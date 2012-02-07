@@ -35,6 +35,7 @@ public class FacebookUtil {
 		this.zActivity = activity;
 		this.zContext = context;
 		zFacebook = new Facebook(APP_ID);
+		fFacebookAuth();
 	}
 	
 	public FBHomeFeed fReadMessage() {
@@ -45,6 +46,7 @@ public class FacebookUtil {
 	
 	    if( !zFacebook.isSessionValid() ){
 	    	fFacebookAuth();
+	    	sfbToken = mPrefs.getString(FBTOKEN, "");
 	    }
 	    //user password change && revoke app authentication is not considered
 	    //for detail refer to http://developers.facebook.com/docs/mobile/android/build/#sso
