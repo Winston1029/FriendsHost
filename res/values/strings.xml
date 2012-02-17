@@ -4,4 +4,7 @@
     <string name="hello">Hello World, FriendsHostActivity!</string>
     <string name="app_name">FriendsHost</string>
 
+    <string name="renren_sdk_username">账号</string>
+	<string name="renren_sdk_password">密码</string>
+	<string name="renren_sdk_login">登录</string>
 </resources>
