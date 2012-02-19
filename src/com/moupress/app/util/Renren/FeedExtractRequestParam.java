@@ -1,25 +1,21 @@
 package com.moupress.app.util.Renren;
 
 
-
-import com.renren.android.RenrenError;
-import com.renren.android.RenrenException;
-import com.renren.android.RequestParam;
-
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.renren.api.connect.android.common.RequestParam;
+import com.renren.api.connect.android.exception.RenrenError;
+import com.renren.api.connect.android.exception.RenrenException;
 
 public class FeedExtractRequestParam extends RequestParam implements Parcelable {
 	
 	private static final String METHOD = "feed.get";
 			
 	private String format;
-	
 	private String type;
-	
 	private int page;
-	
 	private String count;
 	
 	
@@ -35,13 +31,11 @@ public class FeedExtractRequestParam extends RequestParam implements Parcelable 
 
 	@Override
 	public int describeContents() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
 		
 	}
 

@@ -133,7 +133,9 @@ public class FacebookUtil {
 	}
 	
 	public void onComplete (int requestCode, int resultCode, Intent data) {
-		zFacebook.authorizeCallback(requestCode, resultCode, data);
+		if (zFacebook != null) {
+			zFacebook.authorizeCallback(requestCode, resultCode, data);
+		}
     }
 
 }

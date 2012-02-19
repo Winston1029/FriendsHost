@@ -14,7 +14,7 @@ public class FriendsHostActivity extends Activity {
         fInit();
     }
     
-    PubSub zPubsub;
+    public PubSub zPubsub;
     private void fInit() {
     	zPubsub = new PubSub(this);
 	}
