@@ -53,9 +53,10 @@ public class FeedExtractRequestParam extends RequestParam implements Parcelable 
 		Bundle params = new Bundle();
 		
 		params.putString("method", METHOD);
-		params.putString("format", "JSON");
+		params.putString("format", "XML");
 		params.putString("type", type);
-		params.putInt("page", page);
+		//params.putInt("page", page);
+		params.putString("page", page+"");
 		//params.putString("count", count);
 		
 		return params;

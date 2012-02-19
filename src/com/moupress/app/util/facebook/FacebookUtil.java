@@ -1,8 +1,12 @@
 package com.moupress.app.util.facebook;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
+import com.moupress.app.friendshost.FriendsHostActivity;
+import com.facebook.android.AsyncFacebookRunner;
+import com.facebook.android.AsyncFacebookRunner.RequestListener;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
@@ -16,6 +20,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 
@@ -38,6 +43,68 @@ public class FacebookUtil {
 		fFacebookAuth();
 	}
 	
+	public void fGetNewsFeed() {
+		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(zActivity);
+	    sfbToken = mPrefs.getString(FBTOKEN, "");
+	
+	    if( !zFacebook.isSessionValid() ){
+	    	fFacebookAuth();
+	    	sfbToken = mPrefs.getString(FBTOKEN, "");
+	    }
+	    
+	    AsyncFacebookRunner asyncFB = new AsyncFacebookRunner(zFacebook);
+	    RequestListener listener = new RequestListener() {
+
+			@Override
+			public void onComplete(final String response, Object state) {
+				System.out.println("Facebook Request Complete");
+				
+				zActivity.runOnUiThread(new Runnable() {
+					public void run() {
+						FBHomeFeed bean = new Gson().fromJson(response, FBHomeFeed.class);
+						System.out.println("Facebook news feed get listener on complete");
+						ArrayAdapter<String> adapterFBResponse = ((FriendsHostActivity) zActivity).zPubsub.fGetArrAdapterFBFeed();
+						for(int i= 0; i<bean.getData().size();i++) {
+							String msg = ((FBHomeFeedEntry) bean.getData().get(i)).getName()+" : "+((FBHomeFeedEntry) bean.getData().get(i)).getMessage();
+							adapterFBResponse.add(msg);
+						}
+						adapterFBResponse.notifyDataSetChanged();
+					}
+				});
+				
+			}
+
+			@Override
+			public void onIOException(IOException e, Object state) {
+				System.out.println("onIOException: " + e.getMessage());				
+			}
+
+			@Override
+			public void onFileNotFoundException(FileNotFoundException e,
+					Object state) {
+				System.out.println("onFileNotFoundException: " + e.getMessage());
+			}
+
+			@Override
+			public void onMalformedURLException(MalformedURLException e,
+					Object state) {
+				System.out.println("onMalformedURLException: " + e.getMessage());
+			}
+
+			@Override
+			public void onFacebookError(FacebookError e, Object state) {
+				System.out.println("onFacebooError: " + e.getMessage());
+			}
+	    	
+	    };
+	    Bundle mBundle = new Bundle();
+        mBundle.putString(Facebook.TOKEN,sfbToken);
+	    asyncFB.request("me/home", mBundle, listener);
+	}
+	
+/** 
+ * To Remove testing code where facebook feed is obtained synchronously	
+ * 
 	public FBHomeFeed fReadMessage() {
 		String sNewsfeedJson = "";
 		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(zActivity);
@@ -55,7 +122,7 @@ public class FacebookUtil {
 	    FBHomeFeed data = new Gson().fromJson(sNewsfeedJson, FBHomeFeed.class);
 	    return data;
 	}
-	
+
 	private String fGetNewsFeed(String accessToken) {
 		String sNewsfeed = "";
 		Bundle mBundle = new Bundle();
@@ -69,6 +136,8 @@ public class FacebookUtil {
 		}
 		return sNewsfeed;
 	}
+	
+*/
 	
 	public void fPostMessage(String fbMessage) {
 		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(zActivity);

@@ -2,10 +2,14 @@ package com.moupress.app.friendshost;
 
 import java.util.ArrayList;
 
+import com.moupress.app.util.Renren.FeedExtractResponseBean;
 import com.moupress.app.util.Renren.RenrenUtil;
 import com.moupress.app.util.facebook.FBHomeFeed;
 import com.moupress.app.util.facebook.FBHomeFeedEntry;
 import com.moupress.app.util.facebook.FacebookUtil;
+import com.renren.api.connect.android.common.AbstractRequestListener;
+import com.renren.api.connect.android.exception.RenrenError;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -39,10 +43,9 @@ public class PubSub {
 	}
 
 	private ArrayAdapter<String> arrAdapterFBFeed;
+	public ArrayAdapter<String> fGetArrAdapterFBFeed() {return arrAdapterFBFeed;}
 	private void fFBInitUI() {
-		//ListView uLstVFBFeed = (ListView) zActivity.findViewById(R.id.uLstVFBFeed);
         arrAdapterFBFeed = new ArrayAdapter<String>(zActivity, R.layout.feed_item);	
-        
         
         Button uBtnFBGetFeed = (Button) zActivity.findViewById(R.id.btn_getfbfeed);
         uBtnFBGetFeed.setOnClickListener(new View.OnClickListener() {
@@ -52,15 +55,7 @@ public class PubSub {
 				arrAdapterFBFeed.clear();
 				uLstFeed.setAdapter(arrAdapterFBFeed);
 				
-				FBHomeFeed mNewsFeed = zFacebook.fReadMessage();
-				int iNumOfFeeds = mNewsFeed.getData().size();
-				for (int i=0; i<iNumOfFeeds; i++) {
-					FBHomeFeedEntry mHomeFeedEntry = (FBHomeFeedEntry) mNewsFeed.getData().get(i);
-					String msg = mHomeFeedEntry.getFrom().getName() + ": ";
-					msg = msg + mHomeFeedEntry.getMessage();
-					System.out.println(msg);
-					arrAdapterFBFeed.add(msg);
-				}
+				zFacebook.fGetNewsFeed();
 				System.out.print("Feed Parse Complete");
 				
 			}
@@ -70,7 +65,7 @@ public class PubSub {
 	private ArrayAdapter<String> arrAdapterRenrenFeed;
 	public ArrayAdapter<String> fGetArrAdapterRenrenFeed() {return arrAdapterRenrenFeed; }
 	private void fInitRenrenUI() {
-		//feedList = new ArrayList<FeedElement>();
+
 		arrAdapterRenrenFeed = new ArrayAdapter<String>(zActivity,R.layout.feed_item);
 		Button uBtnRenrenGetFeed = (Button) zActivity.findViewById(R.id.btn_getRenrenfeed);
 		
@@ -91,7 +86,9 @@ public class PubSub {
 	}
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		zFacebook.onComplete(requestCode, resultCode, data);
 		zRenrenUtil.onComplete(requestCode, resultCode, data);
+		zFacebook.onComplete(requestCode, resultCode, data);
+		
 	}
+
 }
