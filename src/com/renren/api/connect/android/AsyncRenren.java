@@ -22,8 +22,8 @@ import java.util.concurrent.Executors;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.moupress.app.util.Renren.FeedExtractRequestParam;
-import com.moupress.app.util.Renren.FeedExtractResponseBean;
+import com.moupress.app.friendshost.sns.Renren.FeedExtractRequestParam;
+import com.moupress.app.friendshost.sns.Renren.FeedExtractResponseBean;
 import com.renren.api.connect.android.common.AbstractRequestListener;
 import com.renren.api.connect.android.exception.RenrenError;
 import com.renren.api.connect.android.feed.FeedHelper;

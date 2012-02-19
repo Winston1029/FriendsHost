@@ -1,27 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+   android:layout_width="fill_parent"
+   android:layout_height="fill_parent" android:orientation="vertical">
+   <LinearLayout 
+        android:id="@+id/linearLayout2" 
+        android:layout_width="match_parent" 
+        android:layout_height="wrap_content" 
+        android:orientation="horizontal">
+        
+       <Button
+           android:id="@+id/btn_Scheduler"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Start" >
 
-    <Button
-        android:id="@+id/btn_getfbfeed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Get FB Feed" />
-     <Button
-     	android:id="@+id/btn_getRenrenfeed"
-     	android:layout_width="wrap_content"
-     	android:layout_height="wrap_content"
-     	android:text="Get Renren Feed"
-     	>
-     	</Button>
+       </Button>
+       <TextView 
+            android:textAppearance="?android:attr/textAppearanceLarge" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content" 
+            android:id="@+id/txv_counter" 
+            android:text="counter: " 
+            android:layout_gravity="right">
+       </TextView>
+   </LinearLayout>
+   
+   <LinearLayout 
+        android:id="@+id/linearLayout1" 
+        android:layout_width="match_parent" 
+        android:layout_height="wrap_content" 
+        android:orientation="horizontal">
+        
+       <Button 
+            android:text="Get Renren Feed" 
+            android:id="@+id/btn_getRenrenfeed" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content">
+       </Button>
+       <Button 
+            android:text="Get FB Feed" 
+            android:id="@+id/btn_getfbfeed" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content">
+       </Button>
+   </LinearLayout>
 
-    <ListView
-        android:id="@+id/uLstVFBFeed"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" >
-    </ListView>
+   <ListView
+       android:id="@+id/uLstVFBFeed"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_weight="1" >
+   </ListView>
 
 </LinearLayout>

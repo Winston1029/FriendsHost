@@ -1,4 +1,4 @@
-package com.moupress.app.util.Renren;
+package com.moupress.app.friendshost.sns.Renren;
 
 public class FeedElement {
 

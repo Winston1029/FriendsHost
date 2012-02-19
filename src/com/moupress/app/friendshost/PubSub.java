@@ -1,24 +1,18 @@
 package com.moupress.app.friendshost;
 
-import java.util.ArrayList;
-
-import com.moupress.app.util.Renren.FeedExtractResponseBean;
-import com.moupress.app.util.Renren.RenrenUtil;
-import com.moupress.app.util.facebook.FBHomeFeed;
-import com.moupress.app.util.facebook.FBHomeFeedEntry;
-import com.moupress.app.util.facebook.FacebookUtil;
-import com.renren.api.connect.android.common.AbstractRequestListener;
-import com.renren.api.connect.android.exception.RenrenError;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
+
+import com.moupress.app.friendshost.sns.Renren.RenrenUtil;
+import com.moupress.app.friendshost.sns.facebook.FacebookUtil;
+import com.moupress.app.friendshost.util.FeedScheduler;
 
 public class PubSub {
 	private Activity zActivity;
@@ -26,6 +20,8 @@ public class PubSub {
 	
 	private FacebookUtil 	zFacebook;
 	private RenrenUtil 		zRenrenUtil;
+	private FeedScheduler	zFeedScheduler;
+	
 	ListView uLstFeed;
 	public PubSub(Context context, Activity activity) {
 		this.zContext = context;
@@ -40,6 +36,7 @@ public class PubSub {
 		fInitAcc();
 		fFBInitUI();
 		fInitRenrenUI();
+		fInitSchedulerUI();
 	}
 
 	private ArrayAdapter<String> arrAdapterFBFeed;
@@ -80,9 +77,32 @@ public class PubSub {
 		});
 	}
 
+	private void fInitSchedulerUI() {
+		Button uBtnScheduler = (Button) zActivity.findViewById(R.id.btn_Scheduler);
+		
+		
+		uBtnScheduler.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String btnText = ((Button)v).getText().toString();
+				if (btnText.equals("Start")) {
+					zFeedScheduler.start();
+					((Button)v).setText("Stop");
+				} else {
+					zFeedScheduler.stop();
+					((Button)v).setText("Start");
+				}
+				
+			}
+		});
+	}
+	
 	private void fInitAcc() {
 		zFacebook = new FacebookUtil(zActivity, zContext);
 		zRenrenUtil = new RenrenUtil(zActivity, zContext);
+		
+		zFeedScheduler = new FeedScheduler(zActivity, zContext);
 	}
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {

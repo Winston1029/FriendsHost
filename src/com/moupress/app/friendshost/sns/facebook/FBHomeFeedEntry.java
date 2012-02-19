@@ -1,4 +1,4 @@
-package com.moupress.app.util.facebook;
+package com.moupress.app.friendshost.sns.facebook;
 
 import java.util.List;
 

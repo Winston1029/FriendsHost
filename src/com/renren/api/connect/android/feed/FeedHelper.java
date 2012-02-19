@@ -12,8 +12,8 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.moupress.app.util.Renren.FeedExtractRequestParam;
-import com.moupress.app.util.Renren.FeedExtractResponseBean;
+import com.moupress.app.friendshost.sns.Renren.FeedExtractRequestParam;
+import com.moupress.app.friendshost.sns.Renren.FeedExtractResponseBean;
 import com.renren.api.connect.android.Renren;
 import com.renren.api.connect.android.Util;
 import com.renren.api.connect.android.common.AbstractRequestListener;
