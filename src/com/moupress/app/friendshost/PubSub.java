@@ -34,24 +34,26 @@ public class PubSub {
 		
 		uLstFeed = (ListView) zActivity.findViewById(R.id.uLstVFBFeed);
 		fInitAcc();
+		fInitFeedUI();
 		fFBInitUI();
 		fInitRenrenUI();
 		fInitSchedulerUI();
 	}
 
-	private ArrayAdapter<String> arrAdapterFBFeed;
-	public ArrayAdapter<String> fGetArrAdapterFBFeed() {return arrAdapterFBFeed;}
-	private void fFBInitUI() {
-        arrAdapterFBFeed = new ArrayAdapter<String>(zActivity, R.layout.feed_item);	
-        
+	private ArrayAdapter<String> arrAdapterFeed;
+	public ArrayAdapter<String> fGetArrAdapterFeed() {return arrAdapterFeed;}
+	private void fInitFeedUI() {
+		arrAdapterFeed = new ArrayAdapter<String>(zActivity,R.layout.feed_item);
+		uLstFeed.setAdapter(arrAdapterFeed);
+	}
+	
+	private void fFBInitUI() {        
         Button uBtnFBGetFeed = (Button) zActivity.findViewById(R.id.btn_getfbfeed);
         uBtnFBGetFeed.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				arrAdapterFBFeed.clear();
-				uLstFeed.setAdapter(arrAdapterFBFeed);
-				
+				arrAdapterFeed.clear();				
 				zFacebook.fGetNewsFeed();
 				System.out.print("Feed Parse Complete");
 				
@@ -59,19 +61,14 @@ public class PubSub {
 		});
 	}
 	
-	private ArrayAdapter<String> arrAdapterRenrenFeed;
-	public ArrayAdapter<String> fGetArrAdapterRenrenFeed() {return arrAdapterRenrenFeed; }
 	private void fInitRenrenUI() {
-
-		arrAdapterRenrenFeed = new ArrayAdapter<String>(zActivity,R.layout.feed_item);
 		Button uBtnRenrenGetFeed = (Button) zActivity.findViewById(R.id.btn_getRenrenfeed);
 		
 		uBtnRenrenGetFeed.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				arrAdapterRenrenFeed.clear();
-				uLstFeed.setAdapter(arrAdapterRenrenFeed);
+				arrAdapterFeed.clear();
 				zRenrenUtil.fGetNewsFeed();
 			}
 		});
@@ -104,6 +101,9 @@ public class PubSub {
 		
 		zFeedScheduler = new FeedScheduler(zActivity, zContext);
 	}
+	
+	public FacebookUtil fGetFacebookUtil() {return zFacebook; }
+	public RenrenUtil fGetRenrenUtil() {return zRenrenUtil; }
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		zRenrenUtil.onComplete(requestCode, resultCode, data);

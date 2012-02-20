@@ -63,7 +63,7 @@ public class FacebookUtil {
 					public void run() {
 						FBHomeFeed bean = new Gson().fromJson(response, FBHomeFeed.class);
 						System.out.println("Facebook news feed get listener on complete");
-						ArrayAdapter<String> adapterFBResponse = ((FriendsHostActivity) zActivity).zPubsub.fGetArrAdapterFBFeed();
+						ArrayAdapter<String> adapterFBResponse = ((FriendsHostActivity) zActivity).zPubsub.fGetArrAdapterFeed();
 						for(int i= 0; i<bean.getData().size();i++) {
 							String msg = ((FBHomeFeedEntry) bean.getData().get(i)).getName()+" : "+((FBHomeFeedEntry) bean.getData().get(i)).getMessage();
 							adapterFBResponse.add(msg);

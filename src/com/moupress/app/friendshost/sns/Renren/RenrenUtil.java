@@ -71,7 +71,7 @@ public class RenrenUtil {
 
 				zActivity.runOnUiThread(new Runnable() {
 					public void run() {
-						ArrayAdapter<String> adapterRenrenResponse = ((FriendsHostActivity)zActivity).zPubsub.fGetArrAdapterRenrenFeed();
+						ArrayAdapter<String> adapterRenrenResponse = ((FriendsHostActivity)zActivity).zPubsub.fGetArrAdapterFeed();
 						for(int i= 0; i<bean.getFeedList().size();i++) {
 							String msg = bean.getFeedList().get(i).getName()+" : "+bean.getFeedList().get(i).getTitle();
 							adapterRenrenResponse.add(msg);

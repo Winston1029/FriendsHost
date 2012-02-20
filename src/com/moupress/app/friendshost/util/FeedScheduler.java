@@ -1,5 +1,6 @@
 package com.moupress.app.friendshost.util;
 
+import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.R;
 
 import android.app.Activity;
@@ -19,7 +20,7 @@ public class FeedScheduler {
 		this.zActivity = activity;
 		this.zContext = context;
 		
-		lretrieveInterval = 500;
+		lretrieveInterval = 1000*30;
 		cntTimedTask = 0;
 	}
 	
@@ -28,25 +29,27 @@ public class FeedScheduler {
 	}
 	public long fGetRetriveInterval() { return lretrieveInterval;}
 	
-	private Handler handler = new Handler();
-	private Runnable timedTask = new Runnable(){
+	private Handler zHandler = new Handler();
+	private Runnable zTimedTask = new Runnable(){
 
 		@Override
 		public void run() {
 			TextView uTxvCounter = (TextView) zActivity.findViewById(R.id.txv_counter);
 			cntTimedTask++;
+			((FriendsHostActivity)zActivity).zPubsub.fGetArrAdapterFeed().clear();
+			((FriendsHostActivity)zActivity).zPubsub.fGetFacebookUtil().fGetNewsFeed();
 			uTxvCounter.setText("Counter: " + cntTimedTask);
-			handler.postDelayed(timedTask, lretrieveInterval);
+			zHandler.postDelayed(zTimedTask, lretrieveInterval);
 		}
 		
 	};
 
 	public void start() {
-		handler.post(timedTask);		
+		zHandler.post(zTimedTask);
 	}
 	
 	public void stop() {
-		handler.removeCallbacks(timedTask);
+		zHandler.removeCallbacks(zTimedTask);
 		
 	}
 }
