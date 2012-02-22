@@ -44,6 +44,7 @@ public class DBHelper {
     static final String C_FEED_DESCRIPTION = "description";
     static final String C_FEED_ICON = "icon";
     static final String C_FEED_TYPE = "type";
+    static final String C_FEED_ISREAD = "isread";
     static final String C_FEED_CREATED_TIME = "created_time";
     static final String C_FEED_UPDATED_TIME = "updated_time";
     
@@ -77,6 +78,7 @@ public class DBHelper {
 										    + C_FEED_DESCRIPTION + " TEXT,"
 										    + C_FEED_ICON + " TEXT,"
 										    + C_FEED_TYPE + " TEXT,"
+										    + C_FEED_ISREAD + " TEXT,"
 										    + C_FEED_CREATED_TIME + " TEXT,"
 										    + C_FEED_UPDATED_TIME + " TEXT"
 										    + ");";
@@ -149,23 +151,26 @@ public class DBHelper {
 			return ret;
 		}
 		ContentValues values  = new ContentValues();
-		values.put(C_FEED_ID, "100000218780357_202796283146872");
-		values.put(C_FEED_MSG, "message");
-		values.put(C_FEED_FROM, "message");
-		values.put(C_FEED_PIC, "message");
-		values.put(C_FEED_SOURCE, "message");
-		values.put(C_FEED_LINK, "message");
-		values.put(C_FEED_NAME, "message");
-		values.put(C_FEED_CAPTION, "message");
-		values.put(C_FEED_DESCRIPTION, "message");
-		values.put(C_FEED_ICON, "message");
-		values.put(C_FEED_TYPE, "message");
-		values.put(C_FEED_CREATED_TIME, "message");
-		values.put(C_FEED_UPDATED_TIME, "message");
+		
+		values.put(C_FEED_ID, entry.getId());
+		values.put(C_FEED_MSG, entry.getMessage());
+		values.put(C_FEED_FROM, entry.getFrom().getName());
+		values.put(C_FEED_PIC, entry.getPicture());
+		values.put(C_FEED_SOURCE, entry.getSource());
+		values.put(C_FEED_LINK, entry.getLink());
+		values.put(C_FEED_NAME, entry.getName());
+		values.put(C_FEED_CAPTION, entry.getCaption());
+		values.put(C_FEED_DESCRIPTION, entry.getDescription());
+		values.put(C_FEED_ICON, entry.getIcon());
+		values.put(C_FEED_TYPE, entry.getType());
+		values.put(C_FEED_ISREAD, "0");
+		values.put(C_FEED_CREATED_TIME, entry.getCreated_time());
+		values.put(C_FEED_UPDATED_TIME, entry.getUpdated_time());
+		
 		ret = zSQLiteDB.insert(T_FEED, null, values);
 		
-		fInsertUser(entry.getFrom());
-		fInsertActions(entry.getActions());
+		//fInsertUser(entry.getFrom());
+		//fInsertActions(entry.getActions());
 		fInsertComments();
 		return ret;
 	}
@@ -178,11 +183,11 @@ public class DBHelper {
 	}
 	
 	public static void fInsertUser(FBHomeFeedEntryFrom fbHomeFeedEntryFrom) {
-		
+		ContentValues values  = new ContentValues();
 	}
 	
 	public static void fInsertActions(List<FBHomeFeedEntryAction> list) {
-		
+		ContentValues values  = new ContentValues();
 	}
 	
 	public static void fInsertComments() {
@@ -193,13 +198,33 @@ public class DBHelper {
 		
 	}
 	
-	public static void fGetFeed() {
-		
+	public static String[] fGetFeedSummary() {
+		String[] columns = new String[] {C_FEED_FROM, C_FEED_MSG};
+		String where = C_FEED_ISREAD + "= 0";
+		Cursor cursor = null;
+		String[] result = null;
+		try {
+			cursor = zSQLiteDB.query(T_FEED, columns, where, null, null, null, C_FEED_CREATED_TIME);
+			int numRows = cursor.getCount();
+			result = new String[numRows];
+			cursor.moveToFirst();
+			for (int i = 0; i < numRows; ++i) {
+				result[i] = cursor.getString(0) +" : "+ cursor.getString(1);
+				cursor.moveToNext();
+			}
+		} catch (SQLException e) {
+			Log.v(Const.TAG, "Get all birthday failed.", e);
+		} finally {
+			if (cursor != null && !cursor.isClosed()) {
+				cursor.close();
+			}
+		}
+		return result;
 	}
 	
 	public static String fGetFeedByID (String feedid) {
 		
-		return "";
+		return "aa";
 	}
 	
 	public static void fPurgeFeed() {

@@ -50,4 +50,12 @@ public class FeedOrganisor {
 	public void fPurgeHistoricalFeed() {
 		
 	}
+
+	public static String[] fGetUnReadNewsFeed() {
+		String[] result = DBHelper.fGetFeedSummary();
+		if (result == null || result.length == 0) {
+			result = new String[] {"No Unread Feed in Local"};
+		}
+		return result;
+	}
 }

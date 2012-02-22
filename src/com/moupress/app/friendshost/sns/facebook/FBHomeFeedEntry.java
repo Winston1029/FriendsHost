@@ -13,6 +13,9 @@ public class FBHomeFeedEntry {
 	private String name;
 	private String message;
 	private String picture;
+	private String link;
+	private String description;
+	private String source;
 	private String attribution;
 	private String updated_time;
 	private String created_time;
@@ -121,6 +124,30 @@ public class FBHomeFeedEntry {
 
 	public List<FBHomeFeedEntryAction> getActions() {
 		return actions;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public String getSource() {
+		return source;
 	}
 	
 	//Getter methods should be declared.  Setter methods are optional 

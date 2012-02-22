@@ -59,16 +59,20 @@ public class FacebookUtil {
 			@Override
 			public void onComplete(final String response, Object state) {
 				System.out.println("Facebook Request Complete");
-				FeedOrganisor.fSaveNewFeeds(response); // should run on a seperate thread
+				//FeedOrganisor.fSaveNewFeeds(response); // should run on a seperate thread
 				zActivity.runOnUiThread(new Runnable() {
 					public void run() {
 						FBHomeFeed bean = new Gson().fromJson(response, FBHomeFeed.class);
 						System.out.println("Facebook news feed get listener on complete");
 						ArrayAdapter<String> adapterFBResponse = ((FriendsHostActivity) zActivity).zPubsub.fGetArrAdapterFeed();
-						for(int i= 0; i<bean.getData().size();i++) {
-							String msg = ((FBHomeFeedEntry) bean.getData().get(i)).getName()+" : "+((FBHomeFeedEntry) bean.getData().get(i)).getMessage();
+						for(int i = 0; i < bean.getData().size(); i++) {
+							String msg = ((FBHomeFeedEntry) bean.getData().get(i)).getFrom().getName()+" : "+((FBHomeFeedEntry) bean.getData().get(i)).getMessage();
 							adapterFBResponse.add(msg);
 						}
+						//String[] feedMsg = FeedOrganisor.fGetUnReadNewsFeed();
+						//for (int i = 0; i < feedMsg.length; i++) {
+						//	adapterFBResponse.add(feedMsg[i]);
+						//}
 						adapterFBResponse.notifyDataSetChanged();
 					}
 				});
