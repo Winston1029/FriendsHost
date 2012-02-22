@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 
 import com.moupress.app.friendshost.FriendsHostActivity;
+import com.moupress.app.friendshost.util.FeedOrganisor;
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.AsyncFacebookRunner.RequestListener;
 import com.facebook.android.DialogError;
@@ -58,7 +59,7 @@ public class FacebookUtil {
 			@Override
 			public void onComplete(final String response, Object state) {
 				System.out.println("Facebook Request Complete");
-				
+				FeedOrganisor.fSaveNewFeeds(response); // should run on a seperate thread
 				zActivity.runOnUiThread(new Runnable() {
 					public void run() {
 						FBHomeFeed bean = new Gson().fromJson(response, FBHomeFeed.class);

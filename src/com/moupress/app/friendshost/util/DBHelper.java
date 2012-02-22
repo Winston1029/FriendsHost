@@ -1,0 +1,208 @@
+package com.moupress.app.friendshost.util;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.moupress.app.friendshost.Const;
+import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntry;
+import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryAction;
+import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryFrom;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+public class DBHelper {
+
+	static final String DATABASE_NAME = "friendhost_feed.db";
+    static final String NEWSFEED_TABLE_NAME = "newsfeed";
+    static final int DATABASE_VERSION = 2;
+
+    // database tables
+    static final String T_USER = "User";
+    static final String T_FEED = "Feed";
+    static final String T_COMMENTS = "Comments";
+    static final String T_ACTIONS = "Actions";
+    
+    // User Columns
+    static final String C_USER_ID = "id";
+    static final String C_USER_NAME = "name";
+
+    // Feed Columns
+    static final String C_FEED_ID = "id";
+    static final String C_FEED_FROM = "from";
+    static final String C_FEED_MSG = "msg";
+    static final String C_FEED_PIC = "pic";
+    static final String C_FEED_SOURCE = "source";
+    static final String C_FEED_LINK = "link";
+    static final String C_FEED_NAME = "name";
+    static final String C_FEED_CAPTION = "caption";
+    static final String C_FEED_DESCRIPTION = "description";
+    static final String C_FEED_ICON = "icon";
+    static final String C_FEED_TYPE = "type";
+    static final String C_FEED_CREATED_TIME = "created_time";
+    static final String C_FEED_UPDATED_TIME = "updated_time";
+    
+    // Comments Columns
+    static final String C_COMMENTS_ID = "id";
+    static final String C_COMMENTS_FEEDID = "feedid";
+    static final String C_COMMENTS_FROM = "from";
+    static final String C_COMMENTS_MSG = "msg";
+    static final String C_COMMENTS_CREATED_TIME = "created_time";
+    
+    // Action Columns
+    static final String C_ACTIONS_FEEDID = "feedid";
+    static final String C_ACTIONS_NAME = "name";
+    static final String C_ACTIONS_LINK = "link";
+    
+    // Create table SQL statement
+    static final String CREATE_USER_TABLE = "CREATE TABLE " + T_USER + " ("
+										    + C_USER_ID + " TEXT PRIMARY KEY,"
+										    + C_USER_NAME + " TEXT"
+										    + ");";
+    
+    static final String CREATE_FEED_TABLE = "CREATE TABLE " + T_FEED + " ("
+										    + C_FEED_ID + " TEXT PRIMARY KEY,"
+										    + C_FEED_FROM + " TEXT,"
+										    + C_FEED_MSG + " TEXT,"
+										    + C_FEED_PIC + " TEXT,"
+										    + C_FEED_SOURCE + " TEXT,"
+										    + C_FEED_LINK + " TEXT,"
+										    + C_FEED_NAME + " TEXT,"
+										    + C_FEED_CAPTION + " TEXT,"
+										    + C_FEED_DESCRIPTION + " TEXT,"
+										    + C_FEED_ICON + " TEXT,"
+										    + C_FEED_TYPE + " TEXT,"
+										    + C_FEED_CREATED_TIME + " TEXT,"
+										    + C_FEED_UPDATED_TIME + " TEXT"
+										    + ");";
+    
+    static final String CREATE_COMMENTS_TABLE = "CREATE TABLE " + T_COMMENTS + " ("
+										    + C_COMMENTS_ID + " TEXT PRIMARY KEY,"
+										    + C_COMMENTS_FEEDID + " TEXT,"
+										    + C_COMMENTS_FROM + " TEXT,"
+										    + C_COMMENTS_MSG + " TEXT,"
+										    + C_COMMENTS_CREATED_TIME + " TEXT"
+										    + ");";
+    
+    static final String CREATE_ACTIONS_TABLE = "CREATE TABLE " + T_ACTIONS + " ("
+										    + C_ACTIONS_FEEDID + " TEXT PRIMARY KEY,"
+										    + C_ACTIONS_NAME + " TEXT,"
+										    + C_ACTIONS_LINK + " TEXT"
+										    + ");";
+
+    private static class DatabaseHelper extends SQLiteOpenHelper {
+
+		DatabaseHelper(Context context) {
+	        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+	    }
+
+		@Override
+		public void onCreate(SQLiteDatabase db) {
+			db.execSQL(CREATE_USER_TABLE);
+			db.execSQL(CREATE_FEED_TABLE);
+			db.execSQL(CREATE_COMMENTS_TABLE);
+			db.execSQL(CREATE_ACTIONS_TABLE);
+		}
+
+		@Override
+		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			Log.w(Const.TAG, "Upgrading database from version " + oldVersion + " to "
+	                + newVersion + ", which will destroy all old data");
+			/*
+			 * Be Careful, this will remove all existing data user has locally
+			 */
+			db.execSQL("DROP TABLE IF EXISTS " + CREATE_USER_TABLE);
+			db.execSQL("DROP TABLE IF EXISTS " + CREATE_FEED_TABLE);
+			db.execSQL("DROP TABLE IF EXISTS " + CREATE_COMMENTS_TABLE);
+			db.execSQL("DROP TABLE IF EXISTS " + CREATE_ACTIONS_TABLE);
+			onCreate(db);
+		}
+
+	}
+
+	private static DatabaseHelper zDatabaseHelper;
+	private static SQLiteDatabase zSQLiteDB;
+
+	public DBHelper(Context context) {
+		zDatabaseHelper = new DatabaseHelper(context);
+		if (zSQLiteDB == null) {
+			zSQLiteDB = zDatabaseHelper.getWritableDatabase();
+		}
+	}
+
+	public void fCleanup() {
+		if (zSQLiteDB != null) {
+			zSQLiteDB.close();
+			zSQLiteDB = null;
+		}
+	}
+	
+	public static long fInsertFeed(FBHomeFeedEntry entry) {
+		// check if exist
+		long ret = 0;
+		if (fIfFeedExist(entry.getId())) {
+			return ret;
+		}
+		ContentValues values  = new ContentValues();
+		values.put(C_FEED_ID, "100000218780357_202796283146872");
+		values.put(C_FEED_MSG, "message");
+		values.put(C_FEED_FROM, "message");
+		values.put(C_FEED_PIC, "message");
+		values.put(C_FEED_SOURCE, "message");
+		values.put(C_FEED_LINK, "message");
+		values.put(C_FEED_NAME, "message");
+		values.put(C_FEED_CAPTION, "message");
+		values.put(C_FEED_DESCRIPTION, "message");
+		values.put(C_FEED_ICON, "message");
+		values.put(C_FEED_TYPE, "message");
+		values.put(C_FEED_CREATED_TIME, "message");
+		values.put(C_FEED_UPDATED_TIME, "message");
+		ret = zSQLiteDB.insert(T_FEED, null, values);
+		
+		fInsertUser(entry.getFrom());
+		fInsertActions(entry.getActions());
+		fInsertComments();
+		return ret;
+	}
+	
+	private static boolean fIfFeedExist(String feedid) {
+		String feed = fGetFeedByID(feedid);
+		if (feed != null && !feed.isEmpty()) return true;
+		
+		return false;
+	}
+	
+	public static void fInsertUser(FBHomeFeedEntryFrom fbHomeFeedEntryFrom) {
+		
+	}
+	
+	public static void fInsertActions(List<FBHomeFeedEntryAction> list) {
+		
+	}
+	
+	public static void fInsertComments() {
+		
+	}
+	
+	public static void fUpdateFeedRead() {
+		
+	}
+	
+	public static void fGetFeed() {
+		
+	}
+	
+	public static String fGetFeedByID (String feedid) {
+		
+		return "";
+	}
+	
+	public static void fPurgeFeed() {
+		
+	}
+}
