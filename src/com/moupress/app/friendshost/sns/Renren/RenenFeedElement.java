@@ -1,18 +1,15 @@
 package com.moupress.app.friendshost.sns.Renren;
 
-public class FeedElement {
+public class RenenFeedElement {
 
+	private String id;
 	private String name;
-	
 	private String update_time;
-	
 	private String headurl;
-	
 	private String message;
-	
 	private String title;
-	
 	private String prefix;
+	
 
 	public String getName() {
 		return name;
@@ -60,6 +57,14 @@ public class FeedElement {
 
 	public void setPrefix(String prefix) {
 		this.prefix = prefix;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getId() {
+		return id;
 	}
 	
 	

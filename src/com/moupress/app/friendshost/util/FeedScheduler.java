@@ -1,29 +1,24 @@
 package com.moupress.app.friendshost.util;
 
-import com.moupress.app.friendshost.FriendsHostActivity;
+import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Handler;
 import android.widget.TextView;
 
 public class FeedScheduler {
 	
-	private Activity zActivity;
-	private Context zContext;
+	private PubSub zPubSub;
 	
 	private long lretrieveInterval;
 	private long cntTimedTask;
-
-	public FeedScheduler(Activity activity, Context context) {
-		this.zActivity = activity;
-		this.zContext = context;
-		
+	
+	public FeedScheduler(PubSub zpubSub) {
+		this.zPubSub = zpubSub;
 		lretrieveInterval = 1000*30;
 		cntTimedTask = 0;
 	}
-	
+
 	public void fSetRetrieveInterval(long interval) {
 		lretrieveInterval = interval;
 	}
@@ -34,10 +29,10 @@ public class FeedScheduler {
 
 		@Override
 		public void run() {
-			TextView uTxvCounter = (TextView) zActivity.findViewById(R.id.txv_counter);
+			TextView uTxvCounter = (TextView) zPubSub.fGetActivity().findViewById(R.id.txv_counter);
 			cntTimedTask++;
-			((FriendsHostActivity)zActivity).zPubsub.fGetArrAdapterFeed().clear();
-			((FriendsHostActivity)zActivity).zPubsub.fGetFacebookUtil().fGetNewsFeed();
+			zPubSub.fGetArrAdapterFeed().clear();
+			zPubSub.fGetFacebookUtil().fGetNewsFeed();
 			uTxvCounter.setText("Counter: " + cntTimedTask);
 			zHandler.postDelayed(zTimedTask, lretrieveInterval);
 		}

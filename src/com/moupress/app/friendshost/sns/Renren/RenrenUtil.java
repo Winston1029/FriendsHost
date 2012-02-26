@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.moupress.app.friendshost.FriendsHostActivity;
+import com.moupress.app.friendshost.PubSub;
 import com.renren.api.connect.android.AsyncRenren;
 import com.renren.api.connect.android.Renren;
 import com.renren.api.connect.android.common.AbstractRequestListener;
@@ -24,17 +25,21 @@ public class RenrenUtil {
 	
 	private static final String[] PERMISSIONS = new String[] {"read_user_feed", "publish_feed", "publish_share"};
 	
-	private Activity zActivity;
+	private PubSub zPubSub;
 	private Context zContext;
+	private Activity zActivity;
+	
 	private Renren zRenren;
 	
-	public RenrenUtil(Activity activity, Context context) {
-		this.zActivity = activity;
-		this.zContext = context;
+		
+	public RenrenUtil(PubSub pubSub) {
+		zPubSub = pubSub;
+		zContext = zPubSub.fGetContext();
+		zActivity = zPubSub.fGetActivity();
 		this.zRenren = new Renren(API_KEY, SECRET_KEY, APP_ID, zContext);
 		fRenrenAuth();
 	}
-	
+
 	public void fRenrenAuth() {
 		final RenrenAuthListener listener = new RenrenAuthListener() {
 
@@ -68,13 +73,14 @@ public class RenrenUtil {
 			public void onComplete(final FeedExtractResponseBean bean) {
 
 				System.out.println("Renren news feed get listener on complete");
+				zPubSub.fGetFeedOrganisor().fSaveNewFeeds(bean);
 
 				zActivity.runOnUiThread(new Runnable() {
 					public void run() {
-						ArrayAdapter<String> adapterRenrenResponse = ((FriendsHostActivity)zActivity).zPubsub.fGetArrAdapterFeed();
-						for(int i= 0; i<bean.getFeedList().size();i++) {
-							String msg = bean.getFeedList().get(i).getName()+" : "+bean.getFeedList().get(i).getTitle();
-							adapterRenrenResponse.add(msg);
+						ArrayAdapter<String> adapterRenrenResponse = zPubSub.fGetArrAdapterFeed();
+						String[] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed();
+						for(int i= 0; i<feedMsg.length;i++) {
+							adapterRenrenResponse.add(feedMsg[i]);
 						}
 						adapterRenrenResponse.notifyDataSetChanged();
 					}

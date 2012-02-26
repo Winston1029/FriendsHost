@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 
 import com.moupress.app.friendshost.FriendsHostActivity;
+import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.util.FeedOrganisor;
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.AsyncFacebookRunner.RequestListener;
@@ -27,8 +28,8 @@ import android.widget.Toast;
 
 public class FacebookUtil {
 
-	private Activity zActivity;
 	private Context zContext;
+	private PubSub zPubSub;
 	
 	public static final String APP_ID = "337247706286700";
     private static final String[] PERMISSIONS = new String[] {"publish_stream", "read_stream"};
@@ -37,15 +38,19 @@ public class FacebookUtil {
     private Facebook zFacebook;
 	private String sfbToken;
 	
-	public FacebookUtil(Activity activity, Context context) {
-		this.zActivity = activity;
-		this.zContext = context;
-		zFacebook = new Facebook(APP_ID);
-		fFacebookAuth();
+	public FacebookUtil(PubSub pubSub) {
+		zPubSub = pubSub;
+		zContext = zPubSub.fGetContext();
+		if (zFacebook == null) {
+			zFacebook = new Facebook(APP_ID);
+		}
+		if (!zFacebook.isSessionValid()) {
+			fFacebookAuth();
+		}
 	}
-	
+
 	public void fGetNewsFeed() {
-		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(zActivity);
+		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(zContext);
 	    sfbToken = mPrefs.getString(FBTOKEN, "");
 	
 	    if( !zFacebook.isSessionValid() ){
@@ -58,21 +63,14 @@ public class FacebookUtil {
 
 			@Override
 			public void onComplete(final String response, Object state) {
-				System.out.println("Facebook Request Complete");
-				//FeedOrganisor.fSaveNewFeeds(response); // should run on a seperate thread
-				zActivity.runOnUiThread(new Runnable() {
+				zPubSub.fGetFeedOrganisor().fSaveNewFeeds(response);
+				zPubSub.fGetActivity().runOnUiThread(new Runnable() {
 					public void run() {
-						FBHomeFeed bean = new Gson().fromJson(response, FBHomeFeed.class);
-						System.out.println("Facebook news feed get listener on complete");
-						ArrayAdapter<String> adapterFBResponse = ((FriendsHostActivity) zActivity).zPubsub.fGetArrAdapterFeed();
-						for(int i = 0; i < bean.getData().size(); i++) {
-							String msg = ((FBHomeFeedEntry) bean.getData().get(i)).getFrom().getName()+" : "+((FBHomeFeedEntry) bean.getData().get(i)).getMessage();
-							adapterFBResponse.add(msg);
+						ArrayAdapter<String> adapterFBResponse = zPubSub.fGetArrAdapterFeed();
+						String[] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed();
+						for (int i = 0; i < feedMsg.length; i++) {
+							adapterFBResponse.add(feedMsg[i]);
 						}
-						//String[] feedMsg = FeedOrganisor.fGetUnReadNewsFeed();
-						//for (int i = 0; i < feedMsg.length; i++) {
-						//	adapterFBResponse.add(feedMsg[i]);
-						//}
 						adapterFBResponse.notifyDataSetChanged();
 					}
 				});
@@ -145,7 +143,7 @@ public class FacebookUtil {
 */
 	
 	public void fPostMessage(String fbMessage) {
-		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(zActivity);
+		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(zContext);
 	    sfbToken = mPrefs.getString("fbToken", "");
 	
 	    if(sfbToken.equals("")){
@@ -157,14 +155,13 @@ public class FacebookUtil {
 	
 	private void fFacebookAuth(){
 		
-	    zFacebook.authorize(zActivity, PERMISSIONS, new DialogListener() {
+	    zFacebook.authorize(zPubSub.fGetActivity(), PERMISSIONS, new DialogListener() {
 	
 	        @Override
 	        public void onComplete(Bundle values) {
 	            Log.d(this.getClass().getName(),"Facebook.authorize Complete: ");
 	            sfbToken = zFacebook.getAccessToken();
 	            fSaveFBToken(sfbToken, zFacebook.getAccessExpires());
-	            //Toast.makeText(zContext, "Updated status on Facebook", Toast.LENGTH_SHORT);
 	        }
 	
 	        @Override
@@ -200,7 +197,7 @@ public class FacebookUtil {
 	}
 	
 	private void fSaveFBToken(String token, long tokenExpires){
-	    SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(zActivity);
+	    SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(zContext);
 	    mPrefs.edit().putString(FBTOKEN, token);
 	    mPrefs.edit().putLong(FBTOKENEXPIRES, tokenExpires);
 	    mPrefs.edit().commit();

@@ -1,6 +1,7 @@
 package com.moupress.app.friendshost;
 
 import android.app.Activity;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.moupress.app.friendshost.sns.Renren.RenrenUtil;
 import com.moupress.app.friendshost.sns.facebook.FacebookUtil;
+import com.moupress.app.friendshost.util.FeedOrganisor;
 import com.moupress.app.friendshost.util.FeedScheduler;
 
 public class PubSub {
@@ -21,6 +23,7 @@ public class PubSub {
 	private FacebookUtil 	zFacebook;
 	private RenrenUtil 		zRenrenUtil;
 	private FeedScheduler	zFeedScheduler;
+	private FeedOrganisor 	zFeedOrg;
 	
 	ListView uLstFeed;
 	public PubSub(Context context, Activity activity) {
@@ -40,6 +43,10 @@ public class PubSub {
 		fInitSchedulerUI();
 	}
 
+	public PubSub(Service service) {
+		this.zContext = service.getBaseContext();
+	}
+	
 	private ArrayAdapter<String> arrAdapterFeed;
 	public ArrayAdapter<String> fGetArrAdapterFeed() {return arrAdapterFeed;}
 	private void fInitFeedUI() {
@@ -96,14 +103,18 @@ public class PubSub {
 	}
 	
 	private void fInitAcc() {
-		zFacebook = new FacebookUtil(zActivity, zContext);
-		zRenrenUtil = new RenrenUtil(zActivity, zContext);
+		zFacebook = new FacebookUtil(this);
+		zRenrenUtil = new RenrenUtil(this);
 		
-		zFeedScheduler = new FeedScheduler(zActivity, zContext);
+		zFeedScheduler = new FeedScheduler(this);
+		zFeedOrg = new FeedOrganisor(this);
 	}
 	
 	public FacebookUtil fGetFacebookUtil() {return zFacebook; }
 	public RenrenUtil fGetRenrenUtil() {return zRenrenUtil; }
+	public Activity fGetActivity() { return zActivity; }
+	public Context fGetContext() { return zContext; }
+	public FeedOrganisor fGetFeedOrganisor() {return zFeedOrg; }
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		zRenrenUtil.onComplete(requestCode, resultCode, data);

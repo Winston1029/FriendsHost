@@ -12,6 +12,11 @@ public class FriendsHostActivity extends Activity {
         setContentView(R.layout.main);
         
         fInit();
+        
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+        	this.startService(new Intent(this, FeedRetrievalService.class));
+        }
     }
     
     public PubSub zPubsub;

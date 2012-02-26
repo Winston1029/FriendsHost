@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.moupress.app.friendshost.Const;
+import com.moupress.app.friendshost.sns.Renren.RenenFeedElement;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntry;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryAction;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryFrom;
@@ -21,6 +22,12 @@ public class DBHelper {
 	static final String DATABASE_NAME = "friendhost_feed.db";
     static final String NEWSFEED_TABLE_NAME = "newsfeed";
     static final int DATABASE_VERSION = 2;
+    
+    //sns network type
+    static final String SNS_FACEBOOK = "Facebook";
+    static final String SNS_RENREN = "Renren";
+    static final String SNS_SINA = "Sina";
+    static final String SNS_TWITTER = "Twitter";
 
     // database tables
     static final String T_USER = "User";
@@ -34,7 +41,8 @@ public class DBHelper {
 
     // Feed Columns
     static final String C_FEED_ID = "id";
-    static final String C_FEED_FROM = "from";
+    static final String C_FEED_FROM = "feedFrom";
+    static final String C_FEED_SNS = "SNS";
     static final String C_FEED_MSG = "msg";
     static final String C_FEED_PIC = "pic";
     static final String C_FEED_SOURCE = "source";
@@ -51,7 +59,7 @@ public class DBHelper {
     // Comments Columns
     static final String C_COMMENTS_ID = "id";
     static final String C_COMMENTS_FEEDID = "feedid";
-    static final String C_COMMENTS_FROM = "from";
+    static final String C_COMMENTS_FROM = "commentFrom";
     static final String C_COMMENTS_MSG = "msg";
     static final String C_COMMENTS_CREATED_TIME = "created_time";
     
@@ -68,6 +76,7 @@ public class DBHelper {
     
     static final String CREATE_FEED_TABLE = "CREATE TABLE " + T_FEED + " ("
 										    + C_FEED_ID + " TEXT PRIMARY KEY,"
+										    + C_FEED_SNS + " TEXT,"
 										    + C_FEED_FROM + " TEXT,"
 										    + C_FEED_MSG + " TEXT,"
 										    + C_FEED_PIC + " TEXT,"
@@ -144,14 +153,15 @@ public class DBHelper {
 		}
 	}
 	
-	public static long fInsertFeed(FBHomeFeedEntry entry) {
+	public long fInsertFeed(FBHomeFeedEntry entry) {
 		// check if exist
 		long ret = 0;
 		if (fIfFeedExist(entry.getId())) {
 			return ret;
 		}
 		ContentValues values  = new ContentValues();
-		
+
+		values.put(C_FEED_SNS, SNS_FACEBOOK);
 		values.put(C_FEED_ID, entry.getId());
 		values.put(C_FEED_MSG, entry.getMessage());
 		values.put(C_FEED_FROM, entry.getFrom().getName());
@@ -175,7 +185,24 @@ public class DBHelper {
 		return ret;
 	}
 	
-	private static boolean fIfFeedExist(String feedid) {
+	public long fInsertFeed(RenenFeedElement entry) {
+		long ret = 0;
+		
+		
+		ContentValues values  = new ContentValues();
+		values.put(C_FEED_SNS, SNS_RENREN);
+		values.put(C_FEED_ID, entry.getId());
+		values.put(C_FEED_MSG, entry.getMessage());
+		values.put(C_FEED_FROM, entry.getName());
+		values.put(C_FEED_ISREAD, "0");
+		values.put(C_FEED_UPDATED_TIME, entry.getUpdate_time());
+		
+		ret = zSQLiteDB.insert(T_FEED, null, values);
+		
+		return ret;
+	}
+	
+	private boolean fIfFeedExist(String feedid) {
 		String feed = fGetFeedByID(feedid);
 		if (feed != null && !feed.isEmpty()) return true;
 		
@@ -198,7 +225,7 @@ public class DBHelper {
 		
 	}
 	
-	public static String[] fGetFeedSummary() {
+	public String[] fGetFeedSummary() {
 		String[] columns = new String[] {C_FEED_FROM, C_FEED_MSG};
 		String where = C_FEED_ISREAD + "= 0";
 		Cursor cursor = null;
@@ -222,12 +249,13 @@ public class DBHelper {
 		return result;
 	}
 	
-	public static String fGetFeedByID (String feedid) {
+	public String fGetFeedByID (String feedid) {
 		
 		return "aa";
 	}
 	
-	public static void fPurgeFeed() {
+	public void fPurgeFeed() {
 		
 	}
+
 }

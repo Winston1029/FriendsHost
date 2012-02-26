@@ -29,7 +29,7 @@ public class FeedExtractResponseBean extends ResponseBean{
 	private String name;
 	private String message;
 	
-	private ArrayList<FeedElement> feedList; 
+	private ArrayList<RenenFeedElement> feedList; 
 	
 	
 	public FeedExtractResponseBean(String response)  {
@@ -49,7 +49,7 @@ public class FeedExtractResponseBean extends ResponseBean{
 //		}
 		try
 		{
-			feedList = new ArrayList<FeedElement>();
+			feedList = new ArrayList<RenenFeedElement>();
 			ParseString(response);
 		}
 		catch(Exception e)
@@ -58,11 +58,11 @@ public class FeedExtractResponseBean extends ResponseBean{
 		}
 	}
 	
-	public ArrayList<FeedElement> getFeedList() {
+	public ArrayList<RenenFeedElement> getFeedList() {
 		return feedList;
 	}
 
-	public void setFeedList(ArrayList<FeedElement> feedList) {
+	public void setFeedList(ArrayList<RenenFeedElement> feedList) {
 		this.feedList = feedList;
 	}
 
@@ -85,16 +85,16 @@ public class FeedExtractResponseBean extends ResponseBean{
 			      
 			      if(feed.getNodeType() == Node.ELEMENT_NODE)
 			      {
-			    	  Element element = (Element) feed;
-			    	  
-			    	  FeedElement feedChild = new FeedElement();
+			    	  RenenFeedElement feedChild = new RenenFeedElement();
 			    	  NodeList feedElements = feed.getChildNodes();
 			    	  for(int iIndex=0; iIndex < feedElements.getLength(); iIndex ++)
 			    	  {
 			    		  if(feedElements.item(index).getNodeType() == Node.ELEMENT_NODE)
 			    		  {
 			    			  Element feedElement = (Element) feedElements.item(iIndex);
-			    			  if(feedElement.getNodeName().equals("name"))
+			    			  if (feedElement.getNodeName().equals("post_id"))
+			    				  feedChild.setId(feedElement.getFirstChild().getNodeValue().trim());
+			    			  else if(feedElement.getNodeName().equals("name"))
 			    				  feedChild.setName(feedElement.getFirstChild().getNodeValue().trim());
 			    			  else if(feedElement.getNodeName().equals("update_time"))
 			    				  feedChild.setUpdate_time(feedElement.getFirstChild().getNodeValue().trim());
