@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.PubSub;
 import com.renren.api.connect.android.AsyncRenren;
@@ -38,6 +39,14 @@ public class RenrenUtil {
 		zActivity = zPubSub.fGetActivity();
 		this.zRenren = new Renren(API_KEY, SECRET_KEY, APP_ID, zContext);
 		fRenrenAuth();
+	}
+	
+	public boolean isSessionValid() {
+		if (zRenren != null ) {
+			return zRenren.isSessionKeyValid();
+		} else {
+			return false;
+		}
 	}
 
 	public void fRenrenAuth() {
@@ -71,21 +80,8 @@ public class RenrenUtil {
 		AbstractRequestListener<FeedExtractResponseBean> listener = new AbstractRequestListener<FeedExtractResponseBean>(){
 			@Override
 			public void onComplete(final FeedExtractResponseBean bean) {
-
 				System.out.println("Renren news feed get listener on complete");
 				zPubSub.fGetFeedOrganisor().fSaveNewFeeds(bean);
-
-				zActivity.runOnUiThread(new Runnable() {
-					public void run() {
-						ArrayAdapter<String> adapterRenrenResponse = zPubSub.fGetArrAdapterFeed();
-						String[] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed();
-						for(int i= 0; i<feedMsg.length;i++) {
-							adapterRenrenResponse.add(feedMsg[i]);
-						}
-						adapterRenrenResponse.notifyDataSetChanged();
-					}
-				});
-				
 			}
 
 			@Override
@@ -99,6 +95,20 @@ public class RenrenUtil {
 			}
 		};
 		asyncRenren.getFeed(param, listener, false);
+	}
+	
+	public void fDisplayRenrenFeed() {
+		zActivity.runOnUiThread(new Runnable() {
+			public void run() {
+				ArrayAdapter<String> adapterRenrenResponse = zPubSub.fGetArrAdapterFeed();
+				adapterRenrenResponse.clear();
+				String[] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_RENREN);
+				for(int i= 0; i<feedMsg.length;i++) {
+					adapterRenrenResponse.add(feedMsg[i]);
+				}
+				adapterRenrenResponse.notifyDataSetChanged();
+			}
+		});
 	}
 	
 	public void onComplete (int requestCode, int resultCode, Intent data) {

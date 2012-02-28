@@ -156,7 +156,7 @@ public class DBHelper {
 	public long fInsertFeed(FBHomeFeedEntry entry) {
 		// check if exist
 		long ret = 0;
-		if (fIfFeedExist(entry.getId())) {
+		if (fIfFeedExist(entry.getId(), SNS_FACEBOOK)) {
 			return ret;
 		}
 		ContentValues values  = new ContentValues();
@@ -188,6 +188,9 @@ public class DBHelper {
 	public long fInsertFeed(RenenFeedElement entry) {
 		long ret = 0;
 		
+		if (fIfFeedExist(entry.getId(), SNS_RENREN)) {
+			return ret;
+		}
 		
 		ContentValues values  = new ContentValues();
 		values.put(C_FEED_SNS, SNS_RENREN);
@@ -202,11 +205,14 @@ public class DBHelper {
 		return ret;
 	}
 	
-	private boolean fIfFeedExist(String feedid) {
-		String feed = fGetFeedByID(feedid);
-		if (feed != null && !feed.isEmpty()) return true;
-		
-		return false;
+	private boolean fIfFeedExist(String feedid, String sns) {
+		String feed = fGetFeedByID(feedid, sns);
+		if (feed != null) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
 	public static void fInsertUser(FBHomeFeedEntryFrom fbHomeFeedEntryFrom) {
@@ -225,13 +231,15 @@ public class DBHelper {
 		
 	}
 	
-	public String[] fGetFeedSummary() {
+	public String[] fGetFeedSummary(String sns) {
 		String[] columns = new String[] {C_FEED_FROM, C_FEED_MSG};
-		String where = C_FEED_ISREAD + "= 0";
+		String where = C_FEED_ISREAD + " = ? and " 
+						+ C_FEED_SNS + " = ? ";
+		String[] selectionArgs = new String[] {"0", sns};
 		Cursor cursor = null;
 		String[] result = null;
 		try {
-			cursor = zSQLiteDB.query(T_FEED, columns, where, null, null, null, C_FEED_CREATED_TIME);
+			cursor = zSQLiteDB.query(T_FEED, columns, where, selectionArgs, null, null, C_FEED_CREATED_TIME);
 			int numRows = cursor.getCount();
 			result = new String[numRows];
 			cursor.moveToFirst();
@@ -249,9 +257,40 @@ public class DBHelper {
 		return result;
 	}
 	
-	public String fGetFeedByID (String feedid) {
+	public String fGetFeedByID (String feedid, String sns) {
+		String[] columns = new String[] {C_FEED_FROM, C_FEED_MSG};
+		String where = C_FEED_ISREAD + " = ? and " 
+						+ C_FEED_SNS + " = ? and " 
+						+ C_FEED_ID + " = ?";
+		String[] selectionArgs = new String[] {"0", sns, feedid};
+		Cursor cursor = null;
+		String result = null;
 		
-		return "aa";
+		try {
+			cursor = zSQLiteDB.query(T_FEED, columns, where, selectionArgs, null, null, C_FEED_CREATED_TIME);
+			cursor.moveToFirst();
+			if (cursor.getCount() > 0 ) {
+				result = cursor.getString(0) +" : "+ cursor.getString(1);
+			}
+//			int numRows = cursor.getCount();
+//			result = new String[numRows];
+//			for (int i = 0; i < numRows; ++i) {
+//				result[i] = cursor.getString(0) +" : "+ cursor.getString(1);
+//				cursor.moveToNext();
+//			}
+		} catch (SQLException e) {
+			Log.v(Const.TAG, "Get all birthday failed.", e);
+		} finally {
+			if (cursor != null && !cursor.isClosed()) {
+				cursor.close();
+			}
+		}
+		if (sns.equals(SNS_RENREN)) {
+			if (result != null) {
+				System.out.println(result);
+			}
+		}
+		return result;
 	}
 	
 	public void fPurgeFeed() {

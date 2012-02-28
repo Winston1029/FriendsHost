@@ -67,8 +67,8 @@ public class FeedOrganisor {
 		
 	}
 
-	public String[] fGetUnReadNewsFeed() {
-		String[] result = zDBHelper.fGetFeedSummary();
+	public String[] fGetUnReadNewsFeed(String sns) {
+		String[] result = zDBHelper.fGetFeedSummary(sns);
 		if (result == null || result.length == 0) {
 			result = new String[] {"No Unread Feed in Local"};
 		}

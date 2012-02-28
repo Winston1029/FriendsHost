@@ -17,23 +17,23 @@ import com.moupress.app.friendshost.util.FeedOrganisor;
 import com.moupress.app.friendshost.util.FeedScheduler;
 
 public class PubSub {
-	private Activity zActivity;
-	private Context zContext;
+	private static Activity zActivity;
+	private static Context zContext;
 	
-	private FacebookUtil 	zFacebook;
-	private RenrenUtil 		zRenrenUtil;
-	private FeedScheduler	zFeedScheduler;
-	private FeedOrganisor 	zFeedOrg;
+	public static FacebookUtil 	zFacebook;
+	public static RenrenUtil 	zRenrenUtil;
+	public static FeedScheduler	zFeedScheduler;
+	public static FeedOrganisor zFeedOrg;
 	
 	ListView uLstFeed;
 	public PubSub(Context context, Activity activity) {
-		this.zContext = context;
-		this.zActivity = activity;
+		PubSub.zContext = context;
+		PubSub.zActivity = activity;
 	}
 	
 	public PubSub(Activity activity) {
-		this.zActivity = activity;
-		this.zContext = activity.getBaseContext();
+		PubSub.zActivity = activity;
+		PubSub.zContext = activity.getBaseContext();
 		
 		uLstFeed = (ListView) zActivity.findViewById(R.id.uLstVFBFeed);
 		fInitAcc();
@@ -44,7 +44,7 @@ public class PubSub {
 	}
 
 	public PubSub(Service service) {
-		this.zContext = service.getBaseContext();
+		PubSub.zContext = service.getBaseContext();
 	}
 	
 	private ArrayAdapter<String> arrAdapterFeed;
@@ -60,8 +60,9 @@ public class PubSub {
 			
 			@Override
 			public void onClick(View v) {
-				arrAdapterFeed.clear();				
-				zFacebook.fGetNewsFeed();
+				//arrAdapterFeed.clear();				
+				//zFacebook.fGetNewsFeed();
+				zFacebook.fDisplayFeed();
 				System.out.print("Feed Parse Complete");
 				
 			}
@@ -75,8 +76,9 @@ public class PubSub {
 			
 			@Override
 			public void onClick(View v) {
-				arrAdapterFeed.clear();
-				zRenrenUtil.fGetNewsFeed();
+				//arrAdapterFeed.clear();
+				//zRenrenUtil.fGetNewsFeed();
+				zRenrenUtil.fDisplayRenrenFeed();
 			}
 		});
 	}

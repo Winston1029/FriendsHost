@@ -11,19 +11,28 @@ import android.widget.Toast;
 
 public class FeedRetrievalService extends Service {
 
-	private Timer timer = new Timer();
+	private Timer timer;
 	private long update_interval = 15000;
 	private static int counter = 0;
-	private Class<PubSub> zPubSub;
 	
 	private void pollForUpdates() {
+		timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
 				counter++;
 				//zPubSub.fGetFacebookUtil().fGetNewsFeed();
+				if (PubSub.zFacebook != null) {
+					PubSub.zFacebook.fGetNewsFeed();
+				}
+				if (PubSub.zRenrenUtil != null) {
+					PubSub.zRenrenUtil.fGetNewsFeed();
+				}
+				if (PubSub.zRenrenUtil == null && PubSub.zFacebook == null) {
+					stopSelf();
+				}
 			}
-		}, 10000, update_interval);
+		}, 30000, update_interval);
 		Log.i(getClass().getSimpleName(), "Timer started.");
 
 	}
@@ -40,9 +49,13 @@ public class FeedRetrievalService extends Service {
 		System.out.println("Service is created!");
 		//zPubSub = new PubSub(this);
 		//zPubSub = PubSub.class;
+		while (!PubSub.zFacebook.isSessionValid() && !PubSub.zRenrenUtil.isSessionValid()) {
+			System.out.println("Pending valid SNS sessions");
+		}
 		pollForUpdates();
 		
 	}
+	
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -55,6 +68,7 @@ public class FeedRetrievalService extends Service {
 		if (timer != null) {
 			timer.cancel();
 		}
+		Toast.makeText(this, "Service Stopped", Toast.LENGTH_SHORT).show();
 		Log.i(getClass().getSimpleName(), "Timer stopped.");
 
 	}

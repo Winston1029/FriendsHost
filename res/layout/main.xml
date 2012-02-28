@@ -32,13 +32,13 @@
         android:orientation="horizontal">
         
        <Button 
-            android:text="Get Renren Feed" 
+            android:text="Refresh Renren" 
             android:id="@+id/btn_getRenrenfeed" 
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content">
        </Button>
        <Button 
-            android:text="Get FB Feed" 
+            android:text="Refresh FB" 
             android:id="@+id/btn_getfbfeed" 
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content">

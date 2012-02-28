@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
+import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.util.FeedOrganisor;
@@ -48,6 +49,15 @@ public class FacebookUtil {
 			fFacebookAuth();
 		}
 	}
+	
+	public boolean isSessionValid() {
+		if (zFacebook != null) {
+			return zFacebook.isSessionValid();
+		} else {
+			return false;
+		}
+		
+	}
 
 	public void fGetNewsFeed() {
 		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(zContext);
@@ -64,17 +74,6 @@ public class FacebookUtil {
 			@Override
 			public void onComplete(final String response, Object state) {
 				zPubSub.fGetFeedOrganisor().fSaveNewFeeds(response);
-				zPubSub.fGetActivity().runOnUiThread(new Runnable() {
-					public void run() {
-						ArrayAdapter<String> adapterFBResponse = zPubSub.fGetArrAdapterFeed();
-						String[] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed();
-						for (int i = 0; i < feedMsg.length; i++) {
-							adapterFBResponse.add(feedMsg[i]);
-						}
-						adapterFBResponse.notifyDataSetChanged();
-					}
-				});
-				
 			}
 
 			@Override
@@ -105,42 +104,20 @@ public class FacebookUtil {
 	    asyncFB.request("me/home", mBundle, listener);
 	}
 	
-/** 
- * To Remove testing code where facebook feed is obtained synchronously	
- * 
-	public FBHomeFeed fReadMessage() {
-		String sNewsfeedJson = "";
-		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(zActivity);
-	    sfbToken = mPrefs.getString(FBTOKEN, "");
-	    //long lfbExpires = mPrefs.getLong(FBTOKENEXPIRES, 0);
-	
-	    if( !zFacebook.isSessionValid() ){
-	    	fFacebookAuth();
-	    	sfbToken = mPrefs.getString(FBTOKEN, "");
-	    }
-	    //user password change && revoke app authentication is not considered
-	    //for detail refer to http://developers.facebook.com/docs/mobile/android/build/#sso
-
-	    sNewsfeedJson = fGetNewsFeed(sfbToken);
-	    FBHomeFeed data = new Gson().fromJson(sNewsfeedJson, FBHomeFeed.class);
-	    return data;
+	public void fDisplayFeed() {
+		zPubSub.fGetActivity().runOnUiThread(new Runnable() {
+			public void run() {
+				ArrayAdapter<String> adapterFBResponse = zPubSub.fGetArrAdapterFeed();
+				adapterFBResponse.clear();
+				//adapterFBResponse.notifyDataSetChanged();
+				String[] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_FACEBOOK);
+				for (int i = 0; i < feedMsg.length; i++) {
+					adapterFBResponse.add(feedMsg[i]);
+				}
+				adapterFBResponse.notifyDataSetChanged();
+			}
+		});
 	}
-
-	private String fGetNewsFeed(String accessToken) {
-		String sNewsfeed = "";
-		Bundle mBundle = new Bundle();
-        mBundle.putString(Facebook.TOKEN,accessToken);
-		try {
-			sNewsfeed=zFacebook.request("me/home", mBundle);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return sNewsfeed;
-	}
-	
-*/
 	
 	public void fPostMessage(String fbMessage) {
 		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(zContext);
