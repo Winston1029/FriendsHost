@@ -23,10 +23,10 @@ public class FeedRetrievalService extends Service {
 				counter++;
 				//zPubSub.fGetFacebookUtil().fGetNewsFeed();
 				if (PubSub.zFacebook != null) {
-					PubSub.zFacebook.fGetNewsFeed();
+					//PubSub.zFacebook.fGetNewsFeed();
 				}
 				if (PubSub.zRenrenUtil != null) {
-					PubSub.zRenrenUtil.fGetNewsFeed();
+					//PubSub.zRenrenUtil.fGetNewsFeed();
 				}
 				if (PubSub.zRenrenUtil == null && PubSub.zFacebook == null) {
 					stopSelf();

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.moupress.app.friendshost.sns.Renren.RenrenUtil;
 import com.moupress.app.friendshost.sns.facebook.FacebookUtil;
+import com.moupress.app.friendshost.sns.sina.SinaUtil;
 import com.moupress.app.friendshost.util.FeedOrganisor;
 import com.moupress.app.friendshost.util.FeedScheduler;
 
@@ -22,6 +23,7 @@ public class PubSub {
 	
 	public static FacebookUtil 	zFacebook;
 	public static RenrenUtil 	zRenrenUtil;
+	public static SinaUtil		zSinaUtil;
 	public static FeedScheduler	zFeedScheduler;
 	public static FeedOrganisor zFeedOrg;
 	
@@ -40,6 +42,7 @@ public class PubSub {
 		fInitFeedUI();
 		fFBInitUI();
 		fInitRenrenUI();
+		fInitSinaUI();
 		fInitSchedulerUI();
 	}
 
@@ -82,6 +85,19 @@ public class PubSub {
 			}
 		});
 	}
+	
+	private void fInitSinaUI() {
+		Button uBtnSinaGetFeed = (Button) zActivity.findViewById(R.id.btn_getSinaFeed);
+		
+		uBtnSinaGetFeed.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				arrAdapterFeed.clear();
+				zSinaUtil.fGetNewsFeed();
+			}
+		});
+	}
 
 	private void fInitSchedulerUI() {
 		Button uBtnScheduler = (Button) zActivity.findViewById(R.id.btn_Scheduler);
@@ -107,6 +123,7 @@ public class PubSub {
 	private void fInitAcc() {
 		zFacebook = new FacebookUtil(this);
 		zRenrenUtil = new RenrenUtil(this);
+		zSinaUtil = new SinaUtil(this);
 		
 		zFeedScheduler = new FeedScheduler(this);
 		zFeedOrg = new FeedOrganisor(this);
@@ -114,6 +131,7 @@ public class PubSub {
 	
 	public FacebookUtil fGetFacebookUtil() {return zFacebook; }
 	public RenrenUtil fGetRenrenUtil() {return zRenrenUtil; }
+	public SinaUtil fGetSinaUtil() {return zSinaUtil;}
 	public Activity fGetActivity() { return zActivity; }
 	public Context fGetContext() { return zContext; }
 	public FeedOrganisor fGetFeedOrganisor() {return zFeedOrg; }
@@ -121,7 +139,10 @@ public class PubSub {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		zRenrenUtil.onComplete(requestCode, resultCode, data);
 		zFacebook.onComplete(requestCode, resultCode, data);
-		
+	}
+	
+	public void onDestroy() {
+		zSinaUtil.onDestroy();
 	}
 
 }

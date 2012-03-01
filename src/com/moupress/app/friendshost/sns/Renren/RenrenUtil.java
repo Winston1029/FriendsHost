@@ -38,7 +38,10 @@ public class RenrenUtil {
 		zContext = zPubSub.fGetContext();
 		zActivity = zPubSub.fGetActivity();
 		this.zRenren = new Renren(API_KEY, SECRET_KEY, APP_ID, zContext);
-		fRenrenAuth();
+		if ( !zRenren.isSessionKeyValid() ) {
+			fRenrenAuth();
+		}
+		
 	}
 	
 	public boolean isSessionValid() {

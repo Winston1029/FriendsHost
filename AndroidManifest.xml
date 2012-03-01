@@ -14,15 +14,24 @@
             android:name=".FriendsHostActivity" >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity android:name=".HomeActivity">  
+		    <intent-filter>  
+		        <action android:name="android.intent.action.VIEW" />  
+		        <category android:name="android.intent.category.DEFAULT" />  
+		        <category android:name="android.intent.category.BROWSABLE" />  
+		        <data android:scheme="weibo4android" android:host="HomeActivity" />  
+		    </intent-filter>  
+		</activity>  
         
         <service android:enabled="true" android:name=".FeedRetrievalService" />
         
     </application>
     
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
 </manifest>
