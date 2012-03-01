@@ -1,11 +1,17 @@
 package com.moupress.app.friendshost.sns.sina;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
+import android.os.Bundle;
+import android.widget.Toast;
 
 import com.moupress.app.friendshost.PubSub;
-import com.weibo.net.*;
+import com.weibo.net.AccessToken;
+import com.weibo.net.DialogError;
+import com.weibo.net.Utility;
+import com.weibo.net.Weibo;
+import com.weibo.net.WeiboDialogListener;
+import com.weibo.net.WeiboException;
+import com.weibo.net.WeiboParameters;
 
 public class SinaUtil {
 //1255140182
@@ -22,53 +28,43 @@ public class SinaUtil {
 	public SinaUtil(PubSub pubSub) {
 		zPubSub = pubSub;
 		zContext = zPubSub.fGetContext();
-		//zSina = Weibo.getInstance();
+		zSina = Weibo.getInstance();
 		//if ( !zSina.isSessionValid()) {
 			fSinaWeiboAuth();
 		//}
 	}
 
 	private void fSinaWeiboAuth() {
-		
-//		zSina.setupConsumerConfig(APP_ID, SECRET_KEY);
-//		Weibo.setSERVER("https://api.weibo.com/2/");
-//        try {
-//			Oauth2AccessToken at =
-//				zSina.getOauth2AccessToken(zContext, Weibo.getAppKey(), Weibo.getAppSecret(), "mondaybird66@sina.cn", "bao1bao1");
-//		} catch (WeiboException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
         
         // Oauth2.0 隐式授权认证方式
-//		zSina.setRedirectUrl("http://www.sina.com");
-//		zSina.authorize(zPubSub.fGetActivity(), new WeiboDialogListener() {
-//			@Override
-//			public void onComplete(Bundle values) {
-//				String token = values.getString("access_token");
-//	            String expires_in = values.getString("expires_in");
-//	            AccessToken accessToken = new AccessToken(token, SECRET_KEY);
-//	            accessToken.setExpiresIn(expires_in);
-//	            Weibo.getInstance().setAccessToken(accessToken);
-//	            
-//	            Toast.makeText(zContext, "Sina Auth Complete", Toast.LENGTH_SHORT).show();
-//			}
-//			
-//			@Override
-//			public void onWeiboException(WeiboException e) {
-//				Toast.makeText(zContext, "Sina Auth Failed" + e.getMessage(), Toast.LENGTH_SHORT).show();
-//			}
-//			
-//			@Override
-//			public void onError(DialogError e) {
-//				Toast.makeText(zContext, "Sina onError: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//			}
-//			
-//			@Override
-//			public void onCancel() {
-//				Toast.makeText(zContext, "Sina onCancel", Toast.LENGTH_SHORT).show();
-//			}
-//		});
+		zSina.setRedirectUrl("http://www.sina.com");
+		zSina.authorize(zPubSub.fGetActivity(), new WeiboDialogListener() {
+			@Override
+			public void onComplete(Bundle values) {
+				String token = values.getString("access_token");
+	            String expires_in = values.getString("expires_in");
+	            AccessToken accessToken = new AccessToken(token, SECRET_KEY);
+	            accessToken.setExpiresIn(expires_in);
+	            Weibo.getInstance().setAccessToken(accessToken);
+	            
+	            Toast.makeText(zContext, "Sina Auth Complete", Toast.LENGTH_SHORT).show();
+			}
+			
+			@Override
+			public void onWeiboException(WeiboException e) {
+				Toast.makeText(zContext, "Sina Auth Failed" + e.getMessage(), Toast.LENGTH_SHORT).show();
+			}
+			
+			@Override
+			public void onError(DialogError e) {
+				Toast.makeText(zContext, "Sina onError: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+			}
+			
+			@Override
+			public void onCancel() {
+				Toast.makeText(zContext, "Sina onCancel", Toast.LENGTH_SHORT).show();
+			}
+		});
 	}
 	
 	public void fGetNewsFeed() {

@@ -123,7 +123,7 @@ public class PubSub {
 	private void fInitAcc() {
 		zFacebook = new FacebookUtil(this);
 		zRenrenUtil = new RenrenUtil(this);
-		zSinaUtil = new SinaUtil(this);
+		//zSinaUtil = new SinaUtil(this);
 		
 		zFeedScheduler = new FeedScheduler(this);
 		zFeedOrg = new FeedOrganisor(this);

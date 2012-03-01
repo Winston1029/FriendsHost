@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -21,12 +22,11 @@ public class FeedRetrievalService extends Service {
 			@Override
 			public void run() {
 				counter++;
-				//zPubSub.fGetFacebookUtil().fGetNewsFeed();
 				if (PubSub.zFacebook != null) {
-					//PubSub.zFacebook.fGetNewsFeed();
+					PubSub.zFacebook.fGetNewsFeed();
 				}
 				if (PubSub.zRenrenUtil != null) {
-					//PubSub.zRenrenUtil.fGetNewsFeed();
+					PubSub.zRenrenUtil.fGetNewsFeed();
 				}
 				if (PubSub.zRenrenUtil == null && PubSub.zFacebook == null) {
 					stopSelf();
@@ -47,10 +47,9 @@ public class FeedRetrievalService extends Service {
 	public void onCreate() {
 		Toast.makeText(this, "Service Created", Toast.LENGTH_SHORT).show();
 		System.out.println("Service is created!");
-		//zPubSub = new PubSub(this);
-		//zPubSub = PubSub.class;
 		while (!PubSub.zFacebook.isSessionValid() && !PubSub.zRenrenUtil.isSessionValid()) {
-			System.out.println("Pending valid SNS sessions");
+			//System.out.println("Pending valid SNS sessions");
+			SystemClock.sleep(10000);
 		}
 		pollForUpdates();
 		
