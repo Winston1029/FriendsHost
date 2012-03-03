@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.moupress.app.friendshost.activity.FeedPublishActivity;
 import com.moupress.app.friendshost.sns.Renren.RenrenUtil;
 import com.moupress.app.friendshost.sns.facebook.FacebookUtil;
 import com.moupress.app.friendshost.sns.sina.SinaUtil;
@@ -59,6 +60,8 @@ public class PubSub {
 	
 	private void fFBInitUI() {        
         Button uBtnFBGetFeed = (Button) zActivity.findViewById(R.id.btn_getfbfeed);
+        Button uBtnFBPubFeed = (Button) zActivity.findViewById(R.id.btn_pubfbfeed);
+        
         uBtnFBGetFeed.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -70,10 +73,22 @@ public class PubSub {
 				
 			}
 		});
+        
+        uBtnFBPubFeed.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(zActivity, FeedPublishActivity.class);
+				intent.putExtra(Const.SNS, Const.SNS_FACEBOOK);
+				zActivity.startActivity(intent);
+			}
+		});
 	}
 	
 	private void fInitRenrenUI() {
 		Button uBtnRenrenGetFeed = (Button) zActivity.findViewById(R.id.btn_getRenrenfeed);
+		Button uBtnRenrenPublishFeed = (Button) zActivity.findViewById(R.id.btn_pubrenrenfeed);
 		
 		uBtnRenrenGetFeed.setOnClickListener(new View.OnClickListener() {
 			
@@ -82,6 +97,16 @@ public class PubSub {
 				//arrAdapterFeed.clear();
 				//zRenrenUtil.fGetNewsFeed();
 				zRenrenUtil.fDisplayRenrenFeed();
+			}
+		});
+		
+		uBtnRenrenPublishFeed.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(zActivity, FeedPublishActivity.class);
+				intent.putExtra(Const.SNS, Const.SNS_RENREN);
+				zActivity.startActivity(intent);
 			}
 		});
 	}

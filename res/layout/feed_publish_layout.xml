@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:padding="10dip">
+
+		<TextView android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:text="Title"
+			android:textSize="16sp" android:textColor="#333333" />
+		<EditText android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:layout_weight="1"
+			android:singleLine="true" android:padding="5dip" android:textSize="14sp"
+			android:text="Title" android:id="@+id/name" />
+
+		<TextView android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:text="Description"
+			android:textSize="16sp" android:textColor="#333333" />
+		<EditText android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:layout_weight="1"
+			android:singleLine="true" android:padding="5dip" android:textSize="14sp"
+			android:text="Description" android:id="@+id/description" />
+
+		<TextView android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:text="Link"
+			android:textSize="16sp" android:textColor="#333333" />
+		<EditText android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:layout_weight="1"
+			android:singleLine="true" android:padding="5dip" android:textSize="14sp"
+			android:text="Link"
+			android:id="@+id/link" />
+
+		<TextView android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:text="Picture"
+			android:textSize="16sp" android:textColor="#333333" />
+		<EditText android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:layout_weight="1"
+			android:singleLine="true" android:padding="5dip" android:textSize="14sp"
+			android:text="http://s.xnimg.cn/imgpro/logo/logo-rr-159.png"
+			android:id="@+id/image" />
+
+		<TextView android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:text="Caption "
+			android:textSize="16sp" android:textColor="#333333" />
+		<EditText android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:layout_weight="1"
+			android:singleLine="true" android:padding="5dip" android:textSize="14sp"
+			android:text="Caption" android:id="@+id/caption" />
+
+		<TextView android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:text="Message"
+			android:textSize="16sp" android:textColor="#333333" />
+		<EditText android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:layout_weight="1"
+			android:singleLine="true" android:padding="5dip" android:textSize="14sp"
+			android:text="Message" android:id="@+id/message" />
+
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="Publish"
+			android:id="@+id/publish" android:layout_marginTop="10dip"/>
+	</LinearLayout>
+</ScrollView>

@@ -7,13 +7,11 @@
         android:layout_width="match_parent" 
         android:layout_height="wrap_content" 
         android:orientation="horizontal">
-        
        <Button
            android:id="@+id/btn_Scheduler"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:text="Start" >
-
        </Button>
        <TextView 
             android:textAppearance="?android:attr/textAppearanceLarge" 
@@ -32,24 +30,42 @@
         android:orientation="horizontal">
         
        <Button 
-            android:text="Refresh Renren" 
+            android:text="Renren Feed" 
             android:id="@+id/btn_getRenrenfeed" 
             android:layout_width="wrap_content" 
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:textSize="9dip">
        </Button>
        <Button 
-            android:text="Refresh FB" 
+            android:text="FB Feed" 
             android:id="@+id/btn_getfbfeed" 
             android:layout_width="wrap_content" 
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:textSize="9dip">
        </Button>
 
        <Button
            android:id="@+id/btn_getSinaFeed"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:text="Get Sina Feed" />
-
+           android:text="Sina Feed" 
+           android:textSize="9dip"/>
+          
+         <Button 
+            android:text="Pub RR Feed" 
+            android:id="@+id/btn_pubrenrenfeed" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"
+            android:textSize="9dip">
+       </Button>
+       
+       <Button
+       		android:text="Pub FB Feed"
+       		android:id="@+id/btn_pubfbfeed"
+       		android:layout_width="wrap_content"
+       		android:layout_height="wrap_content"
+       		android:textSize="9dip">
+       	</Button>
    </LinearLayout>
 
    <ListView

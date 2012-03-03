@@ -18,6 +18,7 @@
             </intent-filter>
         </activity>
         
+        <activity android:enabled="true" android:name=".activity.FeedPublishActivity"></activity>
         <service android:enabled="true" android:name=".FeedRetrievalService" />
         
     </application>

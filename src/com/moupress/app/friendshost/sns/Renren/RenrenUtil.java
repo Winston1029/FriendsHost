@@ -120,4 +120,9 @@ public class RenrenUtil {
 		}
     }
 	
+	public Renren getRenren()
+	{
+		return zRenren;
+	}
+	
 }
