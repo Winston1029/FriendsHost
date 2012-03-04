@@ -18,6 +18,16 @@
             </intent-filter>
         </activity>
         
+        <activity android:name=".OAuthActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="weibo4andriod" android:host="OAuthActivity" /> 
+            </intent-filter>
+        
+        </activity>
+        
         <activity android:enabled="true" android:name=".activity.FeedPublishActivity"></activity>
         <service android:enabled="true" android:name=".FeedRetrievalService" />
         

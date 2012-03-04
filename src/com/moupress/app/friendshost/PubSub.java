@@ -35,7 +35,7 @@ public class PubSub {
 	
 	public PubSub(Activity activity) {
 		PubSub.zActivity = activity;
-		PubSub.zContext = activity.getBaseContext();
+		PubSub.zContext = activity.getApplicationContext();
 		
 		uLstFeed = (ListView) zActivity.findViewById(R.id.uLstVFBFeed);
 		fInitAcc();
