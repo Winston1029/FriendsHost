@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -15,6 +16,8 @@ import com.renren.api.connect.android.Renren;
 import com.renren.api.connect.android.common.AbstractRequestListener;
 import com.renren.api.connect.android.exception.RenrenAuthError;
 import com.renren.api.connect.android.exception.RenrenError;
+import com.renren.api.connect.android.feed.FeedPublishRequestParam;
+import com.renren.api.connect.android.feed.FeedPublishResponseBean;
 import com.renren.api.connect.android.view.RenrenAuthListener;
 
 
@@ -23,6 +26,7 @@ public class RenrenUtil {
 	private static final String API_KEY = "7872469fdd144ef792233e56dca0eb31";
 	private static final String SECRET_KEY = "938ebb14322d40c89015483b2479d144";
 	private static final String APP_ID = "166341";
+	private static final String TAG = "RenrenUtil";
 	
 	private static final String[] PERMISSIONS = new String[] {"read_user_feed", "publish_feed", "publish_share"};
 	
@@ -100,6 +104,44 @@ public class RenrenUtil {
 		asyncRenren.getFeed(param, listener, false);
 	}
 	
+	public void fPublishFeeds(String name, String description,String url, String imageUrl, String caption, String message)
+	{
+		if (zRenren != null) {
+			AsyncRenren asyncRenren = new AsyncRenren(zRenren);
+			//showProgress();
+			
+			FeedPublishRequestParam param = new FeedPublishRequestParam(
+					name, description, url, imageUrl, caption,
+					null, null, message);
+			AbstractRequestListener<FeedPublishResponseBean> listener = new AbstractRequestListener<FeedPublishResponseBean>() {
+
+				@Override
+				public void onComplete(final FeedPublishResponseBean bean) {
+	
+							//editTextLog.setText(bean.toString());
+							Log.d(TAG, bean.toString());
+							
+				}
+
+
+				@Override
+				public void onFault(final Throwable fault) {
+					
+							Log.d(TAG, fault.getMessage());
+							
+				}
+
+				@Override
+				public void onRenrenError(final RenrenError renrenError) {
+					
+							Log.d(TAG, renrenError.getMessage());
+				}
+			};
+			asyncRenren.publishFeed(param, listener, true);
+
+		}
+	}
+	
 	public void fDisplayRenrenFeed() {
 		zActivity.runOnUiThread(new Runnable() {
 			public void run() {
@@ -120,7 +162,7 @@ public class RenrenUtil {
 		}
     }
 	
-	public Renren getRenren()
+	public Renren GetRenren()
 	{
 		return zRenren;
 	}

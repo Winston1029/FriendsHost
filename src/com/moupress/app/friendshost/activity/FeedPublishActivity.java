@@ -1,5 +1,7 @@
 package com.moupress.app.friendshost.activity;
 
+import com.facebook.android.AsyncFacebookRunner;
+import com.facebook.android.Facebook;
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
@@ -30,14 +32,26 @@ public class FeedPublishActivity extends Activity{
 	
 	public static final String TAG = "FeedPublishActivity";
 	private String sns;
-	protected Renren renren;
+	//private Renren renren;
+	//private Facebook facebook;
 	private ProgressDialog progressDialog;
+	
+	//Controls Capture user's input info
 	private EditText editTextName;
 	private EditText editTextDescription;
 	private EditText editTextUrl;
 	private EditText editTextImageUrl;
 	private EditText editTextCaption;
 	private EditText editTextMessage;
+	
+	//Parameters Caputure user's input info
+	private String name;
+	private String description;
+	private String url;
+	private String imageUrl;
+	private String caption;
+	private String message;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +64,8 @@ public class FeedPublishActivity extends Activity{
 		Intent intent = this.getIntent();
 		
 		sns = intent.getStringExtra(Const.SNS);
-		renren = PubSub.zRenrenUtil.getRenren();
+		//renren = PubSub.zRenrenUtil.GetRenren();
+		//facebook = PubSub.zFacebook.GetFBObject();
 		
 		editTextName = (EditText) layout.findViewById(R.id.name);
 		editTextDescription = (EditText) layout.findViewById(R.id.description);
@@ -64,10 +79,19 @@ public class FeedPublishActivity extends Activity{
 
 			@Override
 			public void onClick(View arg0) {
+				name = editTextName.getText().toString();
+				description = editTextDescription.getText().toString();
+				url = editTextUrl.getText().toString();
+				imageUrl = editTextImageUrl.getText().toString();
+				caption = editTextCaption.getText().toString();
+				message = editTextMessage.getText().toString();
+				
 				if(sns.equals(Const.SNS_RENREN))
 				{
-					RenrenPublishFeeds();
-				}else if(sns.equals(Const.SNS_FACEBOOK))
+					PubSub.zRenrenUtil.fPublishFeeds(name, description, url, imageUrl, caption, message);
+					
+				}
+					else if(sns.equals(Const.SNS_FACEBOOK))
 				{
 					FBPublishFeeds();
 				}
@@ -77,71 +101,16 @@ public class FeedPublishActivity extends Activity{
 		);
 	}
 	
-	private void RenrenPublishFeeds() {
-		
-		if (renren != null) {
-			AsyncRenren asyncRenren = new AsyncRenren(renren);
-			showProgress();
-			String name = editTextName.getText().toString();
-			String description = editTextDescription.getText()
-					.toString();
-			String url = editTextUrl.getText().toString();
-			String imageUrl = editTextImageUrl.getText().toString();
-			String caption = editTextCaption.getText().toString();
-			String message = editTextMessage.getText().toString();
-			FeedPublishRequestParam param = new FeedPublishRequestParam(
-					name, description, url, imageUrl, caption,
-					null, null, message);
-			AbstractRequestListener<FeedPublishResponseBean> listener = new AbstractRequestListener<FeedPublishResponseBean>() {
-
-				@Override
-				public void onComplete(
-						final FeedPublishResponseBean bean) {
-					runOnUiThread(new Runnable() {
-
-						@Override
-						public void run() {
-							//editTextLog.setText(bean.toString());
-							Log.d(TAG, bean.toString());
-							dismissProgress();
-						}
-					});
-				}
-
-
-				@Override
-				public void onFault(final Throwable fault) {
-					runOnUiThread(new Runnable() {
-
-						@Override
-						public void run() {
-							//editTextLog.setText(fault.getMessage());
-							Log.d(TAG, fault.getMessage());
-							dismissProgress();
-						}
-					});
-				}
-
-				@Override
-				public void onRenrenError(final RenrenError renrenError) {
-					runOnUiThread(new Runnable() {
-
-						@Override
-						public void run() {
-							//editTextLog.setText(renrenError.getMessage());
-							Log.d(TAG, renrenError.getMessage());
-							dismissProgress();
-						}
-					});
-				}
-			};
-			asyncRenren.publishFeed(param, listener, true);
-
-		}
-	}
+	
 	
 	private void FBPublishFeeds() {
 		
+//		if(facebook != null)
+//		{
+//			AsyncFacebookRunner asyncFB = new AsyncFacebookRunner(facebook);
+//			showProgress();
+//			
+//		}
 	}
 	
 

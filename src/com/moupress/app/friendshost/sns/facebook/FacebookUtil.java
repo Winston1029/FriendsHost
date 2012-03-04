@@ -56,7 +56,6 @@ public class FacebookUtil {
 		} else {
 			return false;
 		}
-		
 	}
 
 	public void fGetNewsFeed() {
@@ -185,5 +184,10 @@ public class FacebookUtil {
 			zFacebook.authorizeCallback(requestCode, resultCode, data);
 		}
     }
+	
+	public Facebook GetFBObject()
+	{
+		return zFacebook;
+	}
 
 }

@@ -140,7 +140,6 @@ public class PubSub {
 					zFeedScheduler.stop();
 					((Button)v).setText("Start");
 				}
-				
 			}
 		});
 	}
