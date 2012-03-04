@@ -9,7 +9,6 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.moupress.app.friendshost.activity.FeedPublishActivity;
 import com.moupress.app.friendshost.sns.Renren.RenrenUtil;
@@ -147,7 +146,7 @@ public class PubSub {
 	private void fInitAcc() {
 		zFacebook = new FacebookUtil(this);
 		zRenrenUtil = new RenrenUtil(this);
-		//zSinaUtil = new SinaUtil(this);
+		zSinaUtil = new SinaUtil(this);
 		
 		zFeedScheduler = new FeedScheduler(this);
 		zFeedOrg = new FeedOrganisor(this);
@@ -163,10 +162,6 @@ public class PubSub {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		zRenrenUtil.onComplete(requestCode, resultCode, data);
 		zFacebook.onComplete(requestCode, resultCode, data);
-	}
-	
-	public void onDestroy() {
-		zSinaUtil.onDestroy();
 	}
 
 }

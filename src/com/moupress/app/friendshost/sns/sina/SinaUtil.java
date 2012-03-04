@@ -1,24 +1,33 @@
 package com.moupress.app.friendshost.sns.sina;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.widget.Toast;
+import java.util.List;
 
+import weibo4andriod.Status;
+import weibo4andriod.Weibo;
+import weibo4andriod.WeiboException;
+import weibo4andriod.http.RequestToken;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.widget.ArrayAdapter;
+
+import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.PubSub;
-import com.weibo.net.AccessToken;
-import com.weibo.net.DialogError;
-import com.weibo.net.Utility;
-import com.weibo.net.Weibo;
-import com.weibo.net.WeiboDialogListener;
-import com.weibo.net.WeiboException;
-import com.weibo.net.WeiboParameters;
+import com.moupress.app.friendshost.util.Pref;
 
 public class SinaUtil {
-//1255140182
-	private static final String APP_ID = "1255140182";
-	private static final String SECRET_KEY = "ace86405a2aea9d30c5986d5465e163f";
-	//private static final String APP_ID = "1646212960";
-    //private static final String SECRET_KEY = "94098772160b6f8ffc1315374d8861f9";
+
+	//private static final String APP_ID = "1255140182";
+	//private static final String SECRET_KEY = "ace86405a2aea9d30c5986d5465e163f";
+	private static final String APP_ID = "1646212960";
+    private static final String SECRET_KEY = "94098772160b6f8ffc1315374d8861f9";
+    
+
+	private static final String URL_ACTIVITY_CALLBACK = "weiboandroidsdk://TimeLineActivity";
+    private static final String FROM = "xweibo";
+    
+    private static String sTokenKey = "";
+    private static String sTokenSecret = "";
 	
 	private PubSub zPubSub;
 	private Context zContext;
@@ -28,59 +37,48 @@ public class SinaUtil {
 	public SinaUtil(PubSub pubSub) {
 		zPubSub = pubSub;
 		zContext = zPubSub.fGetContext();
-		zSina = Weibo.getInstance();
-		//if ( !zSina.isSessionValid()) {
-			fSinaWeiboAuth();
-		//}
-	}
-
-	private void fSinaWeiboAuth() {
-        
-        // Oauth2.0 隐式授权认证方式
-		zSina.setRedirectUrl("http://www.sina.com");
-		zSina.authorize(zPubSub.fGetActivity(), new WeiboDialogListener() {
-			@Override
-			public void onComplete(Bundle values) {
-				String token = values.getString("access_token");
-	            String expires_in = values.getString("expires_in");
-	            AccessToken accessToken = new AccessToken(token, SECRET_KEY);
-	            accessToken.setExpiresIn(expires_in);
-	            Weibo.getInstance().setAccessToken(accessToken);
-	            
-	            Toast.makeText(zContext, "Sina Auth Complete", Toast.LENGTH_SHORT).show();
-			}
-			
-			@Override
-			public void onWeiboException(WeiboException e) {
-				Toast.makeText(zContext, "Sina Auth Failed" + e.getMessage(), Toast.LENGTH_SHORT).show();
-			}
-			
-			@Override
-			public void onError(DialogError e) {
-				Toast.makeText(zContext, "Sina onError: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-			}
-			
-			@Override
-			public void onCancel() {
-				Toast.makeText(zContext, "Sina onCancel", Toast.LENGTH_SHORT).show();
-			}
-		});
+		System.setProperty("weibo4j.oauth.consumerKey", Weibo.CONSUMER_KEY);
+    	System.setProperty("weibo4j.oauth.consumerSecret", Weibo.CONSUMER_SECRET);
+		zSina = OAuthConstant.getInstance().getWeibo();
+		fSinaAuth();
 	}
 	
-	public void fGetNewsFeed() {
-		String requestURL = Weibo.SERVER + "statuses/home_timeline.json";
-		WeiboParameters bundle = new WeiboParameters();
-		bundle.add("source", Weibo.getAppKey());
-		String result = "";
+	private void fSinaAuth() {
+		sTokenKey = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENKEY);
+		sTokenSecret = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENSECRET);
+		
+		if ( !sTokenKey.isEmpty() && !sTokenSecret.isEmpty()) {
+			return;
+		}
 		try {
-			result = zSina.request(zContext, requestURL, bundle, "GET", zSina.getAccessToken());
+			RequestToken requestToken =zSina.getOAuthRequestToken("weibo4andriod://OAuthActivity");
+			Uri uri = Uri.parse(requestToken.getAuthenticationURL()+ "&from=xweibo");
+			OAuthConstant.getInstance().setRequestToken(requestToken);
+			zPubSub.fGetActivity().startActivity(new Intent(Intent.ACTION_VIEW, uri));
 		} catch (WeiboException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Sina result = " + result);
 	}
 	
-	public void onDestroy() {
-		Utility.clearCookies(zContext);
+	public void fGetNewsFeed() {
+		zPubSub.fGetActivity().runOnUiThread(new Runnable () {
+			@Override
+			public void run() {
+				//zSina.setToken(OAuthConstant.getInstance().getToken(), OAuthConstant.getInstance().getTokenSecret());
+				zSina.setToken(sTokenKey, sTokenSecret);
+				try {
+					List<Status> friendsTimeline;
+					friendsTimeline = zSina.getFriendsTimeline();
+					ArrayAdapter<String> sinaFeedAdapter = zPubSub.fGetArrAdapterFeed();
+					for (Status status : friendsTimeline) {
+						String msg = status.getUser().getScreenName() + " : " + status.getText();
+						sinaFeedAdapter.add(msg);
+					}
+					sinaFeedAdapter.notifyDataSetChanged();
+				} catch (WeiboException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 }

@@ -2,6 +2,7 @@ package com.moupress.app.friendshost;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -22,10 +23,10 @@ public class FeedRetrievalService extends Service {
 			@Override
 			public void run() {
 				counter++;
-				if (PubSub.zFacebook != null) {
+				if (PubSub.zFacebook != null && PubSub.zFacebook.isSessionValid() ) {
 					PubSub.zFacebook.fGetNewsFeed();
 				}
-				if (PubSub.zRenrenUtil != null) {
+				if (PubSub.zRenrenUtil != null && PubSub.zRenrenUtil.isSessionValid() ) {
 					PubSub.zRenrenUtil.fGetNewsFeed();
 				}
 				if (PubSub.zRenrenUtil == null && PubSub.zFacebook == null) {
@@ -46,11 +47,6 @@ public class FeedRetrievalService extends Service {
 	@Override
 	public void onCreate() {
 		Toast.makeText(this, "Service Created", Toast.LENGTH_SHORT).show();
-		System.out.println("Service is created!");
-		while (!PubSub.zFacebook.isSessionValid() && !PubSub.zRenrenUtil.isSessionValid()) {
-			System.out.println("Pending valid SNS sessions");
-			SystemClock.sleep(10000);
-		}
 		pollForUpdates();
 		
 	}
