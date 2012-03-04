@@ -1,5 +1,7 @@
 package com.moupress.app.friendshost.sns.Renren;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +20,8 @@ import com.renren.api.connect.android.exception.RenrenAuthError;
 import com.renren.api.connect.android.exception.RenrenError;
 import com.renren.api.connect.android.feed.FeedPublishRequestParam;
 import com.renren.api.connect.android.feed.FeedPublishResponseBean;
+import com.renren.api.connect.android.photos.PhotoUploadRequestParam;
+import com.renren.api.connect.android.photos.PhotoUploadResponseBean;
 import com.renren.api.connect.android.view.RenrenAuthListener;
 
 
@@ -45,7 +49,6 @@ public class RenrenUtil {
 		if ( !zRenren.isSessionKeyValid() ) {
 			fRenrenAuth();
 		}
-		
 	}
 	
 	public boolean isSessionValid() {
@@ -66,6 +69,7 @@ public class RenrenUtil {
 
 			@Override
 			public void onRenrenAuthError(RenrenAuthError renrenAuthError) {
+				Log.d(TAG, renrenAuthError.getMessage());
 				Toast.makeText(zContext, "Renren Auth Failed", Toast.LENGTH_SHORT).show();
 			}
 
@@ -166,5 +170,32 @@ public class RenrenUtil {
 	{
 		return zRenren;
 	}
+
+	public void fUploadPic(String message, String selectedImagePath) {
+			if (zRenren != null) {
+				AsyncRenren asyncRenren = new AsyncRenren(zRenren);
+				PhotoUploadRequestParam photoParam = new PhotoUploadRequestParam();
+				
+				photoParam.setCaption(message);
+				photoParam.setFile(new File(selectedImagePath));
+				
+				asyncRenren.publishPhoto(photoParam,new AbstractRequestListener<PhotoUploadResponseBean>(){
+
+					@Override
+					public void onComplete(PhotoUploadResponseBean bean) {
+						Log.d(TAG, bean.toString());
+					}
+
+					@Override
+					public void onFault(Throwable fault) {
+						Log.d(TAG, fault.getMessage());
+					}
+
+					@Override
+					public void onRenrenError(RenrenError renrenError) {
+						Log.d(TAG, renrenError.getMessage());
+					}});
+			}
+		}
 	
 }

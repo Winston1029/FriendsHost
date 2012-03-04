@@ -1,5 +1,7 @@
 package com.moupress.app.friendshost.activity;
 
+import java.io.File;
+
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.Facebook;
 import com.moupress.app.friendshost.Const;
@@ -15,7 +17,10 @@ import com.renren.api.connect.android.feed.FeedPublishResponseBean;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +37,7 @@ public class FeedPublishActivity extends Activity{
 	
 	public static final String TAG = "FeedPublishActivity";
 	private String sns;
+	private Activity activity;
 	//private Renren renren;
 	//private Facebook facebook;
 	private ProgressDialog progressDialog;
@@ -43,6 +49,13 @@ public class FeedPublishActivity extends Activity{
 	private EditText editTextImageUrl;
 	private EditText editTextCaption;
 	private EditText editTextMessage;
+	
+	//Controls & variables to publish Photos
+	private Button btnUploadPic;
+	private Button btnTakePic;
+
+	private static final int SELECT_PICTURE = 1;
+	private String selectedImagePath;
 	
 	//Parameters Caputure user's input info
 	private String name;
@@ -74,6 +87,9 @@ public class FeedPublishActivity extends Activity{
 		editTextCaption = (EditText) layout.findViewById(R.id.caption);
 		editTextMessage = (EditText) layout.findViewById(R.id.message);
 		
+		selectedImagePath = "";
+		activity= this;
+		
 		Button publishButton = (Button) layout.findViewById(R.id.publish);
 		publishButton.setOnClickListener(new OnClickListener(){
 
@@ -86,33 +102,98 @@ public class FeedPublishActivity extends Activity{
 				caption = editTextCaption.getText().toString();
 				message = editTextMessage.getText().toString();
 				
-				if(sns.equals(Const.SNS_RENREN))
+				if(selectedImagePath != null && selectedImagePath.length() > 0)
 				{
-					PubSub.zRenrenUtil.fPublishFeeds(name, description, url, imageUrl, caption, message);
-					
+					uploadPhoto();
+					selectedImagePath="";
 				}
-					else if(sns.equals(Const.SNS_FACEBOOK))
+				else 
 				{
-					PubSub.zFacebook.fPublishFeeds(name, description, url, imageUrl, caption, message);
+					publishFeed();
 				}
+				
+				activity.finish();
 			 }
 			
 			}
 		);
-	}
-	
-	
-	
-	private void FBPublishFeeds() {
 		
-//		if(facebook != null)
-//		{
-//			AsyncFacebookRunner asyncFB = new AsyncFacebookRunner(facebook);
-//			showProgress();
-//			
-//		}
+		
+		//Functions of Photos
+		btnUploadPic = (Button) layout.findViewById(R.id.updPic);
+		btnUploadPic.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				Intent intent = new Intent();
+	            intent.setType("image/*");
+	            intent.setAction(Intent.ACTION_GET_CONTENT);
+	            startActivityForResult(Intent.createChooser(intent,
+	                    "Select Picture"), SELECT_PICTURE);
+				
+			}
+
+		});
+		
+		btnTakePic = (Button) layout.findViewById(R.id.tkePic);
+		btnTakePic.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				takePhoto();
+			}
+
+		});
 	}
 	
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    if (resultCode == RESULT_OK) {
+	        if (requestCode == SELECT_PICTURE) {
+	            Uri selectedImageUri = data.getData();
+	            selectedImagePath = getPath(selectedImageUri);
+	            Log.d(TAG, "Image Selection Path is " + selectedImagePath);
+	            
+	        }
+	    }
+	}
+	
+	public String getPath(Uri uri) {
+	    String[] projection = { MediaStore.Images.Media.DATA };
+	    Cursor cursor = managedQuery(uri, projection, null, null, null);
+	    int column_index = cursor
+	            .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+	    cursor.moveToFirst();
+	    return cursor.getString(column_index);
+	}
+	
+	private void publishFeed()
+	{
+		if(sns.equals(Const.SNS_RENREN))
+		{
+			PubSub.zRenrenUtil.fPublishFeeds(name, description, url, imageUrl, caption, message);
+			
+		}
+			else if(sns.equals(Const.SNS_FACEBOOK))
+		{
+			PubSub.zFacebook.fPublishFeeds(name, description, url, imageUrl, caption, message);
+		}
+	}
+	private void uploadPhoto() {
+		if(sns.equals(Const.SNS_RENREN))
+		{
+			PubSub.zRenrenUtil.fUploadPic(message,selectedImagePath);
+			
+		}else if(sns.equals(Const.SNS_FACEBOOK))
+		{
+			PubSub.zFacebook.fUploadPic(message,selectedImagePath);
+		}
+	}
+	
+	private void takePhoto() {
+		
+	}
 
 	protected void showProgress() {
 		showProgress("Please wait", "progressing");

@@ -5,7 +5,20 @@
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:orientation="vertical" android:layout_width="fill_parent"
 		android:layout_height="fill_parent" android:padding="10dip">
-
+		
+		
+		<LinearLayout android:orientation="horizontal" 
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+		>
+		<Button android:id="@+id/updPic" android:text="Upload Photo"
+			android:layout_height="wrap_content" 
+			android:layout_width="wrap_content">
+		</Button>
+		<Button android:id="@+id/tkePic" android:text="Take Photo"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"></Button>
+		</LinearLayout>
 		<TextView android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:text="Title"
 			android:textSize="16sp" android:textColor="#333333" />
@@ -55,6 +68,7 @@
 			android:layout_height="wrap_content" android:layout_weight="1"
 			android:singleLine="true" android:padding="5dip" android:textSize="14sp"
 			android:text="Message" android:id="@+id/message" />
+			
 
 		<Button android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:text="Publish"

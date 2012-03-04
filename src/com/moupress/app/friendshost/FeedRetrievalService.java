@@ -48,7 +48,7 @@ public class FeedRetrievalService extends Service {
 		Toast.makeText(this, "Service Created", Toast.LENGTH_SHORT).show();
 		System.out.println("Service is created!");
 		while (!PubSub.zFacebook.isSessionValid() && !PubSub.zRenrenUtil.isSessionValid()) {
-			//System.out.println("Pending valid SNS sessions");
+			System.out.println("Pending valid SNS sessions");
 			SystemClock.sleep(10000);
 		}
 		pollForUpdates();

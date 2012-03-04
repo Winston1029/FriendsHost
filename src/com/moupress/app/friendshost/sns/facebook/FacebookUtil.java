@@ -37,8 +37,19 @@ public class FacebookUtil {
     private static final String[] PERMISSIONS = new String[] {"publish_stream", "read_stream"};
     private static final String FBTOKEN = "fbToken";
     private static final String FBTOKENEXPIRES = "fbAccessExpires";
+    
     private Facebook zFacebook;
 	private String sfbToken;
+	
+	//======Feed Params Name ===============
+	private static final String FEED_MSG ="message";
+	private static final String FEED_LINK = "link";
+	private static final String FEED_NAME = "name";
+	private static final String FEED_CAPTION = "caption";
+	private static final String FEED_DESC = "description";
+	private static final String FEED_PICS = "picture";
+	private static final String FEED_SRC = "source";
+	
 	
 	public FacebookUtil(PubSub pubSub) {
 		zPubSub = pubSub;
@@ -49,6 +60,7 @@ public class FacebookUtil {
 		if (!zFacebook.isSessionValid()) {
 			fFacebookAuth();
 		}
+		
 	}
 	
 	public boolean isSessionValid() {
@@ -128,6 +140,8 @@ public class FacebookUtil {
 	    }
 	    
 	    fUpdateStatus(sfbToken, fbMessage);
+	    
+	    
 	}
 	
 	private void fFacebookAuth(){
@@ -136,24 +150,24 @@ public class FacebookUtil {
 	
 	        @Override
 	        public void onComplete(Bundle values) {
-	            Log.d(this.getClass().getName(),"Facebook.authorize Complete: ");
+	            Log.d(TAG,"Facebook.authorize Complete: ");
 	            sfbToken = zFacebook.getAccessToken();
 	            fSaveFBToken(sfbToken, zFacebook.getAccessExpires());
 	        }
 	
 	        @Override
 	        public void onFacebookError(FacebookError error) {
-	            Log.d(this.getClass().getName(),"Facebook.authorize Error: "+error.toString());
+	            Log.d(TAG,"Facebook.authorize Error: "+error.toString());
 	        }
 	
 	        @Override
 	        public void onError(DialogError e) {
-	            Log.d(this.getClass().getName(),"Facebook.authorize DialogError: "+e.toString());
+	            Log.d(TAG,"Facebook.authorize DialogError: "+e.toString());
 	        }
 	
 	        @Override
 	        public void onCancel() {
-	            Log.d(this.getClass().getName(),"Facebook authorization canceled");
+	            Log.d(TAG,"Facebook authorization canceled");
 	        }
 	    });
 	}
@@ -200,22 +214,22 @@ public class FacebookUtil {
 			 Bundle params = new Bundle();
 			 
 			 if(message.length() > 0)
-			 params.putString("message", message);
+			 params.putString(FEED_MSG, message);
 			 
 			 if(url.length()>0 && url.startsWith("http"))
-			 params.putString("link",url);
+			 params.putString(FEED_LINK,url);
 			 
 			 if(name.length()>0)
-			 params.putString("name",name);
+			 params.putString(FEED_NAME,name);
 			 
 			 if(caption.length() > 0)
-			 params.putString("caption", caption);
+			 params.putString(FEED_CAPTION, caption);
 			 
 			 if(description.length() > 0)
-			 params.putString("description",description);
+			 params.putString(FEED_DESC,description);
 			 
 			 if(imageUrl.length() > 0)
-			 params.putString("picture",imageUrl);
+			 params.putString(FEED_PICS,imageUrl);
 			 
 			 
 			 RequestListener listener = new RequestListener() {
@@ -249,6 +263,48 @@ public class FacebookUtil {
 				}};
 				
 				asyncFB.request("me/feed", params, "POST", listener,null);
+		}
+	}
+
+	public void fUploadPic(String message, String selectedImagePath) {
+		if(zFacebook != null)
+		{
+			 AsyncFacebookRunner asyncFB = new AsyncFacebookRunner(zFacebook);
+			 Bundle params = new Bundle();
+			 params.putString(FEED_MSG, message);
+			 params.putString(FEED_SRC, selectedImagePath);
+			 
+			 RequestListener listener = new RequestListener() {
+
+					@Override
+					public void onComplete(String response, Object state) {
+						Log.d(TAG, "complete:"+response);
+						
+					}
+
+					@Override
+					public void onFacebookError(FacebookError e, Object state) {
+						Log.d(TAG, "Error: "+e.getErrorCode()+" : "+e.getMessage());
+					}
+
+					@Override
+					public void onFileNotFoundException(FileNotFoundException e,
+							Object state) {
+						Log.d(TAG, "Exception: " + e.getMessage());
+					}
+
+					@Override
+					public void onIOException(IOException e, Object state) {
+						Log.d(TAG, "Exception: " + e.getMessage());
+					}
+
+					@Override
+					public void onMalformedURLException(MalformedURLException e,
+							Object state) {
+						Log.d(TAG, "Exception: " + e.getMessage());
+					}};
+					
+					asyncFB.request("me/photos", params, "POST", listener,null);
 		}
 	}
 
