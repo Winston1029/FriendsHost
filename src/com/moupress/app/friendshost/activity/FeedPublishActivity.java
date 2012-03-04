@@ -93,7 +93,7 @@ public class FeedPublishActivity extends Activity{
 				}
 					else if(sns.equals(Const.SNS_FACEBOOK))
 				{
-					FBPublishFeeds();
+					PubSub.zFacebook.fPublishFeeds(name, description, url, imageUrl, caption, message);
 				}
 			 }
 			

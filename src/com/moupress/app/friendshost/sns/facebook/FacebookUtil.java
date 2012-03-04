@@ -33,6 +33,7 @@ public class FacebookUtil {
 	private PubSub zPubSub;
 	
 	public static final String APP_ID = "337247706286700";
+	private static final String TAG = "FacebookUtil";
     private static final String[] PERMISSIONS = new String[] {"publish_stream", "read_stream"};
     private static final String FBTOKEN = "fbToken";
     private static final String FBTOKENEXPIRES = "fbAccessExpires";
@@ -188,6 +189,67 @@ public class FacebookUtil {
 	public Facebook GetFBObject()
 	{
 		return zFacebook;
+	}
+	
+	public void fPublishFeeds(String name, String description,String url, String imageUrl, String caption, String message)
+	{
+		if(zFacebook != null)
+		{
+			 AsyncFacebookRunner asyncFB = new AsyncFacebookRunner(zFacebook);
+			 
+			 Bundle params = new Bundle();
+			 
+			 if(message.length() > 0)
+			 params.putString("message", message);
+			 
+			 if(url.length()>0 && url.startsWith("http"))
+			 params.putString("link",url);
+			 
+			 if(name.length()>0)
+			 params.putString("name",name);
+			 
+			 if(caption.length() > 0)
+			 params.putString("caption", caption);
+			 
+			 if(description.length() > 0)
+			 params.putString("description",description);
+			 
+			 if(imageUrl.length() > 0)
+			 params.putString("picture",imageUrl);
+			 
+			 
+			 RequestListener listener = new RequestListener() {
+
+				@Override
+				public void onComplete(String response, Object state) {
+					Log.d(TAG, "complete:"+response);
+					
+				}
+
+				@Override
+				public void onFacebookError(FacebookError e, Object state) {
+					Log.d(TAG, "Error: "+e.getErrorCode()+" : "+e.getMessage());
+				}
+
+				@Override
+				public void onFileNotFoundException(FileNotFoundException e,
+						Object state) {
+					Log.d(TAG, "Exception: " + e.getMessage());
+				}
+
+				@Override
+				public void onIOException(IOException e, Object state) {
+					Log.d(TAG, "Exception: " + e.getMessage());
+				}
+
+				@Override
+				public void onMalformedURLException(MalformedURLException e,
+						Object state) {
+					Log.d(TAG, "Exception: " + e.getMessage());
+				}};
+				
+				asyncFB.request("me/feed", params, "POST", listener,null);
+		}
 	}
 
 }

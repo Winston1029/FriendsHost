@@ -211,6 +211,11 @@ public class AsyncFacebookRunner {
                         RequestListener listener) {
         request(graphPath, parameters, "GET", listener, /* state */ null);
     }
+    
+    public void request(String grahpath, Bundle parameters, RequestListener listener, String httpMethod)
+    {
+    	request(grahpath,parameters,httpMethod,listener,null);
+    }
 
     /**
      * Make a request to the Facebook Graph API with the given HTTP method and
