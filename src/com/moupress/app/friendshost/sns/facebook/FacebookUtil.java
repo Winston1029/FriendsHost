@@ -1,5 +1,6 @@
 package com.moupress.app.friendshost.sns.facebook;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -8,6 +9,7 @@ import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.util.FeedOrganisor;
+import com.renren.api.connect.android.Util;
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.AsyncFacebookRunner.RequestListener;
 import com.facebook.android.DialogError;
@@ -272,7 +274,7 @@ public class FacebookUtil {
 			 AsyncFacebookRunner asyncFB = new AsyncFacebookRunner(zFacebook);
 			 Bundle params = new Bundle();
 			 params.putString(FEED_MSG, message);
-			 params.putString(FEED_SRC, selectedImagePath);
+			 params.putByteArray(FEED_SRC, Util.fileToByteArray(new File(selectedImagePath)));
 			 
 			 RequestListener listener = new RequestListener() {
 
