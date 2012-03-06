@@ -55,6 +55,7 @@ public class FeedPublishActivity extends Activity{
 	private Button btnTakePic;
 
 	private static final int SELECT_PICTURE = 1;
+	private static final int CAMERA_PIC_REQUEST = 2;
 	private String selectedImagePath;
 	
 	//Parameters Caputure user's input info
@@ -142,19 +143,25 @@ public class FeedPublishActivity extends Activity{
 			@Override
 			public void onClick(View v) {
 				
-				takePhoto();
+				//takePhoto();
+				 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+				 startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
 			}
 
 		});
 	}
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    if (resultCode == RESULT_OK) {
+	    if (resultCode == RESULT_OK ) {
 	        if (requestCode == SELECT_PICTURE) {
 	            Uri selectedImageUri = data.getData();
 	            selectedImagePath = getPath(selectedImageUri);
 	            Log.d(TAG, "Image Selection Path is " + selectedImagePath);
 	            
+	        }else if(requestCode == CAMERA_PIC_REQUEST)
+	        {
+	        	//File file = (File) data.getExtras().get("data");
+	        	Log.d(TAG, "Camera is capturing pics!");
 	        }
 	    }
 	}
