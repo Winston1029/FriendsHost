@@ -16,12 +16,13 @@ public class LstViewFeedAdapter extends BaseAdapter{
 	private ArrayList<FeedListItem> feedArrayList;
 	
 	private Activity zActivity;
-	private int iLayoutRef;
+	private int iLayoutResId;
 	private LayoutInflater viewInflator;
 
-	public LstViewFeedAdapter(Activity activity, int layoutRef) {
+	public LstViewFeedAdapter(Activity activity, int layoutResId) {
 		this.zActivity = activity;
-		this.iLayoutRef = layoutRef;
+		this.iLayoutResId = layoutResId;
+		viewInflator = zActivity.getLayoutInflater();
 	}
 	
 	public void clear() {
@@ -54,18 +55,35 @@ public class LstViewFeedAdapter extends BaseAdapter{
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 		if (convertView == null) {
-			convertView = viewInflator.inflate(R.layout.feed_item_preview, null);
+			convertView = viewInflator.inflate(iLayoutResId, null);
 		}
-		
+
+		//compulsory field
 		TextView txv_FeedUser = (TextView) convertView.findViewById(R.id.txt_name);
 		txv_FeedUser.setText(feedArrayList.get(position).getsName());
 		TextView txv_MsgCreationTime = (TextView) convertView.findViewById(R.id.txt_msgcreatedtime);
-		txv_MsgCreationTime.setText(feedArrayList.get(position).getsCreatedTime());
+		String sCreateTime = feedArrayList.get(position).getsCreatedTime();
+		txv_MsgCreationTime.setText(sCreateTime);
+
+		// optional field
+		String sMsgBody = feedArrayList.get(position).getsMsgBody();
 		TextView txv_MsgBody = (TextView) convertView.findViewById(R.id.txt_msgbody);
-		txv_MsgBody.setText(feedArrayList.get(position).getsMsgBody());
+		if ( sMsgBody == null || sMsgBody.isEmpty() ) {
+			//txv_MsgBody.setVisibility(View.INVISIBLE);
+			System.out.println("Pos = " + position + " MsgBody is Empty");
+		} else {
+			txv_MsgBody.setText(sMsgBody);
+		}
+		
 		ImageView img_PhotoPreview = (ImageView) convertView.findViewById(R.id.img_photopreview);
-		Uri imgSource = Uri.parse(feedArrayList.get(position).getsPhotoPreviewLink());
-		img_PhotoPreview.setImageURI(imgSource);
+		String sImgSrc = feedArrayList.get(position).getsPhotoPreviewLink();
+		if (sImgSrc == null || sImgSrc.isEmpty() ) {
+			//img_PhotoPreview.setVisibility(View.INVISIBLE);
+			System.out.println("Pos = " + position + " ImgSrc is Empty");
+		} else {
+			Uri imgSource = Uri.parse(sImgSrc);
+			img_PhotoPreview.setImageURI(imgSource);
+		}
 		
 		return convertView;
 	}

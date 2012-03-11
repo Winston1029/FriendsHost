@@ -126,7 +126,7 @@ public class FacebookUtil {
 				feedAdapter.clear();
 				//adapterFBResponse.notifyDataSetChanged();
 				String[][] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_FACEBOOK);
-				for (int i = 0; i < feedMsg.length; i++) {
+				for (int i = 0; i < 1; i++) {
 					feedAdapter.addItem(feedMsg[i]);
 				}
 				feedAdapter.notifyDataSetChanged();
