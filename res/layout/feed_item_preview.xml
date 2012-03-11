@@ -18,11 +18,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal" >
-
+
     <ImageView
         android:id="@+id/img_feeduser"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:src="@drawable/ic_launcher" />
 
     <LinearLayout
@@ -51,7 +51,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="msgbody"
             android:textSize="18sp" />
         
         <ImageView
