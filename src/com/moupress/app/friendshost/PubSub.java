@@ -57,6 +57,13 @@ public class PubSub {
 		uLstFeed.setAdapter(arrAdapterFeed);
 	}
 	
+	private LstViewFeedAdapter arrAdapterFeedPreview;
+	private void fInitFeedUIPreview() {
+		arrAdapterFeedPreview = new LstViewFeedAdapter(zActivity, R.layout.feed_item_preview);
+		uLstFeed.setAdapter(arrAdapterFeedPreview);
+	}
+	public LstViewFeedAdapter fGetAdapterFeedPreview() {return arrAdapterFeedPreview;}
+	
 	private void fFBInitUI() {        
         Button uBtnFBGetFeed = (Button) zActivity.findViewById(R.id.btn_getfbfeed);
         Button uBtnFBPubFeed = (Button) zActivity.findViewById(R.id.btn_pubfbfeed);
@@ -67,6 +74,7 @@ public class PubSub {
 			public void onClick(View v) {
 				//arrAdapterFeed.clear();				
 				//zFacebook.fGetNewsFeed();
+				fInitFeedUIPreview();
 				zFacebook.fDisplayFeed();
 				System.out.print("Feed Parse Complete");
 				
@@ -95,6 +103,7 @@ public class PubSub {
 			public void onClick(View v) {
 				//arrAdapterFeed.clear();
 				//zRenrenUtil.fGetNewsFeed();
+				fInitFeedUI();
 				zRenrenUtil.fDisplayRenrenFeed();
 			}
 		});
@@ -163,5 +172,6 @@ public class PubSub {
 		zRenrenUtil.onComplete(requestCode, resultCode, data);
 		zFacebook.onComplete(requestCode, resultCode, data);
 	}
+
 
 }

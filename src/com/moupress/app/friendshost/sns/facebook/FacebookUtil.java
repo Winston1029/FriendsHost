@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
+import com.moupress.app.friendshost.LstViewFeedAdapter;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.util.FeedOrganisor;
 import com.renren.api.connect.android.Util;
@@ -121,14 +122,14 @@ public class FacebookUtil {
 	public void fDisplayFeed() {
 		zPubSub.fGetActivity().runOnUiThread(new Runnable() {
 			public void run() {
-				ArrayAdapter<String> adapterFBResponse = zPubSub.fGetArrAdapterFeed();
-				adapterFBResponse.clear();
+				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
+				feedAdapter.clear();
 				//adapterFBResponse.notifyDataSetChanged();
-				String[] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_FACEBOOK);
+				String[][] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_FACEBOOK);
 				for (int i = 0; i < feedMsg.length; i++) {
-					adapterFBResponse.add(feedMsg[i]);
+					feedAdapter.addItem(feedMsg[i]);
 				}
-				adapterFBResponse.notifyDataSetChanged();
+				feedAdapter.notifyDataSetChanged();
 			}
 		});
 	}

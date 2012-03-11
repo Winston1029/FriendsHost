@@ -151,7 +151,7 @@ public class RenrenUtil {
 			public void run() {
 				ArrayAdapter<String> adapterRenrenResponse = zPubSub.fGetArrAdapterFeed();
 				adapterRenrenResponse.clear();
-				String[] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_RENREN);
+				String[] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeedSummary(Const.SNS_RENREN);
 				for(int i= 0; i<feedMsg.length;i++) {
 					adapterRenrenResponse.add(feedMsg[i]);
 				}

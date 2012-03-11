@@ -61,6 +61,9 @@ public class SinaUtil {
 	}
 	
 	public void fGetNewsFeed() {
+		sTokenKey = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENKEY);
+		sTokenSecret = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENSECRET);
+		
 		zPubSub.fGetActivity().runOnUiThread(new Runnable () {
 			@Override
 			public void run() {
