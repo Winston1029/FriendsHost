@@ -3,11 +3,14 @@ package com.moupress.app.friendshost;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -17,7 +20,7 @@ public class FeedRetrievalService extends Service {
 	private long update_interval = 15000;
 	private static int counter = 0;
 	
-	private void pollForUpdates() {
+	private void fPollForUpdates() {
 		timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
@@ -47,7 +50,7 @@ public class FeedRetrievalService extends Service {
 	@Override
 	public void onCreate() {
 		Toast.makeText(this, "Service Created", Toast.LENGTH_SHORT).show();
-		pollForUpdates();
+		fPollForUpdates();
 		
 	}
 	
