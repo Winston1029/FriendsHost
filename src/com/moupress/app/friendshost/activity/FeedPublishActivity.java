@@ -16,8 +16,11 @@ import com.renren.api.connect.android.feed.FeedPublishResponseBean;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -58,6 +61,7 @@ public class FeedPublishActivity extends Activity{
 	private static final int CAMERA_PIC_REQUEST = 2;
 	private String selectedImagePath;
 	
+	
 	//Parameters Caputure user's input info
 	private String name;
 	private String description;
@@ -65,6 +69,8 @@ public class FeedPublishActivity extends Activity{
 	private String imageUrl;
 	private String caption;
 	private String message;
+	
+	private Uri mCapturedImageURI;
 	
 
 	@Override
@@ -89,6 +95,7 @@ public class FeedPublishActivity extends Activity{
 		editTextMessage = (EditText) layout.findViewById(R.id.message);
 		
 		selectedImagePath = "";
+		
 		activity= this;
 		
 		Button publishButton = (Button) layout.findViewById(R.id.publish);
@@ -144,7 +151,13 @@ public class FeedPublishActivity extends Activity{
 			public void onClick(View v) {
 				
 				//takePhoto();
+				 String fileName = "temp.jpg";  
+			     ContentValues values = new ContentValues();  
+			     values.put(MediaStore.Images.Media.TITLE, fileName);  
+			     mCapturedImageURI = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);  
+
 				 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+				 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCapturedImageURI);
 				 startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
 			}
 
@@ -160,7 +173,12 @@ public class FeedPublishActivity extends Activity{
 	            
 	        }else if(requestCode == CAMERA_PIC_REQUEST)
 	        {
-	        	//File file = (File) data.getExtras().get("data");
+	        	//pic = (Bitmap) data.getExtras().get("data");
+	        	String[] projection = { MediaStore.Images.Media.DATA}; 
+	            Cursor cursor = managedQuery(mCapturedImageURI, projection, null, null, null); 
+	            int column_index_data = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA); 
+	            cursor.moveToFirst(); 
+	             selectedImagePath = cursor.getString(column_index_data);
 	        	Log.d(TAG, "Camera is capturing pics!");
 	        }
 	    }
@@ -188,15 +206,18 @@ public class FeedPublishActivity extends Activity{
 		}
 	}
 	private void uploadPhoto() {
+		
 		if(sns.equals(Const.SNS_RENREN))
 		{
-			PubSub.zRenrenUtil.fUploadPic(message,selectedImagePath);
+		   PubSub.zRenrenUtil.fUploadPic(message,selectedImagePath);
 			
 		}else if(sns.equals(Const.SNS_FACEBOOK))
 		{
 			PubSub.zFacebook.fUploadPic(message,selectedImagePath);
 		}
 	}
+	
+	
 	
 	private void takePhoto() {
 		

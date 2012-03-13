@@ -17,4 +17,7 @@ public class Const {
 	//==============Notification============================
 	public static final int FRIENDSHOST_NOTIFY_ID = 1;
 	
+	//=============UploadPhoto Method=======================
+	public static enum photoLoc {Galary, Shot};
+	
 }

@@ -5,6 +5,7 @@ import java.io.File;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -177,6 +178,7 @@ public class RenrenUtil {
 				PhotoUploadRequestParam photoParam = new PhotoUploadRequestParam();
 				
 				photoParam.setCaption(message);
+				
 				photoParam.setFile(new File(selectedImagePath));
 				
 				asyncRenren.publishPhoto(photoParam,new AbstractRequestListener<PhotoUploadResponseBean>(){

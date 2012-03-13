@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -274,6 +275,7 @@ public class FacebookUtil {
 			 AsyncFacebookRunner asyncFB = new AsyncFacebookRunner(zFacebook);
 			 Bundle params = new Bundle();
 			 params.putString(FEED_MSG, message);
+			 
 			 params.putByteArray(FEED_SRC, Util.fileToByteArray(new File(selectedImagePath)));
 			 
 			 RequestListener listener = new RequestListener() {
