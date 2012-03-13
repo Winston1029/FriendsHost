@@ -12,5 +12,9 @@ public class Const {
 	//==============DBHelper================================
 	public static final String SP_SINA_TOKENKEY = "SinaTokeyKey";
 	public static final String SP_SINA_TOKENSECRET = "SinaTokeySecret";
+	public static final String ACTION_DISPLAYFEED = "DisplayFeed";
+	
+	//==============Notification============================
+	public static final int FRIENDSHOST_NOTIFY_ID = 1;
 	
 }

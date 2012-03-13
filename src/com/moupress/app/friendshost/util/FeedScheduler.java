@@ -32,7 +32,7 @@ public class FeedScheduler {
 			TextView uTxvCounter = (TextView) zPubSub.fGetActivity().findViewById(R.id.txv_counter);
 			cntTimedTask++;
 			zPubSub.fGetArrAdapterFeed().clear();
-			zPubSub.fGetFacebookUtil().fGetNewsFeed();
+			zPubSub.fGetFacebookUtil().fGetNewsFeed(zPubSub.fGetContext());
 			uTxvCounter.setText("Counter: " + cntTimedTask);
 			zHandler.postDelayed(zTimedTask, lretrieveInterval);
 		}

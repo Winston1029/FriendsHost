@@ -74,7 +74,7 @@ public class FacebookUtil {
 		}
 	}
 
-	public void fGetNewsFeed() {
+	public void fGetNewsFeed(final Context context) {
 		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(zContext);
 	    sfbToken = mPrefs.getString(FBTOKEN, "");
 	
@@ -88,7 +88,7 @@ public class FacebookUtil {
 
 			@Override
 			public void onComplete(final String response, Object state) {
-				zPubSub.fGetFeedOrganisor().fSaveNewFeeds(response);
+				zPubSub.fGetFeedOrganisor().fSaveNewFeeds(response, context);
 			}
 
 			@Override
@@ -124,7 +124,6 @@ public class FacebookUtil {
 			public void run() {
 				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
 				feedAdapter.clear();
-				//adapterFBResponse.notifyDataSetChanged();
 				String[][] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_FACEBOOK);
 				for (int i = 0; i < feedMsg.length; i++) {
 					feedAdapter.addItem(feedMsg[i]);

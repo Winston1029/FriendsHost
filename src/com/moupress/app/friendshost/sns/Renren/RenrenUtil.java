@@ -85,14 +85,14 @@ public class RenrenUtil {
 		zRenren.authorize(zActivity, PERMISSIONS, listener);
 	}
 	
-	public void fGetNewsFeed() {
+	public void fGetNewsFeed(final Context context) {
 		AsyncRenren asyncRenren = new AsyncRenren(zRenren);
 		FeedExtractRequestParam param = new FeedExtractRequestParam("XML", "10", 1);
 		AbstractRequestListener<FeedExtractResponseBean> listener = new AbstractRequestListener<FeedExtractResponseBean>(){
 			@Override
 			public void onComplete(final FeedExtractResponseBean bean) {
 				System.out.println("Renren news feed get listener on complete");
-				zPubSub.fGetFeedOrganisor().fSaveNewFeeds(bean);
+				zPubSub.fGetFeedOrganisor().fSaveNewFeeds(bean, context);
 			}
 
 			@Override

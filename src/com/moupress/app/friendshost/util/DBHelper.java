@@ -23,6 +23,9 @@ public class DBHelper {
     static final String NEWSFEED_TABLE_NAME = "newsfeed";
     static final int DATABASE_VERSION = 2;
     
+    //query condition
+    static final String ORDER_DESC = " DESC";
+    
     //sns network type
     static final String SNS_FACEBOOK = "Facebook";
     static final String SNS_RENREN = "Renren";
@@ -239,7 +242,7 @@ public class DBHelper {
 		Cursor cursor = null;
 		String[] result = null;
 		try {
-			cursor = zSQLiteDB.query(T_FEED, columns, where, selectionArgs, null, null, C_FEED_CREATED_TIME);
+			cursor = zSQLiteDB.query(T_FEED, columns, where, selectionArgs, null, null, C_FEED_CREATED_TIME + ORDER_DESC);
 			int numRows = cursor.getCount();
 			result = new String[numRows];
 			cursor.moveToFirst();
@@ -270,7 +273,7 @@ public class DBHelper {
 		Cursor cursor = null;
 		String[][] result = null;
 		try {
-			cursor = zSQLiteDB.query(T_FEED, columns, where, selectionArgs, null, null, C_FEED_CREATED_TIME);
+			cursor = zSQLiteDB.query(T_FEED, columns, where, selectionArgs, null, null, C_FEED_CREATED_TIME + ORDER_DESC);
 			int numRows = cursor.getCount();
 			result = new String[numRows][columns.length];
 			cursor.moveToFirst();

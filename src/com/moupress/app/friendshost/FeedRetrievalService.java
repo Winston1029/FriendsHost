@@ -27,10 +27,10 @@ public class FeedRetrievalService extends Service {
 			public void run() {
 				counter++;
 				if (PubSub.zFacebook != null && PubSub.zFacebook.isSessionValid() ) {
-					PubSub.zFacebook.fGetNewsFeed();
+					PubSub.zFacebook.fGetNewsFeed(getApplicationContext());
 				}
 				if (PubSub.zRenrenUtil != null && PubSub.zRenrenUtil.isSessionValid() ) {
-					PubSub.zRenrenUtil.fGetNewsFeed();
+					PubSub.zRenrenUtil.fGetNewsFeed(getApplicationContext());
 				}
 				if (PubSub.zRenrenUtil == null && PubSub.zFacebook == null) {
 					stopSelf();

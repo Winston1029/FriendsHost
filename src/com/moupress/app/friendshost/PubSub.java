@@ -50,15 +50,15 @@ public class PubSub {
 		PubSub.zContext = service.getBaseContext();
 	}
 	
-	private ArrayAdapter<String> arrAdapterFeed;
+	private static ArrayAdapter<String> arrAdapterFeed;
 	public ArrayAdapter<String> fGetArrAdapterFeed() {return arrAdapterFeed;}
-	private void fInitFeedUI() {
+	public void fInitFeedUI() {
 		arrAdapterFeed = new ArrayAdapter<String>(zActivity,R.layout.feed_item);
 		uLstFeed.setAdapter(arrAdapterFeed);
 	}
 	
 	private LstViewFeedAdapter arrAdapterFeedPreview;
-	private void fInitFeedUIPreview() {
+	public void fInitFeedUIPreview() {
 		arrAdapterFeedPreview = new LstViewFeedAdapter(zActivity, R.layout.feed_item_preview);
 		uLstFeed.setAdapter(arrAdapterFeedPreview);
 	}
