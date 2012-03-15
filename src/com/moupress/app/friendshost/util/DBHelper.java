@@ -266,7 +266,7 @@ public class DBHelper {
 	 * @return
 	 */
 	public String[][] fGetFeedPreview(String sns) {
-		String[] columns = new String[] {C_FEED_FROM, C_FEED_CREATED_TIME, C_FEED_MSG, C_FEED_PIC};
+		String[] columns = new String[] {C_FEED_FROM, C_FEED_CREATED_TIME, C_FEED_MSG, C_FEED_PIC, C_FEED_DESCRIPTION};
 		String where = C_FEED_ISREAD + " = ? and " 
 						+ C_FEED_SNS + " = ? ";
 		String[] selectionArgs = new String[] {"0", sns};

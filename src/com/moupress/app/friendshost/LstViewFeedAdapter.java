@@ -2,13 +2,15 @@ package com.moupress.app.friendshost;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,24 +75,31 @@ public class LstViewFeedAdapter extends BaseAdapter{
 		// optional field
 		String sMsgBody = feedArrayList.get(position).getsMsgBody();
 		TextView txv_MsgBody = (TextView) convertView.findViewById(R.id.txt_msgbody);
-		if ( sMsgBody == null || sMsgBody.isEmpty() ) {
-			txv_MsgBody.setVisibility(View.INVISIBLE);
-			System.out.println("Pos = " + position + " MsgBody is Empty");
-		} else {
+		if ( sMsgBody != null ) {
 			txv_MsgBody.setText(sMsgBody);
+		} else {
+			txv_MsgBody.setVisibility(View.GONE);
 		}
 		
 		ImageView img_PhotoPreview = (ImageView) convertView.findViewById(R.id.img_photopreview);
 		String sImgSrc = feedArrayList.get(position).getsPhotoPreviewLink();
-		if (sImgSrc == null || sImgSrc.isEmpty() ) {
-			img_PhotoPreview.setVisibility(View.INVISIBLE);
-			System.out.println("Pos = " + position + " ImgSrc is Empty");
+		//String sImgSrc = "http://photos-g.ak.fbcdn.net/hphotos-ak-ash4/431333_10150739807624187_554329186_11304408_1165959123_s.jpg";
+		Bitmap img = ImageOperations(sImgSrc);
+		if (img != null) {
+			img_PhotoPreview.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+			img_PhotoPreview.setImageBitmap(img);
 		} else {
-			//Uri imgSource = Uri.parse(sImgSrc);
-			//img_PhotoPreview.setImageURI(imgSource);
-			Drawable image = ImageOperations(sImgSrc,"image.jpg");
-			img_PhotoPreview.setImageDrawable(image);
+			img_PhotoPreview.setVisibility(View.GONE);
 		}
+		
+		String sImgDescription = feedArrayList.get(position).getsPhotoPreviewDescription();
+		TextView txv_ImgDecription = (TextView) convertView.findViewById(R.id.txv_imgdescription);
+		if (sImgDescription != null) {
+			txv_ImgDecription.setText(sImgDescription);
+		} else {
+			txv_ImgDecription.setVisibility(View.GONE);
+		}
+		
 		
 		return convertView;
 	}
@@ -101,22 +110,26 @@ public class LstViewFeedAdapter extends BaseAdapter{
 		item.setsCreatedTime(feedMsg[1]);
 		item.setsMsgBody(feedMsg[2]);
 		item.setsPhotoPreviewLink(feedMsg[3]);
+		item.setsPhotoPreviewDescription(feedMsg[4]);
 		feedArrayList.add(item);
 	}
 	
-	private Drawable ImageOperations(String url, String saveFilename) {
-		try {
-			//InputStream is = (InputStream) this.fetch(url);
-			InputStream is = (InputStream) (new URL(url)).getContent(); 
-			Drawable d = Drawable.createFromStream(is, "src");
-			return d;
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			return null;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
+	private Bitmap ImageOperations(String url) {
+		HttpURLConnection con = null;
+		Bitmap bmp = null;
+		if (url != null) {
+			try {
+				URL ulrn = new URL(url);
+				con = (HttpURLConnection)ulrn.openConnection();
+			    InputStream is = con.getInputStream();
+			    bmp = BitmapFactory.decodeStream(is);
+		    } catch(Exception e) {
+		    	
+		    } finally { 
+		    	if (con != null) { con.disconnect(); } 
+	    	}
 		}
+		return bmp;
 	}
 
 //	public Object fetch(String address) throws MalformedURLException,IOException {
