@@ -44,6 +44,7 @@ public class FacebookUtil {
     
     private Facebook zFacebook;
 	private String sfbToken;
+	private static AsyncFacebookRunner asyncFB;
 	
 	//======Feed Params Name ===============
 	private static final String FEED_MSG ="message";
@@ -61,9 +62,7 @@ public class FacebookUtil {
 		if (zFacebook == null) {
 			zFacebook = new Facebook(APP_ID);
 		}
-		if (!zFacebook.isSessionValid()) {
-			fFacebookAuth();
-		}
+		fFacebookAuth();
 		
 	}
 	
@@ -79,12 +78,11 @@ public class FacebookUtil {
 		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(zContext);
 	    sfbToken = mPrefs.getString(FBTOKEN, "");
 	
-	    if( !zFacebook.isSessionValid() ){
-	    	fFacebookAuth();
-	    	sfbToken = mPrefs.getString(FBTOKEN, "");
-	    }
+    	fFacebookAuth();
+    	sfbToken = mPrefs.getString(FBTOKEN, "");
 	    
-	    AsyncFacebookRunner asyncFB = new AsyncFacebookRunner(zFacebook);
+	    //AsyncFacebookRunner asyncFB = new AsyncFacebookRunner(zFacebook);
+    	asyncFB = fGetAsyncFacebook();
 	    RequestListener listener = new RequestListener() {
 
 			@Override
@@ -134,20 +132,11 @@ public class FacebookUtil {
 		});
 	}
 	
-	public void fPostMessage(String fbMessage) {
-		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(zContext);
-	    sfbToken = mPrefs.getString("fbToken", "");
-	
-	    if(sfbToken.equals("")){
-	    	fFacebookAuth();
-	    }
-	    
-	    fUpdateStatus(sfbToken, fbMessage);
-	    
-	    
-	}
-	
 	private void fFacebookAuth(){
+		
+		if (isSessionValid()) {
+			return ;
+		}
 		
 	    zFacebook.authorize(zPubSub.fGetActivity(), PERMISSIONS, new DialogListener() {
 	
@@ -175,21 +164,6 @@ public class FacebookUtil {
 	    });
 	}
 	
-	//updating Status
-	private void fUpdateStatus(String accessToken, String message){
-	    try {
-	        Bundle mBundle = new Bundle();
-	        mBundle.putString("message",  message);
-	        mBundle.putString(Facebook.TOKEN,accessToken);
-	        String response = zFacebook.request("me/feed",mBundle,"POST");
-	        Log.d("UPDATE RESPONSE",""+response);
-	    } catch (MalformedURLException e) {
-	        Log.e("MALFORMED URL",""+e.getMessage());
-	    } catch (IOException e) {
-	        Log.e("IOEX",""+e.getMessage());
-	    }
-	}
-	
 	private void fSaveFBToken(String token, long tokenExpires){
 	    SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(zContext);
 	    mPrefs.edit().putString(FBTOKEN, token);
@@ -203,16 +177,21 @@ public class FacebookUtil {
 		}
     }
 	
-	public Facebook GetFBObject()
+	public AsyncFacebookRunner fGetAsyncFacebook()
 	{
-		return zFacebook;
+		if (asyncFB == null) {
+			fFacebookAuth();
+			asyncFB = new AsyncFacebookRunner(zFacebook);
+		}
+		return asyncFB;
 	}
 	
 	public void fPublishFeeds(String name, String description,String url, String imageUrl, String caption, String message)
 	{
 		if(zFacebook != null)
 		{
-			 AsyncFacebookRunner asyncFB = new AsyncFacebookRunner(zFacebook);
+			 //AsyncFacebookRunner asyncFB = new AsyncFacebookRunner(zFacebook);
+			asyncFB = fGetAsyncFacebook();
 			 
 			 Bundle params = new Bundle();
 			 
@@ -272,7 +251,8 @@ public class FacebookUtil {
 	public void fUploadPic(String message, String selectedImagePath) {
 		if(zFacebook != null)
 		{
-			 AsyncFacebookRunner asyncFB = new AsyncFacebookRunner(zFacebook);
+			 //AsyncFacebookRunner asyncFB = new AsyncFacebookRunner(zFacebook);
+			 asyncFB = fGetAsyncFacebook();
 			 Bundle params = new Bundle();
 			 params.putString(FEED_MSG, message);
 			 

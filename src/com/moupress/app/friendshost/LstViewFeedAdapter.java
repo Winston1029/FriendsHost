@@ -66,6 +66,10 @@ public class LstViewFeedAdapter extends BaseAdapter{
 		}
 
 		//compulsory field
+		String username = feedArrayList.get(position).getsName();
+		if ( username.equals("Kenny Attoken J") ) {
+			System.out.println(username);
+		}
 		TextView txv_FeedUser = (TextView) convertView.findViewById(R.id.txt_name);
 		txv_FeedUser.setText(feedArrayList.get(position).getsName());
 		TextView txv_MsgCreationTime = (TextView) convertView.findViewById(R.id.txt_msgcreatedtime);
@@ -92,11 +96,21 @@ public class LstViewFeedAdapter extends BaseAdapter{
 			img_PhotoPreview.setVisibility(View.GONE);
 		}
 		
+		// Image related text
+		String sImgName = feedArrayList.get(position).getsPhotoPreviewName();
+		String sImgCaption = feedArrayList.get(position).getsPhotoPreviewCaption();
 		String sImgDescription = feedArrayList.get(position).getsPhotoPreviewDescription();
+		
+		TextView txv_ImgName = (TextView) convertView.findViewById(R.id.txv_imgName);
+		TextView txv_ImgCaption = (TextView) convertView.findViewById(R.id.txv_imgCaption);
 		TextView txv_ImgDecription = (TextView) convertView.findViewById(R.id.txv_imgdescription);
-		if (sImgDescription != null) {
+		if (sImgName != null) {
+			txv_ImgName.setText(sImgName);
+			txv_ImgCaption.setText(sImgCaption);
 			txv_ImgDecription.setText(sImgDescription);
 		} else {
+			txv_ImgName.setVisibility(View.GONE);
+			txv_ImgCaption.setVisibility(View.GONE);
 			txv_ImgDecription.setVisibility(View.GONE);
 		}
 		
@@ -106,11 +120,13 @@ public class LstViewFeedAdapter extends BaseAdapter{
 
 	public void addItem(String[] feedMsg) {
 		FeedListItem item = new FeedListItem();
-		item.setsName(feedMsg[0]);
-		item.setsCreatedTime(feedMsg[1]);
-		item.setsMsgBody(feedMsg[2]);
-		item.setsPhotoPreviewLink(feedMsg[3]);
-		item.setsPhotoPreviewDescription(feedMsg[4]);
+		item.setsName(feedMsg[0]);							//name
+		item.setsCreatedTime(feedMsg[1]);					//created time
+		item.setsMsgBody(feedMsg[2]);						//message
+		item.setsPhotoPreviewLink(feedMsg[3]);				//pic url
+		item.setsPhotoPreviewName(feedMsg[4]);				//pic/album name
+		item.setsPhotoPreviewCaption(feedMsg[5]);			//pic/album caption
+		item.setsPhotoPreviewDescription(feedMsg[6]);		//pic/album description
 		feedArrayList.add(item);
 	}
 	

@@ -8,6 +8,8 @@ public class FeedListItem {
 	private String sCreatedTime;
 	private String sMsgBody;
 	private String sPhotoPreviewLink;
+	private String sPhotoPreviewName;
+	private String sPhotoPreviewCaption;
 	private String sPhotoPreviewDescription;
 	
 	public void setsHeadImg(String sHeadImg) {
@@ -45,6 +47,18 @@ public class FeedListItem {
 	}
 	public String getsPhotoPreviewDescription() {
 		return sPhotoPreviewDescription;
+	}
+	public void setsPhotoPreviewName(String sPhotoPreviewName) {
+		this.sPhotoPreviewName = sPhotoPreviewName;
+	}
+	public String getsPhotoPreviewName() {
+		return sPhotoPreviewName;
+	}
+	public void setsPhotoPreviewCaption(String sPhotoPreviewCaption) {
+		this.sPhotoPreviewCaption = sPhotoPreviewCaption;
+	}
+	public String getsPhotoPreviewCaption() {
+		return sPhotoPreviewCaption;
 	}
 	
 }

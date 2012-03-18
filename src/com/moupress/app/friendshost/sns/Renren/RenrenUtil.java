@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.facebook.android.AsyncFacebookRunner;
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.PubSub;
@@ -40,6 +41,7 @@ public class RenrenUtil {
 	private Activity zActivity;
 	
 	private Renren zRenren;
+	private static AsyncRenren asyncRenren;
 	
 		
 	public RenrenUtil(PubSub pubSub) {
@@ -47,9 +49,7 @@ public class RenrenUtil {
 		zContext = zPubSub.fGetContext();
 		zActivity = zPubSub.fGetActivity();
 		this.zRenren = new Renren(API_KEY, SECRET_KEY, APP_ID, zContext);
-		if ( !zRenren.isSessionKeyValid() ) {
-			fRenrenAuth();
-		}
+		fRenrenAuth();
 	}
 	
 	public boolean isSessionValid() {
@@ -61,6 +61,10 @@ public class RenrenUtil {
 	}
 
 	public void fRenrenAuth() {
+		if ( isSessionValid() ) {
+			return;
+		}
+		
 		final RenrenAuthListener listener = new RenrenAuthListener() {
 
 			@Override
@@ -86,8 +90,19 @@ public class RenrenUtil {
 		zRenren.authorize(zActivity, PERMISSIONS, listener);
 	}
 	
+	public AsyncRenren fGetAsyncRenren()
+	{
+		if (asyncRenren == null) {
+			fRenrenAuth();
+			asyncRenren = new AsyncRenren(zRenren);
+		}
+		return asyncRenren;
+	}
+	
 	public void fGetNewsFeed(final Context context) {
-		AsyncRenren asyncRenren = new AsyncRenren(zRenren);
+		//AsyncRenren asyncRenren = new AsyncRenren(zRenren);
+		asyncRenren = fGetAsyncRenren();
+		
 		FeedExtractRequestParam param = new FeedExtractRequestParam("XML", "10", 1);
 		AbstractRequestListener<FeedExtractResponseBean> listener = new AbstractRequestListener<FeedExtractResponseBean>(){
 			@Override
@@ -112,7 +127,8 @@ public class RenrenUtil {
 	public void fPublishFeeds(String name, String description,String url, String imageUrl, String caption, String message)
 	{
 		if (zRenren != null) {
-			AsyncRenren asyncRenren = new AsyncRenren(zRenren);
+			//AsyncRenren asyncRenren = new AsyncRenren(zRenren);
+			asyncRenren = fGetAsyncRenren();
 			//showProgress();
 			
 			FeedPublishRequestParam param = new FeedPublishRequestParam(
@@ -174,7 +190,8 @@ public class RenrenUtil {
 
 	public void fUploadPic(String message, String selectedImagePath) {
 			if (zRenren != null) {
-				AsyncRenren asyncRenren = new AsyncRenren(zRenren);
+				//AsyncRenren asyncRenren = new AsyncRenren(zRenren);
+				asyncRenren = fGetAsyncRenren();
 				PhotoUploadRequestParam photoParam = new PhotoUploadRequestParam();
 				
 				photoParam.setCaption(message);

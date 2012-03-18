@@ -5,7 +5,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -15,7 +14,6 @@ import com.moupress.app.friendshost.sns.Renren.RenrenUtil;
 import com.moupress.app.friendshost.sns.facebook.FacebookUtil;
 import com.moupress.app.friendshost.sns.sina.SinaUtil;
 import com.moupress.app.friendshost.util.FeedOrganisor;
-import com.moupress.app.friendshost.util.FeedScheduler;
 
 public class PubSub {
 	private static Activity zActivity;
@@ -24,7 +22,6 @@ public class PubSub {
 	public static FacebookUtil 	zFacebook;
 	public static RenrenUtil 	zRenrenUtil;
 	public static SinaUtil		zSinaUtil;
-	public static FeedScheduler	zFeedScheduler;
 	public static FeedOrganisor zFeedOrg;
 	
 	ListView uLstFeed;
@@ -43,7 +40,6 @@ public class PubSub {
 		fFBInitUI();
 		fInitRenrenUI();
 		fInitSinaUI();
-		fInitSchedulerUI();
 	}
 
 	public PubSub(Service service) {
@@ -132,32 +128,11 @@ public class PubSub {
 		});
 	}
 
-	private void fInitSchedulerUI() {
-		Button uBtnScheduler = (Button) zActivity.findViewById(R.id.btn_Scheduler);
-		
-		
-		uBtnScheduler.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				String btnText = ((Button)v).getText().toString();
-				if (btnText.equals("Start")) {
-					zFeedScheduler.start();
-					((Button)v).setText("Stop");
-				} else {
-					zFeedScheduler.stop();
-					((Button)v).setText("Start");
-				}
-			}
-		});
-	}
-	
 	private void fInitAcc() {
 		zFacebook = new FacebookUtil(this);
 		zRenrenUtil = new RenrenUtil(this);
 		zSinaUtil = new SinaUtil(this);
 		
-		zFeedScheduler = new FeedScheduler(this);
 		zFeedOrg = new FeedOrganisor(this);
 	}
 	
