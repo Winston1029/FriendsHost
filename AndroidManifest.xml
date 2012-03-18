@@ -12,7 +12,7 @@
         <activity
             android:label="@string/app_name"
             android:name=".FriendsHostActivity" 
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:taskAffinity=""
             android:excludeFromRecents="true">
             <intent-filter >
@@ -23,7 +23,8 @@
         
         <activity android:name=".OAuthActivity">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+<!--                 <action  android:name="com.moupress.app.friendshost.action.REDIRECT"/> -->
+                <action  android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="weibo4andriod" android:host="OAuthActivity" /> 

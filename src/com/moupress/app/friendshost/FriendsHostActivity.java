@@ -34,6 +34,9 @@ public class FriendsHostActivity extends Activity {
         		} else if (action.equals(Const.SNS_RENREN)) {
         			zPubsub.fInitFeedUI();
         			zPubsub.fGetRenrenUtil().fDisplayRenrenFeed();
+        		} else if (action.equals(Const.SNS_SINA)) {
+        			zPubsub.fInitFeedUI();
+        			zPubsub.fGetSinaUtil().fDisplaySinaFeed();
         		}
         	}
         }

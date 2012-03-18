@@ -3,6 +3,8 @@ package com.moupress.app.friendshost.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import weibo4andriod.Status;
+
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.sns.Renren.RenenFeedElement;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntry;
@@ -158,6 +160,7 @@ public class DBHelper {
 		}
 	}
 	
+	// insert feed for facebook
 	public long fInsertFeed(FBHomeFeedEntry entry) {
 		// check if exist
 		long ret = 0;
@@ -192,6 +195,30 @@ public class DBHelper {
 		return ret;
 	}
 	
+	// insert feed for Sina
+	public long fInsertFeed(Status status) {
+		long ret = 0;
+		
+		if (fIfFeedExist(status.getId() + "", SNS_SINA)) {
+			return ret;
+		}
+		
+		ContentValues values  = new ContentValues();
+		values.put(C_FEED_SNS, SNS_SINA);
+		values.put(C_FEED_ISREAD, "0");
+		values.put(C_FEED_ID, status.getId() + "");
+		values.put(C_FEED_FROM, status.getUser().getName());
+		values.put(C_FEED_MSG, status.getText());
+		values.put(C_FEED_PIC, status.getThumbnail_pic());
+		values.put(C_FEED_CREATED_TIME, status.getCreatedAt().toGMTString());
+		//values.put(C_FEED_FROM, status.getSource());
+		
+		ret = zSQLiteDB.insert(T_FEED, null, values);
+		
+		return ret;
+	}
+	
+	// insert feed for Renren
 	public long fInsertFeed(RenenFeedElement entry) {
 		long ret = 0;
 		
@@ -340,6 +367,5 @@ public class DBHelper {
 		
 	}
 
-	
 
 }

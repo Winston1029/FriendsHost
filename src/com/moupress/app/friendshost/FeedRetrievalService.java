@@ -32,7 +32,10 @@ public class FeedRetrievalService extends Service {
 				if (PubSub.zRenrenUtil != null && PubSub.zRenrenUtil.isSessionValid() ) {
 					PubSub.zRenrenUtil.fGetNewsFeed(getApplicationContext());
 				}
-				if (PubSub.zRenrenUtil == null && PubSub.zFacebook == null) {
+				if (PubSub.zSinaUtil != null && PubSub.zSinaUtil.isSessionValid()) {
+					PubSub.zSinaUtil.fGetNewsFeed(getApplicationContext());
+				}
+				if (PubSub.zRenrenUtil == null && PubSub.zFacebook == null && PubSub.zSinaUtil == null) {
 					stopSelf();
 				}
 			}

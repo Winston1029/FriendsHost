@@ -2,6 +2,7 @@ package com.moupress.app.friendshost.sns.sina;
 
 import java.util.List;
 
+import weibo4andriod.AsyncWeibo;
 import weibo4andriod.Status;
 import weibo4andriod.Weibo;
 import weibo4andriod.WeiboException;
@@ -12,6 +13,7 @@ import android.net.Uri;
 import android.widget.ArrayAdapter;
 
 import com.moupress.app.friendshost.Const;
+import com.moupress.app.friendshost.OAuthActivity;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.util.Pref;
 
@@ -40,7 +42,21 @@ public class SinaUtil {
 		System.setProperty("weibo4j.oauth.consumerKey", Weibo.CONSUMER_KEY);
     	System.setProperty("weibo4j.oauth.consumerSecret", Weibo.CONSUMER_SECRET);
 		zSina = OAuthConstant.getInstance().getWeibo();
+		AsyncWeibo async;
 		fSinaAuth();
+	}
+	
+	public Boolean isSessionValid() {
+		if ( zSina != null ) {
+			try {
+				return zSina.test();
+			} catch (WeiboException e) {
+				e.printStackTrace();
+				return false;
+			}
+		} else {
+			return false;
+		}
 	}
 	
 	private void fSinaAuth() {
@@ -55,9 +71,41 @@ public class SinaUtil {
 			Uri uri = Uri.parse(requestToken.getAuthenticationURL()+ "&from=xweibo");
 			OAuthConstant.getInstance().setRequestToken(requestToken);
 			zPubSub.fGetActivity().startActivity(new Intent(Intent.ACTION_VIEW, uri));
+			//zPubSub.fGetContext().sendBroadcast(new Intent(Const.CUSTOM_INTENT_ACTION, uri));
+			//Intent i = new Intent();
+			//i.setAction(Const.CUSTOM_INTENT_ACTION);
+			//i.setData(uri);
+			//zPubSub.fGetActivity().startActivity(new Intent(OAuthActivity.CUSTOM_INTENT_ACTION, uri));
 		} catch (WeiboException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void fGetNewsFeed(final Context context) {
+		sTokenKey = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENKEY);
+		sTokenSecret = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENSECRET);
+		zSina.setToken(sTokenKey, sTokenSecret);
+		try {
+			List<Status> friendsTimeline = zSina.getFriendsTimeline();
+			System.out.println("Sina news feed get listener on complete");
+			zPubSub.fGetFeedOrganisor().fSaveNewFeeds(friendsTimeline, context);
+		} catch (WeiboException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void fDisplaySinaFeed() {
+		zPubSub.fGetActivity().runOnUiThread(new Runnable() {
+			public void run() {
+				ArrayAdapter<String> adapterSinaResponse = zPubSub.fGetArrAdapterFeed();
+				adapterSinaResponse.clear();
+				String[] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeedSummary(Const.SNS_SINA);
+				for(int i= 0; i<feedMsg.length;i++) {
+					adapterSinaResponse.add(feedMsg[i]);
+				}
+				adapterSinaResponse.notifyDataSetChanged();
+			}
+		});
 	}
 	
 	public void fGetNewsFeed() {

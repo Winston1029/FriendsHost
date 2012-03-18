@@ -122,8 +122,10 @@ public class PubSub {
 			
 			@Override
 			public void onClick(View v) {
-				arrAdapterFeed.clear();
-				zSinaUtil.fGetNewsFeed();
+				//arrAdapterFeed.clear();
+				//zSinaUtil.fGetNewsFeed();
+				fInitFeedUI();
+				zSinaUtil.fDisplaySinaFeed();
 			}
 		});
 	}

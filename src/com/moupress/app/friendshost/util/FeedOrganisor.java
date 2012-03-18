@@ -1,5 +1,8 @@
 package com.moupress.app.friendshost.util;
 
+import java.util.List;
+
+import weibo4andriod.Status;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -78,6 +81,20 @@ public class FeedOrganisor {
 			fShowNotification(Const.SNS_RENREN, cntUnReadFeed, context);
 		}
 		
+	}
+	
+	public void fSaveNewFeeds(List<Status> friendsTimeline, Context context) {
+		long res = 0;
+		
+		for (Status status : friendsTimeline) {
+			//String msg = status.getUser().getScreenName() + " : " + status.getText();
+			res += zDBHelper.fInsertFeed(status);
+		}
+		
+		if (res > 0 ) {
+			int cntUnReadFeed = fGetUnReadNewsFeedSummary(Const.SNS_SINA).length;
+			fShowNotification(Const.SNS_SINA, cntUnReadFeed, context);
+		}
 	}
 	
 	/**
