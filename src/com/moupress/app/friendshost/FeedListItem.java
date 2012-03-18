@@ -7,6 +7,8 @@ public class FeedListItem {
 	private String sName;
 	private String sCreatedTime;
 	private String sMsgBody;
+	private String sStory;
+	//private String sStory_Tags;
 	private String sPhotoPreviewLink;
 	private String sPhotoPreviewName;
 	private String sPhotoPreviewCaption;
@@ -60,5 +62,17 @@ public class FeedListItem {
 	public String getsPhotoPreviewCaption() {
 		return sPhotoPreviewCaption;
 	}
+	public void setsStory(String sStory) {
+		this.sStory = sStory;
+	}
+	public String getsStory() {
+		return sStory;
+	}
+//	public void setsStory_Tags(String sStory_Tags) {
+//		this.sStory_Tags = sStory_Tags;
+//	}
+//	public String getsStory_Tags() {
+//		return sStory_Tags;
+//	}
 	
 }

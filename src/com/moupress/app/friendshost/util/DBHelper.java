@@ -47,6 +47,7 @@ public class DBHelper {
     static final String C_FEED_FROM = "feedFrom";
     static final String C_FEED_SNS = "SNS";
     static final String C_FEED_MSG = "msg";
+    static final String C_FEED_STORY = "story";
     static final String C_FEED_PIC = "pic";
     static final String C_FEED_SOURCE = "source";
     static final String C_FEED_LINK = "link";
@@ -82,6 +83,7 @@ public class DBHelper {
 										    + C_FEED_SNS + " TEXT,"
 										    + C_FEED_FROM + " TEXT,"
 										    + C_FEED_MSG + " TEXT,"
+										    + C_FEED_STORY + " TEXT,"
 										    + C_FEED_PIC + " TEXT,"
 										    + C_FEED_SOURCE + " TEXT,"
 										    + C_FEED_LINK + " TEXT,"
@@ -167,6 +169,8 @@ public class DBHelper {
 		values.put(C_FEED_SNS, SNS_FACEBOOK);
 		values.put(C_FEED_ID, entry.getId());
 		values.put(C_FEED_MSG, entry.getMessage());
+		values.put(C_FEED_STORY, entry.getStory());
+		//values.put(C_FEED_STORYTAG, entry.getStory_tags());
 		values.put(C_FEED_FROM, entry.getFrom().getName());
 		values.put(C_FEED_PIC, entry.getPicture());
 		values.put(C_FEED_SOURCE, entry.getSource());
@@ -266,7 +270,8 @@ public class DBHelper {
 	 * @return
 	 */
 	public String[][] fGetFeedPreview(String sns) {
-		String[] columns = new String[] {C_FEED_FROM, C_FEED_CREATED_TIME, C_FEED_MSG, 
+		String[] columns = new String[] {C_FEED_FROM, C_FEED_CREATED_TIME, 
+										 C_FEED_MSG, C_FEED_STORY,
 										 C_FEED_PIC, C_FEED_NAME, C_FEED_CAPTION, C_FEED_DESCRIPTION};
 		String where = C_FEED_ISREAD + " = ? and " 
 						+ C_FEED_SNS + " = ?"; //and "

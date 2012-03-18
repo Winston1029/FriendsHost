@@ -12,6 +12,8 @@ public class FBHomeFeedEntry {
 	private String icon;
 	private String name;
 	private String message;
+	private String story;
+	//private String story_tags;
 	private String picture;
 	private String link;
 	private String description;
@@ -149,6 +151,22 @@ public class FBHomeFeedEntry {
 	public String getSource() {
 		return source;
 	}
+
+	public void setStory(String story) {
+		this.story = story;
+	}
+
+	public String getStory() {
+		return story;
+	}
+
+//	public void setStory_tags(String story_tags) {
+//		this.story_tags = story_tags;
+//	}
+//
+//	public String getStory_tags() {
+//		return story_tags;
+//	}
 	
 	//Getter methods should be declared.  Setter methods are optional 
 }

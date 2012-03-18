@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class LstViewFeedAdapter extends BaseAdapter{
@@ -64,54 +65,71 @@ public class LstViewFeedAdapter extends BaseAdapter{
 		if (convertView == null) {
 			convertView = viewInflator.inflate(iLayoutResId, null);
 		}
-
-		//compulsory field
-		String username = feedArrayList.get(position).getsName();
-		if ( username.equals("Kenny Attoken J") ) {
-			System.out.println(username);
-		}
+		
 		TextView txv_FeedUser = (TextView) convertView.findViewById(R.id.txt_name);
-		txv_FeedUser.setText(feedArrayList.get(position).getsName());
-		TextView txv_MsgCreationTime = (TextView) convertView.findViewById(R.id.txt_msgcreatedtime);
-		String sCreateTime = feedArrayList.get(position).getsCreatedTime();
-		txv_MsgCreationTime.setText(sCreateTime);
+		
+		if (feedArrayList == null || feedArrayList.size() < 2) {
+			txv_FeedUser.setText("Feed Not available yet. \nPlease refresh later");
+			
+			//disable other views
+			convertView.findViewById(R.id.img_feeduser).setVisibility(View.GONE);
+			((LinearLayout)convertView.findViewById(R.id.layout_img)).setVisibility(View.GONE);
+			convertView.findViewById(R.id.txt_msgcreatedtime).setVisibility(View.GONE);
+			convertView.findViewById(R.id.txt_msgbody).setVisibility(View.GONE);
+		} else {
 
-		// optional field
-		String sMsgBody = feedArrayList.get(position).getsMsgBody();
-		TextView txv_MsgBody = (TextView) convertView.findViewById(R.id.txt_msgbody);
-		if ( sMsgBody != null ) {
-			txv_MsgBody.setText(sMsgBody);
-		} else {
-			txv_MsgBody.setVisibility(View.GONE);
-		}
-		
-		ImageView img_PhotoPreview = (ImageView) convertView.findViewById(R.id.img_photopreview);
-		String sImgSrc = feedArrayList.get(position).getsPhotoPreviewLink();
-		//String sImgSrc = "http://photos-g.ak.fbcdn.net/hphotos-ak-ash4/431333_10150739807624187_554329186_11304408_1165959123_s.jpg";
-		Bitmap img = ImageOperations(sImgSrc);
-		if (img != null) {
-			img_PhotoPreview.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-			img_PhotoPreview.setImageBitmap(img);
-		} else {
-			img_PhotoPreview.setVisibility(View.GONE);
-		}
-		
-		// Image related text
-		String sImgName = feedArrayList.get(position).getsPhotoPreviewName();
-		String sImgCaption = feedArrayList.get(position).getsPhotoPreviewCaption();
-		String sImgDescription = feedArrayList.get(position).getsPhotoPreviewDescription();
-		
-		TextView txv_ImgName = (TextView) convertView.findViewById(R.id.txv_imgName);
-		TextView txv_ImgCaption = (TextView) convertView.findViewById(R.id.txv_imgCaption);
-		TextView txv_ImgDecription = (TextView) convertView.findViewById(R.id.txv_imgdescription);
-		if (sImgName != null) {
-			txv_ImgName.setText(sImgName);
-			txv_ImgCaption.setText(sImgCaption);
-			txv_ImgDecription.setText(sImgDescription);
-		} else {
-			txv_ImgName.setVisibility(View.GONE);
-			txv_ImgCaption.setVisibility(View.GONE);
-			txv_ImgDecription.setVisibility(View.GONE);
+			//compulsory field
+			String username = feedArrayList.get(position).getsName();
+			if ( username.equals("Kenny Attoken J") ) {
+				System.out.println(username);
+			}
+			//TextView txv_FeedUser = (TextView) convertView.findViewById(R.id.txt_name);
+			txv_FeedUser.setText(feedArrayList.get(position).getsName());
+			TextView txv_MsgCreationTime = (TextView) convertView.findViewById(R.id.txt_msgcreatedtime);
+			String sCreateTime = feedArrayList.get(position).getsCreatedTime();
+			txv_MsgCreationTime.setText(sCreateTime);
+	
+			// optional field
+			// message or tagged story
+			String sMsgBody = feedArrayList.get(position).getsMsgBody();
+			String sStory = feedArrayList.get(position).getsStory();
+			TextView txv_MsgBody = (TextView) convertView.findViewById(R.id.txt_msgbody);
+			if ( sMsgBody != null ) {
+				txv_MsgBody.setText(sMsgBody);
+			} else if ( sStory != null ) {
+				txv_MsgBody.setText(sStory);
+			} else {
+				txv_MsgBody.setVisibility(View.GONE);
+			}
+			
+			ImageView img_PhotoPreview = (ImageView) convertView.findViewById(R.id.img_photopreview);
+			String sImgSrc = feedArrayList.get(position).getsPhotoPreviewLink();
+			//String sImgSrc = "http://photos-g.ak.fbcdn.net/hphotos-ak-ash4/431333_10150739807624187_554329186_11304408_1165959123_s.jpg";
+			Bitmap img = ImageOperations(sImgSrc);
+			if (img != null) {
+				img_PhotoPreview.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+				img_PhotoPreview.setImageBitmap(img);
+			} else {
+				img_PhotoPreview.setVisibility(View.GONE);
+			}
+			
+			// Image related text
+			String sImgName = feedArrayList.get(position).getsPhotoPreviewName();
+			String sImgCaption = feedArrayList.get(position).getsPhotoPreviewCaption();
+			String sImgDescription = feedArrayList.get(position).getsPhotoPreviewDescription();
+			
+			TextView txv_ImgName = (TextView) convertView.findViewById(R.id.txv_imgName);
+			TextView txv_ImgCaption = (TextView) convertView.findViewById(R.id.txv_imgCaption);
+			TextView txv_ImgDecription = (TextView) convertView.findViewById(R.id.txv_imgdescription);
+			if (sImgName != null) {
+				txv_ImgName.setText(sImgName);
+				txv_ImgCaption.setText(sImgCaption);
+				txv_ImgDecription.setText(sImgDescription);
+			} else {
+				txv_ImgName.setVisibility(View.GONE);
+				txv_ImgCaption.setVisibility(View.GONE);
+				txv_ImgDecription.setVisibility(View.GONE);
+			}
 		}
 		
 		
@@ -120,14 +138,22 @@ public class LstViewFeedAdapter extends BaseAdapter{
 
 	public void addItem(String[] feedMsg) {
 		FeedListItem item = new FeedListItem();
-		item.setsName(feedMsg[0]);							//name
-		item.setsCreatedTime(feedMsg[1]);					//created time
-		item.setsMsgBody(feedMsg[2]);						//message
-		item.setsPhotoPreviewLink(feedMsg[3]);				//pic url
-		item.setsPhotoPreviewName(feedMsg[4]);				//pic/album name
-		item.setsPhotoPreviewCaption(feedMsg[5]);			//pic/album caption
-		item.setsPhotoPreviewDescription(feedMsg[6]);		//pic/album description
+		if ( feedMsg.length > 2 ) {								
+			item.setsName(feedMsg[0]);							//name
+			item.setsCreatedTime(feedMsg[1]);					//created time
+			item.setsMsgBody(feedMsg[2]);						//message
+			item.setsStory(feedMsg[3]);							//story
+			//item.setsStory_tags(feedMsg[4]);							//story_tags
+			item.setsPhotoPreviewLink(feedMsg[4]);				//pic url
+			item.setsPhotoPreviewName(feedMsg[5]);				//pic/album name
+			item.setsPhotoPreviewCaption(feedMsg[6]);			//pic/album caption
+			item.setsPhotoPreviewDescription(feedMsg[7]);		//pic/album description
+		} else {												//No local feed available
+			item.setsName(feedMsg[0]);
+		}
+		
 		feedArrayList.add(item);
+		
 	}
 	
 	private Bitmap ImageOperations(String url) {
