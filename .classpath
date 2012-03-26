@@ -4,11 +4,15 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry exported="true" kind="lib" path="lib/gson-2.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/gson-2.1-javadoc.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/FlurryAgent.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/commons-codec.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/commons-httpclient-3.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/commons-logging-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/gson-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/gson-2.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/FlurryAgent.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec.jar"/>
+	<classpathentry kind="lib" path="lib/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/httpclient-4.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/signpost-commonshttp4-1.2.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/signpost-core-1.2.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/twitter4j-core-2.1.11.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
