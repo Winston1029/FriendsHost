@@ -229,10 +229,33 @@ public class DBHelper {
 		ContentValues values  = new ContentValues();
 		values.put(C_FEED_SNS, SNS_RENREN);
 		values.put(C_FEED_ID, entry.getId());
-		values.put(C_FEED_MSG, entry.getMessage());
+		values.put(C_FEED_MSG, entry.getPrefix() + ": " + entry.getMessage());
 		values.put(C_FEED_FROM, entry.getName());
 		values.put(C_FEED_ISREAD, "0");
 		values.put(C_FEED_UPDATED_TIME, entry.getUpdate_time());
+		values.put(C_FEED_STORY, entry.getTitle() + "\n" + entry.getDescription());
+		
+		// if media_type = blog the URL is need to construct in a special way
+		String media_type = entry.getFeed_media_media_type();
+		String link = entry.getLink();
+		values.put(C_FEED_TYPE, media_type);
+		
+		if (media_type != null && media_type.equals("blog")) {
+			// in XML is -> http://blog.renren.com/GetEntry.do?id=814235473&amp;owner=404482952
+			// acutal url -> http://blog.renren.com/blog/404482952/814155984
+			// need to construct from owner_id & media_id field as "&amp;" cannot parse correctly in XML parser
+//			int ownerID_start = link.lastIndexOf("="); //37
+//			int blogID_start = link.indexOf("=");
+//			int blogID_end = link.indexOf("&");
+//			String blogID = link.substring(blogID_start, blogID_end);
+//			String ownerID = link.substring(ownerID_start);
+			String actualBlog_Url = "http://blog.renren.com/blog/" + entry.getFeed_media_owner_id() + "/" + entry.getFeed_media_media_id();
+			values.put(C_FEED_LINK, actualBlog_Url);
+		} else {
+			values.put(C_FEED_LINK, link);
+		}
+		
+		values.put(C_FEED_PIC, entry.getFeed_media_src());
 		
 		ret = zSQLiteDB.insert(T_FEED, null, values);
 		

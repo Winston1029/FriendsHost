@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed_get_response xmlns="http://api.renren.com/1.0/"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://api.renren.com/1.0/ http://api.renren.com/1.0/renren.xsd">
+	<feed_post>
+		<post_id>16053948331</post_id>
+		<feed_type>10</feed_type>
+		<actor_type>user</actor_type>
+		<update_time>2012-03-28 01:25:41</update_time>
+		<actor_id>234670401</actor_id>
+		<name>章川</name>
+		<headurl>http://hdn.xnimg.cn/photos/hdn121/20110501/2325/tiny_jGOA_103339p019117.jpg</headurl>
+		<attachment />
+		<source_id>3298490635</source_id>
+		<message><![CDATA[我不会调颜色了。。。。。。。。。。。。。。]]></message>
+		<title><![CDATA[我不会调颜色了。。。。。。。。。。。。。。]]></title>
+		<prefix>我不会调颜色了。。。。。。。。。。。。。。</prefix>
+		<comments>
+			<count>0</count>
+		</comments>
+		<likes>
+			<total_count>0</total_count>
+			<friend_count>0</friend_count>
+			<user_like>0</user_like>
+		</likes>
+	</feed_post>
+	<feed_post>
+		<post_id>16049035753</post_id>
+		<feed_type>10</feed_type>
+		<actor_type>user</actor_type>
+		<update_time>2012-03-27 21:25:26</update_time>
+		<actor_id>231136392</actor_id>
+		<name>章浩</name>
+		<headurl>http://hdn.xnimg.cn/photos/hdn521/20111204/1405/tiny_J1yY_203661l019118.jpg</headurl>
+		<attachment />
+		<source_id>3297409753</source_id>
+		<message><![CDATA[Shame learn down wow!   Book learn!!!]]></message>
+		<title><![CDATA[Shame learn down wow!   Book learn!!!]]></title>
+		<prefix>Shame learn down wow! Book learn!!!</prefix>
+		<comments>
+			<count>5</count>
+			<comment>
+				<comment_id>10888516059</comment_id>
+				<text><![CDATA["三国杀不要太上瘾呀"]]></text>
+				<time>2012-03-27 21:52</time>
+				<uid>223308557</uid>
+				<name>匡易礼</name>
+				<headurl>http://hdn.xnimg.cn/photos/hdn421/20110326/2135/tiny_hNof_375091f019117.jpg</headurl>
+			</comment>
+			<comment>
+				<comment_id>10889179165</comment_id>
+				<text><![CDATA["回复匡易礼：好吧=="]]></text>
+				<time>2012-03-27 22:23</time>
+				<uid>231136392</uid>
+				<name>章浩</name>
+				<headurl>http://hdn.xnimg.cn/photos/hdn521/20111204/1405/tiny_J1yY_203661l019118.jpg</headurl>
+			</comment>
+		</comments>
+		<likes>
+			<total_count>0</total_count>
+			<friend_count>0</friend_count>
+			<user_like>0</user_like>
+		</likes>
+	</feed_post>
+	<feed_post>
+		<post_id>16047287771</post_id>
+		<feed_type>10</feed_type>
+		<actor_type>user</actor_type>
+		<update_time>2012-03-27 20:27:15</update_time>
+		<actor_id>275397836</actor_id>
+		<name>梁玉萍</name>
+		<headurl>http://hdn.xnimg.cn/photos/hdn221/20120219/2340/h_tiny_gw9X_3a4c00038b432f76.jpg</headurl>
+		<source>
+			<text>人人iPhone</text>
+			<href>http://page.renren.com/600002551</href>
+		</source>
+		<attachment />
+		<source_id>3297127090</source_id>
+		<message><![CDATA[每个人出生的时候都是原创，可悲的是很多人渐渐都成了盗版。]]></message>
+		<title><![CDATA[每个人出生的时候都是原创，可悲的是很多人渐渐都成了盗版。]]></title>
+		<prefix>每个人出生的时候都是原创，可悲的是很多人渐渐都成了盗版。</prefix>
+		<comments>
+			<count>0</count>
+		</comments>
+		<likes>
+			<total_count>0</total_count>
+			<friend_count>0</friend_count>
+			<user_like>0</user_like>
+		</likes>
+	</feed_post>
+	<feed_post>
+		<post_id>16045447876</post_id>
+		<feed_type>10</feed_type>
+		<actor_type>user</actor_type>
+		<update_time>2012-03-27 19:25:29</update_time>
+		<actor_id>229196059</actor_id>
+		<name>朱建锋</name>
+		<headurl>http://hdn.xnimg.cn/photos/hdn421/20110619/1215/h_tiny_gZTB_7064000013072f75.jpg</headurl>
+		<attachment />
+		<source_id>3296849323</source_id>
+		<message><![CDATA[又喝多了(kb)]]></message>
+		<title><![CDATA[又喝多了(kb)]]></title>
+		<prefix>又喝多了</prefix>
+		<comments>
+			<count>1</count>
+			<comment>
+				<comment_id>10890860944</comment_id>
+				<text><![CDATA["PIG"]]></text>
+				<time>2012-03-27 23:49</time>
+				<uid>246146258</uid>
+				<name>胡姝</name>
+				<headurl>http://hdn.xnimg.cn/photos/hdn421/20120122/0010/tiny_PbVx_276166f019118.jpg</headurl>
+			</comment>
+		</comments>
+		<likes>
+			<total_count>0</total_count>
+			<friend_count>0</friend_count>
+			<user_like>0</user_like>
+		</likes>
+	</feed_post>
+	<feed_post>
+		<post_id>16039893115</post_id>
+		<feed_type>10</feed_type>
+		<actor_type>user</actor_type>
+		<update_time>2012-03-27 14:28:07</update_time>
+		<actor_id>232297083</actor_id>
+		<name>何牟欣亚</name>
+		<headurl>http://hdn.xnimg.cn/photos/hdn521/20111210/1005/tiny_oDbj_740n019118.jpg</headurl>
+		<attachment />
+		<source_id>3295796045</source_id>
+		<message><![CDATA[三月不减肥，全年徒伤悲(yl)(yl)(yl)]]></message>
+		<title><![CDATA[三月不减肥，全年徒伤悲(yl)(yl)(yl)]]></title>
+		<prefix>三月不减肥，全年徒伤悲</prefix>
+		<comments>
+			<count>9</count>
+			<comment>
+				<comment_id>10883481915</comment_id>
+				<text><![CDATA["(不)又不是有四季的地方"]]></text>
+				<time>2012-03-27 14:58</time>
+				<uid>240089505</uid>
+				<name>杨杲</name>
+				<headurl>http://hdn.xnimg.cn/photos/hdn421/20101227/2325/h_tiny_tyNR_73c9000220bb2f76.jpg</headurl>
+			</comment>
+			<comment>
+				<comment_id>10885925648</comment_id>
+				<text><![CDATA["回复何牟欣亚: 我把这两周先忙完然后收拾下嘛"]]></text>
+				<time>2012-03-27 19:06</time>
+				<uid>244174554</uid>
+				<name>文茜</name>
+				<headurl>http://hdn.xnimg.cn/photos/hdn221/20110916/1615/tiny_kK4K_393940g019118.jpg</headurl>
+			</comment>
+		</comments>
+		<likes>
+			<total_count>0</total_count>
+			<friend_count>0</friend_count>
+			<user_like>0</user_like>
+		</likes>
+	</feed_post>
+	<feed_post>
+		<post_id>16041950338</post_id>
+		<feed_type>10</feed_type>
+		<actor_type>user</actor_type>
+		<update_time>2012-03-27 16:32:04</update_time>
+		<actor_id>227794402</actor_id>
+		<name>袁希泉</name>
+		<headurl>http://hdn.xnimg.cn/photos/hdn211/20090830/1110/tiny_R25g_42039m204237.jpg</headurl>
+		<attachment />
+		<source_id>3296192147</source_id>
+		<message><![CDATA[各行各业的冬天一起来了，怎么都在说剩者为王。(汗)]]></message>
+		<title><![CDATA[各行各业的冬天一起来了，怎么都在说剩者为王。(汗)]]></title>
+		<prefix>各行各业的冬天一起来了，怎么都在说剩者为王。</prefix>
+		<comments>
+			<count>0</count>
+		</comments>
+		<likes>
+			<total_count>0</total_count>
+			<friend_count>0</friend_count>
+			<user_like>0</user_like>
+		</likes>
+	</feed_post>
+	<feed_post>
+		<post_id>16041088663</post_id>
+		<feed_type>10</feed_type>
+		<actor_type>user</actor_type>
+		<update_time>2012-03-27 15:36:15</update_time>
+		<actor_id>234670401</actor_id>
+		<name>章川</name>
+		<headurl>http://hdn.xnimg.cn/photos/hdn121/20110501/2325/tiny_jGOA_103339p019117.jpg</headurl>
+		<attachment />
+		<source_id>3296013587</source_id>
+		<message><![CDATA[非常困。。所以来一杯咖啡。。。]]></message>
+		<title><![CDATA[非常困。。所以来一杯咖啡。。。]]></title>
+		<prefix>非常困。。所以来一杯咖啡。。。</prefix>
+		<comments>
+			<count>1</count>
+			<comment>
+				<comment_id>10884106139</comment_id>
+				<text><![CDATA["捏～"]]></text>
+				<time>2012-03-27 16:08</time>
+				<uid>220836934</uid>
+				<name>木子吉吉</name>
+				<headurl>http://hdn.xnimg.cn/photos/hdn221/20111014/1635/tiny_rLzV_1071l019117.jpg</headurl>
+			</comment>
+		</comments>
+		<likes>
+			<total_count>0</total_count>
+			<friend_count>0</friend_count>
+			<user_like>0</user_like>
+		</likes>
+	</feed_post>
+	<feed_post>
+		<post_id>16032997964</post_id>
+		<feed_type>10</feed_type>
+		<actor_type>user</actor_type>
+		<update_time>2012-03-27 08:15:50</update_time>
+		<actor_id>1053371438</actor_id>
+		<name>钟浩文</name>
+		<headurl>http://hdn.xnimg.cn/photos/hdn321/20111231/0015/tiny_GdJm_103564o019117.jpg</headurl>
+		<attachment />
+		<source_id>3294422950</source_id>
+		<message><![CDATA[第一次用skype跟老板打电话，然后他老人家告诉也许这就是以后大部分时候我跟他meet的方式了……]]></message>
+		<title><![CDATA[第一次用skype跟老板打电话，然后他老人家告诉也许这就是以后大部分时候我跟他meet的方式了……]]></title>
+		<prefix>第一次用skype跟老板打电话，然后他老人家告诉也许这就是以后大部分时候我跟他meet的方式了……</prefix>
+		<comments>
+			<count>2</count>
+			<comment>
+				<comment_id>10880034514</comment_id>
+				<text><![CDATA["(难过)"]]></text>
+				<time>2012-03-27 09:14</time>
+				<uid>5992</uid>
+				<name>韩赟儒</name>
+				<headurl>http://hdn.xnimg.cn/photos/hdn121/20120312/1120/tiny_hfUj_17402b019118.jpg</headurl>
+			</comment>
+			<comment>
+				<comment_id>10880098057</comment_id>
+				<text><![CDATA["回复韩赟儒： 师妹你咋回复什么都那么简洁啊……"]]></text>
+				<time>2012-03-27 09:20</time>
+				<uid>1053371438</uid>
+				<name>钟浩文</name>
+				<headurl>http://hdn.xnimg.cn/photos/hdn321/20111231/0015/tiny_GdJm_103564o019117.jpg</headurl>
+			</comment>
+		</comments>
+		<likes>
+			<total_count>0</total_count>
+			<friend_count>0</friend_count>
+			<user_like>0</user_like>
+		</likes>
+	</feed_post>
+	<feed_post>
+		<post_id>16037081964</post_id>
+		<feed_type>10</feed_type>
+		<actor_type>user</actor_type>
+		<update_time>2012-03-27 11:56:34</update_time>
+		<actor_id>227110181</actor_id>
+		<name>仲伟祥</name>
+		<headurl>http://hdn.xnimg.cn/photos/hdn321/20120316/0050/h_tiny_gCOu_5f4a000181762f75.jpg</headurl>
+		<attachment />
+		<source_id>3295247861</source_id>
+		<message><![CDATA[每次要meeting都感觉跟要上坟似的]]></message>
+		<title><![CDATA[每次要meeting都感觉跟要上坟似的]]></title>
+		<prefix>每次要meeting都感觉跟要上坟似的</prefix>
+		<comments>
+			<count>2</count>
+			<comment>
+				<comment_id>10882762468</comment_id>
+				<text><![CDATA["宁愿去上坟啊，不愿meeting"]]></text>
+				<time>2012-03-27 13:36</time>
+				<uid>244514686</uid>
+				<name>丁燕</name>
+				<headurl>http://hdn.xnimg.cn/photos/hdn111/20090316/23/25/tiny_rSIl_98754l204237.jpg</headurl>
+			</comment>
+			<comment>
+				<comment_id>10883116381</comment_id>
+				<text><![CDATA["回复丁燕：对啊...事那么多要做，还总讲nonsense..."]]></text>
+				<time>2012-03-27 14:16</time>
+				<uid>227110181</uid>
+				<name>仲伟祥</name>
+				<headurl>http://hdn.xnimg.cn/photos/hdn321/20120316/0050/h_tiny_gCOu_5f4a000181762f75.jpg</headurl>
+			</comment>
+		</comments>
+		<likes>
+			<total_count>0</total_count>
+			<friend_count>0</friend_count>
+			<user_like>0</user_like>
+		</likes>
+	</feed_post>
+	<feed_post>
+		<post_id>16036792735</post_id>
+		<feed_type>10</feed_type>
+		<actor_type>user</actor_type>
+		<update_time>2012-03-27 11:39:58</update_time>
+		<actor_id>229459143</actor_id>
+		<name>唐洁</name>
+		<headurl>http://hdn.xnimg.cn/photos/hdn221/20110427/1145/h_tiny_czbi_45050001b7b72f76.jpg</headurl>
+		<attachment />
+		<source_id>3295191178</source_id>
+		<message><![CDATA[In joy and sorrow my home's in your arms, in world so hollow it is breaking my heart]]></message>
+		<title><![CDATA[In joy and sorrow my home's in your arms, in world so hollow it is breaking my heart]]></title>
+		<prefix>In joy and sorrow my home's in your arms, in world so hollow
+			it is breaking my heart</prefix>
+		<comments>
+			<count>4</count>
+			<comment>
+				<comment_id>10881601200</comment_id>
+				<text><![CDATA["oh gal we r the same.... 抱抱"]]></text>
+				<time>2012-03-27 11:44</time>
+				<uid>231844233</uid>
+				<name>刘彦</name>
+				<headurl>http://hdn.xnimg.cn/photos/hdn521/20100504/2145/h_tiny_krYc_262c000098292f74.jpg</headurl>
+			</comment>
+			<comment>
+				<comment_id>10884414445</comment_id>
+				<text><![CDATA["回复顾云： 好一个'又'字"]]></text>
+				<time>2012-03-27 16:41</time>
+				<uid>229459143</uid>
+				<name>唐洁</name>
+				<headurl>http://hdn.xnimg.cn/photos/hdn221/20110427/1145/h_tiny_czbi_45050001b7b72f76.jpg</headurl>
+			</comment>
+		</comments>
+		<likes>
+			<total_count>0</total_count>
+			<friend_count>0</friend_count>
+			<user_like>0</user_like>
+		</likes>
+	</feed_post>
+	<feed_post>
+		<post_id>16032813122</post_id>
+		<feed_type>10</feed_type>
+		<actor_type>user</actor_type>
+		<update_time>2012-03-27 07:59:28</update_time>
+		<actor_id>227913591</actor_id>
+		<name>程巍</name>
+		<headurl>http://hdn.xnimg.c...

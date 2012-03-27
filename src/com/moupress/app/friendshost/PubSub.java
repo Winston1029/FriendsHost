@@ -99,8 +99,11 @@ public class PubSub {
 			public void onClick(View v) {
 				//arrAdapterFeed.clear();
 				//zRenrenUtil.fGetNewsFeed();
-				fInitFeedUI();
+				//fInitFeedUI();
+				fInitFeedUIPreview();
 				zRenrenUtil.fDisplayRenrenFeed();
+				
+
 			}
 		});
 		

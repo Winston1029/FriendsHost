@@ -39,7 +39,7 @@ public class FeedRetrievalService extends Service {
 					stopSelf();
 				}
 			}
-		}, 30000, update_interval);
+		}, 3000, update_interval);
 		Log.i(getClass().getSimpleName(), "Timer started.");
 
 	}

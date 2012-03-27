@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.facebook.android.AsyncFacebookRunner;
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
+import com.moupress.app.friendshost.LstViewFeedAdapter;
 import com.moupress.app.friendshost.PubSub;
 import com.renren.api.connect.android.AsyncRenren;
 import com.renren.api.connect.android.Renren;
@@ -98,12 +99,34 @@ public class RenrenUtil {
 		}
 		return asyncRenren;
 	}
-	
+	/**
+	 * type	 描述
+	 *	10	 更新状态的新鲜事。
+	 *  11	 page更新状态的新鲜事。
+	 *  20	 发表日志的新鲜事。
+	 *  21	 分享日志的新鲜事。
+	 *  22	 page发表日志的新鲜事。
+	 *  23	 page分享日志的新鲜事。
+	 *  30	 上传照片的新鲜事。
+	 *  31	 page上传照片的新鲜事。
+	 *  32	 分享照片的新鲜事。
+	 *  33	 分享相册的新鲜事。
+	 *  34	 修改头像的新鲜事。
+	 *  35	 page修改头像的新鲜事。
+	 *  36	 page分享照片的新鲜事。
+	 *  40	 成为好友的新鲜事。
+	 *  41	 成为page粉丝的新鲜事。
+	 *  50	 分享视频的新鲜事。
+	 *  51	 分享链接的新鲜事。
+	 *  52	 分享音乐的新鲜事。
+	 *  53	 page分享视频的新鲜事。
+	 *  54	 page分享链接的新鲜事。
+	 *  55	 page分享音乐的新鲜事。
+	 */
 	public void fGetNewsFeed(final Context context) {
 		//AsyncRenren asyncRenren = new AsyncRenren(zRenren);
 		asyncRenren = fGetAsyncRenren();
-		
-		FeedExtractRequestParam param = new FeedExtractRequestParam("XML", "10", 1);
+		FeedExtractRequestParam param = new FeedExtractRequestParam("XML", "10,11,20,21,22,23,30,31,32,33,34", 1);
 		AbstractRequestListener<FeedExtractResponseBean> listener = new AbstractRequestListener<FeedExtractResponseBean>(){
 			@Override
 			public void onComplete(final FeedExtractResponseBean bean) {
@@ -166,13 +189,21 @@ public class RenrenUtil {
 	public void fDisplayRenrenFeed() {
 		zActivity.runOnUiThread(new Runnable() {
 			public void run() {
-				ArrayAdapter<String> adapterRenrenResponse = zPubSub.fGetArrAdapterFeed();
-				adapterRenrenResponse.clear();
-				String[] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeedSummary(Const.SNS_RENREN);
-				for(int i= 0; i<feedMsg.length;i++) {
-					adapterRenrenResponse.add(feedMsg[i]);
+//				ArrayAdapter<String> adapterRenrenResponse = zPubSub.fGetArrAdapterFeed();
+//				adapterRenrenResponse.clear();
+//				String[] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeedSummary(Const.SNS_RENREN);
+//				for(int i= 0; i<feedMsg.length;i++) {
+//					adapterRenrenResponse.add(feedMsg[i]);
+//				}
+//				adapterRenrenResponse.notifyDataSetChanged();
+				
+				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
+				feedAdapter.clear();
+				String[][] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_RENREN);
+				for (int i = 0; i < feedMsg.length; i++) {
+					feedAdapter.addItem(feedMsg[i]);
 				}
-				adapterRenrenResponse.notifyDataSetChanged();
+				feedAdapter.notifyDataSetChanged();
 			}
 		});
 	}

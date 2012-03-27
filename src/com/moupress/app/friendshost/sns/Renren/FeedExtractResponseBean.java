@@ -82,18 +82,20 @@ public class FeedExtractResponseBean extends ResponseBean{
 			
 			for(int index=0; index < listOffeeds.getLength(); index++) {
 			      Node feed = listOffeeds.item(index);
-			      
+
 			      if(feed.getNodeType() == Node.ELEMENT_NODE)
 			      {
 			    	  RenenFeedElement feedChild = new RenenFeedElement();
 			    	  NodeList feedElements = feed.getChildNodes();
-			    	  for(int iIndex=0; iIndex < feedElements.getLength(); iIndex ++)
-			    	  {
-			    		  if(feedElements.item(index).getNodeType() == Node.ELEMENT_NODE)
-			    		  {
-			    			  Element feedElement = (Element) feedElements.item(iIndex);
+			    	  for(int i=0; i < feedElements.getLength(); i ++) {
+			    		  //if(feedElements.item(i).getNodeType() == Node.ELEMENT_NODE) {
+			    		  	  Element feedElement = (Element) feedElements.item(i);
 			    			  if (feedElement.getNodeName().equals("post_id"))
 			    				  feedChild.setId(feedElement.getFirstChild().getNodeValue().trim());
+			    			  else if(feedElement.getNodeName().equals("feed_type"))
+			    				  feedChild.setFeed_type(feedElement.getFirstChild().getNodeValue().trim());
+			    			  else if(feedElement.getNodeName().equals("actor_type"))
+			    				  feedChild.setActor_type(feedElement.getFirstChild().getNodeValue().trim());
 			    			  else if(feedElement.getNodeName().equals("name"))
 			    				  feedChild.setName(feedElement.getFirstChild().getNodeValue().trim());
 			    			  else if(feedElement.getNodeName().equals("update_time"))
@@ -104,11 +106,51 @@ public class FeedExtractResponseBean extends ResponseBean{
 			    				  feedChild.setMessage(feedElement.getFirstChild().getNodeValue().trim());
 			    			  else if (feedElement.getNodeName().equals("title"))
 			    				  feedChild.setTitle(feedElement.getFirstChild().getNodeValue().trim());
+			    			  else if(feedElement.getNodeName().equals("href")) 
+			    				  feedChild.setLink(feedElement.getFirstChild().getNodeValue().trim());
 			    			  else if(feedElement.getNodeName().equals("prefix"))
 			    				  feedChild.setPrefix(feedElement.getFirstChild().getNodeValue().trim());
-			    			  //System.out.println("Node Name "+feedElement.getNodeName()+" Node Text "+feedElement.getFirstChild().getNodeValue().trim());
+			    			  else if(feedElement.getNodeName().equals("description"))
+			    				  feedChild.setDescription(feedElement.getFirstChild().getNodeValue().trim());
 			    			  
-			    		  }
+			    			  // <attachment>
+			    			  else if(feedElement.getNodeName().equals("attachment")) {
+			    				  NodeList attachmentElements = feedElement.getChildNodes();
+		    					  for ( int j = 0; j < attachmentElements.getLength(); j++ ) {
+			    				  
+			    						  //if(attachmentElements.item(i).getNodeType() == Node.ELEMENT_NODE) {
+			    						  Element attachmentElement = (Element) attachmentElements.item(j);
+			    						  
+			    						  // <feed_media>
+			    						  if(attachmentElement.getNodeName().equals("feed_media")) {
+			    							  NodeList feedMediaElements = attachmentElement.getChildNodes();
+			    							  
+			    							  for ( int k = 0; k < feedMediaElements.getLength(); k++ ) {
+			    								  //if(feedMediaElements.item(j).getNodeType() == Node.ELEMENT_NODE) {
+			    									  Element feedMediaElement = (Element) feedMediaElements.item(k);
+			    									  
+			    									  if(feedMediaElement.getNodeName().equals("media_id"))
+									    				  feedChild.setFeed_media_media_id(feedMediaElement.getFirstChild().getNodeValue().trim());
+									    			  else if(feedMediaElement.getNodeName().equals("owner_id"))
+									    				  feedChild.setFeed_media_owner_id(feedMediaElement.getFirstChild().getNodeValue().trim());
+									    			  else if(feedMediaElement.getNodeName().equals("owner_name"))
+									    				  feedChild.setFeed_media_owner_name(feedMediaElement.getFirstChild().getNodeValue().trim());
+									    			  else if(feedMediaElement.getNodeName().equals("media_type"))
+									    				  feedChild.setFeed_media_media_type(feedMediaElement.getFirstChild().getNodeValue().trim());
+									    			  else if(feedMediaElement.getNodeName().equals("src"))
+									    				  if ( feedMediaElement.getFirstChild() != null ) { // cater for returning <src /> scenario
+									    					  feedChild.setFeed_media_src(feedMediaElement.getFirstChild().getNodeValue().trim());
+									    				  }
+			    								  //}
+			    							  }
+			    						  }
+			    						  // </feed_media>
+			    						  //}
+			    				  }
+			    			  } 
+			    			  // </attachment>
+			    			  
+			    		  //}
 			    	  }
 			    	  
 			    	  feedList.add(feedChild);
