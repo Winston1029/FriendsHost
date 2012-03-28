@@ -8,7 +8,7 @@ public class RenenFeedElement {
 	private String name;
 	private String actor_id;
 	private String update_time;
-	private String headurl;
+	//private String headurl;
 	private String message;
 	private String title;
 	private String link;
@@ -21,6 +21,11 @@ public class RenenFeedElement {
 	private String feed_media_media_type;
 	private String feed_media_src;
 	
+	private RenrenFriend zFriend;
+	
+	public RenenFeedElement () {
+		zFriend = new RenrenFriend();
+	}
 
 	public String getName() {
 		return name;
@@ -36,14 +41,6 @@ public class RenenFeedElement {
 
 	public void setUpdate_time(String update_time) {
 		this.update_time = update_time;
-	}
-
-	public String getHeadurl() {
-		return headurl;
-	}
-
-	public void setHeadurl(String headurl) {
-		this.headurl = headurl;
 	}
 
 	public String getMessage() {
@@ -164,6 +161,14 @@ public class RenenFeedElement {
 
 	public String getFeed_media_src() {
 		return feed_media_src;
+	}
+
+	public void setUser(RenrenFriend user) {
+		this.zFriend = user;
+	}
+
+	public RenrenFriend getFriend() {
+		return zFriend;
 	}
 	
 	

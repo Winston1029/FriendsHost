@@ -89,19 +89,24 @@ public class FeedExtractResponseBean extends ResponseBean{
 			    	  NodeList feedElements = feed.getChildNodes();
 			    	  for(int i=0; i < feedElements.getLength(); i ++) {
 			    		  //if(feedElements.item(i).getNodeType() == Node.ELEMENT_NODE) {
-			    		  	  Element feedElement = (Element) feedElements.item(i);
+			    		  Element feedElement = (Element) feedElements.item(i);
+		    		  	  if (feedElement.getFirstChild() != null) {
 			    			  if (feedElement.getNodeName().equals("post_id"))
 			    				  feedChild.setId(feedElement.getFirstChild().getNodeValue().trim());
 			    			  else if(feedElement.getNodeName().equals("feed_type"))
-			    				  feedChild.setFeed_type(feedElement.getFirstChild().getNodeValue().trim());
+			    				  feedChild.setFeed_type(feedElement.getFirstChild().getNodeValue().trim()); 
 			    			  else if(feedElement.getNodeName().equals("actor_type"))
 			    				  feedChild.setActor_type(feedElement.getFirstChild().getNodeValue().trim());
-			    			  else if(feedElement.getNodeName().equals("name"))
+			    			  else if(feedElement.getNodeName().equals("actor_id"))
+			    				  feedChild.getFriend().setId(feedElement.getFirstChild().getNodeValue().trim());
+			    			  else if(feedElement.getNodeName().equals("name")) {
 			    				  feedChild.setName(feedElement.getFirstChild().getNodeValue().trim());
+			    				  feedChild.getFriend().setName(feedElement.getFirstChild().getNodeValue().trim());
+			    			  }
 			    			  else if(feedElement.getNodeName().equals("update_time"))
 			    				  feedChild.setUpdate_time(feedElement.getFirstChild().getNodeValue().trim());
 			    			  else if(feedElement.getNodeName().equals("headurl"))
-			    				  feedChild.setHeadurl(feedElement.getFirstChild().getNodeValue().trim());
+			    				  feedChild.getFriend().setHeadurl(feedElement.getFirstChild().getNodeValue().trim());
 			    			  else if (feedElement.getNodeName().equals("message"))
 			    				  feedChild.setMessage(feedElement.getFirstChild().getNodeValue().trim());
 			    			  else if (feedElement.getNodeName().equals("title"))
@@ -150,7 +155,7 @@ public class FeedExtractResponseBean extends ResponseBean{
 			    			  } 
 			    			  // </attachment>
 			    			  
-			    		  //}
+			    		  }
 			    	  }
 			    	  
 			    	  feedList.add(feedChild);

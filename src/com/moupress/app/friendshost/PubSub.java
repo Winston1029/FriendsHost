@@ -37,6 +37,7 @@ public class PubSub {
 		uLstFeed = (ListView) zActivity.findViewById(R.id.uLstVFBFeed);
 		fInitAcc();
 		fInitFeedUI();
+		fInitFeedUIPreview();
 		fFBInitUI();
 		fInitRenrenUI();
 		fInitSinaUI();
@@ -70,7 +71,7 @@ public class PubSub {
 			public void onClick(View v) {
 				//arrAdapterFeed.clear();				
 				//zFacebook.fGetNewsFeed();
-				fInitFeedUIPreview();
+				//fInitFeedUIPreview();
 				zFacebook.fDisplayFeed();
 				System.out.print("Feed Parse Complete");
 				
@@ -100,7 +101,7 @@ public class PubSub {
 				//arrAdapterFeed.clear();
 				//zRenrenUtil.fGetNewsFeed();
 				//fInitFeedUI();
-				fInitFeedUIPreview();
+				//fInitFeedUIPreview();
 				zRenrenUtil.fDisplayRenrenFeed();
 				
 
@@ -127,7 +128,8 @@ public class PubSub {
 			public void onClick(View v) {
 				//arrAdapterFeed.clear();
 				//zSinaUtil.fGetNewsFeed();
-				fInitFeedUI();
+				//fInitFeedUI();
+				//fInitFeedUIPreview();
 				zSinaUtil.fDisplaySinaFeed();
 			}
 		});

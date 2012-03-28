@@ -6,6 +6,7 @@ import java.util.List;
 import weibo4andriod.Status;
 
 import com.moupress.app.friendshost.Const;
+import com.moupress.app.friendshost.sns.UserFriend;
 import com.moupress.app.friendshost.sns.Renren.RenenFeedElement;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntry;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryAction;
@@ -42,7 +43,9 @@ public class DBHelper {
     
     // User Columns
     static final String C_USER_ID = "id";
+    static final String C_USER_SNS = "SNS";
     static final String C_USER_NAME = "name";
+    static final String C_USER_HEADURL = "headurl";
 
     // Feed Columns
     static final String C_FEED_ID = "id";
@@ -77,7 +80,9 @@ public class DBHelper {
     // Create table SQL statement
     static final String CREATE_USER_TABLE = "CREATE TABLE " + T_USER + " ("
 										    + C_USER_ID + " TEXT PRIMARY KEY,"
-										    + C_USER_NAME + " TEXT"
+										    + C_USER_SNS + " TEXT,"
+										    + C_USER_NAME + " TEXT,"
+										    + C_USER_HEADURL + " TEXT"
 										    + ");";
     
     static final String CREATE_FEED_TABLE = "CREATE TABLE " + T_FEED + " ("
@@ -164,7 +169,7 @@ public class DBHelper {
 	public long fInsertFeed(FBHomeFeedEntry entry) {
 		// check if exist
 		long ret = 0;
-		if (fIfFeedExist(entry.getId(), SNS_FACEBOOK)) {
+		if (fIfItemExist(entry.getId(), SNS_FACEBOOK, T_FEED)) {
 			return ret;
 		}
 		ContentValues values  = new ContentValues();
@@ -199,7 +204,7 @@ public class DBHelper {
 	public long fInsertFeed(Status status) {
 		long ret = 0;
 		
-		if (fIfFeedExist(status.getId() + "", SNS_SINA)) {
+		if (fIfItemExist(status.getId() + "", SNS_SINA, T_FEED)) {
 			return ret;
 		}
 		
@@ -222,14 +227,18 @@ public class DBHelper {
 	public long fInsertFeed(RenenFeedElement entry) {
 		long ret = 0;
 		
-		if (fIfFeedExist(entry.getId(), SNS_RENREN)) {
+		if (fIfItemExist(entry.getId(), SNS_RENREN, T_FEED)) {
 			return ret;
 		}
 		
 		ContentValues values  = new ContentValues();
 		values.put(C_FEED_SNS, SNS_RENREN);
 		values.put(C_FEED_ID, entry.getId());
-		values.put(C_FEED_MSG, entry.getPrefix() + ": " + entry.getMessage());
+		if ( entry.getMessage() != null ) {
+			values.put(C_FEED_MSG, entry.getPrefix() + ": " + entry.getMessage());	
+		} else {
+			values.put(C_FEED_MSG, entry.getPrefix());
+		}
 		values.put(C_FEED_FROM, entry.getName());
 		values.put(C_FEED_ISREAD, "0");
 		values.put(C_FEED_UPDATED_TIME, entry.getUpdate_time());
@@ -259,12 +268,14 @@ public class DBHelper {
 		
 		ret = zSQLiteDB.insert(T_FEED, null, values);
 		
+		fInsertFriend(entry.getFriend());
+		
 		return ret;
 	}
 	
-	private boolean fIfFeedExist(String feedid, String sns) {
-		String feed = fGetFeedByID(feedid, sns);
-		if (feed != null) {
+	private boolean fIfItemExist(String feedid, String sns, String table) {
+		String item = fGetItemByID(feedid, sns, table);
+		if (item != null) {
 			return true;
 		}
 		else {
@@ -272,15 +283,29 @@ public class DBHelper {
 		}
 	}
 	
-	public static void fInsertUser(FBHomeFeedEntryFrom fbHomeFeedEntryFrom) {
+	public long fInsertFriend(UserFriend friend) {
+		long ret = 0;
+		if (fIfItemExist(friend.getId(), friend.getSNS(), T_USER)) {
+			return ret;
+		}
+		
+		ContentValues values  = new ContentValues();
+		
+		values.put(C_USER_ID, friend.getId());
+		values.put(C_USER_NAME, friend.getName());
+		values.put(C_USER_HEADURL, friend.getHeadurl());
+		values.put(C_USER_SNS, friend.getSNS());
+		
+		ret = zSQLiteDB.insert(T_USER, null, values);
+		
+		return ret;
+	}
+	
+	public void fInsertActions(List<FBHomeFeedEntryAction> list) {
 		ContentValues values  = new ContentValues();
 	}
 	
-	public static void fInsertActions(List<FBHomeFeedEntryAction> list) {
-		ContentValues values  = new ContentValues();
-	}
-	
-	public static void fInsertComments() {
+	public void fInsertComments() {
 		
 	}
 	
@@ -330,7 +355,7 @@ public class DBHelper {
 		Cursor cursor = null;
 		String[][] result = null;
 		try {
-			cursor = zSQLiteDB.query(T_FEED, columns, where, selectionArgs, null, null, C_FEED_CREATED_TIME + ORDER_DESC);
+			cursor = zSQLiteDB.query(T_FEED, columns, where, selectionArgs, null, null, C_FEED_UPDATED_TIME + ORDER_DESC);
 			int numRows = cursor.getCount();
 			result = new String[numRows][columns.length];
 			cursor.moveToFirst();
@@ -350,17 +375,16 @@ public class DBHelper {
 		return result;
 	}
 	
-	public String fGetFeedByID (String feedid, String sns) {
+	public String fGetItemByID (String feedid, String sns, String table) {
 		String[] columns = new String[] {C_FEED_FROM, C_FEED_MSG};
-		String where = C_FEED_ISREAD + " = ? and " 
-						+ C_FEED_SNS + " = ? and " 
+		String where = C_FEED_SNS + " = ? and " 
 						+ C_FEED_ID + " = ?";
-		String[] selectionArgs = new String[] {"0", sns, feedid};
+		String[] selectionArgs = new String[] {sns, feedid};
 		Cursor cursor = null;
 		String result = null;
 		
 		try {
-			cursor = zSQLiteDB.query(T_FEED, columns, where, selectionArgs, null, null, C_FEED_CREATED_TIME);
+			cursor = zSQLiteDB.query(table, columns, where, selectionArgs, null, null, C_FEED_CREATED_TIME);
 			cursor.moveToFirst();
 			if (cursor.getCount() > 0 ) {
 				result = cursor.getString(0) +" : "+ cursor.getString(1);
@@ -376,11 +400,6 @@ public class DBHelper {
 		} finally {
 			if (cursor != null && !cursor.isClosed()) {
 				cursor.close();
-			}
-		}
-		if (sns.equals(SNS_RENREN)) {
-			if (result != null) {
-				System.out.println(result);
 			}
 		}
 		return result;

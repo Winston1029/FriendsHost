@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.widget.ArrayAdapter;
 
 import com.moupress.app.friendshost.Const;
+import com.moupress.app.friendshost.LstViewFeedAdapter;
 import com.moupress.app.friendshost.OAuthActivity;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.util.Pref;
@@ -97,13 +98,21 @@ public class SinaUtil {
 	public void fDisplaySinaFeed() {
 		zPubSub.fGetActivity().runOnUiThread(new Runnable() {
 			public void run() {
-				ArrayAdapter<String> adapterSinaResponse = zPubSub.fGetArrAdapterFeed();
-				adapterSinaResponse.clear();
-				String[] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeedSummary(Const.SNS_SINA);
-				for(int i= 0; i<feedMsg.length;i++) {
-					adapterSinaResponse.add(feedMsg[i]);
+//				ArrayAdapter<String> adapterSinaResponse = zPubSub.fGetArrAdapterFeed();
+//				adapterSinaResponse.clear();
+//				String[] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeedSummary(Const.SNS_SINA);
+//				for(int i= 0; i<feedMsg.length;i++) {
+//					adapterSinaResponse.add(feedMsg[i]);
+//				}
+//				adapterSinaResponse.notifyDataSetChanged();
+				
+				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
+				feedAdapter.clear();
+				String[][] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_SINA);
+				for (int i = 0; i < feedMsg.length; i++) {
+					feedAdapter.addItem(feedMsg[i]);
 				}
-				adapterSinaResponse.notifyDataSetChanged();
+				feedAdapter.notifyDataSetChanged();
 			}
 		});
 	}

@@ -28,14 +28,15 @@ public class FriendsHostActivity extends Activity {
         } else {
         	String action = extras.getString(Const.ACTION_DISPLAYFEED);
         	if (action != null && action.isEmpty() == false ) {
+        		zPubsub.fInitFeedUIPreview();
         		if (action.equals(Const.SNS_FACEBOOK)) {
-        			zPubsub.fInitFeedUIPreview();
+        			//zPubsub.fInitFeedUIPreview();
         			zPubsub.fGetFacebookUtil().fDisplayFeed();
         		} else if (action.equals(Const.SNS_RENREN)) {
-        			zPubsub.fInitFeedUI();
+        			//zPubsub.fInitFeedUI();
         			zPubsub.fGetRenrenUtil().fDisplayRenrenFeed();
         		} else if (action.equals(Const.SNS_SINA)) {
-        			zPubsub.fInitFeedUI();
+        			//zPubsub.fInitFeedUI();
         			zPubsub.fGetSinaUtil().fDisplaySinaFeed();
         		}
         	}

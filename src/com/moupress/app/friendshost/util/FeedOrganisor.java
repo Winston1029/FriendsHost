@@ -13,6 +13,7 @@ import android.os.Bundle;
 
 import com.google.gson.Gson;
 import com.moupress.app.friendshost.Const;
+import com.moupress.app.friendshost.FeedListItem;
 import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
@@ -120,11 +121,12 @@ public class FeedOrganisor {
 	}
 	
 	public String[][] fGetUnReadNewsFeed(String sns) {
-		String[][] result = zDBHelper.fGetFeedPreview(sns);
-		if (result == null || result.length == 0) {
-			result = new String[][] {{"No Unread Feed in Local"}};
+		String[][] feed = zDBHelper.fGetFeedPreview(sns);
+		if (feed == null || feed.length == 0) {
+			feed = new String[][] {{"No Unread Feed in Local"}};
 		}
-		return result;
+		
+		return feed;
 	}
 	
 	
