@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.LstViewFeedAdapter;
 import com.moupress.app.friendshost.PubSub;
+import com.moupress.app.friendshost.sns.FeedItem;
 import com.moupress.app.friendshost.util.FeedOrganisor;
 import com.renren.api.connect.android.Util;
 import com.facebook.android.AsyncFacebookRunner;
@@ -123,9 +125,13 @@ public class FacebookUtil {
 			public void run() {
 				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
 				feedAdapter.clear();
-				String[][] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_FACEBOOK);
-				for (int i = 0; i < feedMsg.length; i++) {
-					feedAdapter.addItem(feedMsg[i]);
+//				String[][] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_FACEBOOK);
+//				for (int i = 0; i < feedMsg.length; i++) {
+//					feedAdapter.addItem(feedMsg[i]);
+//				}
+				ArrayList<FeedItem> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_FACEBOOK);
+				for (FeedItem item : feeds ) {
+					feedAdapter.addItem(item);
 				}
 				feedAdapter.notifyDataSetChanged();
 			}

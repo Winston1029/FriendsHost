@@ -97,8 +97,10 @@ public class FeedExtractResponseBean extends ResponseBean{
 			    				  feedChild.setFeed_type(feedElement.getFirstChild().getNodeValue().trim()); 
 			    			  else if(feedElement.getNodeName().equals("actor_type"))
 			    				  feedChild.setActor_type(feedElement.getFirstChild().getNodeValue().trim());
-			    			  else if(feedElement.getNodeName().equals("actor_id"))
+			    			  else if(feedElement.getNodeName().equals("actor_id")) {
 			    				  feedChild.getFriend().setId(feedElement.getFirstChild().getNodeValue().trim());
+			    				  feedChild.setActor_id(feedElement.getFirstChild().getNodeValue().trim());
+			    			  }
 			    			  else if(feedElement.getNodeName().equals("name")) {
 			    				  feedChild.setName(feedElement.getFirstChild().getNodeValue().trim());
 			    				  feedChild.getFriend().setName(feedElement.getFirstChild().getNodeValue().trim());

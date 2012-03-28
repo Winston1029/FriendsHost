@@ -1,10 +1,11 @@
-package com.moupress.app.friendshost;
+package com.moupress.app.friendshost.sns;
 
-public class FeedListItem {
+public class FeedItem {
 
 	private String sHeadImg;
 	
 	private String sName;
+	private String sOwnerID;
 	private String sCreatedTime;
 	private String sMsgBody;
 	private String sStory;
@@ -13,6 +14,12 @@ public class FeedListItem {
 	private String sPhotoPreviewName;
 	private String sPhotoPreviewCaption;
 	private String sPhotoPreviewDescription;
+	
+	private UserFriend zFriend;
+	
+	public FeedItem() {
+		setzFriend(new UserFriend());
+	}
 	
 	public void setsHeadImg(String sHeadImg) {
 		this.sHeadImg = sHeadImg;
@@ -74,5 +81,19 @@ public class FeedListItem {
 //	public String getsStory_Tags() {
 //		return sStory_Tags;
 //	}
+	public void setsOwnerID(String sOwnerID) {
+		this.sOwnerID = sOwnerID;
+	}
+	public String getsOwnerID() {
+		return sOwnerID;
+	}
+
+	public void setzFriend(UserFriend zFriend) {
+		this.zFriend = zFriend;
+	}
+
+	public UserFriend getzFriend() {
+		return zFriend;
+	}
 	
 }

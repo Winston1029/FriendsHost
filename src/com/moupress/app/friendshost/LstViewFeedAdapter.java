@@ -7,6 +7,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import com.moupress.app.friendshost.sns.FeedItem;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,7 +23,7 @@ import android.widget.TextView;
 
 public class LstViewFeedAdapter extends BaseAdapter{
 	
-	private ArrayList<FeedListItem> feedArrayList;
+	private ArrayList<FeedItem> feedArrayList;
 	
 	private Activity zActivity;
 	private int iLayoutResId;
@@ -34,7 +36,7 @@ public class LstViewFeedAdapter extends BaseAdapter{
 	}
 	
 	public void clear() {
-		feedArrayList = new ArrayList<FeedListItem>();
+		feedArrayList = new ArrayList<FeedItem>();
 	}
 
 	@Override
@@ -64,6 +66,17 @@ public class LstViewFeedAdapter extends BaseAdapter{
 
 		if (convertView == null) {
 			convertView = viewInflator.inflate(iLayoutResId, null);
+		}
+		
+		ImageView img_Head = (ImageView) convertView.findViewById(R.id.img_feeduser);
+		String sHeadImgSrc = feedArrayList.get(position).getzFriend().getHeadurl();
+		Bitmap imgHead = null; 
+		if (sHeadImgSrc != null) {
+			imgHead = ImageOperations(sHeadImgSrc);
+		}
+		if (imgHead != null) {
+			img_Head.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+			img_Head.setImageBitmap(imgHead);
 		}
 		
 		TextView txv_FeedUser = (TextView) convertView.findViewById(R.id.txt_name);
@@ -105,10 +118,10 @@ public class LstViewFeedAdapter extends BaseAdapter{
 			ImageView img_PhotoPreview = (ImageView) convertView.findViewById(R.id.img_photopreview);
 			String sImgSrc = feedArrayList.get(position).getsPhotoPreviewLink();
 			//String sImgSrc = "http://photos-g.ak.fbcdn.net/hphotos-ak-ash4/431333_10150739807624187_554329186_11304408_1165959123_s.jpg";
-			Bitmap img = ImageOperations(sImgSrc);
-			if (img != null) {
+			Bitmap imgPhoto = ImageOperations(sImgSrc);
+			if (imgPhoto != null) {
 				img_PhotoPreview.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-				img_PhotoPreview.setImageBitmap(img);
+				img_PhotoPreview.setImageBitmap(imgPhoto);
 			} else {
 				img_PhotoPreview.setVisibility(View.GONE);
 			}
@@ -137,23 +150,28 @@ public class LstViewFeedAdapter extends BaseAdapter{
 	}
 
 	public void addItem(String[] feedMsg) {
-		FeedListItem item = new FeedListItem();
+		FeedItem item = new FeedItem();
 		if ( feedMsg.length > 2 ) {								
 			item.setsName(feedMsg[0]);							//name
-			item.setsCreatedTime(feedMsg[1]);					//created time
-			item.setsMsgBody(feedMsg[2]);						//message
-			item.setsStory(feedMsg[3]);							//story
+			item.setsOwnerID(feedMsg[1]);						//feed owner id
+			item.setsCreatedTime(feedMsg[2]);					//created time
+			item.setsMsgBody(feedMsg[3]);						//message
+			item.setsStory(feedMsg[4]);							//story
 			//item.setsStory_tags(feedMsg[4]);							//story_tags
-			item.setsPhotoPreviewLink(feedMsg[4]);				//pic url
-			item.setsPhotoPreviewName(feedMsg[5]);				//pic/album name
-			item.setsPhotoPreviewCaption(feedMsg[6]);			//pic/album caption
-			item.setsPhotoPreviewDescription(feedMsg[7]);		//pic/album description
+			item.setsPhotoPreviewLink(feedMsg[5]);				//pic url
+			item.setsPhotoPreviewName(feedMsg[6]);				//pic/album name
+			item.setsPhotoPreviewCaption(feedMsg[7]);			//pic/album caption
+			item.setsPhotoPreviewDescription(feedMsg[8]);		//pic/album description
 		} else {												//No local feed available
 			item.setsName(feedMsg[0]);
 		}
 		
 		feedArrayList.add(item);
 		
+	}
+	
+	public void addItem(FeedItem item) {
+		feedArrayList.add(item);		
 	}
 	
 	private Bitmap ImageOperations(String url) {
@@ -173,6 +191,7 @@ public class LstViewFeedAdapter extends BaseAdapter{
 		}
 		return bmp;
 	}
+
 
 //	public Object fetch(String address) throws MalformedURLException,IOException {
 //		URL url = new URL(address);

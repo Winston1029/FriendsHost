@@ -1,9 +1,9 @@
 package com.moupress.app.friendshost.sns;
 
 public class UserFriend {
-	private String id;
-	private String name;
-	private String headurl;
+	protected String id;
+	protected String name;
+	protected String headurl;
 	
 	protected String sns;
 	

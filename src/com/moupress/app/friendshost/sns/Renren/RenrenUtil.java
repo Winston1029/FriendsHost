@@ -1,6 +1,7 @@
 package com.moupress.app.friendshost.sns.Renren;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,6 +17,7 @@ import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.LstViewFeedAdapter;
 import com.moupress.app.friendshost.PubSub;
+import com.moupress.app.friendshost.sns.FeedItem;
 import com.renren.api.connect.android.AsyncRenren;
 import com.renren.api.connect.android.Renren;
 import com.renren.api.connect.android.common.AbstractRequestListener;
@@ -199,9 +201,9 @@ public class RenrenUtil {
 				
 				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
 				feedAdapter.clear();
-				String[][] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_RENREN);
-				for (int i = 0; i < feedMsg.length; i++) {
-					feedAdapter.addItem(feedMsg[i]);
+				ArrayList<FeedItem> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_RENREN);
+				for (FeedItem item : feeds ) {
+					feedAdapter.addItem(item);
 				}
 				feedAdapter.notifyDataSetChanged();
 			}

@@ -1,6 +1,8 @@
 package com.moupress.app.friendshost.sns.Renren;
 
-public class RenenFeedElement {
+import com.moupress.app.friendshost.sns.FeedItem;
+
+public class RenenFeedElement extends FeedItem {
 
 	private String id;
 	private String feed_type;

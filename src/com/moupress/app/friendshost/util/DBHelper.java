@@ -50,6 +50,7 @@ public class DBHelper {
     // Feed Columns
     static final String C_FEED_ID = "id";
     static final String C_FEED_FROM = "feedFrom";
+    static final String C_FEED_OWNER_ID = "feed_owner_id";
     static final String C_FEED_SNS = "SNS";
     static final String C_FEED_MSG = "msg";
     static final String C_FEED_STORY = "story";
@@ -89,6 +90,7 @@ public class DBHelper {
 										    + C_FEED_ID + " TEXT PRIMARY KEY,"
 										    + C_FEED_SNS + " TEXT,"
 										    + C_FEED_FROM + " TEXT,"
+										    + C_FEED_OWNER_ID + " TEXT,"
 										    + C_FEED_MSG + " TEXT,"
 										    + C_FEED_STORY + " TEXT,"
 										    + C_FEED_PIC + " TEXT,"
@@ -180,6 +182,7 @@ public class DBHelper {
 		values.put(C_FEED_STORY, entry.getStory());
 		//values.put(C_FEED_STORYTAG, entry.getStory_tags());
 		values.put(C_FEED_FROM, entry.getFrom().getName());
+		values.put(C_FEED_OWNER_ID, entry.getFrom().getId());
 		values.put(C_FEED_PIC, entry.getPicture());
 		values.put(C_FEED_SOURCE, entry.getSource());
 		values.put(C_FEED_LINK, entry.getLink());
@@ -213,6 +216,7 @@ public class DBHelper {
 		values.put(C_FEED_ISREAD, "0");
 		values.put(C_FEED_ID, status.getId() + "");
 		values.put(C_FEED_FROM, status.getUser().getName());
+		values.put(C_FEED_OWNER_ID, status.getUser().getId());
 		values.put(C_FEED_MSG, status.getText());
 		values.put(C_FEED_PIC, status.getThumbnail_pic());
 		values.put(C_FEED_CREATED_TIME, status.getCreatedAt().toGMTString());
@@ -240,6 +244,7 @@ public class DBHelper {
 			values.put(C_FEED_MSG, entry.getPrefix());
 		}
 		values.put(C_FEED_FROM, entry.getName());
+		values.put(C_FEED_OWNER_ID, entry.getActor_id());
 		values.put(C_FEED_ISREAD, "0");
 		values.put(C_FEED_UPDATED_TIME, entry.getUpdate_time());
 		values.put(C_FEED_STORY, entry.getTitle() + "\n" + entry.getDescription());
@@ -267,8 +272,6 @@ public class DBHelper {
 		values.put(C_FEED_PIC, entry.getFeed_media_src());
 		
 		ret = zSQLiteDB.insert(T_FEED, null, values);
-		
-		fInsertFriend(entry.getFriend());
 		
 		return ret;
 	}
@@ -345,7 +348,7 @@ public class DBHelper {
 	 * @return
 	 */
 	public String[][] fGetFeedPreview(String sns) {
-		String[] columns = new String[] {C_FEED_FROM, C_FEED_CREATED_TIME, 
+		String[] columns = new String[] {C_FEED_FROM, C_FEED_OWNER_ID, C_FEED_CREATED_TIME, 
 										 C_FEED_MSG, C_FEED_STORY,
 										 C_FEED_PIC, C_FEED_NAME, C_FEED_CAPTION, C_FEED_DESCRIPTION};
 		String where = C_FEED_ISREAD + " = ? and " 
@@ -407,6 +410,35 @@ public class DBHelper {
 	
 	public void fPurgeFeed() {
 		
+	}
+
+	public String[][] fGetFeedOwner(String sns, String ownerid) {
+		String[] columns = new String[] {C_USER_NAME, C_USER_HEADURL};
+		String where = C_USER_SNS + " = ? and " 
+						+ C_USER_ID + " = ?";
+		String[] selectionArgs = new String[] {sns, ownerid};
+		Cursor cursor = null;
+		String[][] result = null;
+		
+		try {
+			cursor = zSQLiteDB.query(T_USER, columns, where, selectionArgs, null, null, null);
+			int numRows = cursor.getCount();
+			result = new String[numRows][columns.length];
+			cursor.moveToFirst();
+			for (int i = 0; i < numRows; ++i) {
+				for (int j = 0; j < columns.length; ++j) {
+					result[i][j] = cursor.getString(j);
+				}
+				cursor.moveToNext();
+			}
+		} catch (SQLException e) {
+			Log.v(Const.TAG, "Get all birthday failed.", e);
+		} finally {
+			if (cursor != null && !cursor.isClosed()) {
+				cursor.close();
+			}
+		}
+		return result;
 	}
 
 

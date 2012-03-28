@@ -1,5 +1,6 @@
 package com.moupress.app.friendshost.sns.sina;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import weibo4andriod.AsyncWeibo;
@@ -16,6 +17,7 @@ import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.LstViewFeedAdapter;
 import com.moupress.app.friendshost.OAuthActivity;
 import com.moupress.app.friendshost.PubSub;
+import com.moupress.app.friendshost.sns.FeedItem;
 import com.moupress.app.friendshost.util.Pref;
 
 public class SinaUtil {
@@ -108,9 +110,13 @@ public class SinaUtil {
 				
 				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
 				feedAdapter.clear();
-				String[][] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_SINA);
-				for (int i = 0; i < feedMsg.length; i++) {
-					feedAdapter.addItem(feedMsg[i]);
+//				String[][] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_SINA);
+//				for (int i = 0; i < feedMsg.length; i++) {
+//					feedAdapter.addItem(feedMsg[i]);
+//				}
+				ArrayList<FeedItem> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_SINA);
+				for (FeedItem item : feeds ) {
+					feedAdapter.addItem(item);
 				}
 				feedAdapter.notifyDataSetChanged();
 			}
