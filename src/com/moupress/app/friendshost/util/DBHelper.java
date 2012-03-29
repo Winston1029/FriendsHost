@@ -387,7 +387,7 @@ public class DBHelper {
 		String result = null;
 		
 		try {
-			cursor = zSQLiteDB.query(table, columns, where, selectionArgs, null, null, C_FEED_CREATED_TIME);
+			cursor = zSQLiteDB.query(table, null, where, selectionArgs, null, null, null);
 			cursor.moveToFirst();
 			if (cursor.getCount() > 0 ) {
 				result = cursor.getString(0) +" : "+ cursor.getString(1);

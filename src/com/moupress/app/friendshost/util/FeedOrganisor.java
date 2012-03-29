@@ -60,8 +60,12 @@ public class FeedOrganisor {
 		for(int i= 0; i<bean.getData().size();i++) {
 			//String msg = ((FBHomeFeedEntry) bean.getData().get(i)).getName()+" : "+((FBHomeFeedEntry) bean.getData().get(i)).getMessage();
 			FBHomeFeedEntry entry = (FBHomeFeedEntry) bean.getData().get(i);
+			String fromID = entry.getFrom().getId();
+			String fromHeadUrl = "https://graph.facebook.com/" + fromID + "/picture";
+			entry.getFrom().setHeadurl(fromHeadUrl);
+			
 			res += zDBHelper.fInsertFeed(entry);
-			//zDBHelper.fInsertFriend(entry.getFrom());
+			zDBHelper.fInsertFriend(entry.getFrom());
 		}
 		
 		if (res > 0 ) {
@@ -96,12 +100,12 @@ public class FeedOrganisor {
 			//String msg = status.getUser().getScreenName() + " : " + status.getText();
 			res += zDBHelper.fInsertFeed(status);
 			
-//			UserFriend friend = new UserFriend();
-//			friend.setId(status.getUser().getId()+"");
-//			friend.setSNS(Const.SNS_SINA);
-//			friend.setName(status.getUser().getName());
-//			friend.setHeadurl(status.getUser().getProfileImageURL().toString());
-//			zDBHelper.fInsertFriend(friend);
+			UserFriend friend = new UserFriend();
+			friend.setId(status.getUser().getId()+"");
+			friend.setSNS(Const.SNS_SINA);
+			friend.setName(status.getUser().getName());
+			friend.setHeadurl(status.getUser().getProfileImageURL().toString());
+			zDBHelper.fInsertFriend(friend);
 		}
 		
 		if (res > 0 ) {
