@@ -13,6 +13,7 @@ import com.moupress.app.friendshost.activity.FeedPublishActivity;
 import com.moupress.app.friendshost.sns.Renren.RenrenUtil;
 import com.moupress.app.friendshost.sns.facebook.FacebookUtil;
 import com.moupress.app.friendshost.sns.sina.SinaUtil;
+import com.moupress.app.friendshost.sns.twitter.TwitterUtil;
 import com.moupress.app.friendshost.util.FeedOrganisor;
 
 public class PubSub {
@@ -22,6 +23,7 @@ public class PubSub {
 	public static FacebookUtil 	zFacebook;
 	public static RenrenUtil 	zRenrenUtil;
 	public static SinaUtil		zSinaUtil;
+	public static TwitterUtil   zTwitterUtil;
 	public static FeedOrganisor zFeedOrg;
 	
 	ListView uLstFeed;
@@ -41,6 +43,11 @@ public class PubSub {
 		fFBInitUI();
 		fInitRenrenUI();
 		fInitSinaUI();
+		fInitTwitter();
+	}
+
+	private void fInitTwitter() {
+		
 	}
 
 	public PubSub(Service service) {
@@ -103,8 +110,6 @@ public class PubSub {
 				//fInitFeedUI();
 				//fInitFeedUIPreview();
 				zRenrenUtil.fDisplayRenrenFeed();
-				
-
 			}
 		});
 		
@@ -139,6 +144,7 @@ public class PubSub {
 		zFacebook = new FacebookUtil(this);
 		zRenrenUtil = new RenrenUtil(this);
 		zSinaUtil = new SinaUtil(this);
+		zTwitterUtil = new TwitterUtil(this);
 		
 		zFeedOrg = new FeedOrganisor(this);
 	}

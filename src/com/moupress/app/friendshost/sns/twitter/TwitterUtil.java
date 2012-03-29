@@ -2,6 +2,7 @@ package com.moupress.app.friendshost.sns.twitter;
 
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
+import com.moupress.app.friendshost.PubSub;
 
 import oauth.signpost.OAuth;
 import oauth.signpost.OAuthConsumer;
@@ -31,7 +32,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 
-public class TwitterUtil extends SnsUtil{
+public class TwitterUtil {
 
 	private SharedPreferences prefs;
 	private Activity activity;
@@ -106,10 +107,11 @@ public class TwitterUtil extends SnsUtil{
 	}
 	
 
-	public TwitterUtil(Activity activity,final Context context)
+	//public TwitterUtil(Activity activity,final Context context)
+	public TwitterUtil(PubSub zPubSub)
 	{
-		this.activity = activity;
-		this.context = context;
+		this.activity = zPubSub.fGetActivity();
+		this.context = zPubSub.fGetActivity();
 		
 		//Notifications When Status Update is Completed
 		mUpdateTwitterNotification = new Runnable() {
@@ -223,14 +225,14 @@ public class TwitterUtil extends SnsUtil{
 	}
 
 
-	@Override
+	
 	public void GetFeed() {
 		    authMethod = AUTH_METHODS.GET_FEEDS;
 			checkAuthenticated(prefs);
 		}
 
 	
-	@Override
+	
 	public void SendFeed(String feed) {
 		// TODO Auto-generated method stub
 		setMessage(feed);
@@ -238,7 +240,7 @@ public class TwitterUtil extends SnsUtil{
 		checkAuthenticated(prefs);;
 	}
 
-	@Override
+	
 	public void CallBackTrigger(Uri uri, int requestCode, int resultCode,
 			Intent data) {
 		// TODO Auto-generated method stub
@@ -246,7 +248,7 @@ public class TwitterUtil extends SnsUtil{
 		this.retrieveToken(uri);
 	}
 
-	@Override
+	
 	public void Autentication() {
 		try {
     		this.consumer = new CommonsHttpOAuthConsumer(Const.CONSUMER_KEY, Const.CONSUMER_SECRET);

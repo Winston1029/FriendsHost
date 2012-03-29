@@ -7,7 +7,15 @@
         android:id="@+id/linearLayout1" 
         android:layout_width="match_parent" 
         android:layout_height="wrap_content" 
-        android:orientation="horizontal">
+        android:orientation="vertical">
+       
+       <LinearLayout
+       	android:id="@+id/linearLayout2"
+       	android:layout_width="match_parent"
+       	android:layout_height="wrap_content"
+       	android:orientation="horizontal"
+       	>
+       
         
        <Button 
             android:text="Renren Feed" 
@@ -23,14 +31,27 @@
             android:layout_height="wrap_content"
             android:textSize="9dip">
        </Button>
-
        <Button
            android:id="@+id/btn_getSinaFeed"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:text="Sina Feed" 
            android:textSize="9dip"/>
-          
+        <Button 
+        	android:id="@+id/btn_getTwitterFeed"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:text="Twitter Feed"
+        	android:textSize="9dip">
+        </Button>
+          	</LinearLayout>
+          	
+    <LinearLayout
+       	android:id="@+id/linearLayout3"
+       	android:layout_width="match_parent"
+       	android:layout_height="wrap_content"
+       	android:orientation="horizontal"
+       	>
          <Button 
             android:text="Pub RR Feed" 
             android:id="@+id/btn_pubrenrenfeed" 
@@ -46,6 +67,14 @@
        		android:layout_height="wrap_content"
        		android:textSize="9dip">
        	</Button>
+       	
+       	<Button android:text="Pub Twitter Feed"
+       		android:id="@+id/btn_pubTwitterfeed"
+       		android:layout_width="wrap_content"
+       		android:layout_height="wrap_content"
+       		android:textSize="9dip">
+       	</Button>
+       	</LinearLayout>
    </LinearLayout>
 
    <ListView
