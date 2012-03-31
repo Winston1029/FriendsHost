@@ -8,43 +8,6 @@
         android:layout_width="match_parent" 
         android:layout_height="wrap_content" 
         android:orientation="vertical">
-       
-       <LinearLayout
-       	android:id="@+id/linearLayout2"
-       	android:layout_width="match_parent"
-       	android:layout_height="wrap_content"
-       	android:orientation="horizontal"
-       	>
-       
-        
-       <Button 
-            android:text="Renren Feed" 
-            android:id="@+id/btn_getRenrenfeed" 
-            android:layout_width="wrap_content" 
-            android:layout_height="wrap_content"
-            android:textSize="9dip">
-       </Button>
-       <Button 
-            android:text="FB Feed" 
-            android:id="@+id/btn_getfbfeed" 
-            android:layout_width="wrap_content" 
-            android:layout_height="wrap_content"
-            android:textSize="9dip">
-       </Button>
-       <Button
-           android:id="@+id/btn_getSinaFeed"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="Sina Feed" 
-           android:textSize="9dip"/>
-        <Button 
-        	android:id="@+id/btn_getTwitterFeed"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:text="Twitter Feed"
-        	android:textSize="9dip">
-        </Button>
-          	</LinearLayout>
           	
     <LinearLayout
        	android:id="@+id/linearLayout3"
@@ -83,5 +46,37 @@
        android:layout_height="match_parent"
        android:layout_weight="1" >
    </ListView>
+
+   <LinearLayout
+       android:id="@+id/linearLayout2"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="horizontal" >
+
+       <ImageButton
+           android:id="@+id/imgBtn_Renren"
+           android:layout_width="76dp"
+           android:layout_height="74dp"
+           android:src="@drawable/renren_logo" />
+
+       <ImageButton
+           android:id="@+id/imgBtn_Facebook"
+           android:layout_width="76dp"
+           android:layout_height="72dp"
+           android:src="@drawable/facebook-logo" />
+
+       <ImageButton
+           android:id="@+id/imgBtn_Sina"
+           android:layout_width="76dp"
+           android:layout_height="74dp"
+           android:src="@drawable/weibo-logo" />
+
+       <ImageButton
+           android:id="@+id/imgBtn_Twitter"
+           android:layout_width="78dp"
+           android:layout_height="75dp"
+           android:src="@drawable/twitter-logo" />
+
+   </LinearLayout>
 
 </LinearLayout>

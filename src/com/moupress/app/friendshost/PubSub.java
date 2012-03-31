@@ -1,5 +1,7 @@
 package com.moupress.app.friendshost;
 
+import twitter4j.util.ImageUpload.ImgLyOAuthUploader;
+import android.R;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
@@ -7,6 +9,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.moupress.app.friendshost.activity.FeedPublishActivity;
@@ -69,7 +72,7 @@ public class PubSub {
 	public LstViewFeedAdapter fGetAdapterFeedPreview() {return arrAdapterFeedPreview;}
 	
 	private void fFBInitUI() {        
-        Button uBtnFBGetFeed = (Button) zActivity.findViewById(R.id.btn_getfbfeed);
+		ImageButton uBtnFBGetFeed = (ImageButton) zActivity.findViewById(R.id.imgBtn_Facebook);
         Button uBtnFBPubFeed = (Button) zActivity.findViewById(R.id.btn_pubfbfeed);
         
         uBtnFBGetFeed.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +101,7 @@ public class PubSub {
 	}
 	
 	private void fInitRenrenUI() {
-		Button uBtnRenrenGetFeed = (Button) zActivity.findViewById(R.id.btn_getRenrenfeed);
+		ImageButton uBtnRenrenGetFeed = (ImageButton) zActivity.findViewById(R.id.imgBtn_Renren);
 		Button uBtnRenrenPublishFeed = (Button) zActivity.findViewById(R.id.btn_pubrenrenfeed);
 		
 		uBtnRenrenGetFeed.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +128,7 @@ public class PubSub {
 	}
 	
 	private void fInitSinaUI() {
-		Button uBtnSinaGetFeed = (Button) zActivity.findViewById(R.id.btn_getSinaFeed);
+		ImageButton uBtnSinaGetFeed = (ImageButton) zActivity.findViewById(R.id.imgBtn_Sina);
 		
 		uBtnSinaGetFeed.setOnClickListener(new View.OnClickListener() {
 			
