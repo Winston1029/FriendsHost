@@ -1,7 +1,6 @@
 package com.moupress.app.friendshost;
 
-import twitter4j.util.ImageUpload.ImgLyOAuthUploader;
-import android.R;
+import com.moupress.app.friendshost.R;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
@@ -139,6 +138,20 @@ public class PubSub {
 				//fInitFeedUI();
 				//fInitFeedUIPreview();
 				zSinaUtil.fDisplaySinaFeed();
+			}
+		});
+	}
+	
+	private void fInitPubUI() {
+		ImageButton uBtnPubFeed = (ImageButton) zActivity.findViewById(R.id.imgBtn_PubFeed);
+		
+		uBtnPubFeed.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(zActivity, FeedPublishActivity.class);
+				intent.putExtra(Const.SNS, Const.SNS_RENREN);
+				zActivity.startActivity(intent);				
 			}
 		});
 	}

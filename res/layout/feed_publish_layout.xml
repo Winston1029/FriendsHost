@@ -6,7 +6,6 @@
 		android:orientation="vertical" android:layout_width="fill_parent"
 		android:layout_height="fill_parent" android:padding="10dip">
 		
-		
 		<LinearLayout android:orientation="horizontal" 
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
@@ -73,5 +72,31 @@
 		<Button android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:text="Publish"
 			android:id="@+id/publish" android:layout_marginTop="10dip"/>
+
+		<LinearLayout
+		    android:id="@+id/linearLayout1"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content" >
+
+			<ImageButton
+			    android:id="@+id/imgBtn_pubFacebook"
+			    android:layout_width="64dp"
+                android:layout_height="64dp"
+			    android:src="@drawable/logo_facebook" />
+
+			<ImageButton
+			    android:id="@+id/imgBtn_pubRenren"
+			    android:layout_width="64dp"
+                android:layout_height="64dp"
+			    android:src="@drawable/logo_renren" />
+
+			<ImageButton
+			    android:id="@+id/imgBtn_pubTwitter"
+			    android:layout_width="64dp"
+                android:layout_height="64dp"
+			    android:src="@drawable/logo_twitter" />
+
+		</LinearLayout>
+
 	</LinearLayout>
 </ScrollView>
