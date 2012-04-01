@@ -3,13 +3,6 @@
    android:layout_width="fill_parent"
    android:layout_height="fill_parent" android:orientation="vertical">
    
-   <LinearLayout 
-        android:id="@+id/linearLayout1" 
-        android:layout_width="match_parent" 
-        android:layout_height="wrap_content" 
-        android:orientation="vertical">
-   </LinearLayout>
-
    <ListView
        android:id="@+id/uLstVFBFeed"
        android:layout_width="match_parent"
@@ -26,30 +19,30 @@
            android:id="@+id/imgBtn_Renren"
            android:layout_width="64dp"
            android:layout_height="64dp"
-           android:src="@drawable/logo_renren" />
+           android:src="@drawable/renren_btn_selector" />
 
        <ImageButton
            android:id="@+id/imgBtn_Facebook"
            android:layout_width="64dp"
            android:layout_height="64dp"
-           android:src="@drawable/logo_facebook" />
+           android:src="@drawable/facebook_btn_selector" />
        <ImageButton
            android:id="@+id/imgBtn_Sina"
            android:layout_width="64dp"
            android:layout_height="64dp"
-           android:src="@drawable/logo_sina" />
+           android:src="@drawable/sina_btn_selector" />
 
        <ImageButton
            android:id="@+id/imgBtn_Twitter"
            android:layout_width="64dp"
            android:layout_height="64dp"
-           android:src="@drawable/logo_twitter" />
+           android:src="@drawable/twitter_btn_selector" />
 
        <ImageButton
            android:id="@+id/imgBtn_PubFeed"
            android:layout_width="64dp"
            android:layout_height="64dp"
-           android:src="@drawable/logo_pub" />
+           android:src="@drawable/pub_btn_selector" />
 
    </LinearLayout>
 

@@ -8,65 +8,81 @@
 		
 		<LinearLayout android:orientation="horizontal" 
 				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-		>
-		<Button android:id="@+id/updPic" android:text="Upload Photo"
+				android:layout_height="wrap_content">
+		
+		<Button android:id="@+id/updPic" 
+			android:text="Upload Photo"
 			android:layout_height="wrap_content" 
 			android:layout_width="wrap_content">
 		</Button>
+		
 		<Button android:id="@+id/tkePic" android:text="Take Photo"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"></Button>
 		</LinearLayout>
-		<TextView android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:text="Title"
-			android:textSize="16sp" android:textColor="#333333" />
-		<EditText android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:layout_weight="1"
-			android:singleLine="true" android:padding="5dip" android:textSize="14sp"
-			android:text="Title" android:id="@+id/name" />
+		
+		
+<!--		<TextView android:layout_width="fill_parent"-->
+<!--			android:layout_height="wrap_content" android:text="Title"-->
+<!--			android:textSize="16sp" android:textColor="#333333" />-->
+<!--			-->
+<!--		<EditText android:layout_width="fill_parent"-->
+<!--			android:layout_height="wrap_content" android:layout_weight="1"-->
+<!--			android:singleLine="true" android:padding="5dip" android:textSize="14sp"-->
+<!--			android:text="Title" android:id="@+id/name" />-->
 
-		<TextView android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:text="Description"
-			android:textSize="16sp" android:textColor="#333333" />
-		<EditText android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:layout_weight="1"
-			android:singleLine="true" android:padding="5dip" android:textSize="14sp"
-			android:text="Description" android:id="@+id/description" />
+<!--		<TextView android:layout_width="fill_parent"-->
+<!--			android:layout_height="wrap_content" android:text="Description"-->
+<!--			android:textSize="16sp" android:textColor="#333333" />-->
+<!--			-->
+<!--		<EditText android:layout_width="fill_parent"-->
+<!--			android:layout_height="wrap_content" android:layout_weight="1"-->
+<!--			android:singleLine="true" android:padding="5dip" android:textSize="14sp"-->
+<!--			android:text="Description" android:id="@+id/description" />-->
 
-		<TextView android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:text="Link"
-			android:textSize="16sp" android:textColor="#333333" />
-		<EditText android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:layout_weight="1"
-			android:singleLine="true" android:padding="5dip" android:textSize="14sp"
-			android:text="Link"
-			android:id="@+id/link" />
+<!--		<TextView android:layout_width="fill_parent"-->
+<!--			android:layout_height="wrap_content" android:text="Link"-->
+<!--			android:textSize="16sp" android:textColor="#333333" />-->
+<!--			-->
+<!--		<EditText android:layout_width="fill_parent"-->
+<!--			android:layout_height="wrap_content" android:layout_weight="1"-->
+<!--			android:singleLine="true" android:padding="5dip" android:textSize="14sp"-->
+<!--			android:text="Link"-->
+<!--			android:id="@+id/link" />-->
 
-		<TextView android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:text="Picture"
-			android:textSize="16sp" android:textColor="#333333" />
-		<EditText android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:layout_weight="1"
-			android:singleLine="true" android:padding="5dip" android:textSize="14sp"
-			android:text="http://s.xnimg.cn/imgpro/logo/logo-rr-159.png"
-			android:id="@+id/image" />
+<!--		<TextView android:layout_width="fill_parent"-->
+<!--			android:layout_height="wrap_content" android:text="Picture"-->
+<!--			android:textSize="16sp" android:textColor="#333333" />-->
+<!--			-->
+<!--		<EditText android:layout_width="fill_parent"-->
+<!--			android:layout_height="wrap_content" android:layout_weight="1"-->
+<!--			android:singleLine="true" android:padding="5dip" android:textSize="14sp"-->
+<!--			android:text="http://s.xnimg.cn/imgpro/logo/logo-rr-159.png"-->
+<!--			android:id="@+id/image" />-->
 
-		<TextView android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:text="Caption "
-			android:textSize="16sp" android:textColor="#333333" />
-		<EditText android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:layout_weight="1"
-			android:singleLine="true" android:padding="5dip" android:textSize="14sp"
-			android:text="Caption" android:id="@+id/caption" />
+<!--		<TextView android:layout_width="fill_parent"-->
+<!--			android:layout_height="wrap_content" android:text="Caption "-->
+<!--			android:textSize="16sp" android:textColor="#333333" />-->
+<!--			-->
+<!--		<EditText android:layout_width="fill_parent"-->
+<!--			android:layout_height="wrap_content" android:layout_weight="1"-->
+<!--			android:singleLine="true" android:padding="5dip" android:textSize="14sp"-->
+<!--			android:text="Caption" android:id="@+id/caption" />-->
 
 		<TextView android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:text="Message"
 			android:textSize="16sp" android:textColor="#333333" />
+			
 		<EditText android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:layout_weight="1"
-			android:singleLine="true" android:padding="5dip" android:textSize="14sp"
-			android:text="Message" android:id="@+id/message" />
+			android:layout_height="wrap_content" 
+			android:singleLine="true" 
+			android:padding="5dip" 
+			android:textSize="14sp"
+			android:gravity="top|left"
+			android:id="@+id/message" android:lines = "12" 
+			android:minLines="10"
+			android:maxLines="12" 
+			android:inputType="textMultiLine"/>
 			
 
 		<Button android:layout_width="wrap_content"

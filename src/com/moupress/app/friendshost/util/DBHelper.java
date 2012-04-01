@@ -1,5 +1,7 @@
 package com.moupress.app.friendshost.util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -219,6 +221,7 @@ public class DBHelper {
 		values.put(C_FEED_OWNER_ID, status.getUser().getId());
 		values.put(C_FEED_MSG, status.getText());
 		values.put(C_FEED_PIC, status.getThumbnail_pic());
+		values.put(C_FEED_UPDATED_TIME, status.getCreatedAt().toGMTString());
 		values.put(C_FEED_CREATED_TIME, status.getCreatedAt().toGMTString());
 		//values.put(C_FEED_FROM, status.getSource());
 		
@@ -276,12 +279,15 @@ public class DBHelper {
 		return ret;
 	}
 	
+	//Twitter
 	public long fInsertFeed(twitter4j.Status status) {
 		long ret = 0;
 		
 		if (fIfItemExist(String.valueOf(status.getId()), SNS_TWITTER, T_FEED)) {
 			return ret;
 		}
+		
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ"); 
 		
 		ContentValues values  = new ContentValues();
 		values.put(C_FEED_SNS, SNS_TWITTER);
@@ -291,7 +297,8 @@ public class DBHelper {
 		values.put(C_FEED_OWNER_ID, status.getUser().getId());
 		values.put(C_FEED_MSG, status.getText());
 		//values.put(C_FEED_PIC, status.GET);
-		values.put(C_FEED_CREATED_TIME, status.getCreatedAt().toGMTString());
+		values.put(C_FEED_UPDATED_TIME, df.format(status.getCreatedAt()));
+		values.put(C_FEED_CREATED_TIME, df.format(status.getCreatedAt()));
 		
 		ret = zSQLiteDB.insert(T_FEED, null, values);
 		return ret;

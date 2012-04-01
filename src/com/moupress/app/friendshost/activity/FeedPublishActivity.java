@@ -96,18 +96,18 @@ public class FeedPublishActivity extends Activity{
 	private void fInitFieldUI() {
 		//Controls Capture user's input info
 		ScrollView layout = (ScrollView) LayoutInflater.from(this).inflate(R.layout.feed_publish_layout, null);
-		EditText editTextName = (EditText) layout.findViewById(R.id.name);
-		EditText editTextDescription = (EditText) layout.findViewById(R.id.description);
-		EditText editTextUrl = (EditText) layout.findViewById(R.id.link);
-		EditText editTextImageUrl = (EditText) layout.findViewById(R.id.image);
-		EditText editTextCaption = (EditText) layout.findViewById(R.id.caption);
+//		EditText editTextName = (EditText) layout.findViewById(R.id.name);
+//		EditText editTextDescription = (EditText) layout.findViewById(R.id.description);
+//		EditText editTextUrl = (EditText) layout.findViewById(R.id.link);
+//		EditText editTextImageUrl = (EditText) layout.findViewById(R.id.image);
+//		EditText editTextCaption = (EditText) layout.findViewById(R.id.caption);
 		EditText editTextMessage = (EditText) layout.findViewById(R.id.message);
 		
-		name = editTextName.getText().toString();
-		description = editTextDescription.getText().toString();
-		url = editTextUrl.getText().toString();
-		imageUrl = editTextImageUrl.getText().toString();
-		caption = editTextCaption.getText().toString();
+//		name = editTextName.getText().toString();
+//		description = editTextDescription.getText().toString();
+//		url = editTextUrl.getText().toString();
+//		imageUrl = editTextImageUrl.getText().toString();
+//		caption = editTextCaption.getText().toString();
 		message = editTextMessage.getText().toString();		
 	}
 
