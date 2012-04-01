@@ -276,6 +276,27 @@ public class DBHelper {
 		return ret;
 	}
 	
+	public long fInsertFeed(twitter4j.Status status) {
+		long ret = 0;
+		
+		if (fIfItemExist(String.valueOf(status.getId()), SNS_TWITTER, T_FEED)) {
+			return ret;
+		}
+		
+		ContentValues values  = new ContentValues();
+		values.put(C_FEED_SNS, SNS_TWITTER);
+		values.put(C_FEED_ISREAD, "0");
+		values.put(C_FEED_ID, status.getId() + "");
+		values.put(C_FEED_FROM, status.getUser().getName());
+		values.put(C_FEED_OWNER_ID, status.getUser().getId());
+		values.put(C_FEED_MSG, status.getText());
+		//values.put(C_FEED_PIC, status.GET);
+		values.put(C_FEED_CREATED_TIME, status.getCreatedAt().toGMTString());
+		
+		ret = zSQLiteDB.insert(T_FEED, null, values);
+		return ret;
+	}
+	
 	private boolean fIfItemExist(String feedid, String sns, String table) {
 		String item = fGetItemByID(feedid, sns, table);
 		if (item != null) {

@@ -48,9 +48,7 @@ public class PubSub {
 		fInitTwitter();
 	}
 
-	private void fInitTwitter() {
-		
-	}
+
 
 	public PubSub(Service service) {
 		PubSub.zContext = service.getBaseContext();
@@ -138,6 +136,19 @@ public class PubSub {
 				//fInitFeedUI();
 				//fInitFeedUIPreview();
 				zSinaUtil.fDisplaySinaFeed();
+			}
+		});
+	}
+	
+	private void fInitTwitter() {
+		Button uBtnTwitterGetFeed = (Button) zActivity.findViewById(R.id.imgBtn_Twitter);
+		
+		uBtnTwitterGetFeed.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				zTwitterUtil.fDisplayTwitterFeed();
 			}
 		});
 	}

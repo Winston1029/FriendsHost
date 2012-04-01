@@ -36,9 +36,18 @@ public class FeedRetrievalService extends Service {
 					PubSub.zSinaUtil.fGetNewsFeed(getApplicationContext());
 				}
 				
-				if (PubSub.zRenrenUtil == null && PubSub.zFacebook == null && PubSub.zSinaUtil == null) {
-					stopSelf();
+				if(PubSub.zTwitterUtil != null && PubSub.zTwitterUtil.isSessionValid())
+				{
+					PubSub.zTwitterUtil.fGetNewsFeed(getApplicationContext());
 				}
+				
+				
+				if (PubSub.zRenrenUtil == null && 
+						PubSub.zFacebook == null && 
+						PubSub.zSinaUtil == null &&
+						PubSub.zTwitterUtil == null) {
+						stopSelf();
+					}
 			}
 		}, 3000, update_interval);
 		Log.i(getClass().getSimpleName(), "Timer started.");

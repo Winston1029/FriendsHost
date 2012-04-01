@@ -1,8 +1,12 @@
 package com.moupress.app.friendshost.sns.twitter;
 
+import java.util.ArrayList;
+
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
+import com.moupress.app.friendshost.LstViewFeedAdapter;
 import com.moupress.app.friendshost.PubSub;
+import com.moupress.app.friendshost.sns.FeedItem;
 
 import oauth.signpost.OAuth;
 import oauth.signpost.OAuthConsumer;
@@ -40,16 +44,15 @@ public class TwitterUtil {
     private OAuthConsumer consumer; 
     private OAuthProvider provider;
     private String msgSend;
-    
-	private final Handler mTwitterHandler = new Handler();
-	
-	final Runnable mUpdateTwitterNotification;
-	final Runnable mFetchTwitterNotification;
-	
-	private static final String TAG = "TwitterFrameWork";
 	
 	private static enum AUTH_METHODS {GET_FEEDS, UPDATE_STATUS};
-	private AUTH_METHODS authMethod;
+	private AUTH_METHODS authMethod = AUTH_METHODS.GET_FEEDS;
+	
+	private PubSub zPubSub;
+	private static final String TAG = "TwitterUtil";
+	
+	private boolean isAutenticated = false; 
+	private AsyncTwitter twitter;
 	
 	 private TwitterListener listener = new TwitterAdapter()
 	 {
@@ -60,7 +63,11 @@ public class TwitterUtil {
 			
 			if(method == TwitterMethod.ACCOUNT_SETTINGS)
 			{
-				Autentication();
+				if(!isAutenticated)
+				{
+					isAutenticated = true;
+					Autentication();
+				}
 			}
 			else if(method == TwitterMethod.UPDATE_STATUS)
 			{
@@ -84,11 +91,14 @@ public class TwitterUtil {
 			
 			//mTwitterHandler.post(mFetchTwitterNotification);
 			//onSnsListener.OnSnsTwitterFeedsLoaded(statuses);
+			Log.i(TAG, "Twitters are downloaded! " + statuses.size());
+			zPubSub.fGetFeedOrganisor().fSaveNewFeeds(statuses, context);
 		}
 
 		@Override
 		public void gotAccountSettings(AccountSettings settings) {
 			//super.gotAccountSettings(settings);
+			isAutenticated = true;
 			followActions();
 		}
 
@@ -112,22 +122,8 @@ public class TwitterUtil {
 	{
 		this.activity = zPubSub.fGetActivity();
 		this.context = zPubSub.fGetActivity();
+		this.zPubSub = zPubSub;
 		
-		//Notifications When Status Update is Completed
-		mUpdateTwitterNotification = new Runnable() {
-	        public void run() {
-	        	Toast.makeText(context, "Tweet sent !", Toast.LENGTH_LONG).show();
-	        }
-	    };
-	    
-	    //Notification When Tweets are loaded
-	    mFetchTwitterNotification = new Runnable()
-	    {
-			@Override
-			public void run() {
-				Toast.makeText(context, "Tweets are downloaded !", Toast.LENGTH_LONG).show();
-			}
-	    };
 	    this.prefs = PreferenceManager.getDefaultSharedPreferences(activity);
 	}
 	
@@ -150,7 +146,10 @@ public class TwitterUtil {
 	 * @param msg
 	 */
 	public void sendTweet(SharedPreferences prefs,String msg)  {
-		AsyncTwitter twitter = Autentication(prefs,msg);
+		
+		if(twitter == null)
+			 twitter = Autentication(prefs,msg);
+			
         twitter.updateStatus(msg);
 	}
 	
@@ -160,7 +159,11 @@ public class TwitterUtil {
 	 */
 	public void getTweets(SharedPreferences prefs)
 	{
-		AsyncTwitter twitter = Autentication(prefs,null);
+		if(twitter == null)
+			 twitter = Autentication(prefs,null);
+			
+			Log.i(TAG, "Get Tweets !");
+			
 		twitter.getHomeTimeline();
 	}
 				
@@ -277,17 +280,56 @@ public class TwitterUtil {
 		AccessToken a = new AccessToken(token,secret);
 		//Twitter twitter = new TwitterFactory().getInstance();
 		AsyncTwitterFactory factory = new AsyncTwitterFactory(listener);
-		AsyncTwitter twitter = factory.getInstance();
+		twitter = factory.getInstance();
 		twitter.setOAuthConsumer(Const.CONSUMER_KEY, Const.CONSUMER_SECRET);
 		twitter.setOAuthAccessToken(a);
 		return twitter;
 	}
 	
-	public void checkAuthenticated(SharedPreferences prefs) {
+	public boolean checkAuthenticated(SharedPreferences prefs) {
 		
-		AsyncTwitter twitter = Autentication(prefs,null);
-		twitter.getAccountSettings();
+		Log.i(TAG, "Authentication " + this.isAutenticated);
+		if(!this.isAutenticated)
+		{
+			if(twitter == null)
+			 twitter = Autentication(prefs,null);
+			twitter.getAccountSettings();
+		}
+		else
+		{
+			
+			this.followActions();
+		}
+		return this.isAutenticated;
 		
+	}
+	
+
+	public boolean isSessionValid() {
+		// TODO Auto-generated method stub
+		return checkAuthenticated(prefs);
+	}
+
+
+	public void fGetNewsFeed(Context applicationContext) {
+		// TODO Auto-generated method stub
+		GetFeed();
+	}
+
+
+	public void fDisplayTwitterFeed() {
+		zPubSub.fGetActivity().runOnUiThread(new Runnable() {
+			public void run() {
+
+				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
+				feedAdapter.clear();
+				ArrayList<FeedItem> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_TWITTER);
+				for (FeedItem item : feeds ) {
+					feedAdapter.addItem(item);
+				}
+				feedAdapter.notifyDataSetChanged();
+			}
+		});
 	}
 
 }
