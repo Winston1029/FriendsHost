@@ -3,6 +3,7 @@ package com.moupress.app.friendshost.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import twitter4j.ResponseList;
 import weibo4andriod.Status;
 import android.app.Activity;
 import android.app.Notification;
@@ -111,6 +112,29 @@ public class FeedOrganisor {
 		if (res > 0 ) {
 			int cntUnReadFeed = fGetUnReadNewsFeedSummary(Const.SNS_SINA).length;
 			fShowNotification(Const.SNS_SINA, cntUnReadFeed, context);
+		}
+	}
+	
+	public void fSaveNewFeeds(ResponseList<twitter4j.Status> statuses,
+			Context context) {
+		long res = 0;
+		
+		for(twitter4j.Status status : statuses)
+		{
+			res += zDBHelper.fInsertFeed(status);
+			
+			UserFriend friend = new UserFriend();
+			friend.setId(status.getUser().getId()+"");
+			friend.setSNS(Const.SNS_TWITTER);
+			friend.setName(status.getUser().getName());
+			friend.setHeadurl(status.getUser().getProfileImageURL().toString());
+			System.out.println("Insert Twitter Feeds and Friends!");
+			zDBHelper.fInsertFriend(friend);
+		}
+		
+		if (res > 0 ) {
+			int cntUnReadFeed = fGetUnReadNewsFeedSummary(Const.SNS_TWITTER).length;
+			fShowNotification(Const.SNS_TWITTER, cntUnReadFeed, context);
 		}
 	}
 	
