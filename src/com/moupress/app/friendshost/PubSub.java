@@ -141,7 +141,7 @@ public class PubSub {
 	}
 	
 	private void fInitTwitter() {
-		Button uBtnTwitterGetFeed = (Button) zActivity.findViewById(R.id.imgBtn_Twitter);
+		ImageButton uBtnTwitterGetFeed = (ImageButton) zActivity.findViewById(R.id.imgBtn_Twitter);
 		
 		uBtnTwitterGetFeed.setOnClickListener(new View.OnClickListener() {
 			
