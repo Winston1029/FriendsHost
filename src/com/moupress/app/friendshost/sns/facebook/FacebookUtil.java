@@ -204,19 +204,19 @@ public class FacebookUtil {
 			 if(message.length() > 0)
 			 params.putString(FEED_MSG, message);
 			 
-			 if(url.length()>0 && url.startsWith("http"))
+			 if(url!=null&&url.length()>0 && url.startsWith("http"))
 			 params.putString(FEED_LINK,url);
 			 
-			 if(name.length()>0)
+			 if(name!= null&&name.length()>0)
 			 params.putString(FEED_NAME,name);
 			 
-			 if(caption.length() > 0)
+			 if(caption!=null && caption.length() > 0)
 			 params.putString(FEED_CAPTION, caption);
 			 
-			 if(description.length() > 0)
+			 if(description!=null&&description.length() > 0)
 			 params.putString(FEED_DESC,description);
 			 
-			 if(imageUrl.length() > 0)
+			 if(imageUrl!=null&&imageUrl.length() > 0)
 			 params.putString(FEED_PICS,imageUrl);
 			 
 			 

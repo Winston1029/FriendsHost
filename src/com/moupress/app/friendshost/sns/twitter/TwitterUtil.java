@@ -128,7 +128,7 @@ public class TwitterUtil {
 	}
 	
 	
-	public void setMessage(String msg)
+	private void setMessage(String msg)
 	{
 		this.msgSend = msg;
 	}

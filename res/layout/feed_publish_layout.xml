@@ -6,68 +6,31 @@
 		android:orientation="vertical" android:layout_width="fill_parent"
 		android:layout_height="fill_parent" android:padding="10dip">
 		
-		<LinearLayout android:orientation="horizontal" 
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content">
-		
-		<Button android:id="@+id/updPic" 
-			android:text="Upload Photo"
-			android:layout_height="wrap_content" 
-			android:layout_width="wrap_content">
-		</Button>
-		
-		<Button android:id="@+id/tkePic" android:text="Take Photo"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"></Button>
+		<LinearLayout
+		    android:id="@+id/linearLayout1"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content" >
+
+			<ImageButton
+			    android:id="@+id/imgBtn_pubFacebook"
+			    android:layout_width="64dp"
+                android:layout_height="64dp"
+			    android:src="@drawable/facebook_selected_button" />
+
+			<ImageButton
+			    android:id="@+id/imgBtn_pubRenren"
+			    android:layout_width="64dp"
+                android:layout_height="64dp"
+			    android:src="@drawable/renren_selected_button" />
+
+			<ImageButton
+			    android:id="@+id/imgBtn_pubTwitter"
+			    android:layout_width="64dp"
+                android:layout_height="64dp"
+			    android:src="@drawable/twitter_selected_button" />
+			    
 		</LinearLayout>
 		
-		
-<!--		<TextView android:layout_width="fill_parent"-->
-<!--			android:layout_height="wrap_content" android:text="Title"-->
-<!--			android:textSize="16sp" android:textColor="#333333" />-->
-<!--			-->
-<!--		<EditText android:layout_width="fill_parent"-->
-<!--			android:layout_height="wrap_content" android:layout_weight="1"-->
-<!--			android:singleLine="true" android:padding="5dip" android:textSize="14sp"-->
-<!--			android:text="Title" android:id="@+id/name" />-->
-
-<!--		<TextView android:layout_width="fill_parent"-->
-<!--			android:layout_height="wrap_content" android:text="Description"-->
-<!--			android:textSize="16sp" android:textColor="#333333" />-->
-<!--			-->
-<!--		<EditText android:layout_width="fill_parent"-->
-<!--			android:layout_height="wrap_content" android:layout_weight="1"-->
-<!--			android:singleLine="true" android:padding="5dip" android:textSize="14sp"-->
-<!--			android:text="Description" android:id="@+id/description" />-->
-
-<!--		<TextView android:layout_width="fill_parent"-->
-<!--			android:layout_height="wrap_content" android:text="Link"-->
-<!--			android:textSize="16sp" android:textColor="#333333" />-->
-<!--			-->
-<!--		<EditText android:layout_width="fill_parent"-->
-<!--			android:layout_height="wrap_content" android:layout_weight="1"-->
-<!--			android:singleLine="true" android:padding="5dip" android:textSize="14sp"-->
-<!--			android:text="Link"-->
-<!--			android:id="@+id/link" />-->
-
-<!--		<TextView android:layout_width="fill_parent"-->
-<!--			android:layout_height="wrap_content" android:text="Picture"-->
-<!--			android:textSize="16sp" android:textColor="#333333" />-->
-<!--			-->
-<!--		<EditText android:layout_width="fill_parent"-->
-<!--			android:layout_height="wrap_content" android:layout_weight="1"-->
-<!--			android:singleLine="true" android:padding="5dip" android:textSize="14sp"-->
-<!--			android:text="http://s.xnimg.cn/imgpro/logo/logo-rr-159.png"-->
-<!--			android:id="@+id/image" />-->
-
-<!--		<TextView android:layout_width="fill_parent"-->
-<!--			android:layout_height="wrap_content" android:text="Caption "-->
-<!--			android:textSize="16sp" android:textColor="#333333" />-->
-<!--			-->
-<!--		<EditText android:layout_width="fill_parent"-->
-<!--			android:layout_height="wrap_content" android:layout_weight="1"-->
-<!--			android:singleLine="true" android:padding="5dip" android:textSize="14sp"-->
-<!--			android:text="Caption" android:id="@+id/caption" />-->
 
 		<TextView android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:text="Message"
@@ -84,35 +47,25 @@
 			android:maxLines="12" 
 			android:inputType="textMultiLine"/>
 			
-
+		<LinearLayout android:orientation="horizontal" 
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				
 		<Button android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:text="Publish"
-			android:id="@+id/publish" android:layout_marginTop="10dip"/>
-
-		<LinearLayout
-		    android:id="@+id/linearLayout1"
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content" >
-
-			<ImageButton
-			    android:id="@+id/imgBtn_pubFacebook"
-			    android:layout_width="64dp"
-                android:layout_height="64dp"
-			    android:src="@drawable/logo_facebook" />
-
-			<ImageButton
-			    android:id="@+id/imgBtn_pubRenren"
-			    android:layout_width="64dp"
-                android:layout_height="64dp"
-			    android:src="@drawable/logo_renren" />
-
-			<ImageButton
-			    android:id="@+id/imgBtn_pubTwitter"
-			    android:layout_width="64dp"
-                android:layout_height="64dp"
-			    android:src="@drawable/logo_twitter" />
-
+		android:layout_height="wrap_content" android:text="Publish"
+		android:id="@+id/publish" android:layout_marginTop="10dip" />
+		
+			
+		<Button android:id="@+id/updPic" 
+			android:text="Upload Photo"
+			android:layout_height="wrap_content" 
+			android:layout_width="wrap_content" android:layout_marginTop="10dip">
+		</Button>
+		
+		<Button android:id="@+id/tkePic" android:text="Take Photo"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:layout_marginTop="10dip"></Button>
 		</LinearLayout>
-
 	</LinearLayout>
+	
 </ScrollView>

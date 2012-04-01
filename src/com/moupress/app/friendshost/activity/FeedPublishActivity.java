@@ -25,6 +25,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +35,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 /**
  * @author Li Ji
@@ -44,10 +46,12 @@ public class FeedPublishActivity extends Activity{
 	public static final String TAG = "FeedPublishActivity";
 	private String sns;
 	private Activity activity;
-	//private Renren renren;
-	//private Facebook facebook;
 	private ProgressDialog progressDialog;
 	
+	//Sns Boolean Selected Indicator
+	private boolean FBSelected = false;
+	private boolean RRSelected = false;
+	private boolean TWSelected = false;
 
 	
 	//Controls & variables to publish Photos
@@ -58,29 +62,25 @@ public class FeedPublishActivity extends Activity{
 	private static final int CAMERA_PIC_REQUEST = 2;
 	private String selectedImagePath;
 	
-	
-	//Parameters Caputure user's input info
-	private String name;
-	private String description;
-	private String url;
-	private String imageUrl;
-	private String caption;
+	//Message to publish
 	private String message;
 	
+	//Button to publish msg
+	private Button publishButton;
+	
+	//Uri of captured Image
 	private Uri mCapturedImageURI;
 	
+	//Notification & Handler;
+	private Handler mNotificationHandler = new Handler();
+	private Runnable mNotification; 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		ScrollView layout = (ScrollView) LayoutInflater.from(this).inflate(R.layout.feed_publish_layout, null);
-		
 		this.setContentView(layout);
-		
-		Intent intent = this.getIntent();
-		
-		sns = intent.getStringExtra(Const.SNS);
 
 		selectedImagePath = "";
 		
@@ -89,71 +89,93 @@ public class FeedPublishActivity extends Activity{
 		fInitFieldUI();
 		fInitPicButtons();
 		fInitPubButtons();
-		
-		
 	}
 	
 	private void fInitFieldUI() {
 		//Controls Capture user's input info
-		ScrollView layout = (ScrollView) LayoutInflater.from(this).inflate(R.layout.feed_publish_layout, null);
-//		EditText editTextName = (EditText) layout.findViewById(R.id.name);
-//		EditText editTextDescription = (EditText) layout.findViewById(R.id.description);
-//		EditText editTextUrl = (EditText) layout.findViewById(R.id.link);
-//		EditText editTextImageUrl = (EditText) layout.findViewById(R.id.image);
-//		EditText editTextCaption = (EditText) layout.findViewById(R.id.caption);
-		EditText editTextMessage = (EditText) layout.findViewById(R.id.message);
+		//ScrollView layout = (ScrollView) LayoutInflater.from(this).inflate(R.layout.feed_publish_layout, null);
+		final EditText editTextMessage = (EditText) this.findViewById(R.id.message);
 		
-//		name = editTextName.getText().toString();
-//		description = editTextDescription.getText().toString();
-//		url = editTextUrl.getText().toString();
-//		imageUrl = editTextImageUrl.getText().toString();
-//		caption = editTextCaption.getText().toString();
-		message = editTextMessage.getText().toString();		
+		publishButton = (Button) this.findViewById(R.id.publish);
+		publishButton.setOnClickListener(new View.OnClickListener(){
+			@Override
+			public void onClick(View arg0) {
+				Log.i(TAG, "Publish Button is Clicked!");
+				message = editTextMessage.getText().toString();	
+				if(selectedImagePath != null && selectedImagePath.length() > 0)
+				{
+					uploadPhoto();
+					selectedImagePath="";
+				}
+				else 
+				{
+					publishFeed();
+				}
+				activity.finish();
+			}
+		});
 	}
 
+	//Select or Unselect Sns Btn
+	private void toggleBtnSelected(ImageButton btn)
+	{
+		if (btn.isSelected()){
+			btn.setSelected(false);
+	       } else {
+	    	  btn.setSelected(true);
+	       }
+	}
+	
+	//Pop up Toast 
+	
+	private void popUpToast(String snsSelected, boolean Selected)
+	{
+		final String text = snsSelected + " is "+ (Selected?"selected":"unselected");
+		mNotification = new Runnable(){
+			@Override
+			public void run() {
+				 Toast.makeText(activity, text, Toast.LENGTH_LONG).show();
+				}
+			};
+			
+		this.mNotificationHandler.post(mNotification);
+	}
+	
+	//Initialize Buttons on UI
 	public void fInitPubButtons() {
 		//Facebook
-		ImageButton imgBtn_Facebook = (ImageButton) this.findViewById(R.id.imgBtn_pubFacebook);
+		final ImageButton imgBtn_Facebook = (ImageButton) this.findViewById(R.id.imgBtn_pubFacebook);
 		imgBtn_Facebook.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				if(selectedImagePath != null && selectedImagePath.length() > 0) {
-					PubSub.zFacebook.fUploadPic(message,selectedImagePath);
-					selectedImagePath="";
-				} else {
-					PubSub.zFacebook.fPublishFeeds(name, description, url, imageUrl, caption, message);				
-				}
+				toggleBtnSelected(imgBtn_Facebook);
+				FBSelected = imgBtn_Facebook.isSelected();
+				popUpToast("Facebook",FBSelected);
 			}
 		});
 		
 		//Renren
-		ImageButton imgBtn_Renren = (ImageButton) this.findViewById(R.id.imgBtn_pubRenren);
+		final ImageButton imgBtn_Renren = (ImageButton) this.findViewById(R.id.imgBtn_pubRenren);
 		imgBtn_Renren.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				if(selectedImagePath != null && selectedImagePath.length() > 0) {
-					PubSub.zRenrenUtil.fUploadPic(message,selectedImagePath);
-					selectedImagePath="";
-				} else {
-					PubSub.zRenrenUtil.fPublishFeeds(name, description, url, imageUrl, caption, message);				
-				}
+				toggleBtnSelected(imgBtn_Renren);
+				RRSelected = imgBtn_Renren.isSelected();
+				popUpToast("RenRen",RRSelected);
 			}
 		});
 		
 		//Twitter
-		ImageButton imgBtn_Twitter = (ImageButton) this.findViewById(R.id.imgBtn_pubTwitter);
+		final ImageButton imgBtn_Twitter = (ImageButton) this.findViewById(R.id.imgBtn_pubTwitter);
 		imgBtn_Twitter.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				if(selectedImagePath != null && selectedImagePath.length() > 0) {
-					PubSub.zRenrenUtil.fUploadPic(message,selectedImagePath);
-					selectedImagePath="";
-				} else {
-					PubSub.zRenrenUtil.fPublishFeeds(name, description, url, imageUrl, caption, message);
-				}
+				toggleBtnSelected(imgBtn_Twitter);
+				TWSelected = imgBtn_Twitter.isSelected();
+				popUpToast("Twitter",TWSelected);
 			}
 		});
 	}
@@ -191,12 +213,12 @@ public class FeedPublishActivity extends Activity{
 		
 		
 		//Functions of Photos
-		btnUploadPic = (Button) layout.findViewById(R.id.updPic);
+		btnUploadPic = (Button) this.findViewById(R.id.updPic);
 		btnUploadPic.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				
+				Log.i(TAG, "Upload Pictures");
 				Intent intent = new Intent();
 	            intent.setType("image/*");
 	            intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -256,35 +278,42 @@ public class FeedPublishActivity extends Activity{
 	    return cursor.getString(column_index);
 	}
 	
-	/*
+	
 	private void publishFeed()
 	{
-		if(sns.equals(Const.SNS_RENREN))
+		if(this.RRSelected)
 		{
-			PubSub.zRenrenUtil.fPublishFeeds(name, description, url, imageUrl, caption, message);
+			PubSub.zRenrenUtil.fPublishFeeds(" ", " ", " ", " ", " ", message);
 			
 		}
-			else if(sns.equals(Const.SNS_FACEBOOK))
+	    if(this.FBSelected)
 		{
-			PubSub.zFacebook.fPublishFeeds(name, description, url, imageUrl, caption, message);
+			PubSub.zFacebook.fPublishFeeds(null, null, null, null, null, message);
 		}
+	    if(this.TWSelected)
+	    {
+	    	PubSub.zTwitterUtil.SendFeed(message);
+	    }
 	}
 	private void uploadPhoto() {
 		
-		if(sns.equals(Const.SNS_RENREN))
+		if(this.FBSelected)
 		{
 		   PubSub.zRenrenUtil.fUploadPic(message,selectedImagePath);
 			
-		}else if(sns.equals(Const.SNS_FACEBOOK))
+		}
+		
+		if(this.RRSelected)
 		{
 			PubSub.zFacebook.fUploadPic(message,selectedImagePath);
 		}
-	}
-	
-	private void takePhoto() {
 		
+		if(this.TWSelected)
+		{
+			
+		}
 	}
-	 */
+	 
 	protected void showProgress() {
 		showProgress("Please wait", "progressing");
 	}
