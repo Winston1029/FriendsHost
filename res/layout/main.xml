@@ -8,36 +8,6 @@
         android:layout_width="match_parent" 
         android:layout_height="wrap_content" 
         android:orientation="vertical">
-          	
-    <LinearLayout
-       	android:id="@+id/linearLayout3"
-       	android:layout_width="match_parent"
-       	android:layout_height="wrap_content"
-       	android:orientation="horizontal"
-       	>
-         <Button 
-            android:text="Pub RR Feed" 
-            android:id="@+id/btn_pubrenrenfeed" 
-            android:layout_width="wrap_content" 
-            android:layout_height="wrap_content"
-            android:textSize="9dip">
-       </Button>
-       
-       <Button
-       		android:text="Pub FB Feed"
-       		android:id="@+id/btn_pubfbfeed"
-       		android:layout_width="wrap_content"
-       		android:layout_height="wrap_content"
-       		android:textSize="9dip">
-       	</Button>
-       	
-       	<Button android:text="Pub Twitter Feed"
-       		android:id="@+id/btn_pubTwitterfeed"
-       		android:layout_width="wrap_content"
-       		android:layout_height="wrap_content"
-       		android:textSize="9dip">
-       	</Button>
-       	</LinearLayout>
    </LinearLayout>
 
    <ListView

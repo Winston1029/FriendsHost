@@ -2,6 +2,8 @@ package com.moupress.app.friendshost.activity;
 
 import java.io.File;
 
+import org.apache.commons.httpclient.cookie.IgnoreCookiesSpec;
+
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.Facebook;
 import com.moupress.app.friendshost.Const;
@@ -30,6 +32,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ScrollView;
 
 /**
@@ -45,13 +48,7 @@ public class FeedPublishActivity extends Activity{
 	//private Facebook facebook;
 	private ProgressDialog progressDialog;
 	
-	//Controls Capture user's input info
-	private EditText editTextName;
-	private EditText editTextDescription;
-	private EditText editTextUrl;
-	private EditText editTextImageUrl;
-	private EditText editTextCaption;
-	private EditText editTextMessage;
+
 	
 	//Controls & variables to publish Photos
 	private Button btnUploadPic;
@@ -84,47 +81,113 @@ public class FeedPublishActivity extends Activity{
 		Intent intent = this.getIntent();
 		
 		sns = intent.getStringExtra(Const.SNS);
-		//renren = PubSub.zRenrenUtil.GetRenren();
-		//facebook = PubSub.zFacebook.GetFBObject();
-		
-		editTextName = (EditText) layout.findViewById(R.id.name);
-		editTextDescription = (EditText) layout.findViewById(R.id.description);
-		editTextUrl = (EditText) layout.findViewById(R.id.link);
-		editTextImageUrl = (EditText) layout.findViewById(R.id.image);
-		editTextCaption = (EditText) layout.findViewById(R.id.caption);
-		editTextMessage = (EditText) layout.findViewById(R.id.message);
-		
+
 		selectedImagePath = "";
 		
 		activity= this;
 		
-		Button publishButton = (Button) layout.findViewById(R.id.publish);
-		publishButton.setOnClickListener(new OnClickListener(){
+		fInitFieldUI();
+		fInitPicButtons();
+		fInitPubButtons();
+		
+		
+	}
+	
+	private void fInitFieldUI() {
+		//Controls Capture user's input info
+		ScrollView layout = (ScrollView) LayoutInflater.from(this).inflate(R.layout.feed_publish_layout, null);
+		EditText editTextName = (EditText) layout.findViewById(R.id.name);
+		EditText editTextDescription = (EditText) layout.findViewById(R.id.description);
+		EditText editTextUrl = (EditText) layout.findViewById(R.id.link);
+		EditText editTextImageUrl = (EditText) layout.findViewById(R.id.image);
+		EditText editTextCaption = (EditText) layout.findViewById(R.id.caption);
+		EditText editTextMessage = (EditText) layout.findViewById(R.id.message);
+		
+		name = editTextName.getText().toString();
+		description = editTextDescription.getText().toString();
+		url = editTextUrl.getText().toString();
+		imageUrl = editTextImageUrl.getText().toString();
+		caption = editTextCaption.getText().toString();
+		message = editTextMessage.getText().toString();		
+	}
 
-			@Override
-			public void onClick(View arg0) {
-				name = editTextName.getText().toString();
-				description = editTextDescription.getText().toString();
-				url = editTextUrl.getText().toString();
-				imageUrl = editTextImageUrl.getText().toString();
-				caption = editTextCaption.getText().toString();
-				message = editTextMessage.getText().toString();
-				
-				if(selectedImagePath != null && selectedImagePath.length() > 0)
-				{
-					uploadPhoto();
-					selectedImagePath="";
-				}
-				else 
-				{
-					publishFeed();
-				}
-				
-				activity.finish();
-			 }
+	public void fInitPubButtons() {
+		//Facebook
+		ImageButton imgBtn_Facebook = (ImageButton) this.findViewById(R.id.imgBtn_pubFacebook);
+		imgBtn_Facebook.setOnClickListener(new View.OnClickListener() {
 			
+			@Override
+			public void onClick(View v) {
+				if(selectedImagePath != null && selectedImagePath.length() > 0) {
+					PubSub.zFacebook.fUploadPic(message,selectedImagePath);
+					selectedImagePath="";
+				} else {
+					PubSub.zFacebook.fPublishFeeds(name, description, url, imageUrl, caption, message);				
+				}
 			}
-		);
+		});
+		
+		//Renren
+		ImageButton imgBtn_Renren = (ImageButton) this.findViewById(R.id.imgBtn_pubRenren);
+		imgBtn_Renren.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if(selectedImagePath != null && selectedImagePath.length() > 0) {
+					PubSub.zRenrenUtil.fUploadPic(message,selectedImagePath);
+					selectedImagePath="";
+				} else {
+					PubSub.zRenrenUtil.fPublishFeeds(name, description, url, imageUrl, caption, message);				
+				}
+			}
+		});
+		
+		//Twitter
+		ImageButton imgBtn_Twitter = (ImageButton) this.findViewById(R.id.imgBtn_pubTwitter);
+		imgBtn_Twitter.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if(selectedImagePath != null && selectedImagePath.length() > 0) {
+					PubSub.zRenrenUtil.fUploadPic(message,selectedImagePath);
+					selectedImagePath="";
+				} else {
+					PubSub.zRenrenUtil.fPublishFeeds(name, description, url, imageUrl, caption, message);
+				}
+			}
+		});
+	}
+	
+	public void fInitPicButtons() {
+		ScrollView layout = (ScrollView) LayoutInflater.from(this).inflate(R.layout.feed_publish_layout, null);
+		
+//		Button publishButton = (Button) layout.findViewById(R.id.publish);
+//		publishButton.setOnClickListener(new OnClickListener(){
+//
+//			@Override
+//			public void onClick(View arg0) {
+//				name = editTextName.getText().toString();
+//				description = editTextDescription.getText().toString();
+//				url = editTextUrl.getText().toString();
+//				imageUrl = editTextImageUrl.getText().toString();
+//				caption = editTextCaption.getText().toString();
+//				message = editTextMessage.getText().toString();
+//				
+//				if(selectedImagePath != null && selectedImagePath.length() > 0)
+//				{
+//					uploadPhoto();
+//					selectedImagePath="";
+//				}
+//				else 
+//				{
+//					publishFeed();
+//				}
+//				
+//				activity.finish();
+//			 }
+//			
+//			}
+//		);
 		
 		
 		//Functions of Photos
@@ -193,6 +256,7 @@ public class FeedPublishActivity extends Activity{
 	    return cursor.getString(column_index);
 	}
 	
+	/*
 	private void publishFeed()
 	{
 		if(sns.equals(Const.SNS_RENREN))
@@ -217,12 +281,10 @@ public class FeedPublishActivity extends Activity{
 		}
 	}
 	
-	
-	
 	private void takePhoto() {
 		
 	}
-
+	 */
 	protected void showProgress() {
 		showProgress("Please wait", "progressing");
 	}
@@ -231,7 +293,7 @@ public class FeedPublishActivity extends Activity{
 	protected void showProgress(String title, String message) {
 		progressDialog = ProgressDialog.show(this, title, message);
 	}
-
+	
 	protected void dismissProgress() {
 		if (progressDialog != null) {
 			try {

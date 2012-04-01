@@ -46,6 +46,7 @@ public class PubSub {
 		fInitRenrenUI();
 		fInitSinaUI();
 		fInitTwitter();
+		fInitPubUI();
 	}
 
 	private void fInitTwitter() {
@@ -72,7 +73,7 @@ public class PubSub {
 	
 	private void fFBInitUI() {        
 		ImageButton uBtnFBGetFeed = (ImageButton) zActivity.findViewById(R.id.imgBtn_Facebook);
-        Button uBtnFBPubFeed = (Button) zActivity.findViewById(R.id.btn_pubfbfeed);
+        //Button uBtnFBPubFeed = (Button) zActivity.findViewById(R.id.btn_pubfbfeed);
         
         uBtnFBGetFeed.setOnClickListener(new View.OnClickListener() {
 			
@@ -87,21 +88,21 @@ public class PubSub {
 			}
 		});
         
-        uBtnFBPubFeed.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent(zActivity, FeedPublishActivity.class);
-				intent.putExtra(Const.SNS, Const.SNS_FACEBOOK);
-				zActivity.startActivity(intent);
-			}
-		});
+//        uBtnFBPubFeed.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				Intent intent = new Intent(zActivity, FeedPublishActivity.class);
+//				intent.putExtra(Const.SNS, Const.SNS_FACEBOOK);
+//				zActivity.startActivity(intent);
+//			}
+//		});
 	}
 	
 	private void fInitRenrenUI() {
 		ImageButton uBtnRenrenGetFeed = (ImageButton) zActivity.findViewById(R.id.imgBtn_Renren);
-		Button uBtnRenrenPublishFeed = (Button) zActivity.findViewById(R.id.btn_pubrenrenfeed);
+		//Button uBtnRenrenPublishFeed = (Button) zActivity.findViewById(R.id.btn_pubrenrenfeed);
 		
 		uBtnRenrenGetFeed.setOnClickListener(new View.OnClickListener() {
 			
@@ -115,15 +116,15 @@ public class PubSub {
 			}
 		});
 		
-		uBtnRenrenPublishFeed.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(zActivity, FeedPublishActivity.class);
-				intent.putExtra(Const.SNS, Const.SNS_RENREN);
-				zActivity.startActivity(intent);
-			}
-		});
+//		uBtnRenrenPublishFeed.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				Intent intent = new Intent(zActivity, FeedPublishActivity.class);
+//				intent.putExtra(Const.SNS, Const.SNS_RENREN);
+//				zActivity.startActivity(intent);
+//			}
+//		});
 	}
 	
 	private void fInitSinaUI() {
