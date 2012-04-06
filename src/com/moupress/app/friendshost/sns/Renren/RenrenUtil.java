@@ -215,11 +215,6 @@ public class RenrenUtil {
 			zRenren.authorizeCallback(requestCode, resultCode, data);
 		}
     }
-	
-	public Renren GetRenren()
-	{
-		return zRenren;
-	}
 
 	public void fUploadPic(String message, String selectedImagePath) {
 			if (zRenren != null) {

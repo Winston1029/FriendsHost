@@ -241,16 +241,24 @@ public class DBHelper {
 		ContentValues values  = new ContentValues();
 		values.put(C_FEED_SNS, SNS_RENREN);
 		values.put(C_FEED_ID, entry.getId());
-		if ( entry.getMessage() != null ) {
-			values.put(C_FEED_MSG, entry.getPrefix() + ": " + entry.getMessage());	
-		} else {
+		if (entry.getFeed_type().equals("10")) { //prefix and message are the same if feedtype is "更新状态的新鲜事"
 			values.put(C_FEED_MSG, entry.getPrefix());
+		} else {
+			if (entry.getMessage() != null ) {
+				values.put(C_FEED_MSG, entry.getPrefix() + ": " + entry.getMessage());	
+			} else {
+				values.put(C_FEED_MSG, entry.getPrefix());
+			}
 		}
 		values.put(C_FEED_FROM, entry.getName());
 		values.put(C_FEED_OWNER_ID, entry.getActor_id());
 		values.put(C_FEED_ISREAD, "0");
 		values.put(C_FEED_UPDATED_TIME, entry.getUpdate_time());
-		values.put(C_FEED_STORY, entry.getTitle() + "\n" + entry.getDescription());
+		if (!entry.getDescription().equals("null") ) {
+			values.put(C_FEED_STORY, entry.getTitle() + "\n" + entry.getDescription());	
+		} else {
+			values.put(C_FEED_STORY, entry.getTitle());
+		}
 		
 		// if media_type = blog the URL is need to construct in a special way
 		String media_type = entry.getFeed_media_media_type();

@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import com.github.droidfu.widgets.WebImageView;
 import com.moupress.app.friendshost.sns.FeedItem;
 
 import android.app.Activity;
@@ -68,16 +69,18 @@ public class LstViewFeedAdapter extends BaseAdapter{
 			convertView = viewInflator.inflate(iLayoutResId, null);
 		}
 		
-		ImageView img_Head = (ImageView) convertView.findViewById(R.id.img_feeduser);
+		WebImageView img_Head = (WebImageView) convertView.findViewById(R.id.img_feeduser);
 		String sHeadImgSrc = feedArrayList.get(position).getzFriend().getHeadurl();
-		Bitmap imgHead = null; 
-		if (sHeadImgSrc != null) {
-			imgHead = ImageOperations(sHeadImgSrc);
-		}
-		if (imgHead != null) {
-			img_Head.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-			img_Head.setImageBitmap(imgHead);
-		}
+		img_Head.setImageUrl(sHeadImgSrc);
+		img_Head.loadImage();
+//		Bitmap imgHead = null; 
+//		if (sHeadImgSrc != null) {
+//			imgHead = ImageOperations(sHeadImgSrc);
+//		}
+//		if (imgHead != null) {
+//			img_Head.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+//			img_Head.setImageBitmap(imgHead);
+//		}
 		
 		TextView txv_FeedUser = (TextView) convertView.findViewById(R.id.txt_name);
 		
@@ -92,10 +95,7 @@ public class LstViewFeedAdapter extends BaseAdapter{
 		} else {
 
 			//compulsory field
-			String username = feedArrayList.get(position).getsName();
-			if ( username.equals("Kenny Attoken J") ) {
-				System.out.println(username);
-			}
+
 			//TextView txv_FeedUser = (TextView) convertView.findViewById(R.id.txt_name);
 			txv_FeedUser.setText(feedArrayList.get(position).getsName());
 			TextView txv_MsgCreationTime = (TextView) convertView.findViewById(R.id.txt_msgcreatedtime);
@@ -107,24 +107,40 @@ public class LstViewFeedAdapter extends BaseAdapter{
 			String sMsgBody = feedArrayList.get(position).getsMsgBody();
 			String sStory = feedArrayList.get(position).getsStory();
 			TextView txv_MsgBody = (TextView) convertView.findViewById(R.id.txt_msgbody);
-			if ( sMsgBody != null ) {
+
+			if ( sMsgBody != null && sStory != null ) {
+				txv_MsgBody.setText(sMsgBody + "\n" + sStory);
+			} else if ( sMsgBody != null ) {
 				txv_MsgBody.setText(sMsgBody);
 			} else if ( sStory != null ) {
 				txv_MsgBody.setText(sStory);
 			} else {
 				txv_MsgBody.setVisibility(View.GONE);
 			}
-			
-			ImageView img_PhotoPreview = (ImageView) convertView.findViewById(R.id.img_photopreview);
+			String username = feedArrayList.get(position).getsName();
+//			if (username.equals("梁玉萍")) {
+//				System.out.println("");
+//			}
+			WebImageView img_PhotoPreview = (WebImageView) convertView.findViewById(R.id.img_photopreview);
 			String sImgSrc = feedArrayList.get(position).getsPhotoPreviewLink();
-			//String sImgSrc = "http://photos-g.ak.fbcdn.net/hphotos-ak-ash4/431333_10150739807624187_554329186_11304408_1165959123_s.jpg";
-			Bitmap imgPhoto = ImageOperations(sImgSrc);
-			if (imgPhoto != null) {
-				img_PhotoPreview.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-				img_PhotoPreview.setImageBitmap(imgPhoto);
+			//img_PhotoPreview.setImageUrl(sHeadImgSrc);
+			//img_PhotoPreview.
+			//img_PhotoPreview.loadImage();
+			if (sImgSrc != null && sImgSrc.startsWith("http://") && sImgSrc.endsWith(".jpg")) {
+				img_PhotoPreview.setImageUrl(sImgSrc);
+				//img_PhotoPreview.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+				img_PhotoPreview.loadImage();
 			} else {
 				img_PhotoPreview.setVisibility(View.GONE);
 			}
+			//String sImgSrc = "http://photos-g.ak.fbcdn.net/hphotos-ak-ash4/431333_10150739807624187_554329186_11304408_1165959123_s.jpg";
+//			Bitmap imgPhoto = ImageOperations(sImgSrc);
+//			if (imgPhoto != null) {
+//				img_PhotoPreview.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+//				img_PhotoPreview.setImageBitmap(imgPhoto);
+//			} else {
+//				img_PhotoPreview.setVisibility(View.GONE);
+//			}
 			
 			// Image related text
 			String sImgName = feedArrayList.get(position).getsPhotoPreviewName();
@@ -136,11 +152,19 @@ public class LstViewFeedAdapter extends BaseAdapter{
 			TextView txv_ImgDecription = (TextView) convertView.findViewById(R.id.txv_imgdescription);
 			if (sImgName != null) {
 				txv_ImgName.setText(sImgName);
-				txv_ImgCaption.setText(sImgCaption);
-				txv_ImgDecription.setText(sImgDescription);
 			} else {
 				txv_ImgName.setVisibility(View.GONE);
+			}
+			if (sImgCaption != null) {
+				txv_ImgCaption.setText(sImgCaption);
+			} else {
 				txv_ImgCaption.setVisibility(View.GONE);
+			}
+			if (sImgDescription != null) {
+				txv_ImgDecription.setText(sImgDescription);
+//			} else if (sMsgBody != null && sStory != null ) {
+//				txv_ImgDecription.setText(sStory);
+			} else {
 				txv_ImgDecription.setVisibility(View.GONE);
 			}
 		}
