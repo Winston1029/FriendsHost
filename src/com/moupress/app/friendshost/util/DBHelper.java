@@ -254,7 +254,7 @@ public class DBHelper {
 		values.put(C_FEED_OWNER_ID, entry.getActor_id());
 		values.put(C_FEED_ISREAD, "0");
 		values.put(C_FEED_UPDATED_TIME, entry.getUpdate_time());
-		if (!entry.getDescription().equals("null") ) {
+		if (entry.getDescription() != null && !entry.getDescription().equals("null") ) {
 			values.put(C_FEED_STORY, entry.getTitle() + "\n" + entry.getDescription());	
 		} else {
 			values.put(C_FEED_STORY, entry.getTitle());
