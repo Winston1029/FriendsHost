@@ -1,5 +1,6 @@
 package com.moupress.app.friendshost.sns.twitter;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import com.moupress.app.friendshost.Const;
@@ -22,7 +23,13 @@ import twitter4j.TwitterAdapter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterListener;
 import twitter4j.TwitterMethod;
-import twitter4j.http.AccessToken;
+import twitter4j.auth.AccessToken;
+import twitter4j.conf.Configuration;
+import twitter4j.conf.ConfigurationBuilder;
+import twitter4j.media.ImageUpload;
+import twitter4j.media.ImageUploadFactory;
+import twitter4j.media.MediaProvider;
+//import twitter4j.http.AccessToken;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -30,10 +37,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
 
 public class TwitterUtil {
@@ -279,8 +284,11 @@ public class TwitterUtil {
 		
 		AccessToken a = new AccessToken(token,secret);
 		//Twitter twitter = new TwitterFactory().getInstance();
-		AsyncTwitterFactory factory = new AsyncTwitterFactory(listener);
+		//AsyncTwitterFactory factory = new AsyncTwitterFactory(listener);
+		AsyncTwitterFactory factory = new AsyncTwitterFactory();
 		twitter = factory.getInstance();
+		twitter.addListener(listener);
+		
 		twitter.setOAuthConsumer(Const.CONSUMER_KEY, Const.CONSUMER_SECRET);
 		twitter.setOAuthAccessToken(a);
 		return twitter;
@@ -332,4 +340,49 @@ public class TwitterUtil {
 		});
 	}
 
+	
+	//Upload Photo to Twitter
+	 public void fUploadPic(String message, String selectedImagePath)
+    {
+	 
+		 Configuration conf = new ConfigurationBuilder()
+	        .setOAuthConsumerKey( Const.CONSUMER_KEY )
+	        .setOAuthConsumerSecret( Const.CONSUMER_SECRET )
+	        .setOAuthAccessToken(prefs.getString(OAuth.OAUTH_TOKEN, ""))
+	        .setOAuthAccessTokenSecret(prefs.getString(OAuth.OAUTH_TOKEN_SECRET, ""))
+	        .build();
+		 
+		(new UploadPhotoTaskTask(conf,message,selectedImagePath)).execute("");
+		 
+    }
+	 
+	 public class UploadPhotoTaskTask extends AsyncTask<String,String,String>
+	 {
+		private Configuration conf;
+		private String message;
+		private String ImagePath;
+		public UploadPhotoTaskTask(Configuration conf, String message, String ImagePath)
+		{
+			this.conf = conf;
+			this.message = message;
+			this.ImagePath = ImagePath;
+		}
+
+
+		@Override
+		protected String doInBackground(String... params) {
+			try {
+				 ImageUpload upload = new ImageUploadFactory(conf).getInstance(MediaProvider.TWITTER);
+				 String mediaUrl;
+				 mediaUrl = upload.upload(new File(ImagePath),message);
+				 
+				 Log.i(TAG, "Media URL is "+mediaUrl);
+				} catch (TwitterException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			return null;
+		}
+		 
+	 }
 }

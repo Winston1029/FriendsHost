@@ -4,6 +4,8 @@ import java.io.File;
 
 import org.apache.commons.httpclient.cookie.IgnoreCookiesSpec;
 
+import twitter4j.TwitterException;
+
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.Facebook;
 import com.moupress.app.friendshost.Const;
@@ -52,7 +54,6 @@ public class FeedPublishActivity extends Activity{
 	private boolean FBSelected = false;
 	private boolean RRSelected = false;
 	private boolean TWSelected = false;
-
 	
 	//Controls & variables to publish Photos
 	private Button btnUploadPic;
@@ -183,35 +184,6 @@ public class FeedPublishActivity extends Activity{
 	public void fInitPicButtons() {
 		ScrollView layout = (ScrollView) LayoutInflater.from(this).inflate(R.layout.feed_publish_layout, null);
 		
-//		Button publishButton = (Button) layout.findViewById(R.id.publish);
-//		publishButton.setOnClickListener(new OnClickListener(){
-//
-//			@Override
-//			public void onClick(View arg0) {
-//				name = editTextName.getText().toString();
-//				description = editTextDescription.getText().toString();
-//				url = editTextUrl.getText().toString();
-//				imageUrl = editTextImageUrl.getText().toString();
-//				caption = editTextCaption.getText().toString();
-//				message = editTextMessage.getText().toString();
-//				
-//				if(selectedImagePath != null && selectedImagePath.length() > 0)
-//				{
-//					uploadPhoto();
-//					selectedImagePath="";
-//				}
-//				else 
-//				{
-//					publishFeed();
-//				}
-//				
-//				activity.finish();
-//			 }
-//			
-//			}
-//		);
-		
-		
 		//Functions of Photos
 		btnUploadPic = (Button) this.findViewById(R.id.updPic);
 		btnUploadPic.setOnClickListener(new View.OnClickListener() {
@@ -224,17 +196,15 @@ public class FeedPublishActivity extends Activity{
 	            intent.setAction(Intent.ACTION_GET_CONTENT);
 	            startActivityForResult(Intent.createChooser(intent,
 	                    "Select Picture"), SELECT_PICTURE);
-				
 			}
-
 		});
 		
-		btnTakePic = (Button) layout.findViewById(R.id.tkePic);
+		btnTakePic = (Button) this.findViewById(R.id.tkePic);
 		btnTakePic.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				
+				 Log.i(TAG, "Take Photo Button is Clicked! ");
 				//takePhoto();
 				 String fileName = "temp.jpg";  
 			     ContentValues values = new ContentValues();  
@@ -245,7 +215,6 @@ public class FeedPublishActivity extends Activity{
 				 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCapturedImageURI);
 				 startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
 			}
-
 		});
 	}
 	
@@ -256,7 +225,8 @@ public class FeedPublishActivity extends Activity{
 	            selectedImagePath = getPath(selectedImageUri);
 	            Log.d(TAG, "Image Selection Path is " + selectedImagePath);
 	            
-	        }else if(requestCode == CAMERA_PIC_REQUEST)
+	        }
+	        	else if(requestCode == CAMERA_PIC_REQUEST)
 	        {
 	        	//pic = (Bitmap) data.getExtras().get("data");
 	        	String[] projection = { MediaStore.Images.Media.DATA}; 
@@ -297,20 +267,19 @@ public class FeedPublishActivity extends Activity{
 	}
 	private void uploadPhoto() {
 		
-		if(this.FBSelected)
+		if(this.RRSelected)
 		{
 		   PubSub.zRenrenUtil.fUploadPic(message,selectedImagePath);
-			
 		}
 		
-		if(this.RRSelected)
+		if(this.FBSelected)
 		{
 			PubSub.zFacebook.fUploadPic(message,selectedImagePath);
 		}
 		
 		if(this.TWSelected)
 		{
-			
+			PubSub.zTwitterUtil.fUploadPic(message, selectedImagePath);
 		}
 	}
 	 
