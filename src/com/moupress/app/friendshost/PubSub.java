@@ -188,6 +188,4 @@ public class PubSub {
 		zRenrenUtil.onComplete(requestCode, resultCode, data);
 		zFacebook.onComplete(requestCode, resultCode, data);
 	}
-
-
 }

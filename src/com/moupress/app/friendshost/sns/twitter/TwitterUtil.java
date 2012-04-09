@@ -361,6 +361,7 @@ public class TwitterUtil {
 		private Configuration conf;
 		private String message;
 		private String ImagePath;
+		
 		public UploadPhotoTaskTask(Configuration conf, String message, String ImagePath)
 		{
 			this.conf = conf;
