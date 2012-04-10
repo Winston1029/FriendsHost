@@ -3,6 +3,10 @@ package com.moupress.app.friendshost;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuInflater;
+import android.view.View;
 
 public class FriendsHostActivity extends Activity {
     /** Called when the activity is first created. */
@@ -54,5 +58,15 @@ public class FriendsHostActivity extends Activity {
 		setIntent(intent);
 		fAnalyseIntent();
 	}
+
 	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		// TODO Auto-generated method stub
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.feed_item_ctx_menu, menu);
+
+	}
 }

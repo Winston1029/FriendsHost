@@ -59,6 +59,7 @@ public class PubSub {
 	public ArrayAdapter<String> fGetArrAdapterFeed() {return arrAdapterFeed;}
 	public void fInitFeedUI() {
 		arrAdapterFeed = new ArrayAdapter<String>(zActivity,R.layout.feed_item);
+		PubSub.zActivity.registerForContextMenu(uLstFeed);
 		uLstFeed.setAdapter(arrAdapterFeed);
 	}
 	

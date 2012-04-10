@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+     <item android:id="@+id/feed_details"
+          android:title="View Details"
+          />
+    <item android:id="@+id/feed_resend"
+          android:title="Resend it" />
+    
+</menu>
