@@ -8,6 +8,7 @@ import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.LstViewFeedAdapter;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.sns.FeedItem;
+import com.moupress.app.friendshost.util.NotificationTask;
 
 import oauth.signpost.OAuth;
 import oauth.signpost.OAuthConsumer;
@@ -58,13 +59,13 @@ public class TwitterUtil {
 	
 	private boolean isAutenticated = false; 
 	private AsyncTwitter twitter;
+	private NotificationTask notificationTask;
 	
 	 private TwitterListener listener = new TwitterAdapter()
 	 {
 
 		@Override
 		public void onException(TwitterException ex, TwitterMethod method) {
-			
 			
 			if(method == TwitterMethod.ACCOUNT_SETTINGS)
 			{
@@ -77,6 +78,7 @@ public class TwitterUtil {
 			else if(method == TwitterMethod.UPDATE_STATUS)
 			{
 				Log.i(TAG, "Update Status Exception");
+				stopNotification();
 			}
 			else if(method == TwitterMethod.HOME_TIMELINE)
 			{
@@ -89,6 +91,7 @@ public class TwitterUtil {
 			
 			Log.i(TAG, "Status Published" + statuses.getText());
 			//mTwitterHandler.post(mUpdateTwitterNotification);
+			stopNotification();
 		}
 
 		@Override
@@ -103,16 +106,17 @@ public class TwitterUtil {
 		@Override
 		public void gotAccountSettings(AccountSettings settings) {
 			//super.gotAccountSettings(settings);
+			Log.i(TAG, "Get Account Setting");
 			isAutenticated = true;
 			followActions();
 		}
-
 	 };
 	
 	private void followActions()
 	{
 		if(authMethod.equals(AUTH_METHODS.UPDATE_STATUS))
 		{
+			Log.i(TAG, "Send Tweets!");
 			sendTweet(prefs,getTweetMsg());
 		}
 			else if(authMethod.equals(AUTH_METHODS.GET_FEEDS))
@@ -128,7 +132,6 @@ public class TwitterUtil {
 		this.activity = zPubSub.fGetActivity();
 		this.context = zPubSub.fGetActivity();
 		this.zPubSub = zPubSub;
-		
 	    this.prefs = PreferenceManager.getDefaultSharedPreferences(activity);
 	}
 	
@@ -154,7 +157,8 @@ public class TwitterUtil {
 		
 		if(twitter == null)
 			 twitter = Autentication(prefs,msg);
-			
+		
+	    startNotification(1,"Tweet");
         twitter.updateStatus(msg);
 	}
 	
@@ -228,24 +232,17 @@ public class TwitterUtil {
 
 
 		private void executeAfterAccessTokenRetrieval() {
+			Log.i(TAG, "Execute after access token Retrieval");
 			followActions();
 		}
 	}
-
-
-	
-	public void GetFeed() {
-		    authMethod = AUTH_METHODS.GET_FEEDS;
-			checkAuthenticated(prefs);
-		}
-
 	
 	
 	public void SendFeed(String feed) {
 		// TODO Auto-generated method stub
 		setMessage(feed);
 		authMethod = AUTH_METHODS.UPDATE_STATUS;
-		checkAuthenticated(prefs);;
+		checkAuthenticated(prefs,true);;
 	}
 
 	
@@ -273,13 +270,12 @@ public class TwitterUtil {
 				// TODO Auto-generated method stub
 				new OAuthRequestTokenTask(activity,consumer,provider).execute();
 			}});
-    	
 	}
 	
 	
 	public AsyncTwitter Autentication(SharedPreferences prefs,String msg) {
 		//super.Autentication(prefs);
-		String token = prefs.getString(OAuth.OAUTH_TOKEN, "");
+		String token = prefs.getString(OAuth.OAUTH_TOKEN, "1-1");
 		String secret = prefs.getString(OAuth.OAUTH_TOKEN_SECRET, "");
 		
 		AccessToken a = new AccessToken(token,secret);
@@ -294,7 +290,7 @@ public class TwitterUtil {
 		return twitter;
 	}
 	
-	public boolean checkAuthenticated(SharedPreferences prefs) {
+	public boolean checkAuthenticated(SharedPreferences prefs,boolean isFollowUp) {
 		
 		Log.i(TAG, "Authentication " + this.isAutenticated);
 		if(!this.isAutenticated)
@@ -305,23 +301,23 @@ public class TwitterUtil {
 		}
 		else
 		{
-			
+			if(isFollowUp)
 			this.followActions();
 		}
 		return this.isAutenticated;
-		
 	}
 	
 
 	public boolean isSessionValid() {
 		// TODO Auto-generated method stub
-		return checkAuthenticated(prefs);
+		return checkAuthenticated(prefs,false);
 	}
 
 
 	public void fGetNewsFeed(Context applicationContext) {
 		// TODO Auto-generated method stub
-		GetFeed();
+		 authMethod = AUTH_METHODS.GET_FEEDS;
+		 checkAuthenticated(prefs,true);
 	}
 
 
@@ -356,6 +352,24 @@ public class TwitterUtil {
 		 
     }
 	 
+    private void startNotification(int notificationId,String fileType)
+    {
+    	notificationTask = new NotificationTask(this.context);
+		 if(notificationTask != null)
+		{
+			notificationTask.SetNotificationTask(notificationId, "Twitter", fileType);
+			notificationTask.execute(0);
+		}
+    }
+    
+    private void stopNotification()
+    {
+    	if(notificationTask != null)
+		{
+			notificationTask.setTaskDone(true);
+		}
+    }
+	 
 	 public class UploadPhotoTaskTask extends AsyncTask<String,String,String>
 	 {
 		private Configuration conf;
@@ -367,6 +381,18 @@ public class TwitterUtil {
 			this.conf = conf;
 			this.message = message;
 			this.ImagePath = ImagePath;
+		}
+
+		
+		@Override
+		protected void onPostExecute(String result) {
+			stopNotification();
+		}
+
+
+		@Override
+		protected void onPreExecute() {
+			startNotification(2,"Picture");
 		}
 
 
@@ -384,6 +410,5 @@ public class TwitterUtil {
 				}
 			return null;
 		}
-		 
-	 }
+	}
 }

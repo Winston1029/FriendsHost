@@ -71,8 +71,11 @@ public class LstViewFeedAdapter extends BaseAdapter{
 		
 		WebImageView img_Head = (WebImageView) convertView.findViewById(R.id.img_feeduser);
 		String sHeadImgSrc = feedArrayList.get(position).getzFriend().getHeadurl();
-		img_Head.setImageUrl(sHeadImgSrc);
-		img_Head.loadImage();
+		if(sHeadImgSrc != null)
+		{
+			img_Head.setImageUrl(sHeadImgSrc);
+			img_Head.loadImage();
+		}
 //		Bitmap imgHead = null; 
 //		if (sHeadImgSrc != null) {
 //			imgHead = ImageOperations(sHeadImgSrc);

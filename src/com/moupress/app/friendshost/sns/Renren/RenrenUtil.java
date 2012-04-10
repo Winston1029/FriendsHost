@@ -18,6 +18,7 @@ import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.LstViewFeedAdapter;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.sns.FeedItem;
+import com.moupress.app.friendshost.util.NotificationTask;
 import com.renren.api.connect.android.AsyncRenren;
 import com.renren.api.connect.android.Renren;
 import com.renren.api.connect.android.common.AbstractRequestListener;
@@ -45,7 +46,7 @@ public class RenrenUtil {
 	
 	private Renren zRenren;
 	private static AsyncRenren asyncRenren;
-	
+	private NotificationTask notificationTask;
 		
 	public RenrenUtil(PubSub pubSub) {
 		zPubSub = pubSub;
@@ -129,6 +130,7 @@ public class RenrenUtil {
 		//AsyncRenren asyncRenren = new AsyncRenren(zRenren);
 		asyncRenren = fGetAsyncRenren();
 		FeedExtractRequestParam param = new FeedExtractRequestParam("XML", "10,11,20,21,22,23,30,31,32,33,34", 1);
+		
 		AbstractRequestListener<FeedExtractResponseBean> listener = new AbstractRequestListener<FeedExtractResponseBean>(){
 			@Override
 			public void onComplete(final FeedExtractResponseBean bean) {
@@ -159,28 +161,28 @@ public class RenrenUtil {
 			FeedPublishRequestParam param = new FeedPublishRequestParam(
 					name, description, url, imageUrl, caption,
 					null, null, message);
+			
+			this.startNotification(4, "Feed");
 			AbstractRequestListener<FeedPublishResponseBean> listener = new AbstractRequestListener<FeedPublishResponseBean>() {
 
 				@Override
 				public void onComplete(final FeedPublishResponseBean bean) {
-	
 							//editTextLog.setText(bean.toString());
 							Log.d(TAG, bean.toString());
-							
+							stopNotification();
 				}
 
 
 				@Override
 				public void onFault(final Throwable fault) {
-					
 							Log.d(TAG, fault.getMessage());
-							
+							stopNotification();
 				}
 
 				@Override
 				public void onRenrenError(final RenrenError renrenError) {
-					
 							Log.d(TAG, renrenError.getMessage());
+							stopNotification();
 				}
 			};
 			asyncRenren.publishFeed(param, listener, true);
@@ -226,23 +228,45 @@ public class RenrenUtil {
 				
 				photoParam.setFile(new File(selectedImagePath));
 				
+				startNotification(3,"Picture");
+				
 				asyncRenren.publishPhoto(photoParam,new AbstractRequestListener<PhotoUploadResponseBean>(){
 
 					@Override
 					public void onComplete(PhotoUploadResponseBean bean) {
 						Log.d(TAG, bean.toString());
+						stopNotification();
 					}
 
 					@Override
 					public void onFault(Throwable fault) {
 						Log.d(TAG, fault.getMessage());
+						stopNotification();
 					}
 
 					@Override
 					public void onRenrenError(RenrenError renrenError) {
 						Log.d(TAG, renrenError.getMessage());
+						stopNotification();
 					}});
 			}
 		}
 	
+	private void startNotification(int notificationId,String fileType)
+    {
+    	notificationTask = new NotificationTask(this.zContext);
+		 if(notificationTask != null)
+		{
+			notificationTask.SetNotificationTask(notificationId, "Renren", fileType);
+			notificationTask.execute(0);
+		}
+    }
+    
+    private void stopNotification()
+    {
+    	if(notificationTask != null)
+		{
+			notificationTask.setTaskDone(true);
+		}
+    }
 }

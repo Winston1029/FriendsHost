@@ -12,6 +12,7 @@ import com.moupress.app.friendshost.LstViewFeedAdapter;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.sns.FeedItem;
 import com.moupress.app.friendshost.util.FeedOrganisor;
+import com.moupress.app.friendshost.util.NotificationTask;
 import com.renren.api.connect.android.Util;
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.AsyncFacebookRunner.RequestListener;
@@ -47,6 +48,7 @@ public class FacebookUtil {
     private Facebook zFacebook;
 	private String sfbToken;
 	private static AsyncFacebookRunner asyncFB;
+	private NotificationTask notificationTask;
 	
 	//======Feed Params Name ===============
 	private static final String FEED_MSG ="message";
@@ -219,35 +221,39 @@ public class FacebookUtil {
 			 if(imageUrl!=null&&imageUrl.length() > 0)
 			 params.putString(FEED_PICS,imageUrl);
 			 
-			 
+			 this.startNotification(6, "Feed");
 			 RequestListener listener = new RequestListener() {
 
 				@Override
 				public void onComplete(String response, Object state) {
 					Log.d(TAG, "complete:"+response);
-					
+					stopNotification();
 				}
 
 				@Override
 				public void onFacebookError(FacebookError e, Object state) {
 					Log.d(TAG, "Error: "+e.getErrorCode()+" : "+e.getMessage());
+					stopNotification();
 				}
 
 				@Override
 				public void onFileNotFoundException(FileNotFoundException e,
 						Object state) {
 					Log.d(TAG, "Exception: " + e.getMessage());
+					stopNotification();
 				}
 
 				@Override
 				public void onIOException(IOException e, Object state) {
 					Log.d(TAG, "Exception: " + e.getMessage());
+					stopNotification();
 				}
 
 				@Override
 				public void onMalformedURLException(MalformedURLException e,
 						Object state) {
 					Log.d(TAG, "Exception: " + e.getMessage());
+					stopNotification();
 				}};
 				
 				asyncFB.request("me/feed", params, "POST", listener,null);
@@ -263,13 +269,13 @@ public class FacebookUtil {
 			 params.putString(FEED_MSG, message);
 			 
 			 params.putByteArray(FEED_SRC, Util.fileToByteArray(new File(selectedImagePath)));
-			 
+			 this.startNotification(5, "Picture");
 			 RequestListener listener = new RequestListener() {
 
 					@Override
 					public void onComplete(String response, Object state) {
 						Log.d(TAG, "complete:"+response);
-						
+						stopNotification();
 					}
 
 					@Override
@@ -297,5 +303,23 @@ public class FacebookUtil {
 					asyncFB.request("me/photos", params, "POST", listener,null);
 		}
 	}
+	
+	private void startNotification(int notificationId,String fileType)
+    {
+    	notificationTask = new NotificationTask(this.zContext);
+		 if(notificationTask != null)
+		{
+			notificationTask.SetNotificationTask(notificationId, "Facebook", fileType);
+			notificationTask.execute(0);
+		}
+    }
+    
+    private void stopNotification()
+    {
+    	if(notificationTask != null)
+		{
+			notificationTask.setTaskDone(true);
+		}
+    }
 
 }
