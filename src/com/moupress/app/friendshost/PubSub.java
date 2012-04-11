@@ -5,13 +5,16 @@ import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.moupress.app.friendshost.activity.FeedPublishActivity;
+import com.moupress.app.friendshost.sns.FeedItem;
 import com.moupress.app.friendshost.sns.Renren.RenrenUtil;
 import com.moupress.app.friendshost.sns.facebook.FacebookUtil;
 import com.moupress.app.friendshost.sns.sina.SinaUtil;
@@ -19,6 +22,8 @@ import com.moupress.app.friendshost.sns.twitter.TwitterUtil;
 import com.moupress.app.friendshost.util.FeedOrganisor;
 
 public class PubSub {
+	private final String TAG = "PubSub"; 
+	
 	private static Activity zActivity;
 	private static Context zContext;
 	
@@ -49,8 +54,6 @@ public class PubSub {
 		fInitPubUI();
 	}
 
-
-
 	public PubSub(Service service) {
 		PubSub.zContext = service.getBaseContext();
 	}
@@ -59,7 +62,7 @@ public class PubSub {
 	public ArrayAdapter<String> fGetArrAdapterFeed() {return arrAdapterFeed;}
 	public void fInitFeedUI() {
 		arrAdapterFeed = new ArrayAdapter<String>(zActivity,R.layout.feed_item);
-		PubSub.zActivity.registerForContextMenu(uLstFeed);
+		//PubSub.zActivity.registerForContextMenu(uLstFeed);
 		uLstFeed.setAdapter(arrAdapterFeed);
 	}
 	
@@ -67,6 +70,15 @@ public class PubSub {
 	public void fInitFeedUIPreview() {
 		arrAdapterFeedPreview = new LstViewFeedAdapter(zActivity, R.layout.feed_item_preview);
 		uLstFeed.setAdapter(arrAdapterFeedPreview);
+		uLstFeed.setOnItemLongClickListener(new OnItemLongClickListener(){
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				FeedItem feed = (FeedItem) arrAdapterFeedPreview.getItem(position);
+				Log.i(TAG, " Name: "+feed.getsName()+" Msg: "+feed.getsMsgBody());
+				return true;
+			}});
 	}
 	public LstViewFeedAdapter fGetAdapterFeedPreview() {return arrAdapterFeedPreview;}
 	
@@ -83,20 +95,8 @@ public class PubSub {
 				//fInitFeedUIPreview();
 				zFacebook.fDisplayFeed();
 				System.out.print("Feed Parse Complete");
-				
 			}
 		});
-        
-//        uBtnFBPubFeed.setOnClickListener(new View.OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				Intent intent = new Intent(zActivity, FeedPublishActivity.class);
-//				intent.putExtra(Const.SNS, Const.SNS_FACEBOOK);
-//				zActivity.startActivity(intent);
-//			}
-//		});
 	}
 	
 	private void fInitRenrenUI() {
@@ -114,16 +114,6 @@ public class PubSub {
 				zRenrenUtil.fDisplayRenrenFeed();
 			}
 		});
-		
-//		uBtnRenrenPublishFeed.setOnClickListener(new View.OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				Intent intent = new Intent(zActivity, FeedPublishActivity.class);
-//				intent.putExtra(Const.SNS, Const.SNS_RENREN);
-//				zActivity.startActivity(intent);
-//			}
-//		});
 	}
 	
 	private void fInitSinaUI() {
