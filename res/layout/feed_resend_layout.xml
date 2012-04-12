@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+  
+  <LinearLayout android:layout_width="match_parent"
+  				android:layout_height="match_parent"
+  				android:layout_weight="0.3">
+  	<include android:id="@+id/feed_send_layout" layout="@layout/feed_item_preview"/>
+  </LinearLayout>
+  <LinearLayout
+    android:id="@+id/btn_ctrl_layout"
+  	android:orientation="horizontal"
+  	android:layout_width="match_parent"
+  	android:layout_height="match_parent"
+  	android:layout_weight="1.2">
+  	<Button android:id="@+id/btn_resend_asis"
+  			android:layout_width="match_parent"
+  			android:layout_height="wrap_content"
+  			android:text="Resend As is"
+  			android:textSize="10dip"
+  			android:layout_weight="1"></Button>
+	<Button android:id="@+id/btn_resend_cmtadd"
+  			android:layout_width="match_parent"
+  			android:layout_height="wrap_content"
+  			android:text="Add Comment"
+  			android:textSize="10dip"
+  			android:layout_weight="1"></Button>
+	<Button android:id="@+id/btn_resend_cancel"
+  			android:layout_width="match_parent"
+  			android:layout_height="wrap_content"
+  			android:text="Cancel"
+  			android:textSize="10dip"
+  			android:layout_weight="1"></Button>
+  </LinearLayout>
+</LinearLayout>

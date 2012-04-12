@@ -6,5 +6,4 @@
           />
     <item android:id="@+id/feed_resend"
           android:title="Resend it" />
-    
 </menu>

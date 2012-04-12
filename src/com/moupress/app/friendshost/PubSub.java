@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.moupress.app.friendshost.activity.FeedPublishActivity;
+import com.moupress.app.friendshost.activity.FeedResendActivity;
 import com.moupress.app.friendshost.sns.FeedItem;
 import com.moupress.app.friendshost.sns.Renren.RenrenUtil;
 import com.moupress.app.friendshost.sns.facebook.FacebookUtil;
@@ -76,12 +77,22 @@ public class PubSub {
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				FeedItem feed = (FeedItem) arrAdapterFeedPreview.getItem(position);
-				Log.i(TAG, " Name: "+feed.getsName()+" Msg: "+feed.getsMsgBody());
+				//Log.i(TAG, " Name: "+feed.getsName()+" Msg: "+feed.getsMsgBody());
+				fFeedResendUI(feed);
 				return true;
 			}});
 	}
-	public LstViewFeedAdapter fGetAdapterFeedPreview() {return arrAdapterFeedPreview;}
 	
+	//Feed Resend UI
+	public void fFeedResendUI(FeedItem feed)
+	{
+		Intent intent = new Intent(this.zActivity,FeedResendActivity.class);
+		intent.putExtra(Const.FEED_ITEM, feed);
+		this.zActivity.startActivityForResult(intent, Const.FEED_RESEND_REQ_CD);
+	}
+	
+	//Init Facebook UI
+	public LstViewFeedAdapter fGetAdapterFeedPreview() {return arrAdapterFeedPreview;}
 	private void fFBInitUI() {        
 		ImageButton uBtnFBGetFeed = (ImageButton) zActivity.findViewById(R.id.imgBtn_Facebook);
         //Button uBtnFBPubFeed = (Button) zActivity.findViewById(R.id.btn_pubfbfeed);
@@ -179,4 +190,6 @@ public class PubSub {
 		zRenrenUtil.onComplete(requestCode, resultCode, data);
 		zFacebook.onComplete(requestCode, resultCode, data);
 	}
+	
+	
 }

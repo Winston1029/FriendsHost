@@ -98,7 +98,6 @@ public class LstViewFeedAdapter extends BaseAdapter{
 		} else {
 
 			//compulsory field
-
 			//TextView txv_FeedUser = (TextView) convertView.findViewById(R.id.txt_name);
 			txv_FeedUser.setText(feedArrayList.get(position).getsName());
 			TextView txv_MsgCreationTime = (TextView) convertView.findViewById(R.id.txt_msgcreatedtime);
@@ -171,8 +170,6 @@ public class LstViewFeedAdapter extends BaseAdapter{
 				txv_ImgDecription.setVisibility(View.GONE);
 			}
 		}
-		
-		
 		return convertView;
 	}
 

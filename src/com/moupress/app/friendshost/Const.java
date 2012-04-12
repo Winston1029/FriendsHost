@@ -38,4 +38,30 @@ public class Const {
 	public static final String REQUEST_URL = "http://api.twitter.com/oauth/request_token";
 	public static final String ACCESS_URL = "http://api.twitter.com/oauth/access_token";
 	public static final String AUTHORIZE_URL = "http://api.twitter.com/oauth/authorize";
+	
+	//=============FeedResendActivity===========================
+	public static final int FEED_RESEND_REQ_CD = 1;
+	
+	//==============Feed Item Attributes========================
+	public static final String FEED_ITEM = "feeditem";
+	
+	public static final String SHEADIMG = "sHeadImg";
+	public static final String SNAME = "sName";
+	public static final String SOWNERID = "sOwnerID";
+	public static final String SCREATEDTIME = "sCreatedTime";
+	public static final String SMSGBODY = "sMsgBody";
+	public static final String SSTORY = "sStory";
+	public static final String SSTORY_TAGS = "sStory_Tags";
+	public static final String SPHOTOPREVIEWLINK = "sPhotoPreviewLink";
+	public static final String SPHOTOPREVIEWNAME = "sPhotoPreviewName";
+	public static final String SPHOTOPREVIEWCAPTION = "sPhotoPreviewCaption";
+	public static final String SPHOTOPREVIEWDESCRIPTION = "sPhotoPreviewDescription";
+
+	//=============Friend Item Attributes==========================
+	public static final String FID = "fId";
+	public static final String FNAME = "fName";
+	public static final String FHEADURL = "fHeadurl";
+	public static final String FSNS = "fSns";
+	
+
 }

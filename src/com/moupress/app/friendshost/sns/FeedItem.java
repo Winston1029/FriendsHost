@@ -1,6 +1,12 @@
 package com.moupress.app.friendshost.sns;
 
-public class FeedItem {
+import com.moupress.app.friendshost.Const;
+
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class FeedItem implements Parcelable{
 
 	private String sHeadImg;
 	
@@ -19,6 +25,23 @@ public class FeedItem {
 	
 	public FeedItem() {
 		setzFriend(new UserFriend());
+	}
+	
+	public FeedItem(Parcel in)
+	{
+		Bundle bundle = Bundle.CREATOR.createFromParcel(in);
+		
+		this.sHeadImg = bundle.getString(Const.SHEADIMG);
+		this.sName = bundle.getString(Const.SNAME);
+		this.sOwnerID = bundle.getString(Const.SOWNERID);
+		this.sCreatedTime = bundle.getString(Const.SCREATEDTIME);
+		this.sMsgBody = bundle.getString(Const.SMSGBODY);
+		this.sStory = bundle.getString(Const.SSTORY);
+		this.sPhotoPreviewLink = bundle.getString(Const.SPHOTOPREVIEWLINK);
+		this.sPhotoPreviewName = bundle.getString(Const.SPHOTOPREVIEWNAME);
+		this.sPhotoPreviewCaption = bundle.getString(Const.SPHOTOPREVIEWCAPTION);
+		this.sPhotoPreviewDescription = bundle.getString(Const.SPHOTOPREVIEWDESCRIPTION);
+		
 	}
 	
 	public void setsHeadImg(String sHeadImg) {
@@ -95,5 +118,43 @@ public class FeedItem {
 	public UserFriend getzFriend() {
 		return zFriend;
 	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+		
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		
+		Bundle bundle = new Bundle();
+		
+		if(sHeadImg != null) { bundle.putString( Const.SHEADIMG,sHeadImg);}
+		if(sName != null) { bundle.putString( Const.SNAME,sName);}
+		if(sOwnerID != null) { bundle.putString( Const.SOWNERID,sOwnerID);}
+		if(sCreatedTime != null) { bundle.putString( Const.SCREATEDTIME,sCreatedTime);}
+		if(sMsgBody != null) { bundle.putString( Const.SMSGBODY,sMsgBody);}
+		if(sStory != null) { bundle.putString( Const.SSTORY,sStory);}
+		if(sPhotoPreviewLink != null) { bundle.putString( Const.SPHOTOPREVIEWLINK,sPhotoPreviewLink);}
+		if(sPhotoPreviewName != null) { bundle.putString( Const.SPHOTOPREVIEWNAME,sPhotoPreviewName);}
+		if(sPhotoPreviewCaption != null) { bundle.putString( Const.SPHOTOPREVIEWCAPTION,sPhotoPreviewCaption);}
+		if(sPhotoPreviewDescription != null) { bundle.putString( Const.SPHOTOPREVIEWDESCRIPTION,sPhotoPreviewDescription);}
+		
+		bundle.writeToParcel(out, flags);
+	}
 	
+	public static final Parcelable.Creator<FeedItem> CREATOR = new Parcelable.Creator<FeedItem>(){
+
+		@Override
+		public FeedItem createFromParcel(Parcel in) {
+			// TODO Auto-generated method stub
+			return new FeedItem(in);
+		}
+
+		@Override
+		public FeedItem[] newArray(int size) {
+			// TODO Auto-generated method stub
+			return new FeedItem[size];
+		}};
 }

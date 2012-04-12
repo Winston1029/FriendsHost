@@ -24,7 +24,7 @@
         
         <activity android:name=".OAuthActivity">
             <intent-filter>
-<!--                 <action  android:name="com.moupress.app.friendshost.action.REDIRECT"/> -->
+<!--            <action  android:name="com.moupress.app.friendshost.action.REDIRECT"/> -->
                 <action  android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -41,7 +41,13 @@
         
         <activity android:enabled="true" android:name=".activity.FeedPublishActivity"></activity>
         <service android:enabled="true" android:name=".FeedRetrievalService" />
-        
+          <activity android:name=".activity.FeedResendActivity"
+        			android:theme="@android:style/Theme.Dialog"
+        			android:label="Resend Feed"
+        			android:launchMode="singleTask"
+        			android:screenOrientation="portrait"
+        			>
+        </activity>
     </application>
     
     <uses-permission android:name="android.permission.INTERNET" />

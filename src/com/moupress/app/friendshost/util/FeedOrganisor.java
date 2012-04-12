@@ -58,15 +58,18 @@ public class FeedOrganisor {
 		FBHomeFeed bean = new Gson().fromJson(feed, FBHomeFeed.class);
 		
 		long res = 0;
-		for(int i= 0; i<bean.getData().size();i++) {
-			//String msg = ((FBHomeFeedEntry) bean.getData().get(i)).getName()+" : "+((FBHomeFeedEntry) bean.getData().get(i)).getMessage();
-			FBHomeFeedEntry entry = (FBHomeFeedEntry) bean.getData().get(i);
-			String fromID = entry.getFrom().getId();
-			String fromHeadUrl = "https://graph.facebook.com/" + fromID + "/picture";
-			entry.getFrom().setHeadurl(fromHeadUrl);
-			
-			res += zDBHelper.fInsertFeed(entry);
-			zDBHelper.fInsertFriend(entry.getFrom());
+		if(bean != null && bean.getData()!=null)
+		{
+			for(int i= 0; i<bean.getData().size();i++) {
+				//String msg = ((FBHomeFeedEntry) bean.getData().get(i)).getName()+" : "+((FBHomeFeedEntry) bean.getData().get(i)).getMessage();
+				FBHomeFeedEntry entry = (FBHomeFeedEntry) bean.getData().get(i);
+				String fromID = entry.getFrom().getId();
+				String fromHeadUrl = "https://graph.facebook.com/" + fromID + "/picture";
+				entry.getFrom().setHeadurl(fromHeadUrl);
+				
+				res += zDBHelper.fInsertFeed(entry);
+				zDBHelper.fInsertFriend(entry.getFrom());
+			}
 		}
 		
 		if (res > 0 ) {
