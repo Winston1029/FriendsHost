@@ -42,6 +42,7 @@ public class FeedItem implements Parcelable{
 		this.sPhotoPreviewCaption = bundle.getString(Const.SPHOTOPREVIEWCAPTION);
 		this.sPhotoPreviewDescription = bundle.getString(Const.SPHOTOPREVIEWDESCRIPTION);
 		
+		this.zFriend = UserFriend.CREATOR.createFromParcel(in);
 	}
 	
 	public void setsHeadImg(String sHeadImg) {
@@ -142,6 +143,7 @@ public class FeedItem implements Parcelable{
 		if(sPhotoPreviewDescription != null) { bundle.putString( Const.SPHOTOPREVIEWDESCRIPTION,sPhotoPreviewDescription);}
 		
 		bundle.writeToParcel(out, flags);
+		if(this.zFriend != null) { this.zFriend.writeToParcel(out, flags);}
 	}
 	
 	public static final Parcelable.Creator<FeedItem> CREATOR = new Parcelable.Creator<FeedItem>(){

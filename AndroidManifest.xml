@@ -44,7 +44,6 @@
           <activity android:name=".activity.FeedResendActivity"
         			android:theme="@android:style/Theme.Dialog"
         			android:label="Resend Feed"
-        			android:launchMode="singleTask"
         			android:screenOrientation="portrait"
         			>
         </activity>

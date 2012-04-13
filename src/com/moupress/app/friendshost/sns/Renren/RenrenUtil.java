@@ -269,4 +269,17 @@ public class RenrenUtil {
 			notificationTask.setTaskDone(true);
 		}
     }
+
+	public void fResend(FeedItem feed) {
+		// TODO Auto-generated method stub
+		//String name = (feed.getsName() == null?" ":feed.getsName());
+		String name = " ";
+		String description = (feed.getsPhotoPreviewDescription() == null? " ":feed.getsPhotoPreviewDescription());
+		String link = (feed.getsPhotoPreviewLink() == null ? " ":feed.getsPhotoPreviewLink());
+		String imgUrl = (feed.getsPhotoPreviewLink() == null ? " ":feed.getsPhotoPreviewLink());
+		String caption = (feed.getsPhotoPreviewCaption() == null ? " ":feed.getsPhotoPreviewCaption());
+		String msg = (feed.getsMsgBody() == null ? " ":feed.getsMsgBody());
+		String story = (feed.getsStory()==null? " ":feed.getsStory());
+		this.fPublishFeeds(name, description, link, imgUrl, caption, msg+story);
+	}
 }

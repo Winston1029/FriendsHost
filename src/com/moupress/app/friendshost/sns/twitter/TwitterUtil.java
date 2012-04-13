@@ -402,7 +402,6 @@ public class TwitterUtil {
 				 ImageUpload upload = new ImageUploadFactory(conf).getInstance(MediaProvider.TWITTER);
 				 String mediaUrl;
 				 mediaUrl = upload.upload(new File(ImagePath),message);
-				 
 				 Log.i(TAG, "Media URL is "+mediaUrl);
 				} catch (TwitterException e) {
 					// TODO Auto-generated catch block
@@ -410,5 +409,10 @@ public class TwitterUtil {
 				}
 			return null;
 		}
+	}
+
+
+	public void fResend(FeedItem feed) {
+		this.SendFeed(feed.getsMsgBody());
 	}
 }

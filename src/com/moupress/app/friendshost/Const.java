@@ -40,7 +40,7 @@ public class Const {
 	public static final String AUTHORIZE_URL = "http://api.twitter.com/oauth/authorize";
 	
 	//=============FeedResendActivity===========================
-	public static final int FEED_RESEND_REQ_CD = 1;
+	public static final int FEED_RESEND_REQ_CD = 3;
 	
 	//==============Feed Item Attributes========================
 	public static final String FEED_ITEM = "feeditem";

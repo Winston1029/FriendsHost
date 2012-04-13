@@ -322,4 +322,8 @@ public class FacebookUtil {
 		}
     }
 
+	public void fResend(FeedItem feed) {
+		this.fPublishFeeds(" ", feed.getsPhotoPreviewDescription(), feed.getsPhotoPreviewLink(), feed.getsPhotoPreviewLink(), feed.getsPhotoPreviewCaption(), feed.getsMsgBody());
+	}
+
 }

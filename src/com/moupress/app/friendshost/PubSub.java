@@ -34,6 +34,8 @@ public class PubSub {
 	public static TwitterUtil   zTwitterUtil;
 	public static FeedOrganisor zFeedOrg;
 	
+	private String displayedSns;
+	
 	ListView uLstFeed;
 	public PubSub(Context context, Activity activity) {
 		PubSub.zContext = context;
@@ -86,9 +88,10 @@ public class PubSub {
 	//Feed Resend UI
 	public void fFeedResendUI(FeedItem feed)
 	{
-		Intent intent = new Intent(this.zActivity,FeedResendActivity.class);
+		Intent intent = new Intent(zActivity,FeedResendActivity.class);
 		intent.putExtra(Const.FEED_ITEM, feed);
-		this.zActivity.startActivityForResult(intent, Const.FEED_RESEND_REQ_CD);
+		intent.putExtra(Const.SNS, this.displayedSns);
+		zActivity.startActivityForResult(intent, Const.FEED_RESEND_REQ_CD);
 	}
 	
 	//Init Facebook UI
@@ -104,8 +107,9 @@ public class PubSub {
 				//arrAdapterFeed.clear();				
 				//zFacebook.fGetNewsFeed();
 				//fInitFeedUIPreview();
+				displayedSns = Const.SNS_FACEBOOK;
 				zFacebook.fDisplayFeed();
-				System.out.print("Feed Parse Complete");
+				//System.out.print("Feed Parse Complete");
 			}
 		});
 	}
@@ -122,6 +126,7 @@ public class PubSub {
 				//zRenrenUtil.fGetNewsFeed();
 				//fInitFeedUI();
 				//fInitFeedUIPreview();
+				displayedSns = Const.SNS_RENREN;
 				zRenrenUtil.fDisplayRenrenFeed();
 			}
 		});
@@ -138,6 +143,7 @@ public class PubSub {
 				//zSinaUtil.fGetNewsFeed();
 				//fInitFeedUI();
 				//fInitFeedUIPreview();
+				displayedSns = Const.SNS_SINA;
 				zSinaUtil.fDisplaySinaFeed();
 			}
 		});
@@ -151,6 +157,7 @@ public class PubSub {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				displayedSns = Const.SNS_TWITTER;
 				zTwitterUtil.fDisplayTwitterFeed();
 			}
 		});
@@ -187,9 +194,32 @@ public class PubSub {
 	public FeedOrganisor fGetFeedOrganisor() {return zFeedOrg; }
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		zRenrenUtil.onComplete(requestCode, resultCode, data);
-		zFacebook.onComplete(requestCode, resultCode, data);
+		
+		if(requestCode == Const.FEED_RESEND_REQ_CD)
+		{
+			Log.i(TAG, "Feed Resend is called back!" + resultCode);
+			if(resultCode == Activity.RESULT_OK)
+			{
+				String sns = data.getStringExtra(Const.SNS);
+				FeedItem feed = data.getParcelableExtra(Const.FEED_ITEM);
+				if(sns.equals(Const.SNS_FACEBOOK))
+				{
+					zFacebook.fResend(feed);
+				} 
+				else if (sns.equals(Const.SNS_RENREN))
+				{
+					zRenrenUtil.fResend(feed);
+				}
+				else if (sns.equals(Const.SNS_TWITTER))
+				{
+					zTwitterUtil.fResend(feed);
+				}
+			}
+		}
+		else 
+		{
+			zRenrenUtil.onComplete(requestCode, resultCode, data);
+			zFacebook.onComplete(requestCode, resultCode, data);
+		}
 	}
-	
-	
 }

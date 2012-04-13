@@ -16,7 +16,6 @@ public class FriendsHostActivity extends Activity {
         setContentView(R.layout.main);
         
         fInit();
-        
         fAnalyseIntent();
     }
     
