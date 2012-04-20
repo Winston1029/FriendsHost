@@ -65,6 +65,8 @@ public class FeedPublishActivity extends Activity{
 	
 	//Message to publish
 	private String message;
+	private String title;
+	private String bodyText;
 	
 	//Button to publish msg
 	private Button publishButton;
@@ -84,18 +86,38 @@ public class FeedPublishActivity extends Activity{
 		this.setContentView(layout);
 
 		selectedImagePath = "";
-		
 		activity= this;
 		
+	
+		
+		fGetIntent();
 		fInitFieldUI();
 		fInitPicButtons();
 		fInitPubButtons();
 	}
 	
+	private void fGetIntent() {
+		
+		Intent intent = activity.getIntent();
+		
+		title = null;
+		bodyText = null;
+		
+		Bundle extras = intent.getExtras();
+		title = extras.getString(Intent.EXTRA_SUBJECT);
+		bodyText = extras.getString(Intent.EXTRA_TEXT);
+		
+	}
+
 	private void fInitFieldUI() {
 		//Controls Capture user's input info
 		//ScrollView layout = (ScrollView) LayoutInflater.from(this).inflate(R.layout.feed_publish_layout, null);
 		final EditText editTextMessage = (EditText) this.findViewById(R.id.message);
+		
+		if(title != null||bodyText != null)
+		{
+			editTextMessage.setText(title+" - "+ bodyText);
+		}
 		
 		publishButton = (Button) this.findViewById(R.id.publish);
 		publishButton.setOnClickListener(new View.OnClickListener(){
