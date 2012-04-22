@@ -54,15 +54,15 @@ public class FeedOrganisor {
 	 * Save new feeds from fGetNewsFeed() into DB
 	 * @param context 
 	 */
-	public void fSaveNewFeeds(String feed, Context context) {
-		FBHomeFeed bean = new Gson().fromJson(feed, FBHomeFeed.class);
+	public void fSaveNewFeeds(FBHomeFeed beans, Context context) {
+		
 		
 		long res = 0;
-		if(bean != null && bean.getData()!=null)
+		if(beans != null && beans.getData()!=null)
 		{
-			for(int i= 0; i<bean.getData().size();i++) {
+			for(int i= 0; i<beans.getData().size();i++) {
 				//String msg = ((FBHomeFeedEntry) bean.getData().get(i)).getName()+" : "+((FBHomeFeedEntry) bean.getData().get(i)).getMessage();
-				FBHomeFeedEntry entry = (FBHomeFeedEntry) bean.getData().get(i);
+				FBHomeFeedEntry entry = (FBHomeFeedEntry) beans.getData().get(i);
 				String fromID = entry.getFrom().getId();
 				String fromHeadUrl = "https://graph.facebook.com/" + fromID + "/picture";
 				entry.getFrom().setHeadurl(fromHeadUrl);
@@ -71,6 +71,7 @@ public class FeedOrganisor {
 				zDBHelper.fInsertFriend(entry.getFrom());
 			}
 		}
+		beans = null;
 		
 		if (res > 0 ) {
 			int cntUnReadFeed = fGetUnReadNewsFeedSummary(Const.SNS_FACEBOOK).length;
@@ -131,7 +132,6 @@ public class FeedOrganisor {
 			friend.setSNS(Const.SNS_TWITTER);
 			friend.setName(status.getUser().getName());
 			friend.setHeadurl(status.getUser().getProfileImageURL().toString());
-			System.out.println("Insert Twitter Feeds and Friends!");
 			zDBHelper.fInsertFriend(friend);
 		}
 		

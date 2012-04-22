@@ -78,7 +78,6 @@ public class FeedExtractResponseBean extends ResponseBean{
 			Document doc = docBuilder.parse (inStream);
 			
 			NodeList listOffeeds = doc.getElementsByTagName("feed_post");
-			System.out.println(" Number of feeds "+listOffeeds.getLength());
 			
 			for(int index=0; index < listOffeeds.getLength(); index++) {
 			      Node feed = listOffeeds.item(index);

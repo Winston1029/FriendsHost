@@ -18,38 +18,11 @@ public class FeedRetrievalService extends Service {
 
 	private Timer timer;
 	private long update_interval = 15000;
-	private static int counter = 0;
+	private TimerTask zTimedTask;
 	
 	private void fPollForUpdates() {
-		timer = new Timer();
-		timer.scheduleAtFixedRate(new TimerTask() {
-			@Override
-			public void run() {
-				counter++;
-				if (PubSub.zFacebook != null && PubSub.zFacebook.isSessionValid() ) {
-					PubSub.zFacebook.fGetNewsFeed(getApplicationContext());
-				}
-				if (PubSub.zRenrenUtil != null && PubSub.zRenrenUtil.isSessionValid() ) {
-					PubSub.zRenrenUtil.fGetNewsFeed(getApplicationContext());
-				}
-				if (PubSub.zSinaUtil != null && PubSub.zSinaUtil.isSessionValid()) {
-					PubSub.zSinaUtil.fGetNewsFeed(getApplicationContext());
-				}
-				
-				if(PubSub.zTwitterUtil != null && PubSub.zTwitterUtil.isSessionValid())
-				{
-					PubSub.zTwitterUtil.fGetNewsFeed(getApplicationContext());
-				}
-				
-				
-				if (PubSub.zRenrenUtil == null && 
-						PubSub.zFacebook == null && 
-						PubSub.zSinaUtil == null &&
-						PubSub.zTwitterUtil == null) {
-						stopSelf();
-					}
-			}
-		}, 3000, update_interval);
+		
+		timer.scheduleAtFixedRate(zTimedTask, 3000, update_interval);
 		Log.i(getClass().getSimpleName(), "Timer started.");
 
 	}
@@ -63,6 +36,31 @@ public class FeedRetrievalService extends Service {
 	@Override
 	public void onCreate() {
 		Toast.makeText(this, "Service Created", Toast.LENGTH_SHORT).show();
+		timer = new Timer();
+		zTimedTask = new TimerTask() {
+			@Override
+			public void run() {
+				if (PubSub.zFacebook != null && PubSub.zFacebook.isSessionValid() ) {
+					PubSub.zFacebook.fGetNewsFeed(getApplicationContext());
+				}
+				if (PubSub.zRenrenUtil != null && PubSub.zRenrenUtil.isSessionValid() ) {
+					PubSub.zRenrenUtil.fGetNewsFeed(getApplicationContext());
+				}
+				if (PubSub.zSinaUtil != null && PubSub.zSinaUtil.isSessionValid()) {
+					PubSub.zSinaUtil.fGetNewsFeed(getApplicationContext());
+				}
+				if(PubSub.zTwitterUtil != null && PubSub.zTwitterUtil.isSessionValid()) {
+					PubSub.zTwitterUtil.fGetNewsFeed(getApplicationContext());
+				}
+				
+				if (PubSub.zRenrenUtil == null && 
+						PubSub.zFacebook == null && 
+						PubSub.zSinaUtil == null &&
+						PubSub.zTwitterUtil == null) {
+						//stopSelf();
+					}
+			}
+		};
 		fPollForUpdates();
 		
 	}

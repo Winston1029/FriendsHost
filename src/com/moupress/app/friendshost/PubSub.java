@@ -48,7 +48,6 @@ public class PubSub {
 		
 		uLstFeed = (ListView) zActivity.findViewById(R.id.uLstVFBFeed);
 		fInitAcc();
-		fInitFeedUI();
 		fInitFeedUIPreview();
 		fFBInitUI();
 		fInitRenrenUI();
@@ -61,15 +60,8 @@ public class PubSub {
 		PubSub.zContext = service.getBaseContext();
 	}
 	
-	private static ArrayAdapter<String> arrAdapterFeed;
-	public ArrayAdapter<String> fGetArrAdapterFeed() {return arrAdapterFeed;}
-	public void fInitFeedUI() {
-		arrAdapterFeed = new ArrayAdapter<String>(zActivity,R.layout.feed_item);
-		//PubSub.zActivity.registerForContextMenu(uLstFeed);
-		uLstFeed.setAdapter(arrAdapterFeed);
-	}
-	
 	private LstViewFeedAdapter arrAdapterFeedPreview;
+	public LstViewFeedAdapter fGetAdapterFeedPreview() {return arrAdapterFeedPreview;}
 	public void fInitFeedUIPreview() {
 		arrAdapterFeedPreview = new LstViewFeedAdapter(zActivity, R.layout.feed_item_preview);
 		uLstFeed.setAdapter(arrAdapterFeedPreview);
@@ -95,37 +87,26 @@ public class PubSub {
 	}
 	
 	//Init Facebook UI
-	public LstViewFeedAdapter fGetAdapterFeedPreview() {return arrAdapterFeedPreview;}
-	private void fFBInitUI() {        
+	private void fFBInitUI() {
 		ImageButton uBtnFBGetFeed = (ImageButton) zActivity.findViewById(R.id.imgBtn_Facebook);
-        //Button uBtnFBPubFeed = (Button) zActivity.findViewById(R.id.btn_pubfbfeed);
         
         uBtnFBGetFeed.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				//arrAdapterFeed.clear();				
-				//zFacebook.fGetNewsFeed();
-				//fInitFeedUIPreview();
 				displayedSns = Const.SNS_FACEBOOK;
 				zFacebook.fDisplayFeed();
-				//System.out.print("Feed Parse Complete");
 			}
 		});
 	}
 	
 	private void fInitRenrenUI() {
 		ImageButton uBtnRenrenGetFeed = (ImageButton) zActivity.findViewById(R.id.imgBtn_Renren);
-		//Button uBtnRenrenPublishFeed = (Button) zActivity.findViewById(R.id.btn_pubrenrenfeed);
 		
 		uBtnRenrenGetFeed.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				//arrAdapterFeed.clear();
-				//zRenrenUtil.fGetNewsFeed();
-				//fInitFeedUI();
-				//fInitFeedUIPreview();
 				displayedSns = Const.SNS_RENREN;
 				zRenrenUtil.fDisplayRenrenFeed();
 			}
@@ -139,10 +120,6 @@ public class PubSub {
 			
 			@Override
 			public void onClick(View v) {
-				//arrAdapterFeed.clear();
-				//zSinaUtil.fGetNewsFeed();
-				//fInitFeedUI();
-				//fInitFeedUIPreview();
 				displayedSns = Const.SNS_SINA;
 				zSinaUtil.fDisplaySinaFeed();
 			}
@@ -156,7 +133,6 @@ public class PubSub {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				displayedSns = Const.SNS_TWITTER;
 				zTwitterUtil.fDisplayTwitterFeed();
 			}
@@ -178,10 +154,11 @@ public class PubSub {
 	}
 
 	private void fInitAcc() {
-		zFacebook = new FacebookUtil(this);
-		zRenrenUtil = new RenrenUtil(this);
-		zSinaUtil = new SinaUtil(this);
-		zTwitterUtil = new TwitterUtil(this);
+		//total 13M
+		zFacebook = new FacebookUtil(this); //10M , 17ps
+		zRenrenUtil = new RenrenUtil(this); //6.4M, 16ps
+		zSinaUtil = new SinaUtil(this); //6.8M, 9ps
+		zTwitterUtil = new TwitterUtil(this); // 7.0M, 10ps
 		
 		zFeedOrg = new FeedOrganisor(this);
 	}

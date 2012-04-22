@@ -266,14 +266,6 @@ public class DBHelper {
 		values.put(C_FEED_TYPE, media_type);
 		
 		if (media_type != null && media_type.equals("blog")) {
-			// in XML is -> http://blog.renren.com/GetEntry.do?id=814235473&amp;owner=404482952
-			// acutal url -> http://blog.renren.com/blog/404482952/814155984
-			// need to construct from owner_id & media_id field as "&amp;" cannot parse correctly in XML parser
-//			int ownerID_start = link.lastIndexOf("="); //37
-//			int blogID_start = link.indexOf("=");
-//			int blogID_end = link.indexOf("&");
-//			String blogID = link.substring(blogID_start, blogID_end);
-//			String ownerID = link.substring(ownerID_start);
 			String actualBlog_Url = "http://blog.renren.com/blog/" + entry.getFeed_media_owner_id() + "/" + entry.getFeed_media_media_id();
 			values.put(C_FEED_LINK, actualBlog_Url);
 		} else {

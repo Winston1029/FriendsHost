@@ -97,6 +97,7 @@ public class FeedItemUIComponent {
 	
 	public void TxtMsgBodyLoad(String sMsgBody,String sStory )
 	{
+		txv_MsgBody.setVisibility(View.VISIBLE);
 		if ( sMsgBody != null && sStory != null ) {
 			txv_MsgBody.setText(sMsgBody + "\n" + sStory);
 		} else if ( sMsgBody != null ) {
@@ -110,7 +111,9 @@ public class FeedItemUIComponent {
 	
 	public void ImgPhotoPreviewLoad(String sImgSrc)
 	{
+		
 		if (sImgSrc != null && sImgSrc.startsWith("http://") && sImgSrc.endsWith(".jpg")) {
+			img_PhotoPreview.setVisibility(View.VISIBLE);
 			img_PhotoPreview.setImageUrl(sImgSrc);
 			//img_PhotoPreview.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 			img_PhotoPreview.loadImage();
@@ -122,6 +125,7 @@ public class FeedItemUIComponent {
 	public void TxtImgNameLoad(String sImgName)
 	{
 		if (sImgName != null) {
+			txv_ImgName.setVisibility(View.VISIBLE);
 			txv_ImgName.setText(sImgName);
 		} else {
 			txv_ImgName.setVisibility(View.GONE);
@@ -131,6 +135,7 @@ public class FeedItemUIComponent {
 	public void TxvImgCaptionLoad(String sImgCaption)
 	{
 		if (sImgCaption != null) {
+			txv_ImgCaption.setVisibility(View.VISIBLE);
 			txv_ImgCaption.setText(sImgCaption);
 		} else {
 			txv_ImgCaption.setVisibility(View.GONE);
@@ -140,6 +145,7 @@ public class FeedItemUIComponent {
 	public void TxvImgDecription(String sImgDescription)
 	{
 		if (sImgDescription != null) {
+			txv_ImgDecription.setVisibility(View.VISIBLE);
 			txv_ImgDecription.setText(sImgDescription);
 //		} else if (sMsgBody != null && sStory != null ) {
 //			txv_ImgDecription.setText(sStory);

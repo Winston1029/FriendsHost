@@ -22,30 +22,18 @@ import com.moupress.app.friendshost.util.Pref;
 
 public class SinaUtil {
 
-	//private static final String APP_ID = "1255140182";
-	//private static final String SECRET_KEY = "ace86405a2aea9d30c5986d5465e163f";
-	private static final String APP_ID = "1646212960";
-    private static final String SECRET_KEY = "94098772160b6f8ffc1315374d8861f9";
-    
-
-	private static final String URL_ACTIVITY_CALLBACK = "weiboandroidsdk://TimeLineActivity";
-    private static final String FROM = "xweibo";
-    
     private static String sTokenKey = "";
     private static String sTokenSecret = "";
 	
 	private PubSub zPubSub;
-	private Context zContext;
 	
 	private Weibo zSina;
 	
 	public SinaUtil(PubSub pubSub) {
 		zPubSub = pubSub;
-		zContext = zPubSub.fGetContext();
 		System.setProperty("weibo4j.oauth.consumerKey", Weibo.CONSUMER_KEY);
     	System.setProperty("weibo4j.oauth.consumerSecret", Weibo.CONSUMER_SECRET);
 		zSina = OAuthConstant.getInstance().getWeibo();
-		AsyncWeibo async;
 		fSinaAuth();
 	}
 	
@@ -74,11 +62,6 @@ public class SinaUtil {
 			Uri uri = Uri.parse(requestToken.getAuthenticationURL()+ "&from=xweibo");
 			OAuthConstant.getInstance().setRequestToken(requestToken);
 			zPubSub.fGetActivity().startActivity(new Intent(Intent.ACTION_VIEW, uri));
-			//zPubSub.fGetContext().sendBroadcast(new Intent(Const.CUSTOM_INTENT_ACTION, uri));
-			//Intent i = new Intent();
-			//i.setAction(Const.CUSTOM_INTENT_ACTION);
-			//i.setData(uri);
-			//zPubSub.fGetActivity().startActivity(new Intent(OAuthActivity.CUSTOM_INTENT_ACTION, uri));
 		} catch (WeiboException e) {
 			e.printStackTrace();
 		}
@@ -100,20 +83,9 @@ public class SinaUtil {
 	public void fDisplaySinaFeed() {
 		zPubSub.fGetActivity().runOnUiThread(new Runnable() {
 			public void run() {
-//				ArrayAdapter<String> adapterSinaResponse = zPubSub.fGetArrAdapterFeed();
-//				adapterSinaResponse.clear();
-//				String[] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeedSummary(Const.SNS_SINA);
-//				for(int i= 0; i<feedMsg.length;i++) {
-//					adapterSinaResponse.add(feedMsg[i]);
-//				}
-//				adapterSinaResponse.notifyDataSetChanged();
 				
 				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
 				feedAdapter.clear();
-//				String[][] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_SINA);
-//				for (int i = 0; i < feedMsg.length; i++) {
-//					feedAdapter.addItem(feedMsg[i]);
-//				}
 				ArrayList<FeedItem> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_SINA);
 				for (FeedItem item : feeds ) {
 					feedAdapter.addItem(item);
@@ -123,28 +95,4 @@ public class SinaUtil {
 		});
 	}
 	
-	public void fGetNewsFeed() {
-		sTokenKey = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENKEY);
-		sTokenSecret = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENSECRET);
-		
-		zPubSub.fGetActivity().runOnUiThread(new Runnable () {
-			@Override
-			public void run() {
-				//zSina.setToken(OAuthConstant.getInstance().getToken(), OAuthConstant.getInstance().getTokenSecret());
-				zSina.setToken(sTokenKey, sTokenSecret);
-				try {
-					List<Status> friendsTimeline;
-					friendsTimeline = zSina.getFriendsTimeline();
-					ArrayAdapter<String> sinaFeedAdapter = zPubSub.fGetArrAdapterFeed();
-					for (Status status : friendsTimeline) {
-						String msg = status.getUser().getScreenName() + " : " + status.getText();
-						sinaFeedAdapter.add(msg);
-					}
-					sinaFeedAdapter.notifyDataSetChanged();
-				} catch (WeiboException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 }

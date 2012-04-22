@@ -91,7 +91,8 @@ public class FacebookUtil {
 
 			@Override
 			public void onComplete(final String response, Object state) {
-				zPubSub.fGetFeedOrganisor().fSaveNewFeeds(response, context);
+				FBHomeFeed bean = new Gson().fromJson(response, FBHomeFeed.class);
+				zPubSub.fGetFeedOrganisor().fSaveNewFeeds(bean, context);
 			}
 
 			@Override

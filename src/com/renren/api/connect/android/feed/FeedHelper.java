@@ -264,7 +264,7 @@ public class FeedHelper {
 			Bundle params = feed.getParams();
 			//response = renren.requestJSON(params);
 			response = renren.requestXML(params);
-			System.out.println("Feeds Response " + response);
+			//System.out.println("Feeds Response " + response);
 		} catch (RenrenException rre) {
 			
 			Util.logger(rre.getMessage());
