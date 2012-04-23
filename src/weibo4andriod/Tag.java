@@ -50,7 +50,7 @@ public class Tag extends WeiboResponse implements java.io.Serializable{
 	
 
 	public Tag(JSONObject json)throws WeiboException,JSONException{
-		if(json.getString("id").isEmpty()){
+		if(json.getString("id") == null || json.getString("id").length() == 0){
 			Iterator i=json.keys();
 			for(;i.hasNext();){
 				id=(String) i.next();

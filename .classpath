@@ -13,9 +13,9 @@
 	<classpathentry exported="true" kind="lib" path="lib/httpclient-4.0.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/signpost-commonshttp4-1.2.1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/signpost-core-1.2.1.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/droid-fu.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/twitter4j-async-android-2.2.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/twitter4j-core-android-2.2.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/twitter4j-media-support-android-2.2.5.jar"/>
+	<classpathentry kind="lib" path="lib/droid-fu.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

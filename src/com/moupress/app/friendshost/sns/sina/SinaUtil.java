@@ -54,7 +54,7 @@ public class SinaUtil {
 		sTokenKey = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENKEY);
 		sTokenSecret = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENSECRET);
 		
-		if ( !sTokenKey.isEmpty() && !sTokenSecret.isEmpty()) {
+		if ( sTokenKey.length() > 0 && sTokenSecret.length() > 0) {
 			return;
 		}
 		try {

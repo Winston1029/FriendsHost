@@ -80,6 +80,7 @@ public class FeedItemUIComponent {
 	{
 		if(sHeadImgSrc != null)
 		{
+			img_Head.setVisibility(View.VISIBLE);
 			img_Head.setImageUrl(sHeadImgSrc);
 			img_Head.loadImage();
 		}

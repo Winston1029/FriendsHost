@@ -30,7 +30,7 @@ public class FriendsHostActivity extends Activity {
         	this.startService(new Intent(this, FeedRetrievalService.class));
         } else {
         	String action = extras.getString(Const.ACTION_DISPLAYFEED);
-        	if (action != null && action.isEmpty() == false ) {
+        	if (action != null && action.length() > 0 ) {
         		zPubsub.fInitFeedUIPreview();
         		if (action.equals(Const.SNS_FACEBOOK)) {
         			//zPubsub.fInitFeedUIPreview();
