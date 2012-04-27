@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Style for Title Bar -->
+ <style name="WindowTitleBackground">     
+        <item name="android:background">@color/lightgreen</item>
+ </style>
+</resources>

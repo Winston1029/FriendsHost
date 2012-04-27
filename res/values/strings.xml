@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+   
+    <!-- Application -->
     <string name="hello">Hello World, FriendsHostActivity!</string>
     <string name="app_name">FriendsHost</string>
-
+    <string name="title_text">FriendsHost</string>
+   
     <!-- SDK String for Renren -->
     <string name="renren_sdk_username">账号</string>
 	<string name="renren_sdk_password">密码</string>

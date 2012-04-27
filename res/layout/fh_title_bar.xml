@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="horizontal"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+  <Button android:id="@+id/leftpanelbtn" 
+  		android:background="@color/darkgreen">
+  </Button>
+  <TextView android:id="@+id/fhtitletv" 
+  			android:text="@string/title_text" 
+  			>
+  </TextView>
+  <Button android:id="@+id/writefeedbtn" 
+  		android:background="@color/darkgreen"
+  		>
+  </Button>
+  <Button android:id="@+id/searchbtn"
+  		android:background="@color/darkgreen">
+  </Button>
+</LinearLayout>
