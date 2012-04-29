@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:textSize="18sp" android:text="feed user"/>
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+<!--             android:textAppearance="?android:attr/textAppearanceSmall" /> -->
         <TextView
             android:id="@+id/txt_msgcreatedtime"
             android:layout_width="match_parent"

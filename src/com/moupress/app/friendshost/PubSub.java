@@ -20,6 +20,7 @@ import com.moupress.app.friendshost.sns.Renren.RenrenUtil;
 import com.moupress.app.friendshost.sns.facebook.FacebookUtil;
 import com.moupress.app.friendshost.sns.sina.SinaUtil;
 import com.moupress.app.friendshost.sns.twitter.TwitterUtil;
+import com.moupress.app.friendshost.ui.UIManager;
 import com.moupress.app.friendshost.util.FeedOrganisor;
 
 public class PubSub {
@@ -34,6 +35,8 @@ public class PubSub {
 	public static TwitterUtil   zTwitterUtil;
 	public static FeedOrganisor zFeedOrg;
 	
+	public static UIManager uiMgr;
+	
 	private String displayedSns;
 	
 	ListView uLstFeed;
@@ -47,6 +50,7 @@ public class PubSub {
 		PubSub.zContext = activity.getApplicationContext();
 		
 		uLstFeed = (ListView) zActivity.findViewById(R.id.uLstVFBFeed);
+		fInitUIMgr();
 		fInitAcc();
 		fInitFeedUIPreview();
 		fFBInitUI();
@@ -54,6 +58,12 @@ public class PubSub {
 		fInitSinaUI();
 		fInitTwitter();
 		fInitPubUI();
+	}
+
+	private void fInitUIMgr() {
+		
+		uiMgr = new UIManager(zActivity);
+		
 	}
 
 	public PubSub(Service service) {
