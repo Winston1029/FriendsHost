@@ -2,6 +2,7 @@ package com.moupress.app.friendshost.sns.Renren;
 
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -12,6 +13,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import com.google.gson.Gson;
+import com.moupress.app.friendshost.sns.FeedItem;
+import com.moupress.app.friendshost.sns.facebook.FBHomeFeed;
+import com.renren.api.connect.android.Renren;
 import com.renren.api.connect.android.common.ResponseBean;
 
 
@@ -29,10 +34,10 @@ public class FeedExtractResponseBean extends ResponseBean{
 	private String name;
 	private String message;
 	
-	private ArrayList<RenenFeedElement> feedList; 
+	private List<FeedItem> feedList; 
 	
 	
-	public FeedExtractResponseBean(String response)  {
+	public FeedExtractResponseBean(String response, String format)  {
 		super(response);
 		
 //		try {
@@ -47,10 +52,16 @@ public class FeedExtractResponseBean extends ResponseBean{
 //			Util.logger(je.getMessage());
 //			title = "";
 //		}
-		try
-		{
-			feedList = new ArrayList<RenenFeedElement>();
-			ParseString(response);
+		try {
+			if (format.equals(Renren.RESPONSE_FORMAT_JSON)) {
+				response = "{ \"data\": " + response + "}"; 
+				RenrenFeedHome bean = new Gson().fromJson(response, RenrenFeedHome.class);
+				feedList = bean.getData();
+				//System.out.println("Renren with JSON Response");
+			} else if (format.equals(Renren.RESPONSE_FORMAT_XML)) {
+				feedList = new ArrayList<FeedItem>();
+				ParseString(response);
+			}
 		}
 		catch(Exception e)
 		{
@@ -58,11 +69,11 @@ public class FeedExtractResponseBean extends ResponseBean{
 		}
 	}
 	
-	public ArrayList<RenenFeedElement> getFeedList() {
+	public List<FeedItem> getFeedList() {
 		return feedList;
 	}
 
-	public void setFeedList(ArrayList<RenenFeedElement> feedList) {
+	public void setFeedList(ArrayList<FeedItem> feedList) {
 		this.feedList = feedList;
 	}
 

@@ -21,7 +21,7 @@ public class FeedExtractRequestParam extends RequestParam implements Parcelable 
 	
 	public FeedExtractRequestParam(String format, String type, int page)
 	{
-		this.format = format;
+		this.setFormat(format);
 		this.type = type;
 		this.page = page;
 		this.count = "100";
@@ -60,6 +60,18 @@ public class FeedExtractRequestParam extends RequestParam implements Parcelable 
 		//params.putString("count", count);
 		
 		return params;
+	}
+
+
+
+	public void setFormat(String format) {
+		this.format = format;
+	}
+
+
+
+	public String getFormat() {
+		return format;
 	}
 
 	

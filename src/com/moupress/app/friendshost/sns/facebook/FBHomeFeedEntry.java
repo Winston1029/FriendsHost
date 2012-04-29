@@ -27,6 +27,7 @@ public class FBHomeFeedEntry extends FeedItem {
 	   
 	//Nested classes for From entries
 	private FBHomeFeedEntryFrom from;
+	private FBHomeFeedEntryComments comments;
 	
 	//Nested collection for Actions entries
 	private List<FBHomeFeedEntryAction> actions;
@@ -160,6 +161,14 @@ public class FBHomeFeedEntry extends FeedItem {
 
 	public String getStory() {
 		return story;
+	}
+
+	public void setComments(FBHomeFeedEntryComments comments) {
+		this.comments = comments;
+	}
+
+	public FBHomeFeedEntryComments getComments() {
+		return comments;
 	}
 
 //	public void setStory_tags(String story_tags) {

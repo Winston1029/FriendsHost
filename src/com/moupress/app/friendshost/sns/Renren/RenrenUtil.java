@@ -129,7 +129,8 @@ public class RenrenUtil {
 	public void fGetNewsFeed(final Context context) {
 		//AsyncRenren asyncRenren = new AsyncRenren(zRenren);
 		asyncRenren = fGetAsyncRenren();
-		FeedExtractRequestParam param = new FeedExtractRequestParam("XML", "10,11,20,21,22,23,30,31,32,33,34", 1);
+		//FeedExtractRequestParam param = new FeedExtractRequestParam("XML", "10,11,20,21,22,23,30,31,32,33,34", 1);
+		FeedExtractRequestParam param = new FeedExtractRequestParam("json", "10,11,20,21,22,23,30,31,32,33,34", 1);
 		
 		AbstractRequestListener<FeedExtractResponseBean> listener = new AbstractRequestListener<FeedExtractResponseBean>(){
 			@Override

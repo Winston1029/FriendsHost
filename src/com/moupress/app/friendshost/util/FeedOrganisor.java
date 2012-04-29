@@ -23,6 +23,7 @@ import com.moupress.app.friendshost.sns.FeedItem;
 import com.moupress.app.friendshost.sns.UserFriend;
 import com.moupress.app.friendshost.sns.Renren.FeedExtractResponseBean;
 import com.moupress.app.friendshost.sns.Renren.RenenFeedElement;
+import com.moupress.app.friendshost.sns.Renren.RenrenFeedElementEntry;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeed;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntry;
 
@@ -86,9 +87,16 @@ public class FeedOrganisor {
 		
 		for(int i= 0; i<bean.getFeedList().size();i++) {
 			//String msg = ((FBHomeFeedEntry) bean.getData().get(i)).getName()+" : "+((FBHomeFeedEntry) bean.getData().get(i)).getMessage();
-			RenenFeedElement entry = (RenenFeedElement) bean.getFeedList().get(i);
+			RenrenFeedElementEntry entry = (RenrenFeedElementEntry) bean.getFeedList().get(i);
 			res += zDBHelper.fInsertFeed(entry);
-			zDBHelper.fInsertFriend(entry.getFriend());
+			
+			UserFriend friend = entry.getzFriend();
+			friend.setSNS(Const.SNS_RENREN);
+			friend.setId(entry.getActor_id());
+			friend.setName(entry.getName());
+			friend.setHeadurl(entry.getHeadurl());
+			
+			zDBHelper.fInsertFriend(friend);
 		}
 		
 		if (res > 0 ) {

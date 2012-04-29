@@ -168,7 +168,7 @@ public class PubSub {
 		zFacebook = new FacebookUtil(this); //10M , 17ps
 		zRenrenUtil = new RenrenUtil(this); //6.4M, 16ps
 		zSinaUtil = new SinaUtil(this); //6.8M, 9ps
-		zTwitterUtil = new TwitterUtil(this); // 7.0M, 10ps
+		//zTwitterUtil = new TwitterUtil(this); // 7.0M, 10ps
 		
 		zFeedOrg = new FeedOrganisor(this);
 	}

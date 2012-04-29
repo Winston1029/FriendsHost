@@ -10,6 +10,7 @@ import weibo4andriod.Status;
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.sns.UserFriend;
 import com.moupress.app.friendshost.sns.Renren.RenenFeedElement;
+import com.moupress.app.friendshost.sns.Renren.RenrenFeedElementEntry;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntry;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryAction;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryFrom;
@@ -231,16 +232,16 @@ public class DBHelper {
 	}
 	
 	// insert feed for Renren
-	public long fInsertFeed(RenenFeedElement entry) {
+	public long fInsertFeed(RenrenFeedElementEntry entry) {
 		long ret = 0;
 		
-		if (fIfItemExist(entry.getId(), SNS_RENREN, T_FEED)) {
+		if (fIfItemExist(entry.getPost_id(), SNS_RENREN, T_FEED)) {
 			return ret;
 		}
 		
 		ContentValues values  = new ContentValues();
 		values.put(C_FEED_SNS, SNS_RENREN);
-		values.put(C_FEED_ID, entry.getId());
+		values.put(C_FEED_ID, entry.getPost_id());
 		if (entry.getFeed_type().equals("10")) { //prefix and message are the same if feedtype is "更新状态的新鲜事"
 			values.put(C_FEED_MSG, entry.getPrefix());
 		} else {
@@ -261,18 +262,24 @@ public class DBHelper {
 		}
 		
 		// if media_type = blog the URL is need to construct in a special way
-		String media_type = entry.getFeed_media_media_type();
-		String link = entry.getLink();
-		values.put(C_FEED_TYPE, media_type);
-		
-		if (media_type != null && media_type.equals("blog")) {
-			String actualBlog_Url = "http://blog.renren.com/blog/" + entry.getFeed_media_owner_id() + "/" + entry.getFeed_media_media_id();
-			values.put(C_FEED_LINK, actualBlog_Url);
-		} else {
-			values.put(C_FEED_LINK, link);
+		//String media_type = entry.getFeed_media_media_type();
+		//String link = entry.getLink();
+		if (entry.getAttachment().size() > 0 ) {
+			String media_type = entry.getAttachment().get(0).getMedia_type();
+			String link = entry.getAttachment().get(0).getHref();
+			values.put(C_FEED_TYPE, media_type);
+			
+			if (media_type != null && media_type.equals("blog")) {
+				//String actualBlog_Url = "http://blog.renren.com/blog/" + entry.getFeed_media_owner_id() + "/" + entry.getFeed_media_media_id();
+				String actualBlog_Url = "http://blog.renren.com/blog/" + entry.getAttachment().get(0).getOwner_id() + "/" + entry.getAttachment().get(0).getMedia_id();
+				values.put(C_FEED_LINK, actualBlog_Url);
+			} else {
+				values.put(C_FEED_LINK, link);
+			}
+			
+			//values.put(C_FEED_PIC, entry.getFeed_media_src());
+			values.put(C_FEED_PIC, entry.getAttachment().get(0).getSrc());
 		}
-		
-		values.put(C_FEED_PIC, entry.getFeed_media_src());
 		
 		ret = zSQLiteDB.insert(T_FEED, null, values);
 		

@@ -259,12 +259,15 @@ public class FeedHelper {
 		}
 				
 		//  接受新鲜事状态请求
+		String requestFormat = feed.getFormat();
 		String response;
 		try {
 			Bundle params = feed.getParams();
-			//response = renren.requestJSON(params);
-			response = renren.requestXML(params);
-			//System.out.println("Feeds Response " + response);
+			if (requestFormat.equals(Renren.RESPONSE_FORMAT_JSON)) {
+				response = renren.requestJSON(params);
+			} else {
+				response = renren.requestXML(params);
+			}
 		} catch (RenrenException rre) {
 			
 			Util.logger(rre.getMessage());
@@ -274,13 +277,18 @@ public class FeedHelper {
 			throw new Throwable(re);
 		}
 		
-		RenrenError rrError = Util.parseRenrenError(response, Renren.RESPONSE_FORMAT_XML);
+		RenrenError rrError;
+		if (requestFormat.equals(Renren.RESPONSE_FORMAT_JSON)) {
+			rrError = Util.parseRenrenError(response, Renren.RESPONSE_FORMAT_JSON);
+		} else {
+			rrError =Util.parseRenrenError(response, Renren.RESPONSE_FORMAT_XML);
+		}
+		
 		if (rrError != null) {
 			Util.logger(rrError.getMessage());
 			throw new RenrenException(rrError);
 		} else {
-		
-			return new FeedExtractResponseBean(response);
+			return new FeedExtractResponseBean(response, requestFormat);
 		}
 	}
 }
