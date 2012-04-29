@@ -14,7 +14,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import com.google.gson.Gson;
-import com.moupress.app.friendshost.sns.FeedItem;
+import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeed;
 import com.renren.api.connect.android.Renren;
 import com.renren.api.connect.android.common.ResponseBean;
@@ -34,7 +34,7 @@ public class FeedExtractResponseBean extends ResponseBean{
 	private String name;
 	private String message;
 	
-	private List<FeedItem> feedList; 
+	private List<FeedEntry> feedList; 
 	
 	
 	public FeedExtractResponseBean(String response, String format)  {
@@ -59,7 +59,7 @@ public class FeedExtractResponseBean extends ResponseBean{
 				feedList = bean.getData();
 				//System.out.println("Renren with JSON Response");
 			} else if (format.equals(Renren.RESPONSE_FORMAT_XML)) {
-				feedList = new ArrayList<FeedItem>();
+				feedList = new ArrayList<FeedEntry>();
 				ParseString(response);
 			}
 		}
@@ -69,11 +69,11 @@ public class FeedExtractResponseBean extends ResponseBean{
 		}
 	}
 	
-	public List<FeedItem> getFeedList() {
+	public List<FeedEntry> getFeedList() {
 		return feedList;
 	}
 
-	public void setFeedList(ArrayList<FeedItem> feedList) {
+	public void setFeedList(ArrayList<FeedEntry> feedList) {
 		this.feedList = feedList;
 	}
 

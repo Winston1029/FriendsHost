@@ -8,7 +8,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import com.github.droidfu.widgets.WebImageView;
-import com.moupress.app.friendshost.sns.FeedItem;
+import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.uicomponent.FeedItemUIComponent;
 
 import android.app.Activity;
@@ -25,7 +25,7 @@ import android.widget.TextView;
 
 public class LstViewFeedAdapter extends BaseAdapter{
 	
-	private ArrayList<FeedItem> feedArrayList;
+	private ArrayList<FeedEntry> feedArrayList;
 	
 	private Activity zActivity;
 	private int iLayoutResId;
@@ -38,7 +38,7 @@ public class LstViewFeedAdapter extends BaseAdapter{
 	}
 	
 	public void clear() {
-		feedArrayList = new ArrayList<FeedItem>();
+		feedArrayList = new ArrayList<FeedEntry>();
 	}
 
 	@Override
@@ -242,7 +242,7 @@ public class LstViewFeedAdapter extends BaseAdapter{
 //	}
 
 	public void addItem(String[] feedMsg) {
-		FeedItem item = new FeedItem();
+		FeedEntry item = new FeedEntry();
 		if ( feedMsg.length > 2 ) {								
 			item.setsName(feedMsg[0]);							//name
 			item.setsOwnerID(feedMsg[1]);						//feed owner id
@@ -262,7 +262,7 @@ public class LstViewFeedAdapter extends BaseAdapter{
 		
 	}
 	
-	public void addItem(FeedItem item) {
+	public void addItem(FeedEntry item) {
 		feedArrayList.add(item);		
 	}
 	

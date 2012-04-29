@@ -10,7 +10,7 @@ import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.LstViewFeedAdapter;
 import com.moupress.app.friendshost.PubSub;
-import com.moupress.app.friendshost.sns.FeedItem;
+import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.util.FeedOrganisor;
 import com.moupress.app.friendshost.util.NotificationTask;
 import com.renren.api.connect.android.Util;
@@ -132,8 +132,8 @@ public class FacebookUtil {
 //				for (int i = 0; i < feedMsg.length; i++) {
 //					feedAdapter.addItem(feedMsg[i]);
 //				}
-				ArrayList<FeedItem> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_FACEBOOK);
-				for (FeedItem item : feeds ) {
+				ArrayList<FeedEntry> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_FACEBOOK);
+				for (FeedEntry item : feeds ) {
 					feedAdapter.addItem(item);
 				}
 				feedAdapter.notifyDataSetChanged();
@@ -323,7 +323,7 @@ public class FacebookUtil {
 		}
     }
 
-	public void fResend(FeedItem feed) {
+	public void fResend(FeedEntry feed) {
 		this.fPublishFeeds(" ", feed.getsPhotoPreviewDescription(), feed.getsPhotoPreviewLink(), feed.getsPhotoPreviewLink(), feed.getsPhotoPreviewCaption(), feed.getsMsgBody());
 	}
 

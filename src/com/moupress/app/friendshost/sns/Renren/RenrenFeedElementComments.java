@@ -1,6 +1,7 @@
 package com.moupress.app.friendshost.sns.Renren;
 
 import java.util.List;
+import com.moupress.app.friendshost.sns.FeedEntryComment;
 
 public class RenrenFeedElementComments {
 
@@ -21,13 +22,14 @@ public class RenrenFeedElementComments {
 		return comment;
 	}
 
-	class RenrenFeedElementComment {
+	public class RenrenFeedElementComment extends FeedEntryComment  {
 		private String comment_id;
 		private String headurl;
 		private String name;
 		private String text;
 		private String time;
 		private String uid;
+		
 		public void setComment_id(String comment_id) {
 			this.comment_id = comment_id;
 		}

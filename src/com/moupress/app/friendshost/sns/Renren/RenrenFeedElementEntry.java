@@ -3,10 +3,10 @@ package com.moupress.app.friendshost.sns.Renren;
 import java.util.List;
 
 import com.moupress.app.friendshost.Const;
-import com.moupress.app.friendshost.sns.FeedItem;
+import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.UserFriend;
 
-public class RenrenFeedElementEntry extends FeedItem {
+public class RenrenFeedElementEntry extends FeedEntry {
 	
 	private String actor_id;
 	private String actor_type;

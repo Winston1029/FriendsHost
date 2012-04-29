@@ -3,7 +3,7 @@ package com.moupress.app.friendshost.activity;
 import com.github.droidfu.widgets.WebImageView;
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.R;
-import com.moupress.app.friendshost.sns.FeedItem;
+import com.moupress.app.friendshost.sns.FeedEntry;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -30,7 +30,7 @@ public class FeedResendActivity extends Activity{
 
 	private void initUI() {
 		Intent intent = this.getIntent();
-		final FeedItem feed = intent.getParcelableExtra(Const.FEED_ITEM);
+		final FeedEntry feed = intent.getParcelableExtra(Const.FEED_ITEM);
 		final String displayedSns = intent.getStringExtra(Const.SNS);
 		loadFeed(feed);
 		Log.i(TAG, " Name: "+feed.getsName()+" Body: "+ feed.getsMsgBody()+" Friend "+feed.getzFriend().getHeadurl());
@@ -70,7 +70,7 @@ public class FeedResendActivity extends Activity{
 			}});
 	}
 
-	private void loadFeed(FeedItem feed) {
+	private void loadFeed(FeedEntry feed) {
 		WebImageView img_Head = (WebImageView) this.findViewById(R.id.img_feeduser);
 		String sHeadImgSrc = feed.getzFriend().getHeadurl();
 		

@@ -19,13 +19,17 @@ import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.LstViewFeedAdapter;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
-import com.moupress.app.friendshost.sns.FeedItem;
+import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.UserFriend;
 import com.moupress.app.friendshost.sns.Renren.FeedExtractResponseBean;
 import com.moupress.app.friendshost.sns.Renren.RenenFeedElement;
+import com.moupress.app.friendshost.sns.Renren.RenrenFeedElementComments;
+import com.moupress.app.friendshost.sns.Renren.RenrenFeedElementComments.RenrenFeedElementComment;
 import com.moupress.app.friendshost.sns.Renren.RenrenFeedElementEntry;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeed;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntry;
+import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryComments;
+import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryComments.FBFeedEntryComment;
 
 public class FeedOrganisor {
 	private Activity zActivity;
@@ -70,6 +74,22 @@ public class FeedOrganisor {
 				
 				res += zDBHelper.fInsertFeed(entry);
 				zDBHelper.fInsertFriend(entry.getFrom());
+				
+				int cntComments = Integer.parseInt(entry.getComments().getCount());
+				// comment get from Facebook only shows the 1st and the last entry
+				// need more research here
+				if (cntComments > 0) {
+					cntComments = Math.min(cntComments, entry.getComments().getData().size());
+				}
+				for (int j = 0; j < cntComments; j++) {
+					FBFeedEntryComment comment = entry.getComments().getData().get(j);
+					if (comment != null ) {
+						comment.setSns(Const.SNS_FACEBOOK);
+						comment.setCommetedfeedID(entry.getId());
+						zDBHelper.fInsertComments(comment);
+					}
+				}
+				
 			}
 		}
 		beans = null;
@@ -97,6 +117,21 @@ public class FeedOrganisor {
 			friend.setHeadurl(entry.getHeadurl());
 			
 			zDBHelper.fInsertFriend(friend);
+			
+			int cntComments = Integer.parseInt(entry.getComments().getCount());
+			// comment get from Renren only shows the 1st and the last entry
+			// need more research here
+			if (cntComments > 0) {
+				cntComments = Math.min(cntComments, entry.getComments().getComment().size());
+			}
+			for (int j = 0; j < cntComments; j++) {
+				RenrenFeedElementComment comment = entry.getComments().getComment().get(j);
+				if (comment != null ) {
+					comment.setSns(Const.SNS_RENREN);
+					comment.setCommetedfeedID(entry.getPost_id());
+					zDBHelper.fInsertComments(comment);
+				}
+			}
 		}
 		
 		if (res > 0 ) {
@@ -171,23 +206,23 @@ public class FeedOrganisor {
 		return result;
 	}
 	
-	public ArrayList<FeedItem> fGetUnReadNewsFeed(String sns) {
+	public ArrayList<FeedEntry> fGetUnReadNewsFeed(String sns) {
 		String[][] feeds = null;
 		String[][] owners = null;
-		ArrayList<FeedItem> items = new ArrayList<FeedItem>();
+		ArrayList<FeedEntry> items = new ArrayList<FeedEntry>();
 		
 		feeds = zDBHelper.fGetFeedPreview(sns);
 		
 		if (feeds == null || feeds.length == 0) {
 			//feeds = new String[][] {{"No Unread Feed in Local"}};
-			FeedItem item = new FeedItem();
+			FeedEntry item = new FeedEntry();
 			item.setsName("No Unread Feed in Local");
 			items.add(item);
 		}
 		else {
 			for (int i = 0; i < feeds.length; i++) {
 				
-				FeedItem item = new FeedItem();
+				FeedEntry item = new FeedEntry();
 				//feedAdapter.addItem(feed[i]);
 				item.setsName(feeds[i][0]);							//name
 				item.setsOwnerID(feeds[i][1]);						//feed owner id

@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class FeedItem implements Parcelable{
+public class FeedEntry implements Parcelable{
 
 	private String sHeadImg;
 	
@@ -23,11 +23,11 @@ public class FeedItem implements Parcelable{
 	
 	private UserFriend zFriend;
 	
-	public FeedItem() {
+	public FeedEntry() {
 		setzFriend(new UserFriend());
 	}
 	
-	public FeedItem(Parcel in)
+	public FeedEntry(Parcel in)
 	{
 		Bundle bundle = Bundle.CREATOR.createFromParcel(in);
 		
@@ -146,17 +146,17 @@ public class FeedItem implements Parcelable{
 		if(this.zFriend != null) { this.zFriend.writeToParcel(out, flags);}
 	}
 	
-	public static final Parcelable.Creator<FeedItem> CREATOR = new Parcelable.Creator<FeedItem>(){
+	public static final Parcelable.Creator<FeedEntry> CREATOR = new Parcelable.Creator<FeedEntry>(){
 
 		@Override
-		public FeedItem createFromParcel(Parcel in) {
+		public FeedEntry createFromParcel(Parcel in) {
 			// TODO Auto-generated method stub
-			return new FeedItem(in);
+			return new FeedEntry(in);
 		}
 
 		@Override
-		public FeedItem[] newArray(int size) {
+		public FeedEntry[] newArray(int size) {
 			// TODO Auto-generated method stub
-			return new FeedItem[size];
+			return new FeedEntry[size];
 		}};
 }

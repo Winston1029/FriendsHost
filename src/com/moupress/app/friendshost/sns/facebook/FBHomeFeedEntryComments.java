@@ -1,6 +1,7 @@
 package com.moupress.app.friendshost.sns.facebook;
 
 import java.util.List;
+import com.moupress.app.friendshost.sns.FeedEntryComment;
 
 
 public class FBHomeFeedEntryComments {
@@ -8,8 +9,10 @@ public class FBHomeFeedEntryComments {
 	private String count;
 	private List<FBFeedEntryComment> data;
 	
-	class FBFeedEntryComment {
+	public class FBFeedEntryComment extends FeedEntryComment {
 		private FBHomeFeedEntryFrom from;
+		
+		private String id;
 		private String message;
 		private String created_time;
 		
@@ -31,6 +34,13 @@ public class FBHomeFeedEntryComments {
 		public String getCreated_time() {
 			return created_time;
 		}
+		public void setId(String id) {
+			this.id = id;
+		}
+		public String getId() {
+			return id;
+		}
+		
 	}
 	
 	public void setCount(String count) {

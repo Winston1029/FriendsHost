@@ -17,7 +17,7 @@ import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.LstViewFeedAdapter;
 import com.moupress.app.friendshost.PubSub;
-import com.moupress.app.friendshost.sns.FeedItem;
+import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.util.NotificationTask;
 import com.renren.api.connect.android.AsyncRenren;
 import com.renren.api.connect.android.Renren;
@@ -204,8 +204,8 @@ public class RenrenUtil {
 				
 				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
 				feedAdapter.clear();
-				ArrayList<FeedItem> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_RENREN);
-				for (FeedItem item : feeds ) {
+				ArrayList<FeedEntry> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_RENREN);
+				for (FeedEntry item : feeds ) {
 					feedAdapter.addItem(item);
 				}
 				feedAdapter.notifyDataSetChanged();
@@ -271,7 +271,7 @@ public class RenrenUtil {
 		}
     }
 
-	public void fResend(FeedItem feed) {
+	public void fResend(FeedEntry feed) {
 		// TODO Auto-generated method stub
 		//String name = (feed.getsName() == null?" ":feed.getsName());
 		String name = " ";

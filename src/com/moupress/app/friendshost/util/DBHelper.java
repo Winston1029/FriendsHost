@@ -8,11 +8,14 @@ import java.util.List;
 import weibo4andriod.Status;
 
 import com.moupress.app.friendshost.Const;
+import com.moupress.app.friendshost.sns.FeedEntryComment;
 import com.moupress.app.friendshost.sns.UserFriend;
 import com.moupress.app.friendshost.sns.Renren.RenenFeedElement;
+import com.moupress.app.friendshost.sns.Renren.RenrenFeedElementComments.RenrenFeedElementComment;
 import com.moupress.app.friendshost.sns.Renren.RenrenFeedElementEntry;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntry;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryAction;
+import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryComments.FBFeedEntryComment;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryFrom;
 
 import android.content.ContentValues;
@@ -71,8 +74,11 @@ public class DBHelper {
     
     // Comments Columns
     static final String C_COMMENTS_ID = "id";
+    static final String C_COMMENTS_SNS = "SNS";
     static final String C_COMMENTS_FEEDID = "feedid";
-    static final String C_COMMENTS_FROM = "commentFrom";
+    static final String C_COMMENTS_USERID = "comment_userid";
+    static final String C_COMMENTS_USERNAME = "comment_username";
+    static final String C_COMMENTS_USERHEADURL = "comment_userheadurl";
     static final String C_COMMENTS_MSG = "msg";
     static final String C_COMMENTS_CREATED_TIME = "created_time";
     
@@ -111,8 +117,11 @@ public class DBHelper {
     
     static final String CREATE_COMMENTS_TABLE = "CREATE TABLE " + T_COMMENTS + " ("
 										    + C_COMMENTS_ID + " TEXT PRIMARY KEY,"
+										    + C_COMMENTS_SNS + " TEXT,"
 										    + C_COMMENTS_FEEDID + " TEXT,"
-										    + C_COMMENTS_FROM + " TEXT,"
+										    + C_COMMENTS_USERID + " TEXT,"
+										    + C_COMMENTS_USERNAME + " TEXT,"
+										    + C_COMMENTS_USERHEADURL + " TEXT,"
 										    + C_COMMENTS_MSG + " TEXT,"
 										    + C_COMMENTS_CREATED_TIME + " TEXT"
 										    + ");";
@@ -202,7 +211,6 @@ public class DBHelper {
 		
 		//fInsertUser(entry.getFrom());
 		//fInsertActions(entry.getActions());
-		fInsertComments();
 		return ret;
 	}
 	
@@ -343,8 +351,46 @@ public class DBHelper {
 		ContentValues values  = new ContentValues();
 	}
 	
-	public void fInsertComments() {
+	public long fInsertComments(FBFeedEntryComment comment) {
+		long ret = 0;
+		if (fIfItemExist(comment.getId(), comment.getSns(), T_COMMENTS)) {
+			return ret;
+		}
 		
+		ContentValues values  = new ContentValues();
+		values.put(C_COMMENTS_SNS, comment.getSns());
+		values.put(C_COMMENTS_ID, comment.getId());
+		values.put(C_COMMENTS_FEEDID, comment.getCommetedfeedID());
+		values.put(C_COMMENTS_USERID, comment.getFrom().getId());
+		values.put(C_COMMENTS_USERNAME, comment.getFrom().getName());
+		values.put(C_COMMENTS_USERHEADURL, comment.getFrom().getHeadurl());
+		values.put(C_COMMENTS_MSG, comment.getMessage());
+		values.put(C_COMMENTS_CREATED_TIME, comment.getCreated_time());
+		
+		ret = zSQLiteDB.insert(T_COMMENTS, null, values);
+		
+		return ret;
+	}
+	
+	public long fInsertComments(RenrenFeedElementComment comment) {
+		long ret = 0;
+		if (fIfItemExist(comment.getComment_id(), comment.getSns(), T_COMMENTS)) {
+			return ret;
+		}
+		
+		ContentValues values  = new ContentValues();
+		values.put(C_COMMENTS_SNS, comment.getSns());
+		values.put(C_COMMENTS_ID, comment.getComment_id());
+		values.put(C_COMMENTS_FEEDID, comment.getCommetedfeedID());
+		values.put(C_COMMENTS_USERID, comment.getUid());
+		values.put(C_COMMENTS_USERNAME, comment.getName());
+		values.put(C_COMMENTS_USERHEADURL, comment.getHeadurl());
+		values.put(C_COMMENTS_MSG, comment.getText());
+		values.put(C_COMMENTS_CREATED_TIME, comment.getTime());
+		
+		ret = zSQLiteDB.insert(T_COMMENTS, null, values);
+		
+		return ret;
 	}
 	
 	public static void fUpdateFeedRead() {

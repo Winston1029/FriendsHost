@@ -2,9 +2,9 @@ package com.moupress.app.friendshost.sns.facebook;
 
 import java.util.List;
 
-import com.moupress.app.friendshost.sns.FeedItem;
+import com.moupress.app.friendshost.sns.FeedEntry;
 
-public class FBHomeFeedEntry extends FeedItem {
+public class FBHomeFeedEntry extends FeedEntry {
 	public final String TYPE_LINK = "link";
 	public final String TYPE_PHOTO = "photo";
 	public final String TYPE_STATUS = "status";

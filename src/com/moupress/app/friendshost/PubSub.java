@@ -15,7 +15,7 @@ import android.widget.ListView;
 
 import com.moupress.app.friendshost.activity.FeedPublishActivity;
 import com.moupress.app.friendshost.activity.FeedResendActivity;
-import com.moupress.app.friendshost.sns.FeedItem;
+import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.Renren.RenrenUtil;
 import com.moupress.app.friendshost.sns.facebook.FacebookUtil;
 import com.moupress.app.friendshost.sns.sina.SinaUtil;
@@ -80,7 +80,7 @@ public class PubSub {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				FeedItem feed = (FeedItem) arrAdapterFeedPreview.getItem(position);
+				FeedEntry feed = (FeedEntry) arrAdapterFeedPreview.getItem(position);
 				//Log.i(TAG, " Name: "+feed.getsName()+" Msg: "+feed.getsMsgBody());
 				fFeedResendUI(feed);
 				return true;
@@ -88,7 +88,7 @@ public class PubSub {
 	}
 	
 	//Feed Resend UI
-	public void fFeedResendUI(FeedItem feed)
+	public void fFeedResendUI(FeedEntry feed)
 	{
 		Intent intent = new Intent(zActivity,FeedResendActivity.class);
 		intent.putExtra(Const.FEED_ITEM, feed);
@@ -168,7 +168,7 @@ public class PubSub {
 		zFacebook = new FacebookUtil(this); //10M , 17ps
 		zRenrenUtil = new RenrenUtil(this); //6.4M, 16ps
 		zSinaUtil = new SinaUtil(this); //6.8M, 9ps
-		//zTwitterUtil = new TwitterUtil(this); // 7.0M, 10ps
+		zTwitterUtil = new TwitterUtil(this); // 7.0M, 10ps
 		
 		zFeedOrg = new FeedOrganisor(this);
 	}
@@ -188,7 +188,7 @@ public class PubSub {
 			if(resultCode == Activity.RESULT_OK)
 			{
 				String sns = data.getStringExtra(Const.SNS);
-				FeedItem feed = data.getParcelableExtra(Const.FEED_ITEM);
+				FeedEntry feed = data.getParcelableExtra(Const.FEED_ITEM);
 				if(sns.equals(Const.SNS_FACEBOOK))
 				{
 					zFacebook.fResend(feed);

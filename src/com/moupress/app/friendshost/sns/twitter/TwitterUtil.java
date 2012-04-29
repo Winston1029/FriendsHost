@@ -7,7 +7,7 @@ import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.LstViewFeedAdapter;
 import com.moupress.app.friendshost.PubSub;
-import com.moupress.app.friendshost.sns.FeedItem;
+import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.util.NotificationTask;
 
 import oauth.signpost.OAuth;
@@ -327,8 +327,8 @@ public class TwitterUtil {
 
 				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
 				feedAdapter.clear();
-				ArrayList<FeedItem> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_TWITTER);
-				for (FeedItem item : feeds ) {
+				ArrayList<FeedEntry> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_TWITTER);
+				for (FeedEntry item : feeds ) {
 					feedAdapter.addItem(item);
 				}
 				feedAdapter.notifyDataSetChanged();
@@ -412,7 +412,7 @@ public class TwitterUtil {
 	}
 
 
-	public void fResend(FeedItem feed) {
+	public void fResend(FeedEntry feed) {
 		this.SendFeed(feed.getsMsgBody());
 	}
 }
