@@ -21,7 +21,9 @@ public class FriendsHostActivity extends Activity {
     
     public static PubSub zPubsub;
     private void fInit() {
-    	zPubsub = new PubSub(this);
+    	if (zPubsub == null ) {
+    		zPubsub = new PubSub(this);
+    	}
 	}
     
     private void fAnalyseIntent() {

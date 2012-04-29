@@ -28,6 +28,12 @@
 			    android:layout_width="64dp"
                 android:layout_height="64dp"
 			    android:src="@drawable/twitter_selected_button" />
+			
+			<ImageButton
+                android:id="@+id/imgBtn_pubSina"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/sina_selected_button" />
 			    
 		</LinearLayout>
 		

@@ -54,6 +54,7 @@ public class FeedPublishActivity extends Activity{
 	private boolean FBSelected = false;
 	private boolean RRSelected = false;
 	private boolean TWSelected = false;
+	private boolean WBSelected = false;
 	
 	//Controls & variables to publish Photos
 	private Button btnUploadPic;
@@ -144,61 +145,96 @@ public class FeedPublishActivity extends Activity{
 	{
 		if (btn.isSelected()){
 			btn.setSelected(false);
-	       } else {
-	    	  btn.setSelected(true);
-	       }
+		} else {
+			btn.setSelected(true);
+		}
 	}
 	
 	//Pop up Toast 
 	
 	private void popUpToast(String snsSelected, boolean Selected)
 	{
-		final String text = snsSelected + " is "+ (Selected?"selected":"unselected");
-		mNotification = new Runnable(){
-			@Override
-			public void run() {
-				 Toast.makeText(activity, text, Toast.LENGTH_LONG).show();
-				}
-			};
-			
-		this.mNotificationHandler.post(mNotification);
+		String text = snsSelected + " is "+ (Selected?"selected":"unselected");
+		if (snsSelected.equals(Const.SNS_SINA) && Selected) {
+			text += "\nSina does NOT allow you to update status to other sns together." +
+					"\nWe will disable other sns you have selected";
+		}
+		Toast.makeText(activity, text, Toast.LENGTH_LONG).show();
+		
+//		mNotification = new Runnable(){
+//			@Override
+//			public void run() {
+//				 Toast.makeText(activity, text, Toast.LENGTH_LONG).show();
+//				}
+//			};
+//			
+//		this.mNotificationHandler.post(mNotification);
 	}
 	
 	//Initialize Buttons on UI
 	public void fInitPubButtons() {
-		//Facebook
 		final ImageButton imgBtn_Facebook = (ImageButton) this.findViewById(R.id.imgBtn_pubFacebook);
+		final ImageButton imgBtn_Renren = (ImageButton) this.findViewById(R.id.imgBtn_pubRenren);
+		final ImageButton imgBtn_Twitter = (ImageButton) this.findViewById(R.id.imgBtn_pubTwitter);
+		final ImageButton imgBtn_Sina = (ImageButton) this.findViewById(R.id.imgBtn_pubSina);
+		//Facebook
 		imgBtn_Facebook.setOnClickListener(new View.OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				toggleBtnSelected(imgBtn_Facebook);
+				if (imgBtn_Facebook.isSelected()) {
+					imgBtn_Sina.setSelected(false);
+					WBSelected = false;
+				}
 				FBSelected = imgBtn_Facebook.isSelected();
-				popUpToast("Facebook",FBSelected);
+				popUpToast(Const.SNS_FACEBOOK,FBSelected);
 			}
 		});
 		
 		//Renren
-		final ImageButton imgBtn_Renren = (ImageButton) this.findViewById(R.id.imgBtn_pubRenren);
 		imgBtn_Renren.setOnClickListener(new View.OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				toggleBtnSelected(imgBtn_Renren);
+				if (imgBtn_Renren.isSelected()) {
+					imgBtn_Sina.setSelected(false);
+					WBSelected = false;
+				}
 				RRSelected = imgBtn_Renren.isSelected();
-				popUpToast("RenRen",RRSelected);
+				popUpToast(Const.SNS_RENREN,RRSelected);
 			}
 		});
 		
 		//Twitter
-		final ImageButton imgBtn_Twitter = (ImageButton) this.findViewById(R.id.imgBtn_pubTwitter);
 		imgBtn_Twitter.setOnClickListener(new View.OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				toggleBtnSelected(imgBtn_Twitter);
+				if (imgBtn_Twitter.isSelected()) {
+					imgBtn_Sina.setSelected(false);
+					WBSelected = false;
+				}
+				
 				TWSelected = imgBtn_Twitter.isSelected();
-				popUpToast("Twitter",TWSelected);
+				popUpToast(Const.SNS_TWITTER,TWSelected);
+			}
+		});
+		
+		//Sina
+		imgBtn_Sina.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				toggleBtnSelected(imgBtn_Sina);
+				if (imgBtn_Sina.isSelected()) {
+					imgBtn_Facebook.setSelected(false);
+					FBSelected = false;
+					imgBtn_Renren.setSelected(false);
+					RRSelected = false;
+					imgBtn_Twitter.setSelected(false);
+					TWSelected = false;
+				}
+				WBSelected = imgBtn_Sina.isSelected();
+				popUpToast(Const.SNS_SINA, WBSelected);
 			}
 		});
 	}
@@ -273,10 +309,13 @@ public class FeedPublishActivity extends Activity{
 	
 	private void publishFeed()
 	{
+		if(this.WBSelected)
+		{
+			PubSub.zSinaUtil.fPublishFeeds(message);
+		}
 		if(this.RRSelected)
 		{
 			PubSub.zRenrenUtil.fPublishFeeds(" ", " ", " ", " ", " ", message);
-			
 		}
 	    if(this.FBSelected)
 		{
@@ -289,6 +328,10 @@ public class FeedPublishActivity extends Activity{
 	}
 	private void uploadPhoto() {
 		
+		if(this.WBSelected)
+		{
+			PubSub.zSinaUtil.fUploadPic(message, selectedImagePath);
+		}
 		if(this.RRSelected)
 		{
 		   PubSub.zRenrenUtil.fUploadPic(message,selectedImagePath);

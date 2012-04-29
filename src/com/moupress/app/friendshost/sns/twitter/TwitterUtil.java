@@ -171,7 +171,7 @@ public class TwitterUtil {
 		if(twitter == null)
 			 twitter = Autentication(prefs,null);
 			
-			Log.i(TAG, "Get Tweets !");
+			//Log.i(TAG, "Get Tweets !");
 			
 		twitter.getHomeTimeline();
 	}

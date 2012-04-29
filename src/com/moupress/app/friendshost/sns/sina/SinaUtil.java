@@ -18,6 +18,7 @@ import com.moupress.app.friendshost.LstViewFeedAdapter;
 import com.moupress.app.friendshost.OAuthActivity;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.sns.FeedEntry;
+import com.moupress.app.friendshost.util.NotificationTask;
 import com.moupress.app.friendshost.util.Pref;
 
 public class SinaUtil {
@@ -26,14 +27,18 @@ public class SinaUtil {
     private static String sTokenSecret = "";
 	
 	private PubSub zPubSub;
+	private Context zContext;
 	
 	private Weibo zSina;
+	
+	private NotificationTask notificationTask;
 	
 	public SinaUtil(PubSub pubSub) {
 		zPubSub = pubSub;
 		System.setProperty("weibo4j.oauth.consumerKey", Weibo.CONSUMER_KEY);
     	System.setProperty("weibo4j.oauth.consumerSecret", Weibo.CONSUMER_SECRET);
 		zSina = OAuthConstant.getInstance().getWeibo();
+		zContext = pubSub.fGetContext();
 		fSinaAuth();
 	}
 	
@@ -94,5 +99,47 @@ public class SinaUtil {
 			}
 		});
 	}
+	
+	public void fPublishFeeds(String message) {
+		if (isSessionValid()) {
+			try {
+				startNotification(7, "Feed");
+				zSina.updateStatus(message);
+			} catch (WeiboException e) {
+				e.printStackTrace();
+			} finally {
+				stopNotification();
+			}
+		}
+		
+	}
+	
+	public void fUploadPic(String message, String selectedImagePath) {
+		if (isSessionValid()) {
+			//zSina.uploadStatus(message, file);
+		}
+	}
+	
+	public void fResend(FeedEntry feed) {
+		this.fPublishFeeds(feed.getsMsgBody());
+	}
+	
+	private void startNotification(int notificationId,String fileType)
+    {
+    	notificationTask = new NotificationTask(this.zContext);
+		 if(notificationTask != null)
+		{
+			notificationTask.SetNotificationTask(notificationId, "Sina", fileType);
+			notificationTask.execute(0);
+		}
+    }
+    
+    private void stopNotification()
+    {
+    	if(notificationTask != null)
+		{
+			notificationTask.setTaskDone(true);
+		}
+    }
 	
 }
