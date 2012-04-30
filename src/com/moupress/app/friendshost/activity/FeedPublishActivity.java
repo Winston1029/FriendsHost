@@ -25,19 +25,24 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Toast;
+import android.widget.ImageView.ScaleType;
 
 /**
  * @author Li Ji
@@ -59,6 +64,8 @@ public class FeedPublishActivity extends Activity{
 	//Controls & variables to publish Photos
 	private Button btnUploadPic;
 	private Button btnTakePic;
+	private ImageView imgUploadPic;
+	public static int uploadPicRotateDegree = 0;
 
 	private static final int SELECT_PICTURE = 1;
 	private static final int CAMERA_PIC_REQUEST = 2;
@@ -87,6 +94,7 @@ public class FeedPublishActivity extends Activity{
 		this.setContentView(layout);
 
 		selectedImagePath = "";
+		uploadPicRotateDegree = 0;
 		activity= this;
 		
 	
@@ -94,6 +102,7 @@ public class FeedPublishActivity extends Activity{
 		fGetIntent();
 		fInitFieldUI();
 		fInitPicButtons();
+		fInitPicView();
 		fInitPubButtons();
 	}
 	
@@ -276,26 +285,65 @@ public class FeedPublishActivity extends Activity{
 		});
 	}
 	
+	
+	public void fInitPicView() {
+		imgUploadPic = (ImageView) this.findViewById(R.id.img_uploadPic);
+		imgUploadPic.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				uploadPicRotateDegree = (uploadPicRotateDegree + 90) % 360;
+				Matrix matrix = new Matrix();
+				matrix.postRotate(uploadPicRotateDegree, imgUploadPic.getWidth()/2, imgUploadPic.getHeight()/2);
+				imgUploadPic.setImageMatrix(matrix);
+			}
+		});
+	}
+	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    if (resultCode == RESULT_OK ) {
 	        if (requestCode == SELECT_PICTURE) {
 	            Uri selectedImageUri = data.getData();
 	            selectedImagePath = getPath(selectedImageUri);
 	            Log.d(TAG, "Image Selection Path is " + selectedImagePath);
-	            
 	        }
-	        	else if(requestCode == CAMERA_PIC_REQUEST)
+        	else if(requestCode == CAMERA_PIC_REQUEST)
 	        {
 	        	//pic = (Bitmap) data.getExtras().get("data");
 	        	String[] projection = { MediaStore.Images.Media.DATA}; 
 	            Cursor cursor = managedQuery(mCapturedImageURI, projection, null, null, null); 
 	            int column_index_data = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA); 
 	            cursor.moveToFirst(); 
-	             selectedImagePath = cursor.getString(column_index_data);
+	            selectedImagePath = cursor.getString(column_index_data);
 	        	Log.d(TAG, "Camera is capturing pics!");
 	        }
+	        fLoadUploadPicToView(selectedImagePath);
 	    }
 	}
+	
+	private void fLoadUploadPicToView(String selectedImagePath) {
+		Display display = getWindowManager().getDefaultDisplay(); 
+        int screen_width = display.getWidth();  // deprecated
+        int screen_height = display.getHeight();  // deprecated
+        
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 2;
+        
+        Bitmap bmp_uploadPic = BitmapFactory.decodeFile(selectedImagePath);
+        
+        int pic_width = bmp_uploadPic.getWidth();
+        int pic_height = bmp_uploadPic.getHeight();
+        
+        float scale_width = (float) Math.min(1.0, ((float)screen_width)/((float)pic_width));
+        float scale_height = (float) Math.min(1.0, ((float)screen_height)/((float)pic_height));
+        Matrix matrix = new Matrix();
+        matrix.postScale(Math.min(scale_width, scale_height), Math.min(scale_width, scale_height));
+        //matrix.postRotate(90);
+        bmp_uploadPic = Bitmap.createBitmap(bmp_uploadPic, 0, 0, bmp_uploadPic.getWidth(), bmp_uploadPic.getHeight(), matrix, true);
+        imgUploadPic.setImageBitmap(bmp_uploadPic);
+        
+        imgUploadPic.setVisibility(View.VISIBLE);
+    }
 	
 	public String getPath(Uri uri) {
 	    String[] projection = { MediaStore.Images.Media.DATA };

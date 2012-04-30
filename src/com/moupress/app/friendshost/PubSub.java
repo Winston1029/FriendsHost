@@ -200,6 +200,8 @@ public class PubSub {
 				else if (sns.equals(Const.SNS_TWITTER))
 				{
 					zTwitterUtil.fResend(feed);
+				} else if (sns.equals(Const.SNS_SINA)) {
+					zSinaUtil.fResend(feed);
 				}
 			}
 		}

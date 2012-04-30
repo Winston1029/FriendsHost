@@ -2,78 +2,110 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:orientation="vertical" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:padding="10dip">
-		
-		<LinearLayout
-		    android:id="@+id/linearLayout1"
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content" >
 
-			<ImageButton
-			    android:id="@+id/imgBtn_pubFacebook"
-			    android:layout_width="64dp"
-                android:layout_height="64dp"
-			    android:src="@drawable/facebook_selected_button" />
+	<LinearLayout
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical"
+	    android:padding="10dip" >
 
-			<ImageButton
-			    android:id="@+id/imgBtn_pubRenren"
-			    android:layout_width="64dp"
-                android:layout_height="64dp"
-			    android:src="@drawable/renren_selected_button" />
+	    <LinearLayout
+	        android:id="@+id/linearLayout1"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
 
-			<ImageButton
-			    android:id="@+id/imgBtn_pubTwitter"
-			    android:layout_width="64dp"
-                android:layout_height="64dp"
-			    android:src="@drawable/twitter_selected_button" />
-			
-			<ImageButton
-                android:id="@+id/imgBtn_pubSina"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:src="@drawable/sina_selected_button" />
-			    
-		</LinearLayout>
-		
+	        <ImageButton
+	            android:id="@+id/imgBtn_pubFacebook"
+	            android:layout_width="64dp"
+	            android:layout_height="64dp"
+	            android:src="@drawable/facebook_selected_button" />
 
-		<TextView android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:text="Message"
-			android:textSize="16sp" android:textColor="#333333" />
-			
-		<EditText android:layout_width="fill_parent"
-			android:layout_height="wrap_content" 
-			android:singleLine="true" 
-			android:padding="5dip" 
-			android:textSize="14sp"
-			android:gravity="top|left"
-			android:id="@+id/message" android:lines = "12" 
-			android:minLines="10"
-			android:maxLines="12" 
-			android:inputType="textMultiLine"/>
-			
-		<LinearLayout android:orientation="horizontal" 
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content">
-				
-		<Button android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:text="Publish"
-		android:id="@+id/publish" android:layout_marginTop="10dip" />
-		
-			
-		<Button android:id="@+id/updPic" 
-			android:text="Upload Photo"
-			android:layout_height="wrap_content" 
-			android:layout_width="wrap_content" android:layout_marginTop="10dip">
-		</Button>
-		
-		<Button android:id="@+id/tkePic" android:text="Take Photo"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:layout_marginTop="10dip">
-		</Button>
-		
-		</LinearLayout>
+	        <ImageButton
+	            android:id="@+id/imgBtn_pubRenren"
+	            android:layout_width="64dp"
+	            android:layout_height="64dp"
+	            android:src="@drawable/renren_selected_button" />
+
+	        <ImageButton
+	            android:id="@+id/imgBtn_pubTwitter"
+	            android:layout_width="64dp"
+	            android:layout_height="64dp"
+	            android:src="@drawable/twitter_selected_button" />
+
+	        <ImageButton
+	            android:id="@+id/imgBtn_pubSina"
+	            android:layout_width="64dp"
+	            android:layout_height="64dp"
+	            android:src="@drawable/sina_selected_button" />
+	    </LinearLayout>
+
+	    <TextView
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="Message"
+	        android:textColor="#333333"
+	        android:textSize="16sp" />
+
+	    <EditText
+	        android:id="@+id/message"
+	        android:layout_width="fill_parent"
+	        android:layout_height="81dp"
+	        android:layout_weight="0.20"
+	        android:gravity="top|left"
+	        android:inputType="textMultiLine"
+	        android:lines="12"
+	        android:maxLines="12"
+	        android:minLines="10"
+	        android:padding="5dip"
+	        android:singleLine="true"
+	        android:textSize="14sp" />
+
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal" >
+
+	        <Button
+	            android:id="@+id/publish"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="10dip"
+	            android:text="Publish" />
+
+	        <Button
+	            android:id="@+id/updPic"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="10dip"
+	            android:text="Upload Photo" >
+	        </Button>
+
+	        <Button
+	            android:id="@+id/tkePic"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="10dip"
+	            android:text="Take Photo" >
+	        </Button>
+
+	    </LinearLayout>
+	    
+	    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+	        <ImageView
+	            android:id="@+id/img_uploadPic"
+	            android:scaleType="matrix"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center_vertical|center_horizontal"
+	            android:src="@android:drawable/ic_menu_gallery"/>
+
+        </FrameLayout>
 	</LinearLayout>
+	
+	
 	
 </ScrollView>

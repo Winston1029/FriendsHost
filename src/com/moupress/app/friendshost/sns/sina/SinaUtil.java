@@ -1,5 +1,6 @@
 package com.moupress.app.friendshost.sns.sina;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,7 +117,11 @@ public class SinaUtil {
 	
 	public void fUploadPic(String message, String selectedImagePath) {
 		if (isSessionValid()) {
-			//zSina.uploadStatus(message, file);
+			try {
+				zSina.uploadStatus(message, new File(selectedImagePath));
+			} catch (WeiboException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

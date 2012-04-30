@@ -104,7 +104,9 @@ public class FeedOrganisor {
 	public void fSaveNewFeeds(FeedExtractResponseBean bean, Context context) {
 
 		long res = 0;
-		
+		if ( bean == null || bean.getFeedList() == null ) {
+			return;
+		}
 		for(int i= 0; i<bean.getFeedList().size();i++) {
 			//String msg = ((FBHomeFeedEntry) bean.getData().get(i)).getName()+" : "+((FBHomeFeedEntry) bean.getData().get(i)).getMessage();
 			RenrenFeedElementEntry entry = (RenrenFeedElementEntry) bean.getFeedList().get(i);
@@ -117,7 +119,7 @@ public class FeedOrganisor {
 			friend.setHeadurl(entry.getHeadurl());
 			
 			zDBHelper.fInsertFriend(friend);
-			
+		
 			int cntComments = Integer.parseInt(entry.getComments().getCount());
 			// comment get from Renren only shows the 1st and the last entry
 			// need more research here
@@ -125,12 +127,16 @@ public class FeedOrganisor {
 				cntComments = Math.min(cntComments, entry.getComments().getComment().size());
 			}
 			for (int j = 0; j < cntComments; j++) {
-				RenrenFeedElementComment comment = entry.getComments().getComment().get(j);
-				if (comment != null ) {
-					comment.setSns(Const.SNS_RENREN);
-					comment.setCommetedfeedID(entry.getPost_id());
-					zDBHelper.fInsertComments(comment);
-				}
+				
+					RenrenFeedElementComment comment = entry.getComments().getComment().get(j);
+				
+				
+					if (comment != null ) {
+						comment.setSns(Const.SNS_RENREN);
+						comment.setCommetedfeedID(entry.getPost_id());
+						zDBHelper.fInsertComments(comment);
+					}
+				
 			}
 		}
 		
@@ -144,6 +150,9 @@ public class FeedOrganisor {
 	public void fSaveNewFeeds(List<Status> friendsTimeline, Context context) {
 		long res = 0;
 		
+		if (friendsTimeline == null) {
+			return;
+		}
 		for (Status status : friendsTimeline) {
 			//String msg = status.getUser().getScreenName() + " : " + status.getText();
 			res += zDBHelper.fInsertFeed(status);
@@ -166,6 +175,9 @@ public class FeedOrganisor {
 			Context context) {
 		long res = 0;
 		
+		if (statuses == null) {
+			return;
+		}
 		for(twitter4j.Status status : statuses)
 		{
 			res += zDBHelper.fInsertFeed(status);

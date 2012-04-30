@@ -135,7 +135,7 @@ public class RenrenUtil {
 		AbstractRequestListener<FeedExtractResponseBean> listener = new AbstractRequestListener<FeedExtractResponseBean>(){
 			@Override
 			public void onComplete(final FeedExtractResponseBean bean) {
-				System.out.println("Renren news feed get listener on complete");
+				//System.out.println("Renren news feed get listener on complete");
 				zPubSub.fGetFeedOrganisor().fSaveNewFeeds(bean, context);
 			}
 
