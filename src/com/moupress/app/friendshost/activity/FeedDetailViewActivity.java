@@ -1,10 +1,5 @@
 package com.moupress.app.friendshost.activity;
 
-import com.github.droidfu.widgets.WebImageView;
-import com.moupress.app.friendshost.Const;
-import com.moupress.app.friendshost.R;
-import com.moupress.app.friendshost.sns.FeedEntry;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,9 +7,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.github.droidfu.widgets.WebImageView;
+import com.moupress.app.friendshost.Const;
+import com.moupress.app.friendshost.R;
+import com.moupress.app.friendshost.sns.FeedEntry;
 
 public class FeedDetailViewActivity extends Activity {
 
@@ -64,30 +65,44 @@ public class FeedDetailViewActivity extends Activity {
 				&& (feed.getsFeedType().equals("blog") || feed.getsFeedType().equals("21")) 
 				&& displayedSns.equals(Const.SNS_RENREN)) {
 			webV_detail.setVisibility(View.VISIBLE);
+			webV_detail.setWebViewClient(new MyWebViewClient());
 			webV_detail.loadUrl(feed.getsLink());
 		} else {
 			webV_detail.setVisibility(View.GONE);
 		}
 		
 		WebImageView img_photo_detail = (WebImageView)findViewById(R.id.img_photo_detail);
-		String photoUrl = feed.getsPhotoPreviewLink();
-		if (photoUrl != null && photoUrl.length() > 0) {
-			img_photo_detail.setVisibility(View.VISIBLE);
-			img_photo_detail.setImageUrl(photoUrl);
-			img_photo_detail.loadImage();
-		} else {
-			img_photo_detail.setVisibility(View.GONE);
-		}
-		
 		TextView txv_description_detail = (TextView) findViewById(R.id.txv_description_detail);
-		String descriptionDetail = feed.getsMsgBody() + "\n" + feed.getsStory() + "\n";
-		if (photoUrl != null && photoUrl.length() > 0) {
-			descriptionDetail += "\n" + feed.getsPhotoPreviewName();
-			descriptionDetail += "\n" + feed.getsPhotoPreviewCaption();
-			descriptionDetail += "\n" + feed.getsPhotoPreviewDescription();
+		if (webV_detail.getVisibility() == View.VISIBLE) {
+			img_photo_detail.setVisibility(View.GONE);
+			txv_description_detail.setVisibility(View.GONE);
+		} else {
+			String photoUrl = feed.getsPhotoPreviewLink();
+			if (photoUrl != null && photoUrl.length() > 0) {
+				img_photo_detail.setVisibility(View.VISIBLE);
+				img_photo_detail.setImageUrl(photoUrl);
+				img_photo_detail.loadImage();
+			} else {
+				img_photo_detail.setVisibility(View.GONE);
+			}
+			
+			String descriptionDetail = feed.getsMsgBody() + "\n" + feed.getsStory() + "\n";
+			if (photoUrl != null && photoUrl.length() > 0) {
+				descriptionDetail += "\n" + feed.getsPhotoPreviewName();
+				descriptionDetail += "\n" + feed.getsPhotoPreviewCaption();
+				descriptionDetail += "\n" + feed.getsPhotoPreviewDescription();
+			}
+			txv_description_detail.setText(descriptionDetail);
+			//Display display = getWindowManager().getDefaultDisplay();
+			//FlowTextHelper.tryFlowText(descriptionDetail, img_photo_detail, txv_description_detail, display);
 		}
-		txv_description_detail.setText(descriptionDetail);
-		
-		
+	}
+	
+	class MyWebViewClient extends WebViewClient {
+	    @Override
+	    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+	        view.loadUrl(url);
+	        return true;
+	    }
 	}
 }
