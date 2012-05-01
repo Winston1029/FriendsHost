@@ -8,11 +8,14 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import com.moupress.app.friendshost.activity.FeedDetailViewActivity;
 import com.moupress.app.friendshost.activity.FeedPublishActivity;
 import com.moupress.app.friendshost.activity.FeedResendActivity;
 import com.moupress.app.friendshost.sns.FeedEntry;
@@ -84,16 +87,35 @@ public class PubSub {
 				//Log.i(TAG, " Name: "+feed.getsName()+" Msg: "+feed.getsMsgBody());
 				fFeedResendUI(feed);
 				return true;
-			}});
+			}
+		});
+		uLstFeed.setOnItemClickListener(new OnItemClickListener() {
+			
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				FeedEntry feed = (FeedEntry) arrAdapterFeedPreview.getItem(position);
+				fFeedDisplayDetailUI(feed);
+			}
+		});
+
 	}
 	
 	//Feed Resend UI
 	public void fFeedResendUI(FeedEntry feed)
 	{
-		Intent intent = new Intent(zActivity,FeedResendActivity.class);
+		Intent intent = new Intent(zActivity, FeedResendActivity.class);
 		intent.putExtra(Const.FEED_ITEM, feed);
 		intent.putExtra(Const.SNS, this.displayedSns);
 		zActivity.startActivityForResult(intent, Const.FEED_RESEND_REQ_CD);
+	}
+	
+	//Feed Display Detail View UI
+	public void fFeedDisplayDetailUI(FeedEntry feed)
+	{
+		Intent intent = new Intent(zActivity,FeedDetailViewActivity.class);
+		intent.putExtra(Const.FEED_ITEM, feed);
+		intent.putExtra(Const.SNS, this.displayedSns);
+		zActivity.startActivity(intent);
 	}
 	
 	//Init Facebook UI

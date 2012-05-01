@@ -39,8 +39,11 @@ public class Const {
 	public static final String ACCESS_URL = "http://api.twitter.com/oauth/access_token";
 	public static final String AUTHORIZE_URL = "http://api.twitter.com/oauth/authorize";
 	
-	//=============FeedResendActivity===========================
+	//=============Activity Request Code===========================
 	public static final int FEED_RESEND_REQ_CD = 3;
+	public static final int FEED_PUBLISH = 2;
+	public static final int FEED_DISPLAY_DETAIL = 1;
+	public static final int FEED_DISPLAY_PREVIEW = 0;
 	
 	//==============Feed Item Attributes========================
 	public static final String FEED_ITEM = "feeditem";
@@ -49,7 +52,9 @@ public class Const {
 	public static final String SNAME = "sName";
 	public static final String SOWNERID = "sOwnerID";
 	public static final String SCREATEDTIME = "sCreatedTime";
+	public static final String SFEEDTYPE = "sFeedType";
 	public static final String SMSGBODY = "sMsgBody";
+	public static final String SLINK = "sLink";
 	public static final String SSTORY = "sStory";
 	public static final String SSTORY_TAGS = "sStory_Tags";
 	public static final String SPHOTOPREVIEWLINK = "sPhotoPreviewLink";
@@ -62,6 +67,15 @@ public class Const {
 	public static final String FNAME = "fName";
 	public static final String FHEADURL = "fHeadurl";
 	public static final String FSNS = "fSns";
+	
+	//=============Comment Item Attributes==========================
+	public static final String COMMENTED_FEEDID = "commetedfeedID";
+	public static final String COMMENTED_ID = "commentedID";
+	public static final String COMMENTED_TIME = "commentedTime";
+	public static final String COMMENTED_MSG = "commentedMsg";
+	public static final String COMMENTED_USERID = "commentedUserID";
+	public static final String COMMENTED_NAME = "commentedName";
+	public static final String COMMENTED_HEADURL = "commentedHeadUrl";
 	
 
 }

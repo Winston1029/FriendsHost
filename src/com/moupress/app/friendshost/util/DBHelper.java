@@ -230,6 +230,7 @@ public class DBHelper {
 		values.put(C_FEED_OWNER_ID, status.getUser().getId());
 		values.put(C_FEED_MSG, status.getText());
 		values.put(C_FEED_PIC, status.getThumbnail_pic());
+		values.put(C_FEED_LINK, status.getOriginal_pic());
 		values.put(C_FEED_UPDATED_TIME, status.getCreatedAt().toGMTString());
 		values.put(C_FEED_CREATED_TIME, status.getCreatedAt().toGMTString());
 		//values.put(C_FEED_FROM, status.getSource());
@@ -250,6 +251,7 @@ public class DBHelper {
 		ContentValues values  = new ContentValues();
 		values.put(C_FEED_SNS, SNS_RENREN);
 		values.put(C_FEED_ID, entry.getPost_id());
+		values.put(C_FEED_TYPE, entry.getsFeedType());
 		if (entry.getFeed_type().equals("10")) { //prefix and message are the same if feedtype is "更新状态的新鲜事"
 			values.put(C_FEED_MSG, entry.getPrefix());
 		} else {
@@ -262,6 +264,7 @@ public class DBHelper {
 		values.put(C_FEED_FROM, entry.getName());
 		values.put(C_FEED_OWNER_ID, entry.getActor_id());
 		values.put(C_FEED_ISREAD, "0");
+		values.put(C_FEED_CREATED_TIME, entry.getsCreatedTime());
 		values.put(C_FEED_UPDATED_TIME, entry.getUpdate_time());
 		if (entry.getDescription() != null && !entry.getDescription().equals("null") ) {
 			values.put(C_FEED_STORY, entry.getTitle() + "\n" + entry.getDescription());	
@@ -275,7 +278,6 @@ public class DBHelper {
 		if (entry.getAttachment().size() > 0 ) {
 			String media_type = entry.getAttachment().get(0).getMedia_type();
 			String link = entry.getAttachment().get(0).getHref();
-			values.put(C_FEED_TYPE, media_type);
 			
 			if (media_type != null && media_type.equals("blog")) {
 				//String actualBlog_Url = "http://blog.renren.com/blog/" + entry.getFeed_media_owner_id() + "/" + entry.getFeed_media_media_id();
@@ -429,8 +431,9 @@ public class DBHelper {
 	 * @return
 	 */
 	public String[][] fGetFeedPreview(String sns) {
-		String[] columns = new String[] {C_FEED_FROM, C_FEED_OWNER_ID, C_FEED_CREATED_TIME, 
-										 C_FEED_MSG, C_FEED_STORY,
+		String[] columns = new String[] {C_FEED_ID,
+										 C_FEED_FROM, C_FEED_OWNER_ID, C_FEED_CREATED_TIME, 
+										 C_FEED_TYPE, C_FEED_MSG, C_FEED_STORY, C_FEED_LINK,
 										 C_FEED_PIC, C_FEED_NAME, C_FEED_CAPTION, C_FEED_DESCRIPTION};
 		String where = C_FEED_ISREAD + " = ? and " 
 						+ C_FEED_SNS + " = ?"; //and "
@@ -519,6 +522,38 @@ public class DBHelper {
 				cursor.close();
 			}
 		}
+		return result;
+	}
+	
+	public String[][] fGetFeedComments(String sns, String feedid) {
+		String[] columns = new String[] {C_COMMENTS_ID, 
+										 C_COMMENTS_USERID, C_COMMENTS_USERNAME, C_COMMENTS_USERHEADURL, 
+										 C_COMMENTS_MSG, C_COMMENTS_CREATED_TIME};
+		String where = C_COMMENTS_SNS + " = ? and " 
+						+ C_COMMENTS_FEEDID + " = ?";
+		String[] selectionArgs = new String[] {sns, feedid};
+		Cursor cursor = null;
+		String[][] result = null;
+		
+		try {
+			cursor = zSQLiteDB.query(T_COMMENTS, columns, where, selectionArgs, null, null, null);
+			int numRows = cursor.getCount();
+			result = new String[numRows][columns.length];
+			cursor.moveToFirst();
+			for (int i = 0; i < numRows; ++i) {
+				for (int j = 0; j < columns.length; ++j) {
+					result[i][j] = cursor.getString(j);
+				}
+				cursor.moveToNext();
+			}
+		} catch (SQLException e) {
+			Log.v(Const.TAG, "Get all birthday failed.", e);
+		} finally {
+			if (cursor != null && !cursor.isClosed()) {
+				cursor.close();
+			}
+		}
+		
 		return result;
 	}
 

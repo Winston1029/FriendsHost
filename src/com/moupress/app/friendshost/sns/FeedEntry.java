@@ -1,5 +1,8 @@
 package com.moupress.app.friendshost.sns;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.moupress.app.friendshost.Const;
 
 import android.os.Bundle;
@@ -10,11 +13,14 @@ public class FeedEntry implements Parcelable{
 
 	private String sHeadImg;
 	
+	private String sID;
 	private String sName;
 	private String sOwnerID;
 	private String sCreatedTime;
+	private String sFeedType;
 	private String sMsgBody;
 	private String sStory;
+	private String sLink;
 	//private String sStory_Tags;
 	private String sPhotoPreviewLink;
 	private String sPhotoPreviewName;
@@ -22,9 +28,11 @@ public class FeedEntry implements Parcelable{
 	private String sPhotoPreviewDescription;
 	
 	private UserFriend zFriend;
+	private List<FeedEntryComment> zComments;
 	
 	public FeedEntry() {
 		setzFriend(new UserFriend());
+		zComments = new ArrayList<FeedEntryComment>();
 	}
 	
 	public FeedEntry(Parcel in)
@@ -35,7 +43,9 @@ public class FeedEntry implements Parcelable{
 		this.sName = bundle.getString(Const.SNAME);
 		this.sOwnerID = bundle.getString(Const.SOWNERID);
 		this.sCreatedTime = bundle.getString(Const.SCREATEDTIME);
+		this.sFeedType = bundle.getString(Const.SFEEDTYPE);
 		this.sMsgBody = bundle.getString(Const.SMSGBODY);
+		this.sLink = bundle.getString(Const.SLINK);
 		this.sStory = bundle.getString(Const.SSTORY);
 		this.sPhotoPreviewLink = bundle.getString(Const.SPHOTOPREVIEWLINK);
 		this.sPhotoPreviewName = bundle.getString(Const.SPHOTOPREVIEWNAME);
@@ -135,7 +145,9 @@ public class FeedEntry implements Parcelable{
 		if(sName != null) { bundle.putString( Const.SNAME,sName);}
 		if(sOwnerID != null) { bundle.putString( Const.SOWNERID,sOwnerID);}
 		if(sCreatedTime != null) { bundle.putString( Const.SCREATEDTIME,sCreatedTime);}
+		if(sFeedType != null) { bundle.putString( Const.SFEEDTYPE,sFeedType);}
 		if(sMsgBody != null) { bundle.putString( Const.SMSGBODY,sMsgBody);}
+		if(sLink != null) { bundle.putString( Const.SLINK,sLink);}
 		if(sStory != null) { bundle.putString( Const.SSTORY,sStory);}
 		if(sPhotoPreviewLink != null) { bundle.putString( Const.SPHOTOPREVIEWLINK,sPhotoPreviewLink);}
 		if(sPhotoPreviewName != null) { bundle.putString( Const.SPHOTOPREVIEWNAME,sPhotoPreviewName);}
@@ -144,8 +156,41 @@ public class FeedEntry implements Parcelable{
 		
 		bundle.writeToParcel(out, flags);
 		if(this.zFriend != null) { this.zFriend.writeToParcel(out, flags);}
+		//if(this.zComments != null) { this.zFriend.writeToParcel(out, flags);}
 	}
 	
+	public void setsFeedType(String sFeedType) {
+		this.sFeedType = sFeedType;
+	}
+
+	public String getsFeedType() {
+		return sFeedType;
+	}
+
+	public void setsID(String sID) {
+		this.sID = sID;
+	}
+
+	public String getsID() {
+		return sID;
+	}
+
+	public void setzComments(List<FeedEntryComment> zComments) {
+		this.zComments = zComments;
+	}
+
+	public List<FeedEntryComment> getzComments() {
+		return zComments;
+	}
+
+	public void setsLink(String sLink) {
+		this.sLink = sLink;
+	}
+
+	public String getsLink() {
+		return sLink;
+	}
+
 	public static final Parcelable.Creator<FeedEntry> CREATOR = new Parcelable.Creator<FeedEntry>(){
 
 		@Override
@@ -159,4 +204,5 @@ public class FeedEntry implements Parcelable{
 			// TODO Auto-generated method stub
 			return new FeedEntry[size];
 		}};
+
 }

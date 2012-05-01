@@ -20,6 +20,7 @@ import com.moupress.app.friendshost.LstViewFeedAdapter;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.sns.FeedEntry;
+import com.moupress.app.friendshost.sns.FeedEntryComment;
 import com.moupress.app.friendshost.sns.UserFriend;
 import com.moupress.app.friendshost.sns.Renren.FeedExtractResponseBean;
 import com.moupress.app.friendshost.sns.Renren.RenenFeedElement;
@@ -221,6 +222,7 @@ public class FeedOrganisor {
 	public ArrayList<FeedEntry> fGetUnReadNewsFeed(String sns) {
 		String[][] feeds = null;
 		String[][] owners = null;
+		String[][] comments = null;
 		ArrayList<FeedEntry> items = new ArrayList<FeedEntry>();
 		
 		feeds = zDBHelper.fGetFeedPreview(sns);
@@ -233,25 +235,43 @@ public class FeedOrganisor {
 		}
 		else {
 			for (int i = 0; i < feeds.length; i++) {
-				
+				int index = 0;
 				FeedEntry item = new FeedEntry();
 				//feedAdapter.addItem(feed[i]);
-				item.setsName(feeds[i][0]);							//name
-				item.setsOwnerID(feeds[i][1]);						//feed owner id
-				item.setsCreatedTime(feeds[i][2]);					//created time
-				item.setsMsgBody(feeds[i][3]);						//message
-				item.setsStory(feeds[i][4]);						//story
+				item.setsID(feeds[i][index++]);
+				item.setsName(feeds[i][index++]);							//name
+				item.setsOwnerID(feeds[i][index++]);						//feed owner id
+				item.setsCreatedTime(feeds[i][index++]);					//created time
+				item.setsFeedType(feeds[i][index++]);
+				item.setsMsgBody(feeds[i][index++]);						//message
+				item.setsStory(feeds[i][index++]);						//story
+				item.setsLink(feeds[i][index++]);						//links
 				//item.setsStory_tags(feeds[i][4]);					//story_tags
-				item.setsPhotoPreviewLink(feeds[i][5]);				//pic url
-				item.setsPhotoPreviewName(feeds[i][6]);				//pic/album name
-				item.setsPhotoPreviewCaption(feeds[i][7]);			//pic/album caption
-				item.setsPhotoPreviewDescription(feeds[i][8]);		//pic/album description
+				item.setsPhotoPreviewLink(feeds[i][index++]);				//pic url
+				item.setsPhotoPreviewName(feeds[i][index++]);				//pic/album name
+				item.setsPhotoPreviewCaption(feeds[i][index++]);			//pic/album caption
+				item.setsPhotoPreviewDescription(feeds[i][index++]);		//pic/album description
 				
-				String feed_OwnerID = feeds[i][1];
+				String feed_OwnerID = feeds[i][2];
 				owners = zDBHelper.fGetFeedOwner(sns, feed_OwnerID); //there should be only 1 owner for each feed
 				if (owners.length > 0) {
-					item.getzFriend().setName(owners[0][0]);
-					item.getzFriend().setHeadurl(owners[0][1]);
+					index = 0;
+					item.getzFriend().setName(owners[0][index++]);
+					item.getzFriend().setHeadurl(owners[0][index++]);
+				}
+				
+				String feed_id = feeds[i][0];
+				comments = zDBHelper.fGetFeedComments(sns, feed_id);
+				for (int j = 0; j < comments.length; j++) {
+					index = 0;
+					FeedEntryComment comment = new FeedEntryComment();
+					comment.setCommentedID(comments[j][index++]);
+					comment.setCommentedUserID(comments[j][index++]);
+					comment.setCommentedName(comments[j][index++]);
+					comment.setCommentedHeadUrl(comments[j][index++]);
+					comment.setCommentedMsg(comments[j][index++]);
+					comment.setCommentedTime(comments[j][index++]);
+					item.getzComments().add(comment);
 				}
 				
 				items.add(item);

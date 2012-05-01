@@ -51,6 +51,14 @@
         	</intent-filter>
         </activity>
         
+        <activity 
+            android:enabled="true"
+            android:name=".activity.FeedDetailViewActivity"
+            android:screenOrientation="portrait" 
+            android:launchMode="singleTask">
+            
+        </activity>
+        
         <service android:enabled="true" android:name=".FeedRetrievalService" />
           <activity android:name=".activity.FeedResendActivity"
         			android:theme="@android:style/Theme.Dialog"
