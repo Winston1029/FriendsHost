@@ -78,6 +78,7 @@ public class PubSub {
 	public void fInitFeedUIPreview() {
 		arrAdapterFeedPreview = new LstViewFeedAdapter(zActivity, R.layout.feed_item_preview);
 		uLstFeed.setAdapter(arrAdapterFeedPreview);
+		uLstFeed.setItemsCanFocus(true);
 		uLstFeed.setOnItemLongClickListener(new OnItemLongClickListener(){
 
 			@Override
@@ -89,14 +90,14 @@ public class PubSub {
 				return true;
 			}
 		});
-		uLstFeed.setOnItemClickListener(new OnItemClickListener() {
-			
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				FeedEntry feed = (FeedEntry) arrAdapterFeedPreview.getItem(position);
-				fFeedDisplayDetailUI(feed);
-			}
-		});
+//		uLstFeed.setOnItemClickListener(new OnItemClickListener() {
+//			
+//			@Override
+//			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//				FeedEntry feed = (FeedEntry) arrAdapterFeedPreview.getItem(position);
+//				fFeedDisplayDetailUI(feed);
+//			}
+//		});
 
 	}
 	

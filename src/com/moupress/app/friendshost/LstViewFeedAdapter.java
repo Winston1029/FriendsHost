@@ -1,27 +1,24 @@
 package com.moupress.app.friendshost;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-
-import com.github.droidfu.widgets.WebImageView;
-import com.moupress.app.friendshost.sns.FeedEntry;
-import com.moupress.app.friendshost.uicomponent.FeedItemUIComponent;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.github.droidfu.widgets.WebImageView;
+import com.moupress.app.friendshost.sns.FeedEntry;
+import com.moupress.app.friendshost.uicomponent.FeedItemUIComponent;
 
 public class LstViewFeedAdapter extends BaseAdapter{
 	
@@ -64,7 +61,7 @@ public class LstViewFeedAdapter extends BaseAdapter{
 	}
 	
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent)
+	public View getView(final int position, View convertView, ViewGroup parent)
 	{
 		FeedItemUIComponent feedItemUIComponent;
 		if(convertView == null)
@@ -105,6 +102,14 @@ public class LstViewFeedAdapter extends BaseAdapter{
 		{
 			feedItemUIComponent = (FeedItemUIComponent) convertView.getTag();
 		}
+		
+		convertView.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FeedEntry feed = (FeedEntry) feedArrayList.get(position);
+				FriendsHostActivity.zPubsub.fFeedDisplayDetailUI(feed);
+			}
+		});
 		
 		feedItemUIComponent.ImgHeadLoad(feedArrayList.get(position).getzFriend().getHeadurl());
 		if (feedArrayList == null || feedArrayList.size() < 2) {
