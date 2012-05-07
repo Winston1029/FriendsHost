@@ -4,6 +4,7 @@ import com.github.droidfu.widgets.WebImageView;
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.sns.FeedEntry;
+import com.moupress.app.friendshost.util.FeedOrganisor;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,6 +19,7 @@ public class FeedResendActivity extends Activity{
 	
 	private final String TAG = "FeedResendActivity";
 	private Activity zActivity;
+	private FeedOrganisor zFeedOrg;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +27,16 @@ public class FeedResendActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.feed_resend_layout);
 		zActivity = this;
+		zFeedOrg = new FeedOrganisor(this);
 		initUI();
 	}
 
 	private void initUI() {
 		Intent intent = this.getIntent();
-		final FeedEntry feed = intent.getParcelableExtra(Const.FEED_ITEM);
+		//final FeedEntry feed = intent.getParcelableExtra(Const.FEED_ITEM);
+		String feed_id = intent.getStringExtra(Const.FID);
 		final String displayedSns = intent.getStringExtra(Const.SNS);
+		final FeedEntry feed = zFeedOrg.fGetFeedByID(displayedSns, feed_id);
 		loadFeed(feed);
 		Log.i(TAG, " Name: "+feed.getsName()+" Body: "+ feed.getsMsgBody()+" Friend "+feed.getzFriend().getHeadurl());
 		
@@ -44,7 +49,8 @@ public class FeedResendActivity extends Activity{
 				
 				feed.setsMsgBody("From "+feed.getsName()+" : "+feed.getsMsgBody());
 				intentBack.putExtra(Const.SNS, displayedSns);
-				intentBack.putExtra(Const.FEED_ITEM, feed);
+				//intentBack.putExtra(Const.FEED_ITEM, feed);
+				intentBack.putExtra(Const.FID, feed.getsID());
 				zActivity.setResult(RESULT_OK, intentBack);
 				zActivity.finish();
 			}});

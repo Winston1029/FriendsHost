@@ -49,6 +49,10 @@ public class FeedOrganisor {
 		zDBHelper = new DBHelper(zContext);
 	}
 	
+	public FeedOrganisor(Context context) {
+		zDBHelper = new DBHelper(context);
+	}
+	
 	/**
 	 * Sort incoming feeds by column requirement
 	 */
@@ -79,11 +83,13 @@ public class FeedOrganisor {
 				int cntComments = Integer.parseInt(entry.getComments().getCount());
 				// comment get from Facebook only shows the 1st and the last entry
 				// need more research here
-				if (cntComments > 0) {
+				if (cntComments > 0 && entry.getComments().getData() != null) {
 					cntComments = Math.min(cntComments, entry.getComments().getData().size());
+				} else {
+					cntComments = 0;
 				}
 				for (int j = 0; j < cntComments; j++) {
-					FBFeedEntryComment comment = entry.getComments().getData().get(j);
+ 					FBFeedEntryComment comment = entry.getComments().getData().get(j);
 					if (comment != null ) {
 						comment.setSns(Const.SNS_FACEBOOK);
 						comment.setCommetedfeedID(entry.getId());
@@ -108,8 +114,14 @@ public class FeedOrganisor {
 		if ( bean == null || bean.getFeedList() == null ) {
 			return;
 		}
-		for(int i= 0; i<bean.getFeedList().size();i++) {
+		int i = 0;
+		try {
+		for( i= 0; i<bean.getFeedList().size();i++) {
 			//String msg = ((FBHomeFeedEntry) bean.getData().get(i)).getName()+" : "+((FBHomeFeedEntry) bean.getData().get(i)).getMessage();
+			if (i==19) {
+				System.out.println();
+			}
+			
 			RenrenFeedElementEntry entry = (RenrenFeedElementEntry) bean.getFeedList().get(i);
 			res += zDBHelper.fInsertFeed(entry);
 			
@@ -127,7 +139,9 @@ public class FeedOrganisor {
 			if (cntComments > 0) {
 				cntComments = Math.min(cntComments, entry.getComments().getComment().size());
 			}
-			for (int j = 0; j < cntComments; j++) {
+			int j = 0;
+			try {
+				for ( j = 0; j < cntComments; j++) {
 				
 					RenrenFeedElementComment comment = entry.getComments().getComment().get(j);
 				
@@ -137,8 +151,17 @@ public class FeedOrganisor {
 						comment.setCommetedfeedID(entry.getPost_id());
 						zDBHelper.fInsertComments(comment);
 					}
-				
+				}
+			} catch (Exception e) {
+				String from = entry.getName();
+				System.out.println("Error for feed index " + i );
+				System.out.println("Error for feed from " + from);
+				System.out.println("Error for comment index " + j );
 			}
+			
+		}
+		} catch (Exception e) {
+			System.out.println("Error for feed index " + i );
 		}
 		
 		if (res > 0 ) {
@@ -221,11 +244,38 @@ public class FeedOrganisor {
 	
 	public ArrayList<FeedEntry> fGetUnReadNewsFeed(String sns) {
 		String[][] feeds = null;
-		String[][] owners = null;
-		String[][] comments = null;
 		ArrayList<FeedEntry> items = new ArrayList<FeedEntry>();
 		
 		feeds = zDBHelper.fGetFeedPreview(sns);
+		
+		if (feeds == null || feeds.length == 0) {
+			FeedEntry item = new FeedEntry();
+			item.setsName("No Unread Feed in Local");
+			items.add(item);
+		}
+		else {
+			items = transformDB2Feed(sns, feeds);
+		}
+		return items;
+	}
+	
+	public FeedEntry fGetFeedByID(String sns, String feed_id) {
+		
+		String[][] feeds = null;
+		
+		
+		feeds = zDBHelper.fGetFeedByID(sns, feed_id);
+		
+		ArrayList<FeedEntry> items = transformDB2Feed(sns, feeds);
+		
+		return items.get(0);
+	}
+	
+	private ArrayList<FeedEntry> transformDB2Feed(String sns, String[][] feeds) {
+		String[][] owners = null;
+		String[][] comments = null;
+		
+		ArrayList<FeedEntry> items = new ArrayList<FeedEntry>();
 		
 		if (feeds == null || feeds.length == 0) {
 			//feeds = new String[][] {{"No Unread Feed in Local"}};
@@ -280,7 +330,6 @@ public class FeedOrganisor {
 		return items;
 	}
 	
-	
 	private void fShowNotification(String sFromSNS, int NumUnRead, Context context) {
 		// create notification manager
 		NotificationManager notificationMgr = (NotificationManager) zActivity.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -305,5 +354,6 @@ public class FeedOrganisor {
 		// notify
 		notificationMgr.notify(sFromSNS, Const.FRIENDSHOST_NOTIFY_ID, notification);
 	}
+
 
 }

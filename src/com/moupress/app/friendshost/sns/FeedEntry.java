@@ -1,15 +1,8 @@
 package com.moupress.app.friendshost.sns;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import com.moupress.app.friendshost.Const;
-
-import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
-
-public class FeedEntry implements Parcelable{
+public class FeedEntry /*implements Parcelable*/{
 
 	private String sHeadImg;
 	
@@ -28,31 +21,11 @@ public class FeedEntry implements Parcelable{
 	private String sPhotoPreviewDescription;
 	
 	private UserFriend zFriend;
-	private List<FeedEntryComment> zComments;
+	private ArrayList<FeedEntryComment> zComments;
 	
 	public FeedEntry() {
 		setzFriend(new UserFriend());
 		zComments = new ArrayList<FeedEntryComment>();
-	}
-	
-	public FeedEntry(Parcel in)
-	{
-		Bundle bundle = Bundle.CREATOR.createFromParcel(in);
-		
-		this.sHeadImg = bundle.getString(Const.SHEADIMG);
-		this.sName = bundle.getString(Const.SNAME);
-		this.sOwnerID = bundle.getString(Const.SOWNERID);
-		this.sCreatedTime = bundle.getString(Const.SCREATEDTIME);
-		this.sFeedType = bundle.getString(Const.SFEEDTYPE);
-		this.sMsgBody = bundle.getString(Const.SMSGBODY);
-		this.sLink = bundle.getString(Const.SLINK);
-		this.sStory = bundle.getString(Const.SSTORY);
-		this.sPhotoPreviewLink = bundle.getString(Const.SPHOTOPREVIEWLINK);
-		this.sPhotoPreviewName = bundle.getString(Const.SPHOTOPREVIEWNAME);
-		this.sPhotoPreviewCaption = bundle.getString(Const.SPHOTOPREVIEWCAPTION);
-		this.sPhotoPreviewDescription = bundle.getString(Const.SPHOTOPREVIEWDESCRIPTION);
-		
-		this.zFriend = UserFriend.CREATOR.createFromParcel(in);
 	}
 	
 	public void setsHeadImg(String sHeadImg) {
@@ -130,35 +103,6 @@ public class FeedEntry implements Parcelable{
 		return zFriend;
 	}
 
-	@Override
-	public int describeContents() {
-		return 0;
-		
-	}
-
-	@Override
-	public void writeToParcel(Parcel out, int flags) {
-		
-		Bundle bundle = new Bundle();
-		
-		if(sHeadImg != null) { bundle.putString( Const.SHEADIMG,sHeadImg);}
-		if(sName != null) { bundle.putString( Const.SNAME,sName);}
-		if(sOwnerID != null) { bundle.putString( Const.SOWNERID,sOwnerID);}
-		if(sCreatedTime != null) { bundle.putString( Const.SCREATEDTIME,sCreatedTime);}
-		if(sFeedType != null) { bundle.putString( Const.SFEEDTYPE,sFeedType);}
-		if(sMsgBody != null) { bundle.putString( Const.SMSGBODY,sMsgBody);}
-		if(sLink != null) { bundle.putString( Const.SLINK,sLink);}
-		if(sStory != null) { bundle.putString( Const.SSTORY,sStory);}
-		if(sPhotoPreviewLink != null) { bundle.putString( Const.SPHOTOPREVIEWLINK,sPhotoPreviewLink);}
-		if(sPhotoPreviewName != null) { bundle.putString( Const.SPHOTOPREVIEWNAME,sPhotoPreviewName);}
-		if(sPhotoPreviewCaption != null) { bundle.putString( Const.SPHOTOPREVIEWCAPTION,sPhotoPreviewCaption);}
-		if(sPhotoPreviewDescription != null) { bundle.putString( Const.SPHOTOPREVIEWDESCRIPTION,sPhotoPreviewDescription);}
-		
-		bundle.writeToParcel(out, flags);
-		if(this.zFriend != null) { this.zFriend.writeToParcel(out, flags);}
-		//if(this.zComments != null) { this.zFriend.writeToParcel(out, flags);}
-	}
-	
 	public void setsFeedType(String sFeedType) {
 		this.sFeedType = sFeedType;
 	}
@@ -175,11 +119,11 @@ public class FeedEntry implements Parcelable{
 		return sID;
 	}
 
-	public void setzComments(List<FeedEntryComment> zComments) {
+	public void setzComments(ArrayList<FeedEntryComment> zComments) {
 		this.zComments = zComments;
 	}
 
-	public List<FeedEntryComment> getzComments() {
+	public ArrayList<FeedEntryComment> getzComments() {
 		return zComments;
 	}
 
@@ -190,19 +134,82 @@ public class FeedEntry implements Parcelable{
 	public String getsLink() {
 		return sLink;
 	}
-
-	public static final Parcelable.Creator<FeedEntry> CREATOR = new Parcelable.Creator<FeedEntry>(){
-
-		@Override
-		public FeedEntry createFromParcel(Parcel in) {
-			// TODO Auto-generated method stub
-			return new FeedEntry(in);
-		}
-
-		@Override
-		public FeedEntry[] newArray(int size) {
-			// TODO Auto-generated method stub
-			return new FeedEntry[size];
-		}};
+	
+//	public FeedEntry(Parcel in)
+//	{
+//		Bundle bundle = Bundle.CREATOR.createFromParcel(in);
+//		
+//		this.sHeadImg = bundle.getString(Const.SHEADIMG);
+//		this.sName = bundle.getString(Const.SNAME);
+//		this.sOwnerID = bundle.getString(Const.SOWNERID);
+//		this.sCreatedTime = bundle.getString(Const.SCREATEDTIME);
+//		this.sFeedType = bundle.getString(Const.SFEEDTYPE);
+//		this.sMsgBody = bundle.getString(Const.SMSGBODY);
+//		this.sLink = bundle.getString(Const.SLINK);
+//		this.sStory = bundle.getString(Const.SSTORY);
+//		this.sPhotoPreviewLink = bundle.getString(Const.SPHOTOPREVIEWLINK);
+//		this.sPhotoPreviewName = bundle.getString(Const.SPHOTOPREVIEWNAME);
+//		this.sPhotoPreviewCaption = bundle.getString(Const.SPHOTOPREVIEWCAPTION);
+//		this.sPhotoPreviewDescription = bundle.getString(Const.SPHOTOPREVIEWDESCRIPTION);
+//		//this.zComments = bundle.getParcelableArrayList(Const.COMMENTS);
+//		in.readList(zComments, null);
+//		
+//		this.zFriend = UserFriend.CREATOR.createFromParcel(in);
+//	}
+//	
+//	@Override
+//	public int describeContents() {
+//		return 0;
+//		
+//	}
+//	
+//	@Override
+//	public void writeToParcel(Parcel out, int flags) {
+//		
+//		Bundle bundle = new Bundle();
+//		
+//		if(sHeadImg != null) { bundle.putString( Const.SHEADIMG,sHeadImg);}
+//		if(sName != null) { bundle.putString( Const.SNAME,sName);}
+//		if(sOwnerID != null) { bundle.putString( Const.SOWNERID,sOwnerID);}
+//		if(sCreatedTime != null) { bundle.putString( Const.SCREATEDTIME,sCreatedTime);}
+//		if(sFeedType != null) { bundle.putString( Const.SFEEDTYPE,sFeedType);}
+//		if(sMsgBody != null) { bundle.putString( Const.SMSGBODY,sMsgBody);}
+//		if(sLink != null) { bundle.putString( Const.SLINK,sLink);}
+//		if(sStory != null) { bundle.putString( Const.SSTORY,sStory);}
+//		if(sPhotoPreviewLink != null) { bundle.putString( Const.SPHOTOPREVIEWLINK,sPhotoPreviewLink);}
+//		if(sPhotoPreviewName != null) { bundle.putString( Const.SPHOTOPREVIEWNAME,sPhotoPreviewName);}
+//		if(sPhotoPreviewCaption != null) { bundle.putString( Const.SPHOTOPREVIEWCAPTION,sPhotoPreviewCaption);}
+//		if(sPhotoPreviewDescription != null) { bundle.putString( Const.SPHOTOPREVIEWDESCRIPTION,sPhotoPreviewDescription);}
+//		
+//		bundle.writeToParcel(out, flags);
+//		
+//		if( zFriend != null) {  
+//			//bundle.putParcelable(Const.FRIEND, zFriend);
+//			zFriend.writeToParcel(out, flags);
+//		}
+//		if (zComments != null ) {
+//			//bundle.putParcelableArrayList(Const.COMMENTS, zComments);
+//			out.writeList(zComments);
+//		}
+////		if ( zComments != null && zComments.size() > 0) {
+////			for (int i = 0; i < zComments.size(); i++) {
+////				zComments.get(i).writeToParcel(out, flags);
+////			}
+////		}
+////		if(this.zComments != null) { this.zFriend.writeToParcel(out, flags);}
+//		
+//	}
+//
+//	public static final Parcelable.Creator<FeedEntry> CREATOR = new Parcelable.Creator<FeedEntry>(){
+//
+//		@Override
+//		public FeedEntry createFromParcel(Parcel in) {
+//			return new FeedEntry(in);
+//		}
+//
+//		@Override
+//		public FeedEntry[] newArray(int size) {
+//			return new FeedEntry[size];
+//		}};
 
 }

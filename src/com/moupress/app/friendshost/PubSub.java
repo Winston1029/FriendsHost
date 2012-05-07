@@ -105,7 +105,8 @@ public class PubSub {
 	public void fFeedResendUI(FeedEntry feed)
 	{
 		Intent intent = new Intent(zActivity, FeedResendActivity.class);
-		intent.putExtra(Const.FEED_ITEM, feed);
+		//intent.putExtra(Const.FEED_ITEM, feed);
+		intent.putExtra(Const.FID, feed.getsID());
 		intent.putExtra(Const.SNS, this.displayedSns);
 		zActivity.startActivityForResult(intent, Const.FEED_RESEND_REQ_CD);
 	}
@@ -114,7 +115,12 @@ public class PubSub {
 	public void fFeedDisplayDetailUI(FeedEntry feed)
 	{
 		Intent intent = new Intent(zActivity,FeedDetailViewActivity.class);
-		intent.putExtra(Const.FEED_ITEM, feed);
+//		intent.putExtra(Const.FEED_ITEM, feed);
+//		if (feed.getzComments() != null && feed.getzComments().size() > 0) {
+//			intent.putExtra(Const.COMMENTS, feed.getzComments());
+//		}
+		
+		intent.putExtra(Const.FID, feed.getsID());
 		intent.putExtra(Const.SNS, this.displayedSns);
 		zActivity.startActivity(intent);
 	}
@@ -211,7 +217,10 @@ public class PubSub {
 			if(resultCode == Activity.RESULT_OK)
 			{
 				String sns = data.getStringExtra(Const.SNS);
-				FeedEntry feed = data.getParcelableExtra(Const.FEED_ITEM);
+				//FeedEntry feed = data.getParcelableExtra(Const.FEED_ITEM);
+				String feed_id = data.getStringExtra(Const.FID);
+				FeedEntry feed = zFeedOrg.fGetFeedByID(displayedSns, feed_id);
+				
 				if(sns.equals(Const.SNS_FACEBOOK))
 				{
 					zFacebook.fResend(feed);

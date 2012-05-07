@@ -1,12 +1,6 @@
 package com.moupress.app.friendshost.sns;
 
-import com.moupress.app.friendshost.Const;
-
-import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
-
-public class UserFriend implements Parcelable{
+public class UserFriend /*implements Parcelable*/{
 	protected String id;
 	protected String name;
 	protected String headurl;
@@ -15,16 +9,7 @@ public class UserFriend implements Parcelable{
 	
 	public UserFriend()
 	{}
-	public UserFriend(Parcel in) {
-		
-		Bundle bundle = Bundle.CREATOR.createFromParcel(in);
-		
-		this.id = bundle.getString(Const.FID);
-		this.name = bundle.getString(Const.FNAME);
-		this.headurl = bundle.getString(Const.FHEADURL);
-		this.sns = bundle.getString(Const.FSNS);
 
-	}
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -49,33 +34,43 @@ public class UserFriend implements Parcelable{
 	public String getSNS() {
 		return sns;
 	}
-	@Override
-	public int describeContents() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-	@Override
-	public void writeToParcel(Parcel out, int flags) {
-		// TODO Auto-generated method stub
-		Bundle bundle = new Bundle();
-		
-		if(id != null) { bundle.putString(Const.FID,id);}
-		if(name != null) { bundle.putString(Const.FNAME,name);}
-		if(headurl != null) { bundle.putString(Const.FHEADURL,headurl);}
-		if(sns != null) { bundle.putString(Const.FSNS,sns);}
-		
-		bundle.writeToParcel(out, flags);
-	}
 	
-	public static final Parcelable.Creator<UserFriend> CREATOR = new Parcelable.Creator<UserFriend>(){
-
-		@Override
-		public UserFriend createFromParcel(Parcel in) {
-			return new UserFriend(in);
-		}
-
-		@Override
-		public UserFriend[] newArray(int size) {
-			return new UserFriend[size];
-		}};
+//	public UserFriend(Parcel in) {
+//	
+//	Bundle bundle = Bundle.CREATOR.createFromParcel(in);
+//	
+//	this.id = bundle.getString(Const.FID);
+//	this.name = bundle.getString(Const.FNAME);
+//	this.headurl = bundle.getString(Const.FHEADURL);
+//	this.sns = bundle.getString(Const.FSNS);
+//
+//}
+	
+//	@Override
+//	public int describeContents() {
+//		return 0;
+//	}
+//	@Override
+//	public void writeToParcel(Parcel out, int flags) {
+//		Bundle bundle = new Bundle();
+//		
+//		if(id != null) { bundle.putString(Const.FID,id);}
+//		if(name != null) { bundle.putString(Const.FNAME,name);}
+//		if(headurl != null) { bundle.putString(Const.FHEADURL,headurl);}
+//		if(sns != null) { bundle.putString(Const.FSNS,sns);}
+//		
+//		bundle.writeToParcel(out, flags);
+//	}
+//	
+//	public static final Parcelable.Creator<UserFriend> CREATOR = new Parcelable.Creator<UserFriend>(){
+//
+//		@Override
+//		public UserFriend createFromParcel(Parcel in) {
+//			return new UserFriend(in);
+//		}
+//
+//		@Override
+//		public UserFriend[] newArray(int size) {
+//			return new UserFriend[size];
+//		}};
 }

@@ -1,8 +1,11 @@
 package com.moupress.app.friendshost.activity;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -16,8 +19,12 @@ import com.github.droidfu.widgets.WebImageView;
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.sns.FeedEntry;
+import com.moupress.app.friendshost.sns.FeedEntryComment;
+import com.moupress.app.friendshost.util.FeedOrganisor;
 
 public class FeedDetailViewActivity extends Activity {
+
+	private FeedOrganisor zFeedOrg;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +32,21 @@ public class FeedDetailViewActivity extends Activity {
 		
 		this.setContentView(R.layout.feed_item_detail);
 		
+		zFeedOrg = new FeedOrganisor(this);
 		fInitUI();
 	}
 
 	private void fInitUI() {
 		Intent intent = this.getIntent();
-		final FeedEntry feed = intent.getParcelableExtra(Const.FEED_ITEM);
+//		final FeedEntry feed = intent.getParcelableExtra(Const.FEED_ITEM);
+//		final ArrayList<Parcelable> comments = intent.getParcelableArrayListExtra(Const.COMMENTS);
+//		if (comments != null) {
+//			System.out.println();
+//		}
 		final String displayedSns = intent.getStringExtra(Const.SNS);
+		final String feed_id = intent.getStringExtra(Const.FID);
+		
+		final FeedEntry feed = zFeedOrg.fGetFeedByID(displayedSns, feed_id);
 		
 		WebImageView img_feeduserhead_detail = (WebImageView)findViewById(R.id.img_userhead_detail);
 		img_feeduserhead_detail.setImageUrl(feed.getzFriend().getHeadurl());

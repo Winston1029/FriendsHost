@@ -76,6 +76,8 @@ public class Const {
 	public static final String COMMENTED_USERID = "commentedUserID";
 	public static final String COMMENTED_NAME = "commentedName";
 	public static final String COMMENTED_HEADURL = "commentedHeadUrl";
+	public static final String COMMENTS = "comments";
+	public static final String FRIEND = "friend";
 	
 
 }
