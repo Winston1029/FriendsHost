@@ -18,6 +18,7 @@ import android.widget.ListView;
 import com.moupress.app.friendshost.activity.FeedDetailViewActivity;
 import com.moupress.app.friendshost.activity.FeedPublishActivity;
 import com.moupress.app.friendshost.activity.FeedResendActivity;
+import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.Renren.RenrenUtil;
 import com.moupress.app.friendshost.sns.facebook.FacebookUtil;

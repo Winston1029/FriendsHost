@@ -1,4 +1,4 @@
-package com.moupress.app.friendshost;
+package com.moupress.app.friendshost.activity;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -17,6 +17,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.droidfu.widgets.WebImageView;
+import com.moupress.app.friendshost.FriendsHostActivity;
+import com.moupress.app.friendshost.R;
+import com.moupress.app.friendshost.R.id;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.uicomponent.FeedItemUIComponent;
 
@@ -56,7 +59,6 @@ public class LstViewFeedAdapter extends BaseAdapter{
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 	

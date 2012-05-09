@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ns="http://github.com/droidfu/schema"
     android:layout_width="match_parent"
@@ -9,6 +9,7 @@
     >
 
     <LinearLayout
+        android:id="@+id/LinearLayout_UserInfo_ItemDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
@@ -54,9 +55,11 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/LinearLayout_Content_ItemDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:layout_below="@+id/LinearLayout_UserInfo_ItemDetail" >
 
         <WebView
             android:id="@+id/webV_detail"
@@ -90,14 +93,17 @@
     </LinearLayout>
     
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/LinearLayout_Content_ItemDetail"
+        
+        android:orientation="vertical" >
+<!-- android:layout_alignParentBottom="true" -->
+        <com.moupress.app.friendshost.uicomponent.WrapSlidingDrawer
+            android:id="@+id/drawer_comments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-        <SlidingDrawer
-            android:id="@+id/slidingDrawer1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
             android:content="@+id/content"
             android:handle="@+id/handle" >
 
@@ -119,9 +125,52 @@
             <LinearLayout
                 android:id="@+id/content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+	            
+                <ListView
+                    android:id="@+id/lstV_detail_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </ListView>
+                
+                <LinearLayout
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content" 
+			        android:orientation="horizontal" >
+			        
+			        <com.github.droidfu.widgets.WebImageView
+			                xmlns:droidfu="http://github.com/droidfu/schema"
+			                android:id="@+id/img_selfhead_detail_comment"
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:background="#CCC"
+			                droidfu:progressDrawable="..."
+			                ns:autoLoad="true" >
+			            </com.github.droidfu.widgets.WebImageView>
+			
+			        <EditText
+			            android:id="@+id/etx_commentmsg_detail_comment"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_weight="1"
+			            android:ems="10"
+			            android:inputType="textMultiLine" >
+			
+			            <requestFocus />
+			        </EditText>
+			
+			        <Button
+			            android:id="@+id/btn_send_detail_comment"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:text="Send" />
+			        
+			    </LinearLayout>
+
             </LinearLayout>
-        </SlidingDrawer>
+
+        </com.moupress.app.friendshost.uicomponent.WrapSlidingDrawer>
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

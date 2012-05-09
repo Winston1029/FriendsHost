@@ -16,9 +16,9 @@ import android.os.Bundle;
 import com.google.gson.Gson;
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
-import com.moupress.app.friendshost.LstViewFeedAdapter;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
+import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.FeedEntryComment;
 import com.moupress.app.friendshost.sns.UserFriend;
@@ -118,9 +118,7 @@ public class FeedOrganisor {
 		try {
 		for( i= 0; i<bean.getFeedList().size();i++) {
 			//String msg = ((FBHomeFeedEntry) bean.getData().get(i)).getName()+" : "+((FBHomeFeedEntry) bean.getData().get(i)).getMessage();
-			if (i==19) {
-				System.out.println();
-			}
+			
 			
 			RenrenFeedElementEntry entry = (RenrenFeedElementEntry) bean.getFeedList().get(i);
 			res += zDBHelper.fInsertFeed(entry);

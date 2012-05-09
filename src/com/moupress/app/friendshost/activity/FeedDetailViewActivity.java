@@ -1,17 +1,21 @@
 package com.moupress.app.friendshost.activity;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.SlidingDrawer;
+import android.widget.SlidingDrawer.OnDrawerCloseListener;
+import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,12 +23,18 @@ import com.github.droidfu.widgets.WebImageView;
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.sns.FeedEntry;
-import com.moupress.app.friendshost.sns.FeedEntryComment;
 import com.moupress.app.friendshost.util.FeedOrganisor;
 
-public class FeedDetailViewActivity extends Activity {
+public class FeedDetailViewActivity extends Activity implements OnDrawerOpenListener, OnDrawerCloseListener {
 
 	private FeedOrganisor zFeedOrg;
+	private FeedEntry feed;
+	
+	private ListView lstView_comments;
+	private LstViewCommentAdapter arrAdapterComment;
+	private LinearLayout drawer_comments_content;
+	
+	private int iScreenHeight;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,21 +42,40 @@ public class FeedDetailViewActivity extends Activity {
 		
 		this.setContentView(R.layout.feed_item_detail);
 		
-		zFeedOrg = new FeedOrganisor(this);
+		iScreenHeight = getWindowManager().getDefaultDisplay().getHeight();
+		
+		fInitFeed();
 		fInitUI();
 	}
-
-	private void fInitUI() {
+	
+	private void fInitFeed() {
 		Intent intent = this.getIntent();
 //		final FeedEntry feed = intent.getParcelableExtra(Const.FEED_ITEM);
 //		final ArrayList<Parcelable> comments = intent.getParcelableArrayListExtra(Const.COMMENTS);
 //		if (comments != null) {
 //			System.out.println();
 //		}
-		final String displayedSns = intent.getStringExtra(Const.SNS);
-		final String feed_id = intent.getStringExtra(Const.FID);
+		zFeedOrg = new FeedOrganisor(this);
 		
-		final FeedEntry feed = zFeedOrg.fGetFeedByID(displayedSns, feed_id);
+		String displayedSns = intent.getStringExtra(Const.SNS);
+		String feed_id = intent.getStringExtra(Const.FID);
+		
+		feed = zFeedOrg.fGetFeedByID( displayedSns, feed_id );
+		
+		arrAdapterComment = new LstViewCommentAdapter(this, R.layout.feed_item_detail_comment);
+//		for (FeedEntryComment comment : feed.getzComments()) {
+//			arrAdapterComment.addItem(comment);
+//		}
+		if (feed.getzComments() != null ) {
+			int size = feed.getzComments().size();
+			for (int i = 0; i< size; i++) {
+				arrAdapterComment.addItem(feed.getzComments().get(i));
+			}
+		}
+		
+	}
+
+	private void fInitUI() {
 		
 		WebImageView img_feeduserhead_detail = (WebImageView)findViewById(R.id.img_userhead_detail);
 		img_feeduserhead_detail.setImageUrl(feed.getzFriend().getHeadurl());
@@ -76,9 +105,10 @@ public class FeedDetailViewActivity extends Activity {
 		});
 		
 		WebView webV_detail = (WebView) findViewById(R.id.webV_detail);
-		if (feed.getsFeedType() != null 
+		if (
+				feed.getsFeedType() != null 
 				&& (feed.getsFeedType().equals("blog") || feed.getsFeedType().equals("21")) 
-				&& displayedSns.equals(Const.SNS_RENREN)) {
+			) {
 			webV_detail.setVisibility(View.VISIBLE);
 			webV_detail.setWebViewClient(new MyWebViewClient());
 			webV_detail.loadUrl(feed.getsLink());
@@ -111,6 +141,17 @@ public class FeedDetailViewActivity extends Activity {
 			//Display display = getWindowManager().getDefaultDisplay();
 			//FlowTextHelper.tryFlowText(descriptionDetail, img_photo_detail, txv_description_detail, display);
 		}
+		
+		SlidingDrawer drawer_comments = (SlidingDrawer) findViewById(R.id.drawer_comments);
+		drawer_comments.setOnDrawerOpenListener(this);
+		drawer_comments.setOnDrawerCloseListener(this);
+		
+		lstView_comments = (ListView) findViewById(R.id.lstV_detail_comment);
+		//lstView_comments.setVisibility(View.GONE);
+		lstView_comments.setAdapter(arrAdapterComment);
+		
+		drawer_comments_content = (LinearLayout) findViewById(R.id.content);
+		drawer_comments_content.setVisibility(View.GONE);
 	}
 	
 	class MyWebViewClient extends WebViewClient {
@@ -119,5 +160,31 @@ public class FeedDetailViewActivity extends Activity {
 	        view.loadUrl(url);
 	        return true;
 	    }
+	}
+
+	@Override
+	public void onDrawerClosed() {
+		drawer_comments_content.setVisibility(View.GONE);
+	}
+
+	@Override
+	public void onDrawerOpened() {
+		drawer_comments_content.setVisibility(View.VISIBLE);
+		arrAdapterComment.notifyDataSetChanged();
+		fInitMyCommentUI();
+	}
+
+	private void fInitMyCommentUI() {
+		WebImageView img_selfhead_detail_comment = (WebImageView) findViewById(R.id.img_selfhead_detail_comment);
+		final EditText etx_commentmsg_detail_comment = (EditText) findViewById(R.id.etx_commentmsg_detail_comment);
+		Button btn_send_detail_comment = (Button) findViewById(R.id.btn_send_detail_comment);
+		btn_send_detail_comment.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String myCommentMsg = etx_commentmsg_detail_comment.getText().toString();
+				Toast.makeText(getApplicationContext(), myCommentMsg, Toast.LENGTH_SHORT).show();
+			}
+		});
 	}
 }
