@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ns="http://github.com/droidfu/schema"
+    android:id="@+id/linearLayout2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="fill_horizontal"
+    android:orientation="horizontal" >
+
+     <LinearLayout
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal" >
+
+         <com.github.droidfu.widgets.WebImageView
+             xmlns:droidfu="http://github.com/droidfu/schema"
+             android:id="@+id/img_userhead_detail_comment"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:background="#CCC"
+             droidfu:progressDrawable="..."
+             ns:autoLoad="true" >
+         </com.github.droidfu.widgets.WebImageView>
+     </LinearLayout>
+
+     <LinearLayout
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_weight="2"
+         android:orientation="vertical" >
+
+         <TextView
+             android:id="@+id/txv_username_detail_comment"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Medium Text"
+             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+         <TextView
+             android:id="@+id/txv_commentmsg_detail_comment"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="aaaa"
+             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+         <TextView
+             android:id="@+id/txv_commentcreatedtime_detail_comment"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="aaaa"
+             android:textAppearance="?android:attr/textAppearanceSmall" />
+     </LinearLayout>
+
+     <LinearLayout
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:orientation="vertical" >
+
+         <ImageView
+             android:id="@+id/img_replytouser_detail_comment"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:src="@android:drawable/ic_input_add" />
+     </LinearLayout>
+     
+</LinearLayout>

@@ -462,6 +462,38 @@ public class DBHelper {
 		return result;
 	}
 	
+	public String[][] fGetFeedByID(String sns, String feedid) {
+		String[] columns = new String[] {C_FEED_ID,
+				 C_FEED_FROM, C_FEED_OWNER_ID, C_FEED_CREATED_TIME, 
+				 C_FEED_TYPE, C_FEED_MSG, C_FEED_STORY, C_FEED_LINK,
+				 C_FEED_PIC, C_FEED_NAME, C_FEED_CAPTION, C_FEED_DESCRIPTION};
+		String where = C_FEED_ID + " = ? and " 
+						+ C_FEED_SNS + " = ?"; //and "
+		//+ C_FEED_TYPE + " in (\"status\", \"picture\", \"link\")";
+		String[] selectionArgs = new String[] {feedid, sns};
+		Cursor cursor = null;
+		String[][] result = null;
+		try {
+			cursor = zSQLiteDB.query(T_FEED, columns, where, selectionArgs, null, null, C_FEED_UPDATED_TIME + ORDER_DESC);
+			int numRows = cursor.getCount();
+			result = new String[numRows][columns.length];
+			cursor.moveToFirst();
+			for (int i = 0; i < numRows; ++i) {
+				for (int j = 0; j < columns.length; ++j) {
+					result[i][j] = cursor.getString(j);
+				}
+				cursor.moveToNext();
+			}
+		} catch (SQLException e) {
+			Log.v(Const.TAG, "Get all birthday failed.", e);
+		} finally {
+			if (cursor != null && !cursor.isClosed()) {
+				cursor.close();
+			}
+		}
+		return result;
+	}
+	
 	public String fGetItemByID (String feedid, String sns, String table) {
 		String[] columns = new String[] {C_FEED_FROM, C_FEED_MSG};
 		String where = C_FEED_SNS + " = ? and " 

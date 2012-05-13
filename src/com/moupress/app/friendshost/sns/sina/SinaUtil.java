@@ -16,9 +16,9 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.moupress.app.friendshost.Const;
-import com.moupress.app.friendshost.LstViewFeedAdapter;
 import com.moupress.app.friendshost.OAuthActivity;
 import com.moupress.app.friendshost.PubSub;
+import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.SnsUtil;
 import com.moupress.app.friendshost.util.NotificationTask;
