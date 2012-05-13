@@ -3,7 +3,7 @@ package com.moupress.app.friendshost.sns;
 import java.util.ArrayList;
 
 import com.moupress.app.friendshost.Const;
-import com.moupress.app.friendshost.LstViewFeedAdapter;
+import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
 

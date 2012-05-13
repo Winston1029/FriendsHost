@@ -38,15 +38,15 @@ public class PubSub {
 	private static Activity zActivity;
 	private static Context zContext;
 	
-        public static FacebookUtil 	zFacebook;
-	public static RenrenUtil 	zRenrenUtil;
-	public static SinaUtil		zSinaUtil;
-	public static TwitterUtil   zTwitterUtil;
+    //public static FacebookUtil 	zFacebook;
+	//public static RenrenUtil 	zRenrenUtil;
+	//public static SinaUtil		zSinaUtil;
+	//public static TwitterUtil   zTwitterUtil;
 
 	public static FeedOrganisor zFeedOrg;
 	public static SnsOrg 		zSnsOrg;
 	
-	public static UIManager uiMgr;
+	//public static UIManager uiMgr;
 	private MainUIView mainUIView;
 	
 	private String displayedSns;
@@ -61,24 +61,24 @@ public class PubSub {
 		PubSub.zActivity = activity;
 		PubSub.zContext = activity.getApplicationContext();
 		
-                 uLstFeed = (ListView) zActivity.findViewById(R.id.uLstVFBFeed);
-		fInitUIMgr();
+        //uLstFeed = (ListView) zActivity.findViewById(R.id.uLstVFBFeed);
+		//fInitUIMgr();
 		fInitAcc();
 		fInitMainUI();
 		fLoadMainUI();
-		fInitFeedUIPreview();
-		fFBInitUI();
-		fInitRenrenUI();
-		fInitSinaUI();
-		fInitTwitter();
-		fInitPubUI();
+		//fInitFeedUIPreview();
+		//fFBInitUI();
+		//fInitRenrenUI();
+		//fInitSinaUI();
+		//fInitTwitter();
+		//fInitPubUI();
 	}
 
-        private void fInitUIMgr() {
-		
-		uiMgr = new UIManager(zActivity);
-		
-	}
+//        private void fInitUIMgr() {
+//		
+//		uiMgr = new UIManager(zActivity);
+//		
+//	}
 
 
 	//=====================Main UI Initialization=================
@@ -147,7 +147,7 @@ public class PubSub {
 	public void fFeedResendUI(FeedEntry feed)
 	{
 		Intent intent = new Intent(zActivity, FeedResendActivity.class);
-		intent.putExtra(Const.FEED_ITEM, feed);
+		//intent.putExtra(Const.FEED_ITEM, feed);
 		intent.putExtra(Const.FID, feed.getsID());
 		intent.putExtra(Const.SNS, this.displayedSns);
 		zActivity.startActivityForResult(intent, Const.FEED_RESEND_REQ_CD);
@@ -168,99 +168,87 @@ public class PubSub {
 	}
 	
 //Init Facebook UI
-	private void fFBInitUI() {
-		ImageButton uBtnFBGetFeed = (ImageButton) zActivity.findViewById(R.id.imgBtn_Facebook);
-        
-        uBtnFBGetFeed.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				displayedSns = Const.SNS_FACEBOOK;
-				zFacebook.fDisplayFeed();
-			}
-		});
-	}
-	
-	private void fInitRenrenUI() {
-		ImageButton uBtnRenrenGetFeed = (ImageButton) zActivity.findViewById(R.id.imgBtn_Renren);
-		
-		uBtnRenrenGetFeed.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				displayedSns = Const.SNS_RENREN;
-				zRenrenUtil.fDisplayRenrenFeed();
-			}
-		});
-	}
-	
-	private void fInitSinaUI() {
-		ImageButton uBtnSinaGetFeed = (ImageButton) zActivity.findViewById(R.id.imgBtn_Sina);
-		
-		uBtnSinaGetFeed.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				displayedSns = Const.SNS_SINA;
-				zSinaUtil.fDisplaySinaFeed();
-			}
-		});
-	}
-	
-	private void fInitTwitter() {
-		ImageButton uBtnTwitterGetFeed = (ImageButton) zActivity.findViewById(R.id.imgBtn_Twitter);
-		
-		uBtnTwitterGetFeed.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				displayedSns = Const.SNS_TWITTER;
-				zTwitterUtil.fDisplayTwitterFeed();
-			}
-		});
-	}
-	
-	private void fInitPubUI() {
-		ImageButton uBtnPubFeed = (ImageButton) zActivity.findViewById(R.id.imgBtn_PubFeed);
-		
-		uBtnPubFeed.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(zActivity, FeedPublishActivity.class);
-				intent.putExtra(Const.SNS, Const.SNS_RENREN);
-				zActivity.startActivity(intent);				
-			}
-		});
-	}
-
-	private void fInitAcc() {
-		//total 13M
-		zFacebook = new FacebookUtil(this); //10M , 17ps
-		zRenrenUtil = new RenrenUtil(this); //6.4M, 16ps
-		zSinaUtil = new SinaUtil(this); //6.8M, 9ps
-		zTwitterUtil = new TwitterUtil(this); // 7.0M, 10ps
-		
-		zFeedOrg = new FeedOrganisor(this);
-	}
+//	private void fFBInitUI() {
+//		ImageButton uBtnFBGetFeed = (ImageButton) zActivity.findViewById(R.id.imgBtn_Facebook);
+//        
+//        uBtnFBGetFeed.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				displayedSns = Const.SNS_FACEBOOK;
+//				zFacebook.fDisplayFeed();
+//			}
+//		});
+//	}
+//	
+//	private void fInitRenrenUI() {
+//		ImageButton uBtnRenrenGetFeed = (ImageButton) zActivity.findViewById(R.id.imgBtn_Renren);
+//		
+//		uBtnRenrenGetFeed.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				displayedSns = Const.SNS_RENREN;
+//				zRenrenUtil.fDisplayRenrenFeed();
+//			}
+//		});
+//	}
+//	
+//	private void fInitSinaUI() {
+//		ImageButton uBtnSinaGetFeed = (ImageButton) zActivity.findViewById(R.id.imgBtn_Sina);
+//		
+//		uBtnSinaGetFeed.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				displayedSns = Const.SNS_SINA;
+//				zSinaUtil.fDisplaySinaFeed();
+//			}
+//		});
+//	}
+//	
+//	private void fInitTwitter() {
+//		ImageButton uBtnTwitterGetFeed = (ImageButton) zActivity.findViewById(R.id.imgBtn_Twitter);
+//		
+//		uBtnTwitterGetFeed.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				displayedSns = Const.SNS_TWITTER;
+//				zTwitterUtil.fDisplayTwitterFeed();
+//			}
+//		});
+//	}
+//	
+//	private void fInitPubUI() {
+//		ImageButton uBtnPubFeed = (ImageButton) zActivity.findViewById(R.id.imgBtn_PubFeed);
+//		
+//		uBtnPubFeed.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				Intent intent = new Intent(zActivity, FeedPublishActivity.class);
+//				intent.putExtra(Const.SNS, Const.SNS_RENREN);
+//				zActivity.startActivity(intent);				
+//			}
+//		});
+//	}
 
 
 	private void fInitAcc() {
 		//total 13M
-                zFacebook = new FacebookUtil(this); //10M , 17ps
-		zRenrenUtil = new RenrenUtil(this); //6.4M, 16ps
-		zSinaUtil = new SinaUtil(this); //6.8M, 9ps
-		zTwitterUtil = new TwitterUtil(this); // 7.0M, 10ps
-		
-
+//        zFacebook = new FacebookUtil(this); //10M , 17ps
+//		zRenrenUtil = new RenrenUtil(this); //6.4M, 16ps
+//		zSinaUtil = new SinaUtil(this); //6.8M, 9ps
+//		zTwitterUtil = new TwitterUtil(this); // 7.0M, 10ps
 		
 		this.zFeedOrg = new FeedOrganisor(this);
 		this.zSnsOrg = new SnsOrg(this);
 	}
 	
-	public FacebookUtil fGetFacebookUtil() {return zFacebook; }
-	public RenrenUtil fGetRenrenUtil() {return zRenrenUtil; }
-	public SinaUtil fGetSinaUtil() {return zSinaUtil;}
+//	public FacebookUtil fGetFacebookUtil() {return zFacebook; }
+//	public RenrenUtil fGetRenrenUtil() {return zRenrenUtil; }
+//	public SinaUtil fGetSinaUtil() {return zSinaUtil;}
 	public Activity fGetActivity() { return zActivity; }
 	public Context fGetContext() { return zContext; }
 	public FeedOrganisor fGetFeedOrganisor() {return zFeedOrg; }
@@ -277,28 +265,31 @@ public class PubSub {
 				String feed_id = data.getStringExtra(Const.FID);
 				FeedEntry feed = zFeedOrg.fGetFeedByID(displayedSns, feed_id);
 				
-if(sns.equals(Const.SNS_FACEBOOK))
-				{
-					zFacebook.fResend(feed);
-				} 
-				else if (sns.equals(Const.SNS_RENREN))
-				{
-					zRenrenUtil.fResend(feed);
-				}
-				else if (sns.equals(Const.SNS_TWITTER))
-				{
-					zTwitterUtil.fResend(feed);
-				} else if (sns.equals(Const.SNS_SINA)) {
-					zSinaUtil.fResend(feed);
-				}
+//				if(sns.equals(Const.SNS_FACEBOOK))
+//				{
+//					zFacebook.fResend(feed);
+//				} 
+//				else if (sns.equals(Const.SNS_RENREN))
+//				{
+//					zRenrenUtil.fResend(feed);
+//				}
+//				else if (sns.equals(Const.SNS_TWITTER))
+//				{
+//					zTwitterUtil.fResend(feed);
+//				} else if (sns.equals(Const.SNS_SINA)) {
+//					zSinaUtil.fResend(feed);
+//				}
 				this.zSnsOrg.GetSnsInstance(sns).fResend(feed);
 
 			}
 		}
 		else 
 	{  
-			zRenrenUtil.onComplete(requestCode, resultCode, data);
-			zFacebook.onComplete(requestCode, resultCode, data);
+//			zRenrenUtil.onComplete(requestCode, resultCode, data);
+//			zFacebook.onComplete(requestCode, resultCode, data);
+			((RenrenUtil)this.zSnsOrg.GetSnsInstance(Const.SNS_RENREN)).onComplete(requestCode, resultCode, data);
+			((FacebookUtil)this.zSnsOrg.GetSnsInstance(Const.SNS_FACEBOOK)).onComplete(requestCode, resultCode, data);
+
 		}
 
 	}

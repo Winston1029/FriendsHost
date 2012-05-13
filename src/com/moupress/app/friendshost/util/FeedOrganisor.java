@@ -90,16 +90,13 @@ public class FeedOrganisor {
 					cntComments = 0;
 				}
 				for (int j = 0; j < cntComments; j++) {
-					if( entry.getComments().getData() != null)
-					{
-                                         if (comment != null ) {
+					FBFeedEntryComment comment = entry.getComments().getData().get(j);
+					if (comment != null ) {
 						comment.setSns(Const.SNS_FACEBOOK);
 						comment.setCommetedfeedID(entry.getId());
 						zDBHelper.fInsertComments(comment);
-
-
-						}
 					}
+
 				}
 				
 			}
