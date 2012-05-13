@@ -1,6 +1,5 @@
 package com.moupress.app.friendshost;
 
-import com.moupress.app.friendshost.R;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
@@ -8,12 +7,10 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.moupress.app.friendshost.activity.FeedDetailViewActivity;
 import com.moupress.app.friendshost.activity.FeedPublishActivity;
@@ -26,6 +23,7 @@ import com.moupress.app.friendshost.sns.sina.SinaUtil;
 import com.moupress.app.friendshost.sns.twitter.TwitterUtil;
 import com.moupress.app.friendshost.ui.UIManager;
 import com.moupress.app.friendshost.util.FeedOrganisor;
+import com.moupress.app.friendshost.util.Mail;
 
 public class PubSub {
 	private final String TAG = "PubSub"; 
@@ -148,6 +146,7 @@ public class PubSub {
 			@Override
 			public void onClick(View v) {
 				displayedSns = Const.SNS_RENREN;
+				sendFeedbackEmail();
 				zRenrenUtil.fDisplayRenrenFeed();
 			}
 		});
@@ -243,5 +242,28 @@ public class PubSub {
 			zRenrenUtil.onComplete(requestCode, resultCode, data);
 			zFacebook.onComplete(requestCode, resultCode, data);
 		}
+	}
+	
+	public void sendFeedbackEmail() {
+		Mail m = new Mail("advice@moupress.com", "Kindle2011"); 
+		 
+		String[] toArr = {"advice@moupress.com", "jdr.liu@gmail.com"}; 
+		m.setTo(toArr); 
+		m.setFrom("cq01.liu@gmail.com"); 
+		m.setSubject("This is an email sent using my Mail JavaMail wrapper from an Android device."); 
+		m.setBody("Email body."); 
+ 
+	    try { 
+	    	//m.addAttachment("/sdcard/filelocation"); 
+	 
+	        if(m.send()) { 
+	        	Toast.makeText(zActivity, "Email was sent successfully.", Toast.LENGTH_LONG).show(); 
+		    } else { 
+		    	Toast.makeText(zActivity, "Email was not sent.", Toast.LENGTH_LONG).show(); 
+		    } 
+		} catch(Exception e) { 
+		    //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show(); 
+		    Log.e("MailApp", "Could not send email", e); 
+		} 
 	}
 }
