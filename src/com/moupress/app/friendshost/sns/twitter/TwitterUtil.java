@@ -8,6 +8,7 @@ import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.LstViewFeedAdapter;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.sns.FeedEntry;
+import com.moupress.app.friendshost.sns.SnsUtil;
 import com.moupress.app.friendshost.util.NotificationTask;
 
 import oauth.signpost.OAuth;
@@ -15,7 +16,7 @@ import oauth.signpost.OAuthConsumer;
 import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
-import twitter4j.AccountSettings;
+import twitter4j.AccountTotals;
 import twitter4j.AsyncTwitter;
 import twitter4j.AsyncTwitterFactory;
 import twitter4j.ResponseList;
@@ -42,11 +43,12 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 
-public class TwitterUtil {
+public class TwitterUtil extends SnsUtil{
 
 	private SharedPreferences prefs;
-	private Activity activity;
-	private Context context;
+	//private Activity zActivity;
+	//private Context zContext;
+	
     private OAuthConsumer consumer; 
     private OAuthProvider provider;
     private String msgSend;
@@ -54,10 +56,10 @@ public class TwitterUtil {
 	private static enum AUTH_METHODS {GET_FEEDS, UPDATE_STATUS};
 	private AUTH_METHODS authMethod = AUTH_METHODS.GET_FEEDS;
 	
-	private PubSub zPubSub;
+	//private PubSub zPubSub;
 	private static final String TAG = "TwitterUtil";
 	
-	private boolean isAutenticated = false; 
+	private boolean isAuthenticated = false; 
 	private AsyncTwitter twitter;
 	private NotificationTask notificationTask;
 	
@@ -67,12 +69,12 @@ public class TwitterUtil {
 		@Override
 		public void onException(TwitterException ex, TwitterMethod method) {
 			
-			if(method == TwitterMethod.ACCOUNT_SETTINGS)
+			if(method == TwitterMethod.ACCOUNT_TOTALS)
 			{
-				if(!isAutenticated)
+				if(!isAuthenticated)
 				{
-					isAutenticated = true;
-					Autentication();
+					isAuthenticated = true;
+					Authentication();
 				}
 			}
 			else if(method == TwitterMethod.UPDATE_STATUS)
@@ -100,14 +102,15 @@ public class TwitterUtil {
 			//mTwitterHandler.post(mFetchTwitterNotification);
 			//onSnsListener.OnSnsTwitterFeedsLoaded(statuses);
 			Log.i(TAG, "Twitters are downloaded! " + statuses.size());
-			zPubSub.fGetFeedOrganisor().fSaveNewFeeds(statuses, context);
+			zPubSub.fGetFeedOrganisor().fSaveNewFeeds(statuses, zContext);
 		}
 
+		
 		@Override
-		public void gotAccountSettings(AccountSettings settings) {
+		public void gotAccountTotals(AccountTotals totals) {
 			//super.gotAccountSettings(settings);
 			Log.i(TAG, "Get Account Setting");
-			isAutenticated = true;
+			isAuthenticated = true;
 			followActions();
 		}
 	 };
@@ -129,10 +132,11 @@ public class TwitterUtil {
 	//public TwitterUtil(Activity activity,final Context context)
 	public TwitterUtil(PubSub zPubSub)
 	{
-		this.activity = zPubSub.fGetActivity();
-		this.context = zPubSub.fGetActivity();
-		this.zPubSub = zPubSub;
-	    this.prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+		super(zPubSub,Const.SNS_TWITTER);
+		//this.zActivity = zPubSub.fGetActivity();
+		//this.zContext = zPubSub.fGetActivity();
+		//this.zPubSub = zPubSub;
+	    this.prefs = PreferenceManager.getDefaultSharedPreferences(zActivity);
 	}
 	
 	
@@ -156,7 +160,7 @@ public class TwitterUtil {
 	public void sendTweet(SharedPreferences prefs,String msg)  {
 		
 		if(twitter == null)
-			 twitter = Autentication(prefs,msg);
+			 twitter = Authentication(prefs,msg);
 		
 	    startNotification(1,"Tweet");
         twitter.updateStatus(msg);
@@ -169,7 +173,7 @@ public class TwitterUtil {
 	public void getTweets(SharedPreferences prefs)
 	{
 		if(twitter == null)
-			 twitter = Autentication(prefs,null);
+			 twitter = Authentication(prefs,null);
 			
 			//Log.i(TAG, "Get Tweets !");
 			
@@ -178,7 +182,7 @@ public class TwitterUtil {
 				
 
 	public void retrieveToken(Uri uri) {
-		new RetrieveAccessTokenTask(activity,consumer,provider,prefs).execute(uri);
+		new RetrieveAccessTokenTask(zActivity,consumer,provider,prefs).execute(uri);
 	}
 	
 	public class RetrieveAccessTokenTask extends AsyncTask<Uri, Void, Void> {
@@ -254,7 +258,7 @@ public class TwitterUtil {
 	}
 
 	
-	public void Autentication() {
+	public void Authentication() {
 		try {
     		this.consumer = new CommonsHttpOAuthConsumer(Const.CONSUMER_KEY, Const.CONSUMER_SECRET);
     	    this.provider = new CommonsHttpOAuthProvider(Const.REQUEST_URL,Const.ACCESS_URL,Const.AUTHORIZE_URL);
@@ -263,17 +267,17 @@ public class TwitterUtil {
     		System.out.println("Erro creating consumer / provider" + e);
 		}
     	
-    	activity.runOnUiThread(new Runnable(){
+    	zActivity.runOnUiThread(new Runnable(){
 
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				new OAuthRequestTokenTask(activity,consumer,provider).execute();
+				new OAuthRequestTokenTask(zActivity,consumer,provider).execute();
 			}});
 	}
 	
 	
-	public AsyncTwitter Autentication(SharedPreferences prefs,String msg) {
+	public AsyncTwitter Authentication(SharedPreferences prefs,String msg) {
 		//super.Autentication(prefs);
 		String token = prefs.getString(OAuth.OAUTH_TOKEN, "1-1");
 		String secret = prefs.getString(OAuth.OAUTH_TOKEN_SECRET, "");
@@ -292,28 +296,30 @@ public class TwitterUtil {
 	
 	public boolean checkAuthenticated(SharedPreferences prefs,boolean isFollowUp) {
 		
-		Log.i(TAG, "Authentication " + this.isAutenticated);
-		if(!this.isAutenticated)
+		Log.i(TAG, "Authentication " + this.isAuthenticated);
+		if(!this.isAuthenticated)
 		{
 			if(twitter == null)
-			 twitter = Autentication(prefs,null);
-			twitter.getAccountSettings();
+			{
+				 twitter = Authentication(prefs,null);
+				 twitter.getAccountTotals();
+			}
 		}
 		else
 		{
 			if(isFollowUp)
 			this.followActions();
 		}
-		return this.isAutenticated;
+		return this.isAuthenticated;
 	}
 	
-
+    @Override
 	public boolean isSessionValid() {
 		// TODO Auto-generated method stub
 		return checkAuthenticated(prefs,false);
 	}
 
-
+    @Override
 	public void fGetNewsFeed(Context applicationContext) {
 		// TODO Auto-generated method stub
 		 authMethod = AUTH_METHODS.GET_FEEDS;
@@ -321,20 +327,22 @@ public class TwitterUtil {
 	}
 
 
-	public void fDisplayTwitterFeed() {
-		zPubSub.fGetActivity().runOnUiThread(new Runnable() {
-			public void run() {
-
-				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
-				feedAdapter.clear();
-				ArrayList<FeedEntry> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_TWITTER);
-				for (FeedEntry item : feeds ) {
-					feedAdapter.addItem(item);
-				}
-				feedAdapter.notifyDataSetChanged();
-			}
-		});
-	}
+	//public void fDisplayTwitterFeed() {
+//    @Override
+//    public void fDisplayFeed(){
+//		zPubSub.fGetActivity().runOnUiThread(new Runnable() {
+//			public void run() {
+//
+//				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
+//				feedAdapter.clear();
+//				ArrayList<FeedEntry> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_TWITTER);
+//				for (FeedEntry item : feeds ) {
+//					feedAdapter.addItem(item);
+//				}
+//				feedAdapter.notifyDataSetChanged();
+//			}
+//		});
+//	}
 
 	
 	//Upload Photo to Twitter
@@ -354,7 +362,7 @@ public class TwitterUtil {
 	 
     private void startNotification(int notificationId,String fileType)
     {
-    	notificationTask = new NotificationTask(this.context);
+    	notificationTask = new NotificationTask(this.zContext);
 		 if(notificationTask != null)
 		{
 			notificationTask.SetNotificationTask(notificationId, "Twitter", fileType);
@@ -410,8 +418,8 @@ public class TwitterUtil {
 			return null;
 		}
 	}
-
-
+	 
+	@Override
 	public void fResend(FeedEntry feed) {
 		this.SendFeed(feed.getsMsgBody());
 	}

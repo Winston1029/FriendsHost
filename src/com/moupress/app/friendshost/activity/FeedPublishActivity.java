@@ -357,43 +357,46 @@ public class FeedPublishActivity extends Activity{
 	
 	private void publishFeed()
 	{
-		if(this.WBSelected)
-		{
-			PubSub.zSinaUtil.fPublishFeeds(message);
-		}
-		if(this.RRSelected)
-		{
-			PubSub.zRenrenUtil.fPublishFeeds(" ", " ", " ", " ", " ", message);
-		}
-	    if(this.FBSelected)
-		{
-			PubSub.zFacebook.fPublishFeeds(null, null, null, null, null, message);
-		}
-	    if(this.TWSelected)
-	    {
-	    	PubSub.zTwitterUtil.SendFeed(message);
-	    }
+//		
+//		if(this.WBSelected)
+//		{
+//			PubSub.zSinaUtil.fPublishFeeds(message);
+//		}
+//		if(this.RRSelected)
+//		{
+//			PubSub.zRenrenUtil.fPublishFeeds(" ", " ", " ", " ", " ", message);
+//		}
+//	    if(this.FBSelected)
+//		{
+//			PubSub.zFacebook.fPublishFeeds(null, null, null, null, null, message);
+//		}
+//	    if(this.TWSelected)
+//	    {
+//	    	PubSub.zTwitterUtil.SendFeed(message);
+//	    }
+	    
+	    
 	}
 	private void uploadPhoto() {
-		
-		if(this.WBSelected)
-		{
-			PubSub.zSinaUtil.fUploadPic(message, selectedImagePath);
-		}
-		if(this.RRSelected)
-		{
-		   PubSub.zRenrenUtil.fUploadPic(message,selectedImagePath);
-		}
-		
-		if(this.FBSelected)
-		{
-			PubSub.zFacebook.fUploadPic(message,selectedImagePath);
-		}
-		
-		if(this.TWSelected)
-		{
-			PubSub.zTwitterUtil.fUploadPic(message, selectedImagePath);
-		}
+//		
+//		if(this.WBSelected)
+//		{
+//			PubSub.zSinaUtil.fUploadPic(message, selectedImagePath);
+//		}
+//		if(this.RRSelected)
+//		{
+//		   PubSub.zRenrenUtil.fUploadPic(message,selectedImagePath);
+//		}
+//		
+//		if(this.FBSelected)
+//		{
+//			PubSub.zFacebook.fUploadPic(message,selectedImagePath);
+//		}
+//		
+//		if(this.TWSelected)
+//		{
+//			PubSub.zTwitterUtil.fUploadPic(message, selectedImagePath);
+//		}
 	}
 	 
 	protected void showProgress() {

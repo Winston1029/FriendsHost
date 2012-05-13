@@ -11,6 +11,8 @@ public class Const {
 	
 	public static final String SNS = "sns";
 	
+	public static final String SNS_SIGN_ON = "SnsSignOn";
+	
 	//==============DBHelper================================
 	public static final String SP_SINA_TOKENKEY = "SinaTokeyKey";
 	public static final String SP_SINA_TOKENSECRET = "SinaTokeySecret";

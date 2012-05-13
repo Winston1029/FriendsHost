@@ -27,4 +27,5 @@ public class Pref {
         // perform validation etc..
         getPrefs(context).edit().putInt(key, value).commit();
     }
+    
 }

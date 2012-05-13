@@ -11,6 +11,7 @@ import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.LstViewFeedAdapter;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.sns.FeedEntry;
+import com.moupress.app.friendshost.sns.SnsUtil;
 import com.moupress.app.friendshost.util.FeedOrganisor;
 import com.moupress.app.friendshost.util.NotificationTask;
 import com.renren.api.connect.android.Util;
@@ -34,10 +35,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 
-public class FacebookUtil {
+public class FacebookUtil extends SnsUtil{
 
-	private Context zContext;
-	private PubSub zPubSub;
+	//private Context zContext;
+	//private PubSub zPubSub;
 	
 	public static final String APP_ID = "337247706286700";
 	private static final String TAG = "FacebookUtil";
@@ -61,15 +62,18 @@ public class FacebookUtil {
 	
 	
 	public FacebookUtil(PubSub pubSub) {
-		zPubSub = pubSub;
-		zContext = zPubSub.fGetContext();
+		
+		super(pubSub,Const.SNS_FACEBOOK);
+		//zPubSub = pubSub;
+		//zContext = zPubSub.fGetContext();
 		if (zFacebook == null) {
 			zFacebook = new Facebook(APP_ID);
 		}
-		fFacebookAuth();
 		
+		fFacebookAuth();
 	}
 	
+	@Override
 	public boolean isSessionValid() {
 		if (zFacebook != null) {
 			return zFacebook.isSessionValid();
@@ -77,12 +81,15 @@ public class FacebookUtil {
 			return false;
 		}
 	}
+	
+	
 
+	@Override
 	public void fGetNewsFeed(final Context context) {
 		SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(zContext);
 	    sfbToken = mPrefs.getString(FBTOKEN, "");
 	
-    	fFacebookAuth();
+    	//fFacebookAuth();
     	sfbToken = mPrefs.getString(FBTOKEN, "");
 	    
 	    //AsyncFacebookRunner asyncFB = new AsyncFacebookRunner(zFacebook);
@@ -91,6 +98,9 @@ public class FacebookUtil {
 
 			@Override
 			public void onComplete(final String response, Object state) {
+				
+				Log.i(TAG, "Facebook news feed get listener on complete");
+				
 				FBHomeFeed bean = new Gson().fromJson(response, FBHomeFeed.class);
 				zPubSub.fGetFeedOrganisor().fSaveNewFeeds(bean, context);
 			}
@@ -123,23 +133,24 @@ public class FacebookUtil {
 	    asyncFB.request("me/home", mBundle, listener);
 	}
 	
-	public void fDisplayFeed() {
-		zPubSub.fGetActivity().runOnUiThread(new Runnable() {
-			public void run() {
-				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
-				feedAdapter.clear();
-//				String[][] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_FACEBOOK);
-//				for (int i = 0; i < feedMsg.length; i++) {
-//					feedAdapter.addItem(feedMsg[i]);
+//	@Override
+//	public void fDisplayFeed() {
+//		zPubSub.fGetActivity().runOnUiThread(new Runnable() {
+//			public void run() {
+//				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
+//				feedAdapter.clear();
+////				String[][] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_FACEBOOK);
+////				for (int i = 0; i < feedMsg.length; i++) {
+////					feedAdapter.addItem(feedMsg[i]);
+////				}
+//				ArrayList<FeedEntry> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_FACEBOOK);
+//				for (FeedEntry item : feeds ) {
+//					feedAdapter.addItem(item);
 //				}
-				ArrayList<FeedEntry> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_FACEBOOK);
-				for (FeedEntry item : feeds ) {
-					feedAdapter.addItem(item);
-				}
-				feedAdapter.notifyDataSetChanged();
-			}
-		});
-	}
+//				feedAdapter.notifyDataSetChanged();
+//			}
+//		});
+//	}
 	
 	private void fFacebookAuth(){
 		
@@ -323,6 +334,7 @@ public class FacebookUtil {
 		}
     }
 
+    @Override
 	public void fResend(FeedEntry feed) {
 		this.fPublishFeeds(" ", feed.getsPhotoPreviewDescription(), feed.getsPhotoPreviewLink(), feed.getsPhotoPreviewLink(), feed.getsPhotoPreviewCaption(), feed.getsMsgBody());
 	}

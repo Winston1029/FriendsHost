@@ -80,14 +80,18 @@ public class FeedOrganisor {
 				// comment get from Facebook only shows the 1st and the last entry
 				// need more research here
 				if (cntComments > 0) {
+					if(entry.getComments().getData() != null)
 					cntComments = Math.min(cntComments, entry.getComments().getData().size());
 				}
 				for (int j = 0; j < cntComments; j++) {
-					FBFeedEntryComment comment = entry.getComments().getData().get(j);
-					if (comment != null ) {
-						comment.setSns(Const.SNS_FACEBOOK);
-						comment.setCommetedfeedID(entry.getId());
-						zDBHelper.fInsertComments(comment);
+					if( entry.getComments().getData() != null)
+					{
+						FBFeedEntryComment comment = entry.getComments().getData().get(j);
+						if (comment != null ) {
+							comment.setSns(Const.SNS_FACEBOOK);
+							comment.setCommetedfeedID(entry.getId());
+							zDBHelper.fInsertComments(comment);
+						}
 					}
 				}
 				

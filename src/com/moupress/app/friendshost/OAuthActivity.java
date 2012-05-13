@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.moupress.app.friendshost.sns.sina.OAuthConstant;
+import com.moupress.app.friendshost.sns.twitter.TwitterUtil;
 import com.moupress.app.friendshost.util.Pref;
 
 public class OAuthActivity extends Activity {
@@ -22,7 +23,8 @@ public class OAuthActivity extends Activity {
 		if(uri != null && uri.getScheme().equals(Const.OAUTH_CALLBACK_SCHEME))
 		{
 			//Twitter Call Back trigger
-			PubSub.zTwitterUtil.CallBackTrigger(uri, 0, 0, null);
+			//PubSub.zTwitterUtil.CallBackTrigger(uri, 0, 0, null);
+			((TwitterUtil)PubSub.zSnsOrg.GetSnsInstance(Const.SNS_TWITTER)).CallBackTrigger(uri, 0, 0, null);
 		}
 		else if(uri != null && uri.getScheme().equals(Const.SINA_AUTH))
 		{
