@@ -2,6 +2,31 @@
 <resources>
     <!-- Style for Title Bar -->
  <style name="WindowTitleBackground">     
-        <item name="android:background">@color/lightgreen</item>
+        <item name="android:background">@color/purple</item>
  </style>
+ 
+ <style name="TitleBarButtonStyle">
+ 	  <item name="android:layout_width">match_parent</item>
+  	  <item name="android:layout_height">match_parent</item>
+  	  <item name="android:layout_weight">1</item>
+  	   <item name="android:background">@drawable/fh_title_btn_bg</item>
+ </style>
+ 
+ <!-- Style for scroll Bar -->
+  <style name="CustomTabPageIndicator" >
+     <item name="android:gravity">center_horizontal</item>
+     <item name="android:paddingLeft">22dip</item>
+     <item name="android:paddingRight">22dip</item>
+     <item name="android:paddingTop">12dp</item>
+     <item name="android:paddingBottom">12dp</item>
+     <item name="android:background">@drawable/custom_tab_indicator</item>
+  </style>
+  
+   <style name="CustomTabPageIndicatorText">
+   		<item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">#FF555555</item>
+    </style>
+    
 </resources>

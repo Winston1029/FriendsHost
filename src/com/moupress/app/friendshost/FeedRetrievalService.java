@@ -24,7 +24,6 @@ public class FeedRetrievalService extends Service {
 		
 		timer.scheduleAtFixedRate(zTimedTask, 3000, update_interval);
 		Log.i(getClass().getSimpleName(), "Timer started.");
-
 	}
 	
 	@Override
@@ -40,25 +39,29 @@ public class FeedRetrievalService extends Service {
 		zTimedTask = new TimerTask() {
 			@Override
 			public void run() {
-				if (PubSub.zFacebook != null && PubSub.zFacebook.isSessionValid() ) {
-					PubSub.zFacebook.fGetNewsFeed(getApplicationContext());
-				}
-				if (PubSub.zRenrenUtil != null && PubSub.zRenrenUtil.isSessionValid() ) {
-					PubSub.zRenrenUtil.fGetNewsFeed(getApplicationContext());
-				}
-				if (PubSub.zSinaUtil != null && PubSub.zSinaUtil.isSessionValid()) {
-					PubSub.zSinaUtil.fGetNewsFeed(getApplicationContext());
-				}
-				if(PubSub.zTwitterUtil != null && PubSub.zTwitterUtil.isSessionValid()) {
-					PubSub.zTwitterUtil.fGetNewsFeed(getApplicationContext());
-				}
+				PubSub.zSnsOrg.SnsGetNewFeed(getApplicationContext());
+//				if (PubSub.zFacebook != null && PubSub.zFacebook.isSessionValid() ) {
+//					PubSub.zFacebook.fGetNewsFeed(getApplicationContext());
+//				}
+//				if (PubSub.zRenrenUtil != null && PubSub.zRenrenUtil.isSessionValid() ) {
+//					PubSub.zRenrenUtil.fGetNewsFeed(getApplicationContext());
+//				}
+//				if (PubSub.zSinaUtil != null && PubSub.zSinaUtil.isSessionValid()) {
+//					PubSub.zSinaUtil.fGetNewsFeed(getApplicationContext());
+//				}
+//				if(PubSub.zTwitterUtil != null && PubSub.zTwitterUtil.isSessionValid()) {
+//					PubSub.zTwitterUtil.fGetNewsFeed(getApplicationContext());
+//				}
 				
-				if (PubSub.zRenrenUtil == null && 
-						PubSub.zFacebook == null && 
-						PubSub.zSinaUtil == null &&
-						PubSub.zTwitterUtil == null) {
-						//stopSelf();
-					}
+				
+				
+//				if (PubSub.zRenrenUtil == null && 
+//						PubSub.zFacebook == null && 
+//						PubSub.zSinaUtil == null &&
+//						PubSub.zTwitterUtil == null) {
+//						//stopSelf();
+//					}
+				
 			}
 		};
 		fPollForUpdates();

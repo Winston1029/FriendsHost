@@ -9,41 +9,41 @@
        android:layout_height="match_parent"
        android:layout_weight="1" >
    </ListView>
-
-   <LinearLayout
-       android:id="@+id/linearLayout2"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:orientation="horizontal" >
-       <ImageButton
-           android:id="@+id/imgBtn_Renren"
-           android:layout_width="64dp"
-           android:layout_height="64dp"
-           android:src="@drawable/renren_btn_selector" />
-
-       <ImageButton
-           android:id="@+id/imgBtn_Facebook"
-           android:layout_width="64dp"
-           android:layout_height="64dp"
-           android:src="@drawable/facebook_btn_selector" />
-       <ImageButton
-           android:id="@+id/imgBtn_Sina"
-           android:layout_width="64dp"
-           android:layout_height="64dp"
-           android:src="@drawable/sina_btn_selector" />
-
-       <ImageButton
-           android:id="@+id/imgBtn_Twitter"
-           android:layout_width="64dp"
-           android:layout_height="64dp"
-           android:src="@drawable/twitter_btn_selector" />
-
-       <ImageButton
-           android:id="@+id/imgBtn_PubFeed"
-           android:layout_width="64dp"
-           android:layout_height="64dp"
-           android:src="@drawable/pub_btn_selector" />
-
-   </LinearLayout>
+<!---->
+<!--   <LinearLayout-->
+<!--       android:id="@+id/linearLayout2"-->
+<!--       android:layout_width="match_parent"-->
+<!--       android:layout_height="wrap_content"-->
+<!--       android:orientation="horizontal" >--><!---->
+<!--       <ImageButton-->
+<!--           android:id="@+id/imgBtn_Renren"-->
+<!--           android:layout_width="64dp"-->
+<!--           android:layout_height="64dp"-->
+<!--           android:src="@drawable/renren_btn_selector" />-->
+<!---->
+<!--       <ImageButton-->
+<!--           android:id="@+id/imgBtn_Facebook"-->
+<!--           android:layout_width="64dp"-->
+<!--           android:layout_height="64dp"-->
+<!--           android:src="@drawable/facebook_btn_selector" />-->
+<!----><!--       <ImageButton-->
+<!--           android:id="@+id/imgBtn_Sina"-->
+<!--           android:layout_width="64dp"-->
+<!--           android:layout_height="64dp"-->
+<!--           android:src="@drawable/sina_btn_selector" />-->
+<!---->
+<!--       <ImageButton-->
+<!--           android:id="@+id/imgBtn_Twitter"-->
+<!--           android:layout_width="64dp"-->
+<!--           android:layout_height="64dp"-->
+<!--           android:src="@drawable/twitter_btn_selector" />-->
+<!---->
+<!--       <ImageButton-->
+<!--           android:id="@+id/imgBtn_PubFeed"-->
+<!--           android:layout_width="64dp"-->
+<!--           android:layout_height="64dp"-->
+<!--           android:src="@drawable/pub_btn_selector" />-->
+<!---->
+<!--   </LinearLayout>-->
 
 </LinearLayout>

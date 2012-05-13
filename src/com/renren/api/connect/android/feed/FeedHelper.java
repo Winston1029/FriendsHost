@@ -233,6 +233,7 @@ public class FeedHelper {
 								.getOrgResponse()));
 					}
 				} catch (Throwable t) { // 一般为网络异常
+					if(t.getMessage() != null)
 					Util.logger(t.getMessage());
 					if (listener != null) {
 						listener.onFault(t);

@@ -18,6 +18,7 @@ import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
+import com.moupress.app.friendshost.sns.SnsUtil;
 import com.moupress.app.friendshost.util.NotificationTask;
 import com.renren.api.connect.android.AsyncRenren;
 import com.renren.api.connect.android.Renren;
@@ -31,7 +32,7 @@ import com.renren.api.connect.android.photos.PhotoUploadResponseBean;
 import com.renren.api.connect.android.view.RenrenAuthListener;
 
 
-public class RenrenUtil {
+public class RenrenUtil extends SnsUtil{
 	
 	private static final String API_KEY = "7872469fdd144ef792233e56dca0eb31";
 	private static final String SECRET_KEY = "938ebb14322d40c89015483b2479d144";
@@ -40,22 +41,25 @@ public class RenrenUtil {
 	
 	private static final String[] PERMISSIONS = new String[] {"read_user_feed", "publish_feed", "publish_share"};
 	
-	private PubSub zPubSub;
-	private Context zContext;
-	private Activity zActivity;
+	//private PubSub zPubSub;
+	//private Context zContext;
+	//private Activity zActivity;
 	
 	private Renren zRenren;
 	private static AsyncRenren asyncRenren;
 	private NotificationTask notificationTask;
 		
 	public RenrenUtil(PubSub pubSub) {
-		zPubSub = pubSub;
-		zContext = zPubSub.fGetContext();
-		zActivity = zPubSub.fGetActivity();
+		//zPubSub = pubSub;
+		//zContext = zPubSub.fGetContext();
+		//zActivity = zPubSub.fGetActivity();
+		super(pubSub, Const.SNS_RENREN);
+		
 		this.zRenren = new Renren(API_KEY, SECRET_KEY, APP_ID, zContext);
 		fRenrenAuth();
 	}
 	
+	@Override
 	public boolean isSessionValid() {
 		if (zRenren != null ) {
 			return zRenren.isSessionKeyValid();
@@ -126,6 +130,8 @@ public class RenrenUtil {
 	 *  54	 page分享链接的新鲜事。
 	 *  55	 page分享音乐的新鲜事。
 	 */
+	
+	@Override
 	public void fGetNewsFeed(final Context context) {
 		//AsyncRenren asyncRenren = new AsyncRenren(zRenren);
 		asyncRenren = fGetAsyncRenren();
@@ -136,6 +142,7 @@ public class RenrenUtil {
 			@Override
 			public void onComplete(final FeedExtractResponseBean bean) {
 				//System.out.println("Renren news feed get listener on complete");
+				Log.i(TAG, "Renren news feed get listener on complete");
 				zPubSub.fGetFeedOrganisor().fSaveNewFeeds(bean, context);
 			}
 
@@ -191,27 +198,29 @@ public class RenrenUtil {
 		}
 	}
 	
-	public void fDisplayRenrenFeed() {
-		zActivity.runOnUiThread(new Runnable() {
-			public void run() {
-//				ArrayAdapter<String> adapterRenrenResponse = zPubSub.fGetArrAdapterFeed();
-//				adapterRenrenResponse.clear();
-//				String[] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeedSummary(Const.SNS_RENREN);
-//				for(int i= 0; i<feedMsg.length;i++) {
-//					adapterRenrenResponse.add(feedMsg[i]);
+	//public void fDisplayRenrenFeed() {
+//	@Override
+//	public void fDisplayFeed(){
+//		zActivity.runOnUiThread(new Runnable() {
+//			public void run() {
+////				ArrayAdapter<String> adapterRenrenResponse = zPubSub.fGetArrAdapterFeed();
+////				adapterRenrenResponse.clear();
+////				String[] feedMsg = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeedSummary(Const.SNS_RENREN);
+////				for(int i= 0; i<feedMsg.length;i++) {
+////					adapterRenrenResponse.add(feedMsg[i]);
+////				}
+////				adapterRenrenResponse.notifyDataSetChanged();
+//				
+//				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
+//				feedAdapter.clear();
+//				ArrayList<FeedEntry> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_RENREN);
+//				for (FeedEntry item : feeds ) {
+//					feedAdapter.addItem(item);
 //				}
-//				adapterRenrenResponse.notifyDataSetChanged();
-				
-				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
-				feedAdapter.clear();
-				ArrayList<FeedEntry> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_RENREN);
-				for (FeedEntry item : feeds ) {
-					feedAdapter.addItem(item);
-				}
-				feedAdapter.notifyDataSetChanged();
-			}
-		});
-	}
+//				feedAdapter.notifyDataSetChanged();
+//			}
+//		});
+//	}
 	
 	public void onComplete (int requestCode, int resultCode, Intent data) {
 		if (zRenren != null ) {
@@ -271,6 +280,7 @@ public class RenrenUtil {
 		}
     }
 
+    @Override
 	public void fResend(FeedEntry feed) {
 		// TODO Auto-generated method stub
 		//String name = (feed.getsName() == null?" ":feed.getsName());

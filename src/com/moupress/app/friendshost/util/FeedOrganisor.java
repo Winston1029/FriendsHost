@@ -84,17 +84,19 @@ public class FeedOrganisor {
 				// comment get from Facebook only shows the 1st and the last entry
 				// need more research here
 				if (cntComments > 0 && entry.getComments().getData() != null) {
+					if(entry.getComments().getData() != null)
 					cntComments = Math.min(cntComments, entry.getComments().getData().size());
 				} else {
 					cntComments = 0;
 				}
 				for (int j = 0; j < cntComments; j++) {
- 					FBFeedEntryComment comment = entry.getComments().getData().get(j);
+					FBFeedEntryComment comment = entry.getComments().getData().get(j);
 					if (comment != null ) {
 						comment.setSns(Const.SNS_FACEBOOK);
 						comment.setCommetedfeedID(entry.getId());
 						zDBHelper.fInsertComments(comment);
 					}
+
 				}
 				
 			}
@@ -114,10 +116,10 @@ public class FeedOrganisor {
 		if ( bean == null || bean.getFeedList() == null ) {
 			return;
 		}
-		int i = 0;
+	int i = 0;
 		try {
 		for( i= 0; i<bean.getFeedList().size();i++) {
-			//String msg = ((FBHomeFeedEntry) bean.getData().get(i)).getName()+" : "+((FBHomeFeedEntry) bean.getData().get(i)).getMessage();
+					//String msg = ((FBHomeFeedEntry) bean.getData().get(i)).getName()+" : "+((FBHomeFeedEntry) bean.getData().get(i)).getMessage();
 			
 			
 			RenrenFeedElementEntry entry = (RenrenFeedElementEntry) bean.getFeedList().get(i);
@@ -160,7 +162,7 @@ public class FeedOrganisor {
 		}
 		} catch (Exception e) {
 			System.out.println("Error for feed index " + i );
-		}
+			}
 		
 		if (res > 0 ) {
 			int cntUnReadFeed = fGetUnReadNewsFeedSummary(Const.SNS_RENREN).length;

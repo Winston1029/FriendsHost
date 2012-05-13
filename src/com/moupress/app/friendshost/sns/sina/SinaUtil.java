@@ -12,6 +12,7 @@ import weibo4andriod.http.RequestToken;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.moupress.app.friendshost.Const;
@@ -19,31 +20,35 @@ import com.moupress.app.friendshost.OAuthActivity;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
+import com.moupress.app.friendshost.sns.SnsUtil;
 import com.moupress.app.friendshost.util.NotificationTask;
 import com.moupress.app.friendshost.util.Pref;
 
-public class SinaUtil {
+public class SinaUtil extends SnsUtil{
 
+	private static final String TAG = "SinaUtil";
     private static String sTokenKey = "";
     private static String sTokenSecret = "";
 	
-	private PubSub zPubSub;
-	private Context zContext;
+	//private PubSub zPubSub;
+	//private Context zContext;
 	
 	private Weibo zSina;
 	
 	private NotificationTask notificationTask;
 	
 	public SinaUtil(PubSub pubSub) {
-		zPubSub = pubSub;
+		super(pubSub,Const.SNS_SINA);
+		//zPubSub = pubSub;
 		System.setProperty("weibo4j.oauth.consumerKey", Weibo.CONSUMER_KEY);
     	System.setProperty("weibo4j.oauth.consumerSecret", Weibo.CONSUMER_SECRET);
 		zSina = OAuthConstant.getInstance().getWeibo();
-		zContext = pubSub.fGetContext();
+		//zContext = pubSub.fGetContext();
 		fSinaAuth();
 	}
 	
-	public Boolean isSessionValid() {
+	@Override
+	public boolean isSessionValid() {
 		if ( zSina != null ) {
 			try {
 				return zSina.test();
@@ -73,34 +78,39 @@ public class SinaUtil {
 		}
 	}
 	
+	@Override
 	public void fGetNewsFeed(final Context context) {
 		sTokenKey = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENKEY);
 		sTokenSecret = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENSECRET);
 		zSina.setToken(sTokenKey, sTokenSecret);
 		try {
 			List<Status> friendsTimeline = zSina.getFriendsTimeline();
-			System.out.println("Sina news feed get listener on complete");
+			//System.out.println("Sina news feed get listener on complete");
+			Log.i(TAG, "Sing news feed get listener on complete");
 			zPubSub.fGetFeedOrganisor().fSaveNewFeeds(friendsTimeline, context);
 		} catch (WeiboException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void fDisplaySinaFeed() {
-		zPubSub.fGetActivity().runOnUiThread(new Runnable() {
-			public void run() {
-				
-				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
-				feedAdapter.clear();
-				ArrayList<FeedEntry> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_SINA);
-				for (FeedEntry item : feeds ) {
-					feedAdapter.addItem(item);
-				}
-				feedAdapter.notifyDataSetChanged();
-			}
-		});
-	}
+	//public void fDisplaySinaFeed() {
+//	@Override
+//	public void fDisplayFeed(){
+//		zPubSub.fGetActivity().runOnUiThread(new Runnable() {
+//			public void run() {
+//				
+//				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
+//				feedAdapter.clear();
+//				ArrayList<FeedEntry> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_SINA);
+//				for (FeedEntry item : feeds ) {
+//					feedAdapter.addItem(item);
+//				}
+//				feedAdapter.notifyDataSetChanged();
+//			}
+//		});
+//	}
 	
+	@Override
 	public void fPublishFeeds(String message) {
 		if (isSessionValid()) {
 			try {
@@ -125,6 +135,7 @@ public class SinaUtil {
 		}
 	}
 	
+	@Override
 	public void fResend(FeedEntry feed) {
 		this.fPublishFeeds(feed.getsMsgBody());
 	}

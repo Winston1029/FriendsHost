@@ -5,17 +5,28 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
   <Button android:id="@+id/leftpanelbtn" 
-  		android:background="@color/darkgreen">
+  		android:layout_gravity="left|center_vertical"
+  	    style="@style/TitleBarButtonStyle"
+  		>
   </Button>
   <TextView android:id="@+id/fhtitletv" 
+  			android:layout_width="match_parent"
+  			android:layout_height="match_parent"
+  			android:layout_gravity="center"
   			android:text="@string/title_text" 
+  			android:layout_weight="0.5"
+  			android:textSize="20dip"
+  			android:gravity="center"
   			>
   </TextView>
   <Button android:id="@+id/writefeedbtn" 
-  		android:background="@color/darkgreen"
+  		android:layout_gravity="right"
+  		style="@style/TitleBarButtonStyle"
   		>
   </Button>
   <Button android:id="@+id/searchbtn"
-  		android:background="@color/darkgreen">
+  		android:layout_gravity="right"
+  		style="@style/TitleBarButtonStyle"
+  		>
   </Button>
 </LinearLayout>
