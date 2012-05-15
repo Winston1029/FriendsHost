@@ -119,8 +119,6 @@ public class FeedOrganisor {
 	int i = 0;
 		try {
 		for( i= 0; i<bean.getFeedList().size();i++) {
-					//String msg = ((FBHomeFeedEntry) bean.getData().get(i)).getName()+" : "+((FBHomeFeedEntry) bean.getData().get(i)).getMessage();
-			
 			
 			RenrenFeedElementEntry entry = (RenrenFeedElementEntry) bean.getFeedList().get(i);
 			res += zDBHelper.fInsertFeed(entry);

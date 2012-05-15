@@ -7,21 +7,28 @@
     android:gravity="fill_horizontal"
     android:orientation="horizontal" >
 
-     <LinearLayout
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:orientation="horizontal" >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
-         <com.github.droidfu.widgets.WebImageView
-             xmlns:droidfu="http://github.com/droidfu/schema"
-             android:id="@+id/img_userhead_detail_comment"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:background="#CCC"
-             droidfu:progressDrawable="..."
-             ns:autoLoad="true" >
-         </com.github.droidfu.widgets.WebImageView>
-     </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <com.github.droidfu.widgets.WebImageView
+                xmlns:droidfu="http://github.com/droidfu/schema"
+                android:id="@+id/img_userhead_detail_comment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#CCC"
+                droidfu:progressDrawable="..."
+                ns:autoLoad="true" >
+            </com.github.droidfu.widgets.WebImageView>
+        </LinearLayout>
+
+    </LinearLayout>
 
      <LinearLayout
          android:layout_width="wrap_content"

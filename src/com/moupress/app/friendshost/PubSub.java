@@ -59,6 +59,9 @@ public class PubSub {
 		PubSub.zActivity = activity;
 		PubSub.zContext = activity.getApplicationContext();
 		
+		//hardcoded here to avoid error
+		displayedSns = Const.SNS_RENREN;
+		
         //uLstFeed = (ListView) zActivity.findViewById(R.id.uLstVFBFeed);
 		//fInitUIMgr();
 		fInitAcc();
