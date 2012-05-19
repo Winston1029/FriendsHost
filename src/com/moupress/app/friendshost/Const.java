@@ -81,5 +81,12 @@ public class Const {
 	public static final String COMMENTS = "comments";
 	public static final String FRIEND = "friend";
 	
+	
+	//==============SNS ListView Scroll Action Result ==============
+	public static final int LISTVIEW_SCROLL_TO_TOP = 0;
+	public static final int LISTVIEW_SCROLL_TO_BOTTOM = 1;
+	public static final int LISTVIEW_SCROLL_AT_TOP = 2;
+	public static final int LISTVIEW_SCROLL_AT_BOTTOM = 3;
+	
 
 }

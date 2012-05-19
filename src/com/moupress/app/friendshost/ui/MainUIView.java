@@ -3,6 +3,7 @@ package com.moupress.app.friendshost.ui;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -13,12 +14,17 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.Toast;
 
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.ui.listeners.DetailViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
+import com.moupress.app.friendshost.uicomponent.PullToRefreshListView;
+import com.moupress.app.friendshost.uicomponent.PullToRefreshListView.OnRefreshListener;
 import com.moupress.app.friendshost.uicomponent.TabPageIndicator;
 import com.moupress.app.friendshost.uicomponent.interfaces.TitleProvider;
 
@@ -53,6 +59,7 @@ public class MainUIView extends View{
 	}
 
 
+	private static Activity zActivity;
 
 	@Override
 	public void InitDetail(Activity activity, DetailViewListener detailViewListener) {
@@ -71,9 +78,8 @@ public class MainUIView extends View{
 		mPager = (ViewPager) activity.findViewById(R.id.snsPager);
 		mIndicator = (TabPageIndicator) activity.findViewById(R.id.snsTabIndicator);
 		
+		zActivity = activity;
 	}
-	
-	
 	
 	@Override
 	public void LoadView(Bundle loadData) {
@@ -84,13 +90,16 @@ public class MainUIView extends View{
 		mIndicator.setViewPager(mPager);
 		
 	}
+	
+	public FragmentPagerAdapter getAdapter() {
+		return mAdapter;
+	}
 
 
 
 
-	class SnsAdapter extends FragmentPagerAdapter implements TitleProvider
+	public class SnsAdapter extends FragmentPagerAdapter implements TitleProvider
 	{
-
 		public SnsAdapter(FragmentManager fm) {
 			super(fm);
 			// TODO Auto-generated constructor stub
@@ -99,7 +108,9 @@ public class MainUIView extends View{
 		@Override
 		public Fragment getItem(int position) {
 			// TODO Auto-generated method stub
+			//snsFeedListFragment = SnsFeedListFragment.newInstance(LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON).get(position).toString());
 			return SnsFeedListFragment.newInstance(LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON).get(position).toString());
+			//return snsFeedListFragment;
 		}
 
 		@Override
@@ -115,12 +126,21 @@ public class MainUIView extends View{
 			ArrayList<CharSequence> titles = LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON);
 			return titles.get(position%titles.size()).toString().toUpperCase();
 		}
+		
+//		public SnsFeedListFragment getSnsFeedListFragment() {
+//			return snsFeedListFragment;
+//		}
 	}
 	
 	
 	public static class SnsFeedListFragment extends ListFragment
 	{
 		 String snsName;
+		 private PullToRefreshListView lstViewFeedPreview;
+		 private static int iPrevScrollStatus;
+		 private static int iLstViewScrollAction;
+		 private static int iCntOnScrollEvents;
+		 private static boolean bScrolled;
 		 
 		 static SnsFeedListFragment newInstance(String sns)
 		 {
@@ -128,8 +148,12 @@ public class MainUIView extends View{
 			 
 			 Bundle args = new Bundle();
 			 args.putString(Const.SNS, sns);
+			 PubSub.setSNSDisplayed(sns);
 			 snsFeedListFragment.setArguments(args);
-			 
+			 bScrolled = false;
+			 iCntOnScrollEvents = 0;
+			 iPrevScrollStatus = OnScrollListener.SCROLL_STATE_IDLE;
+			 iLstViewScrollAction = Const.LISTVIEW_SCROLL_AT_TOP;
 			 return snsFeedListFragment;
 		 }
 
@@ -157,7 +181,94 @@ public class MainUIView extends View{
 			super.onActivityCreated(savedInstanceState);
 			this.setListAdapter(PubSub.zSnsOrg.GetSnsInstance(this.snsName).getFeedAdapter());
 			PubSub.zSnsOrg.GetSnsInstance(snsName).RefreshAdapter();
+			
+			lstViewFeedPreview = (PullToRefreshListView) this.getListView();
+			lstViewFeedPreview.setOnRefreshListener(new OnRefreshListener() {
+				
+				@Override
+				public void onRefresh() {
+					// TODO Auto-generated method stub
+					new GetDataTask().execute();
+					
+				}
+			});
+			
+			lstViewFeedPreview.setOnScrollListener(new OnScrollListener() {
+				
+				@Override
+				public void onScrollStateChanged(AbsListView view, int scrollState) {
+//					if (iPrevScrollStatus == OnScrollListener.SCROLL_STATE_FLING
+//							&& scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
+//						bScrolled = true;
+//						iLstViewScrollAction = Const.LISTVIEW_SCROLL_TO_TOP;
+//					} else if (iPrevScrollStatus == OnScrollListener.SCROLL_STATE_TOUCH_SCROLL
+//							&& scrollState == OnScrollListener.SCROLL_STATE_FLING) {
+//						bScrolled = true;
+//						iLstViewScrollAction = Const.LISTVIEW_SCROLL_AT_TOP;
+//					} else {
+//						bScrolled = false;
+//					}
+//					iPrevScrollStatus = scrollState;
+				}
+				
+				@Override
+				public void onScroll(AbsListView view, int firstVisibleItem,
+						int visibleItemCount, int totalItemCount) {
+					boolean loadOlder = firstVisibleItem + visibleItemCount >= totalItemCount;
+					boolean loadNewer = firstVisibleItem == 0;
+
+//					if (bScrolled) {
+//						System.out.println("Scrolled");
+//					}
+//					if (loadNewer && iLstViewScrollAction == Const.LISTVIEW_SCROLL_AT_TOP) {
+//						iCntOnScrollEvents++;
+//						Toast.makeText(zActivity, "At Top "+iCntOnScrollEvents, 
+//								Toast.LENGTH_SHORT).show();
+//					}
+//					if (loadNewer && bScrolled) {
+//						iCntOnScrollEvents++;
+//						Toast.makeText(zActivity, "Reach Top "+iCntOnScrollEvents, 
+//								Toast.LENGTH_SHORT).show();
+//					}
+//					if (loadOlder && iLstViewScrollAction == Const.LISTVIEW_SCROLL_AT_TOP) {
+//						iCntOnScrollEvents++;
+//						Toast.makeText(zActivity, "At Bottom "+iCntOnScrollEvents, 
+//								Toast.LENGTH_SHORT).show();
+//					}
+//			        if(loadOlder && bScrolled) {
+//			            //fGetAdapterFeedPreview() += visibleItemCount; // or any other amount
+//			            //fGetAdapterFeedPreview().notifyDataSetChanged();
+//			        	Toast.makeText(zActivity, "Reach End "+iCntOnScrollEvents,
+//			        			Toast.LENGTH_SHORT).show();
+//			        }				
+				}
+			});
 		}
+		
+		private class GetDataTask extends AsyncTask<Void, Void, String[]> {
+
+	        @Override
+	        protected String[] doInBackground(Void... params) {
+	            // Simulates a background job.
+	        	String[] mStrings = {
+	                    "aa", "bb"};
+	            //Thread.sleep(2000);
+				PubSub.zSnsOrg.GetSnsInstance(snsName).fGetNewsFeed(zActivity);
+	            return mStrings;
+	        }
+
+	        @Override
+	        protected void onPostExecute(String[] result) {
+	            //mListItems.addFirst("Added after refresh...");
+	        	Toast.makeText(zActivity, "Refresh Complete " +snsName, 
+						Toast.LENGTH_SHORT).show();
+	        	PubSub.zSnsOrg.GetSnsInstance(snsName).RefreshAdapter();
+	            // Call onRefreshComplete when the list has been refreshed.
+	            ((PullToRefreshListView) getListView()).onRefreshComplete();
+
+	            super.onPostExecute(result);
+	        }
+	    }
 		 
 	}
 }
