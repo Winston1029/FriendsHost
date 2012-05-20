@@ -135,12 +135,11 @@ public class MainUIView extends View{
 	
 	public static class SnsFeedListFragment extends ListFragment
 	{
-		 String snsName;
+		 private String snsName;
 		 private PullToRefreshListView lstViewFeedPreview;
-		 private static int iPrevScrollStatus;
-		 private static int iLstViewScrollAction;
-		 private static int iCntOnScrollEvents;
-		 private static boolean bScrolled;
+		 private int iCountScrollEvent;
+		 private boolean bScrolling;
+		 private int iPrevScrollState;
 		 
 		 static SnsFeedListFragment newInstance(String sns)
 		 {
@@ -148,12 +147,7 @@ public class MainUIView extends View{
 			 
 			 Bundle args = new Bundle();
 			 args.putString(Const.SNS, sns);
-			 PubSub.setSNSDisplayed(sns);
 			 snsFeedListFragment.setArguments(args);
-			 bScrolled = false;
-			 iCntOnScrollEvents = 0;
-			 iPrevScrollStatus = OnScrollListener.SCROLL_STATE_IDLE;
-			 iLstViewScrollAction = Const.LISTVIEW_SCROLL_AT_TOP;
 			 return snsFeedListFragment;
 		 }
 
@@ -181,7 +175,7 @@ public class MainUIView extends View{
 			super.onActivityCreated(savedInstanceState);
 			this.setListAdapter(PubSub.zSnsOrg.GetSnsInstance(this.snsName).getFeedAdapter());
 			PubSub.zSnsOrg.GetSnsInstance(snsName).RefreshAdapter();
-			
+			PubSub.setSNSDisplayed(snsName);
 			lstViewFeedPreview = (PullToRefreshListView) this.getListView();
 			lstViewFeedPreview.setOnRefreshListener(new OnRefreshListener() {
 				
@@ -193,54 +187,41 @@ public class MainUIView extends View{
 				}
 			});
 			
+			iCountScrollEvent = 0;
+			bScrolling = false;
+			iPrevScrollState = OnScrollListener.SCROLL_STATE_IDLE;
 			lstViewFeedPreview.setOnScrollListener(new OnScrollListener() {
 				
 				@Override
 				public void onScrollStateChanged(AbsListView view, int scrollState) {
-//					if (iPrevScrollStatus == OnScrollListener.SCROLL_STATE_FLING
-//							&& scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
-//						bScrolled = true;
-//						iLstViewScrollAction = Const.LISTVIEW_SCROLL_TO_TOP;
-//					} else if (iPrevScrollStatus == OnScrollListener.SCROLL_STATE_TOUCH_SCROLL
-//							&& scrollState == OnScrollListener.SCROLL_STATE_FLING) {
-//						bScrolled = true;
-//						iLstViewScrollAction = Const.LISTVIEW_SCROLL_AT_TOP;
-//					} else {
-//						bScrolled = false;
-//					}
-//					iPrevScrollStatus = scrollState;
+					if ((iPrevScrollState == OnScrollListener.SCROLL_STATE_IDLE
+							&& scrollState == OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+							|| (iPrevScrollState == OnScrollListener.SCROLL_STATE_TOUCH_SCROLL 
+									&& scrollState == OnScrollListener.SCROLL_STATE_FLING)) {
+						bScrolling = true;
+					} else {
+						bScrolling = false;
+					}
+					iPrevScrollState = scrollState;
 				}
 				
 				@Override
 				public void onScroll(AbsListView view, int firstVisibleItem,
 						int visibleItemCount, int totalItemCount) {
 					boolean loadOlder = firstVisibleItem + visibleItemCount >= totalItemCount;
-					boolean loadNewer = firstVisibleItem == 0;
+					//boolean loadNewer = firstVisibleItem == 0;
 
-//					if (bScrolled) {
-//						System.out.println("Scrolled");
-//					}
-//					if (loadNewer && iLstViewScrollAction == Const.LISTVIEW_SCROLL_AT_TOP) {
-//						iCntOnScrollEvents++;
-//						Toast.makeText(zActivity, "At Top "+iCntOnScrollEvents, 
-//								Toast.LENGTH_SHORT).show();
-//					}
-//					if (loadNewer && bScrolled) {
-//						iCntOnScrollEvents++;
-//						Toast.makeText(zActivity, "Reach Top "+iCntOnScrollEvents, 
-//								Toast.LENGTH_SHORT).show();
-//					}
-//					if (loadOlder && iLstViewScrollAction == Const.LISTVIEW_SCROLL_AT_TOP) {
-//						iCntOnScrollEvents++;
-//						Toast.makeText(zActivity, "At Bottom "+iCntOnScrollEvents, 
-//								Toast.LENGTH_SHORT).show();
-//					}
-//			        if(loadOlder && bScrolled) {
-//			            //fGetAdapterFeedPreview() += visibleItemCount; // or any other amount
-//			            //fGetAdapterFeedPreview().notifyDataSetChanged();
-//			        	Toast.makeText(zActivity, "Reach End "+iCntOnScrollEvents,
-//			        			Toast.LENGTH_SHORT).show();
-//			        }				
+					if(loadOlder && bScrolling) {
+						//still some bug but only trigger 2 times at the bottom now.
+			            //fGetAdapterFeedPreview() += visibleItemCount; // or any other amount
+			            //fGetAdapterFeedPreview().notifyDataSetChanged();
+						iCountScrollEvent++;
+			        	Toast.makeText(zActivity, "Loading More Feeds",
+			        			Toast.LENGTH_LONG).show();
+			        	//PubSub.zFeedOrg.fGet10MoreNewsFeed(snsName);
+			        	PubSub.zSnsOrg.GetSnsInstance(snsName).RefreshAdapter10MoreFeed();
+			        	bScrolling = false;
+			        }				
 				}
 			});
 		}
@@ -252,8 +233,14 @@ public class MainUIView extends View{
 	            // Simulates a background job.
 	        	String[] mStrings = {
 	                    "aa", "bb"};
-	            //Thread.sleep(2000);
-				PubSub.zSnsOrg.GetSnsInstance(snsName).fGetNewsFeed(zActivity);
+				
+				try {
+					PubSub.zSnsOrg.GetSnsInstance(snsName).fGetNewsFeed(zActivity);
+					//sleep a while to wait for async news feed getting return
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 	            return mStrings;
 	        }
 

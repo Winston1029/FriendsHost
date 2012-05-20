@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
+import com.moupress.app.friendshost.util.Pref;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
 
@@ -55,10 +56,25 @@ public abstract class SnsUtil {
 	public void LoadAdapter()
 	{
 		ArrayList<FeedEntry> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(this.SnsName);
+		FeedEntry lastItem = null;
 		for (FeedEntry item : feeds ) {
 			FeedAdapter.addItem(item);
+			lastItem = item;
 		}
+		fSaveLastLoadedFeed(lastItem);
 	}
+	
+	public void LoadAdapter10MoreFeed()
+	{
+		ArrayList<FeedEntry> feeds = zPubSub.fGetFeedOrganisor().fGet10MoreNewsFeed(this.SnsName);
+		FeedEntry lastItem = null;
+		for (FeedEntry item : feeds ) {
+			FeedAdapter.addItem(item);
+			lastItem = item;
+		}
+		fSaveLastLoadedFeed(lastItem);
+	}
+
 	public void AdapterNotifcation()
 	{
 		FeedAdapter.notifyDataSetChanged();
@@ -70,5 +86,17 @@ public abstract class SnsUtil {
 		this.LoadAdapter();
 		this.AdapterNotifcation();
 	}
+	
+	public void RefreshAdapter10MoreFeed()
+	{
+		//this.CleanAdapter();
+		this.LoadAdapter10MoreFeed();
+		this.AdapterNotifcation();
+	}
 	//===============Adapter Related Functions End=================
+	
+	private void fSaveLastLoadedFeed(FeedEntry lastItem) {
+		// TODO Auto-generated method stub
+		Pref.setMyStringPref(zContext, SnsName, lastItem.getsCreatedTime());
+	}
 }
