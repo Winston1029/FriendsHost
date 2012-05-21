@@ -25,20 +25,27 @@
 <!--         android:src="@drawable/ic_launcher" /> -->
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
-        <com.github.droidfu.widgets.WebImageView
-            xmlns:droidfu="http://github.com/droidfu/schema"
-            android:id="@+id/img_feeduser"
+        <LinearLayout
+            android:id="@+id/linearLayout1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            ns:autoLoad="true"
-            android:background="#CCC"
-            droidfu:progressDrawable="..." >
-        </com.github.droidfu.widgets.WebImageView>
+            android:orientation="vertical" >
+
+            <com.github.droidfu.widgets.WebImageView
+                xmlns:droidfu="http://github.com/droidfu/schema"
+                android:id="@+id/img_feeduser"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:background="#CCC"
+                droidfu:progressDrawable="..."
+                ns:autoLoad="true" >
+            </com.github.droidfu.widgets.WebImageView>
+        </LinearLayout>
 
     </LinearLayout>
 

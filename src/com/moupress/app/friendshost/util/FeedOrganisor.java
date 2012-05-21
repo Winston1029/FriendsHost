@@ -1,6 +1,8 @@
 package com.moupress.app.friendshost.util;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import twitter4j.ResponseList;
@@ -12,24 +14,20 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 
-import com.google.gson.Gson;
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
-import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.FeedEntryComment;
 import com.moupress.app.friendshost.sns.UserFriend;
 import com.moupress.app.friendshost.sns.Renren.FeedExtractResponseBean;
-import com.moupress.app.friendshost.sns.Renren.RenenFeedElement;
-import com.moupress.app.friendshost.sns.Renren.RenrenFeedElementComments;
 import com.moupress.app.friendshost.sns.Renren.RenrenFeedElementComments.RenrenFeedElementComment;
 import com.moupress.app.friendshost.sns.Renren.RenrenFeedElementEntry;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeed;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntry;
-import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryComments;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryComments.FBFeedEntryComment;
 
 public class FeedOrganisor {
@@ -39,7 +37,7 @@ public class FeedOrganisor {
 	
 	private DBHelper zDBHelper;
 	
-	
+	private HashMap<String, Integer> hmUnreadFeed;
 
 	public FeedOrganisor(PubSub pubsub) {
 		this.zPubSub = pubsub;
@@ -47,6 +45,7 @@ public class FeedOrganisor {
 		this.zActivity = zPubSub.fGetActivity();
 		
 		zDBHelper = new DBHelper(zContext);
+		hmUnreadFeed = new HashMap<String,Integer>();
 	}
 	
 	public FeedOrganisor(Context context) {
@@ -116,11 +115,9 @@ public class FeedOrganisor {
 		if ( bean == null || bean.getFeedList() == null ) {
 			return;
 		}
-	int i = 0;
+		int i = 0;
 		try {
 		for( i= 0; i<bean.getFeedList().size();i++) {
-					//String msg = ((FBHomeFeedEntry) bean.getData().get(i)).getName()+" : "+((FBHomeFeedEntry) bean.getData().get(i)).getMessage();
-			
 			
 			RenrenFeedElementEntry entry = (RenrenFeedElementEntry) bean.getFeedList().get(i);
 			res += zDBHelper.fInsertFeed(entry);
@@ -243,10 +240,23 @@ public class FeedOrganisor {
 	}
 	
 	public ArrayList<FeedEntry> fGetUnReadNewsFeed(String sns) {
+		Date d = new Date();
+		CharSequence currentDateTime  = DateFormat.format("yyyy-MM-dd hh:mm:ss", d.getTime());
+		ArrayList<FeedEntry> items = fGetUnReadNewsFeed(sns, currentDateTime.toString());
+		return items;
+	}
+	
+	public ArrayList<FeedEntry> fGet10MoreNewsFeed(String sns) {
+		String lastItemCreatedTime = Pref.getMyStringPref(zContext, sns);
+		ArrayList<FeedEntry> items = fGetUnReadNewsFeed(sns, lastItemCreatedTime);
+		return items;
+	}
+	
+	private ArrayList<FeedEntry> fGetUnReadNewsFeed(String sns, String createdTime) {
 		String[][] feeds = null;
 		ArrayList<FeedEntry> items = new ArrayList<FeedEntry>();
 		
-		feeds = zDBHelper.fGetFeedPreview(sns);
+		feeds = zDBHelper.fGetFeedPreview(sns, createdTime);
 		
 		if (feeds == null || feeds.length == 0) {
 			FeedEntry item = new FeedEntry();
@@ -262,10 +272,7 @@ public class FeedOrganisor {
 	public FeedEntry fGetFeedByID(String sns, String feed_id) {
 		
 		String[][] feeds = null;
-		
-		
 		feeds = zDBHelper.fGetFeedByID(sns, feed_id);
-		
 		ArrayList<FeedEntry> items = transformDB2Feed(sns, feeds);
 		
 		return items.get(0);
@@ -331,6 +338,9 @@ public class FeedOrganisor {
 	}
 	
 	private void fShowNotification(String sFromSNS, int NumUnRead, Context context) {
+		// update unread feed maps
+		hmUnreadFeed.put(sFromSNS, NumUnRead);
+		
 		// create notification manager
 		NotificationManager notificationMgr = (NotificationManager) zActivity.getSystemService(Context.NOTIFICATION_SERVICE);
 		
@@ -342,8 +352,14 @@ public class FeedOrganisor {
 		
 		// preparation
 		//Context context = zActivity.getApplicationContext();
-		CharSequence contentTitle = "New Feed From " + sFromSNS;
-		CharSequence contentText = NumUnRead + " unread updates";
+		CharSequence contentTitle = "New Feeds";
+		CharSequence contentText = "Unread updates ";
+		for ( String key: hmUnreadFeed.keySet()) {
+			int iUnreadFeed = hmUnreadFeed.get(key);
+			if ( iUnreadFeed > 0) {
+				contentText = key + ":" + iUnreadFeed + " ";
+			}
+		}
 		Intent notificationIntent = new Intent(context, FriendsHostActivity.class);
 		Bundle bundle = new Bundle();
 		bundle.putString(Const.ACTION_DISPLAYFEED, sFromSNS);
@@ -352,8 +368,7 @@ public class FeedOrganisor {
 		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 		
 		// notify
-		notificationMgr.notify(sFromSNS, Const.FRIENDSHOST_NOTIFY_ID, notification);
+		notificationMgr.notify(Const.FRIENDSHOST_NOTIFY_ID, notification);
 	}
-
 
 }

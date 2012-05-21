@@ -24,6 +24,7 @@ public class FeedItemUIComponent {
 	}
 	public void setImg_Head(WebImageView img_Head) {
 		this.img_Head = img_Head;
+		this.img_Head.setDrawingCacheEnabled(true);
 	}
 	public TextView getTxv_FeedUser() {
 		return txv_FeedUser;

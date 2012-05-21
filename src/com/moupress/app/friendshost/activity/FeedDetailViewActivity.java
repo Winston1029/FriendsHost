@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -80,7 +81,7 @@ public class FeedDetailViewActivity extends Activity implements OnDrawerOpenList
 		WebImageView img_feeduserhead_detail = (WebImageView)findViewById(R.id.img_userhead_detail);
 		img_feeduserhead_detail.setImageUrl(feed.getzFriend().getHeadurl());
 		img_feeduserhead_detail.loadImage();
-		
+		//img_feeduserhead_detail.set
 		TextView txv_feedusername_detail = (TextView) findViewById(R.id.txv_username_detail);
 		txv_feedusername_detail.setText(feed.getzFriend().getName());
 		
@@ -143,11 +144,12 @@ public class FeedDetailViewActivity extends Activity implements OnDrawerOpenList
 		}
 		
 		SlidingDrawer drawer_comments = (SlidingDrawer) findViewById(R.id.drawer_comments);
+		
 		drawer_comments.setOnDrawerOpenListener(this);
 		drawer_comments.setOnDrawerCloseListener(this);
 		
 		lstView_comments = (ListView) findViewById(R.id.lstV_detail_comment);
-		//lstView_comments.setVisibility(View.GONE);
+		lstView_comments.setVisibility(View.GONE);
 		lstView_comments.setAdapter(arrAdapterComment);
 		
 		drawer_comments_content = (LinearLayout) findViewById(R.id.content);
@@ -165,11 +167,14 @@ public class FeedDetailViewActivity extends Activity implements OnDrawerOpenList
 	@Override
 	public void onDrawerClosed() {
 		drawer_comments_content.setVisibility(View.GONE);
+		lstView_comments.setVisibility(View.GONE);
 	}
 
 	@Override
 	public void onDrawerOpened() {
 		drawer_comments_content.setVisibility(View.VISIBLE);
+		lstView_comments.setVisibility(View.VISIBLE);
+		
 		arrAdapterComment.notifyDataSetChanged();
 		fInitMyCommentUI();
 	}

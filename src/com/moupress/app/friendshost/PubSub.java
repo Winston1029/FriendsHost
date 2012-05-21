@@ -1,36 +1,32 @@
 package com.moupress.app.friendshost;
 
-import com.moupress.app.friendshost.R;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.moupress.app.friendshost.activity.FeedDetailViewActivity;
-import com.moupress.app.friendshost.activity.FeedPublishActivity;
 import com.moupress.app.friendshost.activity.FeedResendActivity;
 import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.SnsOrg;
 import com.moupress.app.friendshost.sns.Renren.RenrenUtil;
 import com.moupress.app.friendshost.sns.facebook.FacebookUtil;
-import com.moupress.app.friendshost.sns.sina.SinaUtil;
-import com.moupress.app.friendshost.sns.twitter.TwitterUtil;
 import com.moupress.app.friendshost.ui.MainUIView;
-import com.moupress.app.friendshost.ui.UIManager;
 import com.moupress.app.friendshost.ui.listeners.DetailViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
 import com.moupress.app.friendshost.util.FeedOrganisor;
+import com.moupress.app.friendshost.util.Mail;
 
 public class PubSub {
 	private final String TAG = "PubSub"; 
@@ -49,7 +45,7 @@ public class PubSub {
 	//public static UIManager uiMgr;
 	private MainUIView mainUIView;
 	
-	private String displayedSns;
+	private static String displayedSns;
 	
 	ListView uLstFeed;
 	public PubSub(Context context, Activity activity) {
@@ -60,6 +56,9 @@ public class PubSub {
 	public PubSub(Activity activity) {
 		PubSub.zActivity = activity;
 		PubSub.zContext = activity.getApplicationContext();
+		
+		//hardcoded here to avoid error
+		//displayedSns = Const.SNS_RENREN;
 		
         //uLstFeed = (ListView) zActivity.findViewById(R.id.uLstVFBFeed);
 		//fInitUIMgr();
@@ -97,6 +96,7 @@ public class PubSub {
 			Bundle snsFeedBundle = new Bundle();
 			snsFeedBundle.putCharSequenceArrayList(Const.SNS_SIGN_ON, this.zSnsOrg.GetSignOnSnsNames());
 			this.mainUIView.LoadView(snsFeedBundle);
+			
 		}
 	}
 	
@@ -141,6 +141,10 @@ public class PubSub {
 //			}
 //		});
 
+	}
+	
+	public static void setSNSDisplayed(String snsName) {
+		displayedSns = snsName;
 	}
 	
 	//Feed Resend UI
@@ -293,4 +297,5 @@ public class PubSub {
 		}
 
 	}
+	
 }

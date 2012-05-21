@@ -34,6 +34,7 @@ public class DBHelper {
     
     //query condition
     static final String ORDER_DESC = " DESC";
+    static final String LIMIT = " LIMIT 10";
     
     //sns network type
     static final String SNS_FACEBOOK = "Facebook";
@@ -430,19 +431,21 @@ public class DBHelper {
 	 * @param sns
 	 * @return
 	 */
-	public String[][] fGetFeedPreview(String sns) {
+	public String[][] fGetFeedPreview(String sns, String createdTime) {
 		String[] columns = new String[] {C_FEED_ID,
 										 C_FEED_FROM, C_FEED_OWNER_ID, C_FEED_CREATED_TIME, 
 										 C_FEED_TYPE, C_FEED_MSG, C_FEED_STORY, C_FEED_LINK,
 										 C_FEED_PIC, C_FEED_NAME, C_FEED_CAPTION, C_FEED_DESCRIPTION};
 		String where = C_FEED_ISREAD + " = ? and " 
-						+ C_FEED_SNS + " = ?"; //and "
+						+ C_FEED_SNS + " = ? and "
+						+ C_FEED_UPDATED_TIME + " < ?";
 						//+ C_FEED_TYPE + " in (\"status\", \"picture\", \"link\")";
-		String[] selectionArgs = new String[] {"0", sns};
+		String[] selectionArgs = new String[] {"0", sns, createdTime};
 		Cursor cursor = null;
 		String[][] result = null;
 		try {
-			cursor = zSQLiteDB.query(T_FEED, columns, where, selectionArgs, null, null, C_FEED_UPDATED_TIME + ORDER_DESC);
+			cursor = zSQLiteDB.query(T_FEED, columns, where, selectionArgs, 
+					null, null, C_FEED_CREATED_TIME + ORDER_DESC + LIMIT);
 			int numRows = cursor.getCount();
 			result = new String[numRows][columns.length];
 			cursor.moveToFirst();

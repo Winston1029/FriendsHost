@@ -14,13 +14,15 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.Window;
+<<<<<<< HEAD
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+=======
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.Toast;
-
+>>>>>>> 12bf2ac2a191de9089c8d282d93df269d779464b
 
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.PubSub;
@@ -28,9 +30,12 @@ import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
 import com.moupress.app.friendshost.ui.listeners.DetailViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
+<<<<<<< HEAD
 import com.moupress.app.friendshost.uicomponent.SlidingPanel;
+=======
 import com.moupress.app.friendshost.uicomponent.PullToRefreshListView;
 import com.moupress.app.friendshost.uicomponent.PullToRefreshListView.OnRefreshListener;
+>>>>>>> 12bf2ac2a191de9089c8d282d93df269d779464b
 import com.moupress.app.friendshost.uicomponent.TabPageIndicator;
 import com.moupress.app.friendshost.uicomponent.SlidingPanel.PanelSlidingListener;
 import com.moupress.app.friendshost.uicomponent.interfaces.TitleProvider;
@@ -89,8 +94,7 @@ public class MainUIView extends View{
 		
 	}
 
-	private static Activity zActivity;
-	
+<<<<<<< HEAD
 	@Override
 	protected void RefreshView() 
 	{
@@ -102,6 +106,10 @@ public class MainUIView extends View{
 			this.mIndicator.notifyDataSetChanged();
 		}
 	}
+=======
+
+	private static Activity zActivity;
+>>>>>>> 12bf2ac2a191de9089c8d282d93df269d779464b
 
 	@Override
 	public void InitDetail(Activity activity, DetailViewListener detailViewListener) {
@@ -121,7 +129,7 @@ public class MainUIView extends View{
 		mPager = (ViewPager) activity.findViewById(R.id.snsPager);
 		mIndicator = (TabPageIndicator) activity.findViewById(R.id.snsTabIndicator);
 		
-		zActivity = activity;
+<<<<<<< HEAD
 		InitSlidingPanel(activity);
 		InitTitleButtons(activity);
 		InitLeftPanelView(activity);
@@ -130,6 +138,11 @@ public class MainUIView extends View{
 
 
 
+=======
+		zActivity = activity;
+	}
+	
+>>>>>>> 12bf2ac2a191de9089c8d282d93df269d779464b
 	@Override
 	public void LoadView(Bundle loadData) {
 		
@@ -143,6 +156,7 @@ public class MainUIView extends View{
 	public FragmentPagerAdapter getAdapter() {
 		return mAdapter;
 	}
+
 
 
     private void InitSlidingPanel(Activity activity)
@@ -181,6 +195,7 @@ public class MainUIView extends View{
     	btnPub.setOnClickListener(new OnClickListener()
     	{
 
+<<<<<<< HEAD
 			@Override
 			public void onClick(android.view.View v) {
 				// TODO Auto-generated method stub
@@ -207,8 +222,9 @@ public class MainUIView extends View{
 	}
     
 	private class SnsAdapter extends FragmentPagerAdapter implements TitleProvider
-
+=======
 	public class SnsAdapter extends FragmentPagerAdapter implements TitleProvider
+>>>>>>> 12bf2ac2a191de9089c8d282d93df269d779464b
 	{
 		public SnsAdapter(FragmentManager fm) {
 			super(fm);

@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
-
-import java.util.ArrayList;
-
+<<<<<<< HEAD
 import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
+=======
+>>>>>>> 12bf2ac2a191de9089c8d282d93df269d779464b
 import com.moupress.app.friendshost.util.Pref;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
@@ -95,21 +95,14 @@ public abstract class SnsUtil {
 		this.AdapterNotifcation();
 	}
 	
-	public void RefreshAdapter10MoreFeed()
-	{
-		//this.CleanAdapter();
-		this.LoadAdapter10MoreFeed();
-		this.AdapterNotifcation();
-	}
-	
-	
-	private void fSaveLastLoadedFeed(FeedEntry lastItem) {
-		// TODO Auto-generated method stub
-		Pref.setMyStringPref(zContext, SnsName, lastItem.getsCreatedTime());
-	}
+<<<<<<< HEAD
 	
 	//===============Adapter Related Functions End=================
-
+	
+	
+	//===============Use Selection Setting Functions Start==============
+	
+	
 	public void GetSelectedPref()
 	{
 		this.Selected =	Pref.getMyBoolPref(zContext, this.SnsName+"_Selected");
@@ -167,4 +160,18 @@ public abstract class SnsUtil {
 	}
 	
 	//===============Use Selection Setting Functions Start==============
+=======
+	public void RefreshAdapter10MoreFeed()
+	{
+		//this.CleanAdapter();
+		this.LoadAdapter10MoreFeed();
+		this.AdapterNotifcation();
+	}
+	//===============Adapter Related Functions End=================
+	
+	private void fSaveLastLoadedFeed(FeedEntry lastItem) {
+		// TODO Auto-generated method stub
+		Pref.setMyStringPref(zContext, SnsName, lastItem.getsCreatedTime());
+	}
+>>>>>>> 12bf2ac2a191de9089c8d282d93df269d779464b
 }

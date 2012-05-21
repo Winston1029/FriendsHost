@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/menu_item_about"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="About" />
+	<item android:id="@+id/menu_item_help"
+	    android:icon="@android:drawable/ic_menu_help"
+        android:title="Help" />
+	<item android:id="@+id/menu_item_feedback"
+	    android:icon="@android:drawable/ic_dialog_email"
+        android:title="FeedBack" />
+	<item android:id="@+id/menu_item_rate"
+	    android:icon="@android:drawable/btn_star_big_off"
+        android:title="Rate Us" />
+
+</menu>
