@@ -1,13 +1,17 @@
 package com.moupress.app.friendshost;
 
-import android.app.Activity;
+import com.moupress.app.friendshost.util.Mail;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 public class FriendsHostActivity extends FragmentActivity {
     /** Called when the activity is first created. */
@@ -65,10 +69,37 @@ public class FriendsHostActivity extends FragmentActivity {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
-		// TODO Auto-generated method stub
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.feed_item_ctx_menu, menu);
 
+	}
+	
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.option_menu, menu);
+	    return true;
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		switch (item.getItemId()) {
+        case R.id.menu_item_about:
+        	Toast.makeText(getApplicationContext(), "About", Toast.LENGTH_SHORT).show();
+        	break;
+        case R.id.menu_item_help:
+        	Toast.makeText(getApplicationContext(), "Help", Toast.LENGTH_SHORT).show();
+        	break;
+        case R.id.menu_item_feedback:
+        	Toast.makeText(getApplicationContext(), "FeedBack", Toast.LENGTH_SHORT).show();
+        	Mail.sendFeedbackEmail(this);
+        	break;
+        case R.id.menu_item_rate:
+        	Toast.makeText(getApplicationContext(), "Rate", Toast.LENGTH_SHORT).show();
+        	break;
+        default:
+        	super.onOptionsItemSelected(item);
+        }		
+		return true;
 	}
 }

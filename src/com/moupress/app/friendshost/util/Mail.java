@@ -1,21 +1,26 @@
 package com.moupress.app.friendshost.util;
 
-import java.util.Date; 
-import java.util.Properties; 
-import javax.activation.CommandMap; 
-import javax.activation.DataHandler; 
-import javax.activation.DataSource; 
-import javax.activation.FileDataSource; 
-import javax.activation.MailcapCommandMap; 
-import javax.mail.BodyPart; 
-import javax.mail.Multipart; 
-import javax.mail.PasswordAuthentication; 
-import javax.mail.Session; 
-import javax.mail.Transport; 
-import javax.mail.internet.InternetAddress; 
-import javax.mail.internet.MimeBodyPart; 
-import javax.mail.internet.MimeMessage; 
-import javax.mail.internet.MimeMultipart; 
+import java.util.Date;
+import java.util.Properties;
+
+import javax.activation.CommandMap;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.activation.MailcapCommandMap;
+import javax.mail.BodyPart;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+
+import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
  
  
 public class Mail extends javax.mail.Authenticator { 
@@ -168,6 +173,27 @@ public class Mail extends javax.mail.Authenticator {
 	public void setSubject(String _subject) {
 		this._subject = _subject;
 	}
+
+	public static void sendFeedbackEmail(Context context) {
+		Mail m = new Mail("advice@moupress.com", "Kindle2011"); 
+		 
+		String[] toArr = {"advice@moupress.com", "cq01.liu@gmail.com"}; 
+		m.setTo(toArr); 
+		m.setFrom("MouPress"); 
+		m.setSubject("This is an email sent using my Mail JavaMail wrapper from an Android device."); 
+		m.setBody("Email body."); 
  
-    // more of the getters and setters ….. 
+	    try { 
+	    	//m.addAttachment("/sdcard/filelocation"); 
+	 
+	        if(m.send()) { 
+	        	Toast.makeText(context, "Email was sent successfully.", Toast.LENGTH_LONG).show(); 
+		    } else { 
+		    	Toast.makeText(context, "Email was not sent.", Toast.LENGTH_LONG).show(); 
+		    } 
+		} catch(Exception e) { 
+		    //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show(); 
+		    Log.e("MailApp", "Could not send email", e); 
+		} 
+	}
 } 

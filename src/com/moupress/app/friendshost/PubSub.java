@@ -298,27 +298,4 @@ public class PubSub {
 
 	}
 	
-	public void sendFeedbackEmail() {
-		Mail m = new Mail("advice@moupress.com", "Kindle2011"); 
-		 
-		String[] toArr = {"advice@moupress.com", "jdr.liu@gmail.com"}; 
-		m.setTo(toArr); 
-		m.setFrom("cq01.liu@gmail.com"); 
-		m.setSubject("This is an email sent using my Mail JavaMail wrapper from an Android device."); 
-		m.setBody("Email body."); 
- 
-	    try { 
-	    	//m.addAttachment("/sdcard/filelocation"); 
-	 
-	        if(m.send()) { 
-	        	Toast.makeText(zActivity, "Email was sent successfully.", Toast.LENGTH_LONG).show(); 
-		    } else { 
-		    	Toast.makeText(zActivity, "Email was not sent.", Toast.LENGTH_LONG).show(); 
-		    } 
-		} catch(Exception e) { 
-		    //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show(); 
-		    Log.e("MailApp", "Could not send email", e); 
-		} 
-	}
-
 }
