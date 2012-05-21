@@ -206,7 +206,6 @@ public class MainUIView extends View{
 		
 	}
     
-	private class SnsAdapter extends FragmentPagerAdapter implements TitleProvider
 
 	public class SnsAdapter extends FragmentPagerAdapter implements TitleProvider
 	{
