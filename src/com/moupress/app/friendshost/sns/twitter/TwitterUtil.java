@@ -9,6 +9,7 @@ import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.SnsUtil;
+import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
 import com.moupress.app.friendshost.util.NotificationTask;
 
 import oauth.signpost.OAuth;
@@ -74,7 +75,7 @@ public class TwitterUtil extends SnsUtil{
 				if(!isAuthenticated)
 				{
 					isAuthenticated = true;
-					Authentication();
+					//Authentication();
 				}
 			}
 			else if(method == TwitterMethod.UPDATE_STATUS)
@@ -181,10 +182,6 @@ public class TwitterUtil extends SnsUtil{
 	}
 				
 
-	public void retrieveToken(Uri uri) {
-		new RetrieveAccessTokenTask(zActivity,consumer,provider,prefs).execute(uri);
-	}
-	
 	public class RetrieveAccessTokenTask extends AsyncTask<Uri, Void, Void> {
 
 		private Context	context;
@@ -254,11 +251,23 @@ public class TwitterUtil extends SnsUtil{
 			Intent data) {
 		// TODO Auto-generated method stub
 		//super.CallBackTrigger(uri, requestCode, resultCode, data);
-		this.retrieveToken(uri);
+		//this.retrieveToken(uri);
+		new RetrieveAccessTokenTask(zActivity,consumer,provider,prefs).execute(uri);
+		this.SnsAddEventCallback(snsEventListener, uptPref);
+		
 	}
 
+	//Variables that passing to call back function
 	
-	public void Authentication() {
+	private SnsEventListener snsEventListener = null;
+	private boolean uptPref = false;
+	
+	@Override
+	protected void fSnsAuth(SnsEventListener snsEventListener, boolean uptPref) {
+		
+		this.snsEventListener = snsEventListener;
+		this.uptPref = uptPref;
+		
 		try {
     		this.consumer = new CommonsHttpOAuthConsumer(Const.CONSUMER_KEY, Const.CONSUMER_SECRET);
     	    this.provider = new CommonsHttpOAuthProvider(Const.REQUEST_URL,Const.ACCESS_URL,Const.AUTHORIZE_URL);
@@ -291,6 +300,7 @@ public class TwitterUtil extends SnsUtil{
 		
 		twitter.setOAuthConsumer(Const.CONSUMER_KEY, Const.CONSUMER_SECRET);
 		twitter.setOAuthAccessToken(a);
+		
 		return twitter;
 	}
 	
@@ -423,4 +433,5 @@ public class TwitterUtil extends SnsUtil{
 	public void fResend(FeedEntry feed) {
 		this.SendFeed(feed.getsMsgBody());
 	}
+	
 }

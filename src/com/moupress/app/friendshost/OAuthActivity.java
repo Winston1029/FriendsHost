@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.moupress.app.friendshost.sns.sina.OAuthConstant;
+import com.moupress.app.friendshost.sns.sina.SinaUtil;
 import com.moupress.app.friendshost.sns.twitter.TwitterUtil;
 import com.moupress.app.friendshost.util.Pref;
 
@@ -25,21 +26,17 @@ public class OAuthActivity extends Activity {
 			//Twitter Call Back trigger
 			//PubSub.zTwitterUtil.CallBackTrigger(uri, 0, 0, null);
 			((TwitterUtil)PubSub.zSnsOrg.GetSnsInstance(Const.SNS_TWITTER)).CallBackTrigger(uri, 0, 0, null);
+			//startActivity(new Intent(this, FriendsHostActivity.class));
 		}
 		else if(uri != null && uri.getScheme().equals(Const.SINA_AUTH))
 		{
-			try {
-				RequestToken requestToken= OAuthConstant.getInstance().getRequestToken();
-				AccessToken accessToken=requestToken.getAccessToken(uri.getQueryParameter("oauth_verifier"));
-				OAuthConstant.getInstance().setAccessToken(accessToken);
-				Pref.setMyStringPref(getApplicationContext(), Const.SP_SINA_TOKENKEY, accessToken.getToken());
-				Pref.setMyStringPref(getApplicationContext(), Const.SP_SINA_TOKENSECRET, accessToken.getTokenSecret());
+			
+				((SinaUtil)PubSub.zSnsOrg.GetSnsInstance(Const.SNS_SINA)).CallBackTrigger(uri);
+				
 				startActivity(new Intent(this, FriendsHostActivity.class));
 				//TextView textView = (TextView) findViewById(R.id.TextView01);
 				//textView.setText("得到AccessToken的key和Secret,可以使用这两个参数进行授权登录了.\n Access token:\n"+accessToken.getToken()+"\n Access token secret:\n"+accessToken.getTokenSecret());
-			} catch (WeiboException e) {
-				e.printStackTrace();
-			}
+				
 		}
 		
 //		Button button=  (Button) findViewById(R.id.Button01);

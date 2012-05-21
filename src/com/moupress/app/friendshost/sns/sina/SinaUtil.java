@@ -8,6 +8,7 @@ import weibo4andriod.AsyncWeibo;
 import weibo4andriod.Status;
 import weibo4andriod.Weibo;
 import weibo4andriod.WeiboException;
+import weibo4andriod.http.AccessToken;
 import weibo4andriod.http.RequestToken;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +22,7 @@ import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.SnsUtil;
+import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
 import com.moupress.app.friendshost.util.NotificationTask;
 import com.moupress.app.friendshost.util.Pref;
 
@@ -44,7 +46,7 @@ public class SinaUtil extends SnsUtil{
     	System.setProperty("weibo4j.oauth.consumerSecret", Weibo.CONSUMER_SECRET);
 		zSina = OAuthConstant.getInstance().getWeibo();
 		//zContext = pubSub.fGetContext();
-		fSinaAuth();
+		//fSinaAuth();
 	}
 	
 	@Override
@@ -61,11 +63,21 @@ public class SinaUtil extends SnsUtil{
 		}
 	}
 	
-	private void fSinaAuth() {
+	//Variable Passing to Uri Call Back Listener
+	
+	private SnsEventListener snsEventListener = null;
+	private boolean uptPref = false;
+	
+	@Override
+	protected void fSnsAuth(SnsEventListener snsEventListener, boolean uptPref) {
+		this.snsEventListener = snsEventListener;
+		this.uptPref = uptPref;
+		
 		sTokenKey = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENKEY);
 		sTokenSecret = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENSECRET);
 		
 		if ( sTokenKey.length() > 0 && sTokenSecret.length() > 0) {
+			this.SnsAddEventCallback(snsEventListener, uptPref);
 			return;
 		}
 		try {
@@ -158,4 +170,19 @@ public class SinaUtil extends SnsUtil{
 		}
     }
 	
+    public void CallBackTrigger(Uri uri)
+    {
+    	try {
+		    RequestToken requestToken= OAuthConstant.getInstance().getRequestToken();
+			AccessToken accessToken=requestToken.getAccessToken(uri.getQueryParameter("oauth_verifier"));
+			OAuthConstant.getInstance().setAccessToken(accessToken);
+			Pref.setMyStringPref(this.zContext, Const.SP_SINA_TOKENKEY, accessToken.getToken());
+			Pref.setMyStringPref(this.zContext, Const.SP_SINA_TOKENSECRET, accessToken.getTokenSecret());
+			
+			this.SnsAddEventCallback(snsEventListener, uptPref);
+	    }
+    	catch (WeiboException e) {
+			e.printStackTrace();
+		}
+    }
 }

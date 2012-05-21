@@ -30,8 +30,7 @@ public abstract class View {
 		
 	}
 	
-	protected void LoadView(Bundle loadData)
-	{
-		
-	}
+	protected abstract void LoadView(Bundle loadData);
+	
+	protected abstract void RefreshView();
 }

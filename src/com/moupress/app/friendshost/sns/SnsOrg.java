@@ -26,7 +26,7 @@ public class SnsOrg {
 	private SinaUtil zSinaUtil;
 	
 	//Social Networks Names
-	private String[] SnsNames = {Const.SNS_FACEBOOK, Const.SNS_RENREN, Const.SNS_SINA, Const.SNS_TWITTER};
+	//private String[] SnsNames = {Const.SNS_FACEBOOK, Const.SNS_RENREN, Const.SNS_SINA, Const.SNS_TWITTER};
 	
 	public SnsOrg (PubSub pubsub)
 	{
@@ -43,11 +43,11 @@ public class SnsOrg {
 		ArrayList<CharSequence> signOnSnsNames = new ArrayList<CharSequence>();
 		signOnSnsNames.clear();
 		
-		for(int i=0 ; i < this.SnsNames.length; i++)
+		for(int i=0 ; i < Const.SNSGROUPS.length; i++)
 		{
-			if(this.GetSnsInstance(this.SnsNames[i]).isSelected())
+			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSelected())
 			{
-				signOnSnsNames.add(this.SnsNames[i]);
+				signOnSnsNames.add(Const.SNSGROUPS[i]);
 			}
 		}
 		
@@ -90,19 +90,19 @@ public class SnsOrg {
 	
 	public void InitSns()
 	{
-		for(int i=0; i< this.SnsNames.length; i++)
+		for(int i=0; i< Const.SNSGROUPS.length; i++)
 		{
-			this.GetSnsInstance(this.SnsNames[i]);
+			this.GetSnsInstance(Const.SNSGROUPS[i]);
 		}
 	}
 	
 	public void SnsGetNewFeed(Context ctx)
 	{
-		for(int i=0; i< this.SnsNames.length; i++)
+		for(int i=0; i< Const.SNSGROUPS.length; i++)
 		{
-			if(this.GetSnsInstance(this.SnsNames[i]).isSessionValid())
+			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).isSelected())
 			{
-				this.GetSnsInstance(this.SnsNames[i]).fGetNewsFeed(ctx);
+				this.GetSnsInstance(Const.SNSGROUPS[i]).fGetNewsFeed(ctx);
 			}
 		}
 	}

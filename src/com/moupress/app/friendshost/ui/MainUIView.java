@@ -13,13 +13,19 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
+import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
 import com.moupress.app.friendshost.ui.listeners.DetailViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
+import com.moupress.app.friendshost.uicomponent.SlidingPanel;
 import com.moupress.app.friendshost.uicomponent.TabPageIndicator;
+import com.moupress.app.friendshost.uicomponent.SlidingPanel.PanelSlidingListener;
 import com.moupress.app.friendshost.uicomponent.interfaces.TitleProvider;
 
 
@@ -30,12 +36,34 @@ import com.moupress.app.friendshost.uicomponent.interfaces.TitleProvider;
  */
 public class MainUIView extends View{
 	
-	private static final String[] CONTENT = new String[] { "Facebook", "Renren", "Weibo", "Twitter"};
 
 	private ViewPager mPager;
 	private TabPageIndicator mIndicator;
 	private FragmentPagerAdapter mAdapter;
+	private SlidingPanel slidingPanel;
 	
+	private LeftPanelView leftPanelView;
+	
+	
+	//Interface between Presenter (MainUIView) and Model (SnsUtil)
+	
+	private SnsEventListener snsEventListener = new SnsEventListener()
+	{
+
+		@Override
+		public void OnSnsUtilAdded(String snsName) {
+			leftPanelView.RefreshView();
+			RefreshView();
+		}
+
+		@Override
+		public void OnSnsUtilRemoved(String snsName) {
+			leftPanelView.RefreshView();
+			RefreshView();
+			
+		}
+		
+	};
 	
 	
 	public  MainUIView()
@@ -49,10 +77,22 @@ public class MainUIView extends View{
 	@Override
 	public void InitTitle(Activity activity, TitleBarListener titleBarListener) {
 		super.InitTitle(activity, titleBarListener);
-		activity.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+	     
+		activity.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
 	}
 
-
+	@Override
+	protected void RefreshView() 
+	{
+		if(mAdapter != null)
+		{
+			this.LoadData.clear();
+			LoadData.putCharSequenceArrayList(Const.SNS_SIGN_ON, PubSub.zSnsOrg.GetSignOnSnsNames());
+			this.mAdapter.notifyDataSetChanged();
+			this.mIndicator.notifyDataSetChanged();
+		}
+	}
 
 	@Override
 	public void InitDetail(Activity activity, DetailViewListener detailViewListener) {
@@ -62,8 +102,9 @@ public class MainUIView extends View{
 		if(DetailLayoutId != -1)
 			activity.setContentView(DetailLayoutId);
 		
-		if(TitleLayoutId != -1)
-			activity.getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, this.TitleLayoutId);
+		//if(TitleLayoutId != -1)
+			//activity.getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, this.TitleLayoutId);
+		
 		
 		if(activity instanceof FragmentActivity) 
 			mAdapter = new SnsAdapter(((FragmentActivity)activity).getSupportFragmentManager());
@@ -71,10 +112,14 @@ public class MainUIView extends View{
 		mPager = (ViewPager) activity.findViewById(R.id.snsPager);
 		mIndicator = (TabPageIndicator) activity.findViewById(R.id.snsTabIndicator);
 		
+		InitSlidingPanel(activity);
+		InitTitleButtons(activity);
+		InitLeftPanelView(activity);
+		
 	}
-	
-	
-	
+
+
+
 	@Override
 	public void LoadView(Bundle loadData) {
 		
@@ -87,8 +132,68 @@ public class MainUIView extends View{
 
 
 
+    private void InitSlidingPanel(Activity activity)
+    {
+		slidingPanel = (SlidingPanel) activity.findViewById(R.id.slidepanel);
+		slidingPanel.SetAlignViewId(R.id.leftPanelLayout);
+		slidingPanel.setPanelSlidingListener(new PanelSlidingListener(){
 
-	class SnsAdapter extends FragmentPagerAdapter implements TitleProvider
+			@Override
+			public void onSlidingDownEnd() {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onSlidingUpEnd() {
+				// TODO Auto-generated method stub
+				
+			}});
+    }
+    
+    
+    private void InitTitleButtons(Activity activity)
+    {
+    	Button btnSetting = (Button) activity.findViewById(R.id.leftpanelbtn);
+    	btnSetting.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(android.view.View arg0) {
+				// TODO Auto-generated method stub
+				slidingPanel.Slide2Left();
+				//slidingPanel.setVisibility(android.view.View.GONE);
+			}});
+    	
+    	Button btnPub = (Button) activity.findViewById(R.id.writefeedbtn);
+    	btnPub.setOnClickListener(new OnClickListener()
+    	{
+
+			@Override
+			public void onClick(android.view.View v) {
+				// TODO Auto-generated method stub
+				slidingPanel.Slide2Right();
+			}
+    		
+    	});
+    	
+    	Button btnRefresh = (Button) activity.findViewById(R.id.refreshbtn);
+    	btnRefresh.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(android.view.View v) {
+				// TODO Auto-generated method stub
+				slidingPanel.Slide2Right();
+			}});	
+    }
+    
+	private void InitLeftPanelView(Activity activity) {
+		
+		leftPanelView = new LeftPanelView(snsEventListener);
+		leftPanelView.InitDetail(activity, detailViewListener);
+		
+	}
+    
+	private class SnsAdapter extends FragmentPagerAdapter implements TitleProvider
 	{
 
 		public SnsAdapter(FragmentManager fm) {
@@ -105,7 +210,7 @@ public class MainUIView extends View{
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
-			return MainUIView.CONTENT.length;
+			return LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON).size();
 		}
 
 		@Override
@@ -113,6 +218,8 @@ public class MainUIView extends View{
 			// TODO Auto-generated method stub
 			//return MainUIView.CONTENT[position % MainUIView.CONTENT.length].toUpperCase();
 			ArrayList<CharSequence> titles = LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON);
+			
+			
 			return titles.get(position%titles.size()).toString().toUpperCase();
 		}
 	}
@@ -160,4 +267,7 @@ public class MainUIView extends View{
 		}
 		 
 	}
+
+
+	
 }

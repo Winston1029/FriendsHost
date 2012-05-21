@@ -1,20 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:friendshost="http://schemas.android.com/apk/res/com.moupress.app.friendshost"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
 <LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
-  
-   <com.moupress.app.friendshost.uicomponent.TabPageIndicator
-        android:id="@+id/snsTabIndicator"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        />
-    <android.support.v4.view.ViewPager
-        android:id="@+id/snsPager"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        />
+	android:id="@+id/leftPanelLayout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:layout_marginRight="80dip"
+	android:orientation="vertical"
+	android:clickable="true"
+	android:background="@color/black"
+	> 
+	
+	<TextView  
+	android:id="@+id/tv"
+    android:layout_width="match_parent" 
+    android:layout_height="wrap_content"
+    android:text="FriendHost Setting"
+    />
     
-</LinearLayout>
+    <include android:id="@+id/fhLeftPanel" layout="@layout/fh_left_panel"/>
+    
+ </LinearLayout>
+ 
+    
+ <com.moupress.app.friendshost.uicomponent.SlidingPanel
+ 	android:id="@+id/slidepanel"
+ 	android:layout_width="match_parent"
+ 	android:layout_height="match_parent"
+ 	friendshost:targetDistance="200dip"
+ 	android:background="@color/white"
+ 	android:minWidth="200dip"
+ 	>
+
+	<LinearLayout
+	  android:orientation="vertical"
+	  android:layout_width="match_parent"
+	  android:layout_height="match_parent">
+
+	  	<include android:id="@+id/fhTitle" layout="@layout/fh_title_bar"/>
+	  	
+	   <com.moupress.app.friendshost.uicomponent.TabPageIndicator
+	        android:id="@+id/snsTabIndicator"
+	        android:layout_height="wrap_content"
+	        android:layout_width="fill_parent"
+	        />
+	    <android.support.v4.view.ViewPager
+	        android:id="@+id/snsPager"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:layout_weight="1"
+	        />
+	        
+	</LinearLayout>
+</com.moupress.app.friendshost.uicomponent.SlidingPanel>
+</RelativeLayout>

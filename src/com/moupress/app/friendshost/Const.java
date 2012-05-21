@@ -81,5 +81,11 @@ public class Const {
 	public static final String COMMENTS = "comments";
 	public static final String FRIEND = "friend";
 	
+	//=============Login Setting======================================
+	public static final String[] SNSGROUPS = new String[] { SNS_FACEBOOK, SNS_RENREN, SNS_SINA, SNS_TWITTER};
+	public static final String[] SETTING_BASIC_GROUPS = { "Login Accounts", "Update Frequency"};
+	public static final String SETTING_BASIC = "BasicSetting";
+	public static final String SETTING_FEEDBACKS = "FeedBacks";
+	public static final String[] SETTING_FEEDBACKS_GROUPS = { "FeedBacks", "Rate It","Help"};
 
 }

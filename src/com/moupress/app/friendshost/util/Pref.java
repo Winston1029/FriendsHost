@@ -17,6 +17,11 @@ public class Pref {
     public static int getMyIntPref(Context context, String key) {
         return getPrefs(context).getInt(key, 0);
     }
+    
+    public static boolean getMyBoolPref(Context context, String key)
+    {
+         return getPrefs(context).getBoolean(key, false);	
+    }
 
     public static void setMyStringPref(Context context, String key, String value) {
         // perform validation etc..
@@ -26,6 +31,11 @@ public class Pref {
     public static void setMyIntPref(Context context, String key, int value) {
         // perform validation etc..
         getPrefs(context).edit().putInt(key, value).commit();
+    }
+    
+    public static void setMyBoolPref(Context context, String key, boolean value) {
+        // perform validation etc..
+        getPrefs(context).edit().putBoolean(key, value).commit();
     }
     
 }

@@ -19,6 +19,7 @@ import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.SnsUtil;
+import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
 import com.moupress.app.friendshost.util.NotificationTask;
 import com.renren.api.connect.android.AsyncRenren;
 import com.renren.api.connect.android.Renren;
@@ -56,7 +57,7 @@ public class RenrenUtil extends SnsUtil{
 		super(pubSub, Const.SNS_RENREN);
 		
 		this.zRenren = new Renren(API_KEY, SECRET_KEY, APP_ID, zContext);
-		fRenrenAuth();
+		//fRenrenAuth();
 	}
 	
 	@Override
@@ -68,8 +69,10 @@ public class RenrenUtil extends SnsUtil{
 		}
 	}
 
-	public void fRenrenAuth() {
+	@Override
+	public void fSnsAuth(final SnsEventListener snsEventListener,final boolean uptPref) {
 		if ( isSessionValid() ) {
+			this.SnsAddEventCallback(snsEventListener,uptPref);
 			return;
 		}
 		
@@ -78,6 +81,7 @@ public class RenrenUtil extends SnsUtil{
 			@Override
 			public void onComplete(Bundle values) {
 				Toast.makeText(zContext, "Renren Auth Complete",Toast.LENGTH_SHORT).show();
+				SnsAddEventCallback(snsEventListener,uptPref);
 			}
 
 			@Override
@@ -101,7 +105,7 @@ public class RenrenUtil extends SnsUtil{
 	public AsyncRenren fGetAsyncRenren()
 	{
 		if (asyncRenren == null) {
-			fRenrenAuth();
+			fSnsAuth(null,false);
 			asyncRenren = new AsyncRenren(zRenren);
 		}
 		return asyncRenren;

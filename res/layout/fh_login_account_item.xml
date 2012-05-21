@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="horizontal">
+  <TextView
+  	android:id="@+id/snsLogin"
+  	style="@style/LeftPanel.ExpandGroupTV.ChildTV"
+  	android:layout_weight="0.3">
+  </TextView>
+<!--  <ListView-->
+<!--  	android:id="@+id/snsAccountsLst"-->
+<!--  	style="@style/LeftPanel">-->
+<!--  </ListView>-->
+  <ImageView
+  	android:id="@+id/snsStatusInd"
+  	android:layout_height="match_parent"
+  	android:layout_width="match_parent"
+  	android:layout_weight="0.7"
+  	>
+  </ImageView>
+</LinearLayout>

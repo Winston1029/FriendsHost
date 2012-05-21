@@ -3,7 +3,7 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:orientation="horizontal"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="45dip">
   <Button android:id="@+id/leftpanelbtn" 
   		android:layout_gravity="left|center_vertical"
   	    style="@style/TitleBarButtonStyle"
@@ -17,6 +17,7 @@
   			android:layout_weight="0.5"
   			android:textSize="20dip"
   			android:gravity="center"
+  			android:background="@color/purple"
   			>
   </TextView>
   <Button android:id="@+id/writefeedbtn" 
@@ -24,7 +25,7 @@
   		style="@style/TitleBarButtonStyle"
   		>
   </Button>
-  <Button android:id="@+id/searchbtn"
+  <Button android:id="@+id/refreshbtn"
   		android:layout_gravity="right"
   		style="@style/TitleBarButtonStyle"
   		>
