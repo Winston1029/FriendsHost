@@ -48,7 +48,7 @@
         </LinearLayout>
 
     </LinearLayout>
-
+
     <LinearLayout
         android:id="@+id/layout_feedcontent"
         android:layout_width="match_parent"
@@ -86,31 +86,35 @@
             android:id="@+id/layout_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal" >
-
-<!--             <ImageView -->
-<!--                 android:id="@+id/img_photopreview" -->
-<!--                 android:layout_width="fill_parent" -->
-<!--                 android:layout_height="match_parent" -->
-<!--                 android:layout_gravity="fill" -->
-<!--                 android:layout_weight="2" -->
-<!--                 android:adjustViewBounds="true" -->
-<!--                 android:src="@drawable/ic_launcher" /> -->
+            android:orientation="vertical" >
 
-		   <com.github.droidfu.widgets.WebImageView
-		       xmlns:droidfu="http://github.com/droidfu/schema"
-		       android:id="@+id/img_photopreview"
-		       android:layout_width="wrap_content"
-		       android:layout_height="wrap_content"
-		       android:adjustViewBounds="true"
-		       droidfu:autoLoad="true"
-		       android:background="#CCC"
-		       droidfu:progressDrawable="..." />
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <com.github.droidfu.widgets.WebImageView
+                        xmlns:droidfu="http://github.com/droidfu/schema"
+                        android:id="@+id/img_photopreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:background="#CCC"
+                        droidfu:progressDrawable="..."
+                        ns:autoLoad="true" >
+                    </com.github.droidfu.widgets.WebImageView>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/linearLayout4"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical" >
 
@@ -140,6 +144,7 @@
                     android:textColor="@color/black"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
             </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

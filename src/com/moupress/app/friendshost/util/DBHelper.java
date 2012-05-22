@@ -133,10 +133,14 @@ public class DBHelper {
 										    + C_ACTIONS_LINK + " TEXT"
 										    + ");";
 
+    private static SimpleDateFormat simpleDateFormat;
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
+    	 
+    	
 		DatabaseHelper(Context context) {
 	        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+	        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
 	    }
 
 		@Override
@@ -232,8 +236,8 @@ public class DBHelper {
 		values.put(C_FEED_MSG, status.getText());
 		values.put(C_FEED_PIC, status.getThumbnail_pic());
 		values.put(C_FEED_LINK, status.getOriginal_pic());
-		values.put(C_FEED_UPDATED_TIME, status.getCreatedAt().toGMTString());
-		values.put(C_FEED_CREATED_TIME, status.getCreatedAt().toGMTString());
+		values.put(C_FEED_UPDATED_TIME, simpleDateFormat.format(status.getCreatedAt()));
+		values.put(C_FEED_CREATED_TIME, simpleDateFormat.format(status.getCreatedAt()));
 		//values.put(C_FEED_FROM, status.getSource());
 		
 		ret = zSQLiteDB.insert(T_FEED, null, values);
@@ -265,7 +269,7 @@ public class DBHelper {
 		values.put(C_FEED_FROM, entry.getName());
 		values.put(C_FEED_OWNER_ID, entry.getActor_id());
 		values.put(C_FEED_ISREAD, "0");
-		values.put(C_FEED_CREATED_TIME, entry.getsCreatedTime());
+		values.put(C_FEED_CREATED_TIME, entry.getUpdate_time());
 		values.put(C_FEED_UPDATED_TIME, entry.getUpdate_time());
 		if (entry.getDescription() != null && !entry.getDescription().equals("null") ) {
 			values.put(C_FEED_STORY, entry.getTitle() + "\n" + entry.getDescription());	
@@ -305,7 +309,7 @@ public class DBHelper {
 			return ret;
 		}
 		
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ"); 
+		//DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ"); 
 		
 		ContentValues values  = new ContentValues();
 		values.put(C_FEED_SNS, SNS_TWITTER);
@@ -315,8 +319,8 @@ public class DBHelper {
 		values.put(C_FEED_OWNER_ID, status.getUser().getId());
 		values.put(C_FEED_MSG, status.getText());
 		//values.put(C_FEED_PIC, status.GET);
-		values.put(C_FEED_UPDATED_TIME, df.format(status.getCreatedAt()));
-		values.put(C_FEED_CREATED_TIME, df.format(status.getCreatedAt()));
+		values.put(C_FEED_UPDATED_TIME, simpleDateFormat.format(status.getCreatedAt()));
+		values.put(C_FEED_CREATED_TIME, simpleDateFormat.format(status.getCreatedAt()));
 		
 		ret = zSQLiteDB.insert(T_FEED, null, values);
 		return ret;
@@ -431,21 +435,21 @@ public class DBHelper {
 	 * @param sns
 	 * @return
 	 */
-	public String[][] fGetFeedPreview(String sns, String createdTime) {
+	public String[][] fGetFeedPreview(String sns, String updatedTime) {
 		String[] columns = new String[] {C_FEED_ID,
-										 C_FEED_FROM, C_FEED_OWNER_ID, C_FEED_CREATED_TIME, 
+										 C_FEED_FROM, C_FEED_OWNER_ID, C_FEED_UPDATED_TIME, 
 										 C_FEED_TYPE, C_FEED_MSG, C_FEED_STORY, C_FEED_LINK,
 										 C_FEED_PIC, C_FEED_NAME, C_FEED_CAPTION, C_FEED_DESCRIPTION};
 		String where = C_FEED_ISREAD + " = ? and " 
 						+ C_FEED_SNS + " = ? and "
 						+ C_FEED_UPDATED_TIME + " < ?";
 						//+ C_FEED_TYPE + " in (\"status\", \"picture\", \"link\")";
-		String[] selectionArgs = new String[] {"0", sns, createdTime};
+		String[] selectionArgs = new String[] {"0", sns, updatedTime};
 		Cursor cursor = null;
 		String[][] result = null;
 		try {
 			cursor = zSQLiteDB.query(T_FEED, columns, where, selectionArgs, 
-					null, null, C_FEED_CREATED_TIME + ORDER_DESC + LIMIT);
+					null, null, C_FEED_UPDATED_TIME + ORDER_DESC + LIMIT);
 			int numRows = cursor.getCount();
 			result = new String[numRows][columns.length];
 			cursor.moveToFirst();
@@ -590,6 +594,10 @@ public class DBHelper {
 		}
 		
 		return result;
+	}
+
+	public SimpleDateFormat fGetDateFormat() {
+		return simpleDateFormat;
 	}
 
 

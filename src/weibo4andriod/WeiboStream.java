@@ -552,7 +552,7 @@ public class WeiboStream extends WeiboSupport {
 
     private void log(String message) {
         if (DEBUG) {
-            System.out.println("[" + new java.util.Date() + "]" + message);
+            //System.out.println("[" + new java.util.Date() + "]" + message);
         }
     }
 
