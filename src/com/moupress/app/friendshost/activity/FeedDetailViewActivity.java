@@ -22,13 +22,14 @@ import android.widget.Toast;
 
 import com.github.droidfu.widgets.WebImageView;
 import com.moupress.app.friendshost.Const;
+import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.util.FeedOrganisor;
 
 public class FeedDetailViewActivity extends Activity implements OnDrawerOpenListener, OnDrawerCloseListener {
 
-	private FeedOrganisor zFeedOrg;
+	//private FeedOrganisor zFeedOrg;
 	private FeedEntry feed;
 	
 	private ListView lstView_comments;
@@ -56,12 +57,13 @@ public class FeedDetailViewActivity extends Activity implements OnDrawerOpenList
 //		if (comments != null) {
 //			System.out.println();
 //		}
-		zFeedOrg = new FeedOrganisor(this);
+		//zFeedOrg = new FeedOrganisor(this);
+		//zFeedOrg = PubSub.zFeedOrg;
 		
 		String displayedSns = intent.getStringExtra(Const.SNS);
 		String feed_id = intent.getStringExtra(Const.FID);
 		
-		feed = zFeedOrg.fGetFeedByID( displayedSns, feed_id );
+		feed = PubSub.zFeedOrg.fGetFeedByID( displayedSns, feed_id );
 		
 		arrAdapterComment = new LstViewCommentAdapter(this, R.layout.feed_item_detail_comment);
 //		for (FeedEntryComment comment : feed.getzComments()) {

@@ -30,11 +30,13 @@ public class LstViewFeedAdapter extends BaseAdapter{
 	private Activity zActivity;
 	private int iLayoutResId;
 	private LayoutInflater viewInflator;
+	private String snsName;
 
-	public LstViewFeedAdapter(Activity activity, int layoutResId) {
+	public LstViewFeedAdapter(Activity activity, int layoutResId, String snsName) {
 		this.zActivity = activity;
 		this.iLayoutResId = layoutResId;
 		viewInflator = zActivity.getLayoutInflater();
+		this.snsName = snsName;
 	}
 	
 	public void clear() {
@@ -109,7 +111,7 @@ public class LstViewFeedAdapter extends BaseAdapter{
 			@Override
 			public void onClick(View v) {
 				FeedEntry feed = (FeedEntry) feedArrayList.get(position);
-				FriendsHostActivity.zPubsub.fFeedDisplayDetailUI(feed);
+				FriendsHostActivity.zPubsub.fFeedDisplayDetailUI(feed, snsName);
 			}
 		});
 		

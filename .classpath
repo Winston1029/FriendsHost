@@ -18,5 +18,8 @@
 	<classpathentry kind="lib" path="libs/twitter4j-core-android-2.2.5.jar"/>
 	<classpathentry kind="lib" path="libs/twitter4j-media-support-android-2.2.5.jar"/>
 	<classpathentry kind="lib" path="libs/android-support-v4.jar"/>
+	<classpathentry kind="lib" path="libs/mail.jar"/>
+	<classpathentry kind="lib" path="libs/activation.jar"/>
+	<classpathentry kind="lib" path="libs/additionnal.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
