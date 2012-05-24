@@ -1,5 +1,6 @@
 package com.moupress.app.friendshost.util;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.widget.SimpleAdapter;
 
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
@@ -247,16 +249,16 @@ public class FeedOrganisor {
 	}
 	
 	public ArrayList<FeedEntry> fGet10MoreNewsFeed(String sns) {
-		String lastItemCreatedTime = Pref.getMyStringPref(zContext, sns);
-		ArrayList<FeedEntry> items = fGetUnReadNewsFeed(sns, lastItemCreatedTime);
+		String lastItemUpdatedTime = Pref.getMyStringPref(zContext, sns);
+		ArrayList<FeedEntry> items = fGetUnReadNewsFeed(sns, lastItemUpdatedTime);
 		return items;
 	}
 	
-	private ArrayList<FeedEntry> fGetUnReadNewsFeed(String sns, String createdTime) {
+	private ArrayList<FeedEntry> fGetUnReadNewsFeed(String sns, String updatedTime) {
 		String[][] feeds = null;
 		ArrayList<FeedEntry> items = new ArrayList<FeedEntry>();
 		
-		feeds = zDBHelper.fGetFeedPreview(sns, createdTime);
+		feeds = zDBHelper.fGetFeedPreview(sns, updatedTime);
 		
 		if (feeds == null || feeds.length == 0) {
 			FeedEntry item = new FeedEntry();

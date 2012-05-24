@@ -100,12 +100,16 @@ public class FeedItemUIComponent {
 	public void TxtMsgBodyLoad(String sMsgBody,String sStory )
 	{
 		txv_MsgBody.setVisibility(View.VISIBLE);
-		if ( sMsgBody != null && sStory != null ) {
+		if ( sMsgBody != null && sStory != null
+				//if first 4 chars are the same, means duplicate message display Story Only
+				//specially cater for Renren feed structure
+				&& sMsgBody.length() >3 && sStory.length() > 3
+				&& sMsgBody.substring(0, 4).compareToIgnoreCase(sStory.substring(0, 4)) != 0) {
 			txv_MsgBody.setText(sMsgBody + "\n" + sStory);
-		} else if ( sMsgBody != null ) {
-			txv_MsgBody.setText(sMsgBody);
-		} else if ( sStory != null ) {
+		}  else if ( sStory != null ) {
 			txv_MsgBody.setText(sStory);
+		} else if ( sMsgBody != null ) {
+				txv_MsgBody.setText(sMsgBody);
 		} else {
 			txv_MsgBody.setVisibility(View.GONE);
 		}
@@ -115,6 +119,7 @@ public class FeedItemUIComponent {
 	{
 		
 		if (sImgSrc != null && sImgSrc.startsWith("http://") && sImgSrc.endsWith(".jpg")) {
+			//sImgSrc = sImgSrc.replace("head", "large");
 			img_PhotoPreview.setVisibility(View.VISIBLE);
 			img_PhotoPreview.setImageUrl(sImgSrc);
 			//img_PhotoPreview.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
