@@ -165,6 +165,7 @@ public class TabPageIndicator extends HorizontalScrollView{
 
 	    public void setViewPager(ViewPager view) {
 	        final PagerAdapter adapter = view.getAdapter();
+	        
 	        if (adapter == null) {
 	            throw new IllegalStateException("ViewPager does not have adapter instance.");
 	        }
@@ -177,6 +178,7 @@ public class TabPageIndicator extends HorizontalScrollView{
 	    public void notifyDataSetChanged() {
 	        mTabLayout.removeAllViews();
 	        TitleProvider adapter = (TitleProvider)mViewPager.getAdapter();
+	        //((PagerAdapter)mViewPager.getAdapter()).notifyDataSetChanged();
 	        final int count = ((PagerAdapter)adapter).getCount();
 	        for (int i = 0; i < count; i++) {
 	            addTab(adapter.getTitle(i), i);
