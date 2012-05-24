@@ -34,7 +34,7 @@ public abstract class SnsUtil {
 		//Update IsSelected Variable
 		this.GetSelectedPref();
 		
-		this.FeedAdapter = new LstViewFeedAdapter(zActivity, R.layout.feed_item_preview);
+		this.FeedAdapter = new LstViewFeedAdapter(zActivity, R.layout.feed_item_preview, this.SnsName);
 	}
 	
 	//Login Status for Each SNS

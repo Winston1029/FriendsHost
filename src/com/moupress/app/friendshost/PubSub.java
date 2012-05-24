@@ -45,7 +45,7 @@ public class PubSub {
 	//public static UIManager uiMgr;
 	private MainUIView mainUIView;
 	
-	private static String displayedSns;
+	//private static String displayedSns;
 	
 	ListView uLstFeed;
 	public PubSub(Context context, Activity activity) {
@@ -116,21 +116,21 @@ public class PubSub {
 	
 	private LstViewFeedAdapter arrAdapterFeedPreview;
 	public LstViewFeedAdapter fGetAdapterFeedPreview() {return arrAdapterFeedPreview;}
-	public void fInitFeedUIPreview() {
-		arrAdapterFeedPreview = new LstViewFeedAdapter(zActivity, R.layout.feed_item_preview);
-		uLstFeed.setAdapter(arrAdapterFeedPreview);
-		uLstFeed.setItemsCanFocus(true);
-		uLstFeed.setOnItemLongClickListener(new OnItemLongClickListener(){
-
-			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				FeedEntry feed = (FeedEntry) arrAdapterFeedPreview.getItem(position);
-				//Log.i(TAG, " Name: "+feed.getsName()+" Msg: "+feed.getsMsgBody());
-				fFeedResendUI(feed);
-				return true;
-			}
-		});
+//	public void fInitFeedUIPreview() {
+//		arrAdapterFeedPreview = new LstViewFeedAdapter(zActivity, R.layout.feed_item_preview);
+//		uLstFeed.setAdapter(arrAdapterFeedPreview);
+//		uLstFeed.setItemsCanFocus(true);
+//		uLstFeed.setOnItemLongClickListener(new OnItemLongClickListener(){
+//
+//			@Override
+//			public boolean onItemLongClick(AdapterView<?> parent, View view,
+//					int position, long id) {
+//				FeedEntry feed = (FeedEntry) arrAdapterFeedPreview.getItem(position);
+//				//Log.i(TAG, " Name: "+feed.getsName()+" Msg: "+feed.getsMsgBody());
+//				fFeedResendUI(feed);
+//				return true;
+//			}
+//		});
 		
 //		uLstFeed.setOnItemClickListener(new OnItemClickListener() {
 //			
@@ -141,24 +141,24 @@ public class PubSub {
 //			}
 //		});
 
-	}
+//	}
 	
-	public static void setSNSDisplayed(String snsName) {
-		displayedSns = snsName;
-	}
+//	public static void setSNSDisplayed(String snsName) {
+//		displayedSns = snsName;
+//	}
 	
 	//Feed Resend UI
-	public void fFeedResendUI(FeedEntry feed)
+	public void fFeedResendUI(FeedEntry feed, String snsName)
 	{
 		Intent intent = new Intent(zActivity, FeedResendActivity.class);
 		//intent.putExtra(Const.FEED_ITEM, feed);
 		intent.putExtra(Const.FID, feed.getsID());
-		intent.putExtra(Const.SNS, this.displayedSns);
+		intent.putExtra(Const.SNS, snsName);
 		zActivity.startActivityForResult(intent, Const.FEED_RESEND_REQ_CD);
 	}
 	
 	//Feed Display Detail View UI
-	public void fFeedDisplayDetailUI(FeedEntry feed)
+	public void fFeedDisplayDetailUI(FeedEntry feed, String snsName)
 	{
 		Intent intent = new Intent(zActivity,FeedDetailViewActivity.class);
 //		intent.putExtra(Const.FEED_ITEM, feed);
@@ -167,7 +167,7 @@ public class PubSub {
 //		}
 		
 		intent.putExtra(Const.FID, feed.getsID());
-		intent.putExtra(Const.SNS, this.displayedSns);
+		intent.putExtra(Const.SNS, snsName);
 		zActivity.startActivity(intent);
 	}
 	
@@ -245,7 +245,6 @@ public class PubSub {
 //		zRenrenUtil = new RenrenUtil(this); //6.4M, 16ps
 //		zSinaUtil = new SinaUtil(this); //6.8M, 9ps
 //		zTwitterUtil = new TwitterUtil(this); // 7.0M, 10ps
-		displayedSns = Const.SNS_RENREN;
 		this.zFeedOrg = new FeedOrganisor(this);
 		this.zSnsOrg = new SnsOrg(this);
 	}
@@ -264,10 +263,11 @@ public class PubSub {
 			Log.i(TAG, "Feed Resend is called back!" + resultCode);
 			if(resultCode == Activity.RESULT_OK)
 			{
-				String sns = data.getStringExtra(Const.SNS);
+				String snsName = data.getStringExtra(Const.SNS);
 				//FeedEntry feed = data.getParcelableExtra(Const.FEED_ITEM);
 				String feed_id = data.getStringExtra(Const.FID);
-				FeedEntry feed = zFeedOrg.fGetFeedByID(displayedSns, feed_id);
+				//FeedEntry feed = zFeedOrg.fGetFeedByID(displayedSns, feed_id);
+				FeedEntry feed = zFeedOrg.fGetFeedByID(snsName, feed_id);
 				
 //				if(sns.equals(Const.SNS_FACEBOOK))
 //				{
@@ -283,7 +283,7 @@ public class PubSub {
 //				} else if (sns.equals(Const.SNS_SINA)) {
 //					zSinaUtil.fResend(feed);
 //				}
-				zSnsOrg.GetSnsInstance(sns).fResend(feed);
+				this.zSnsOrg.GetSnsInstance(snsName).fResend(feed);
 
 			}
 		}
