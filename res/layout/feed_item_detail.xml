@@ -76,9 +76,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
             
             <com.github.droidfu.widgets.WebImageView
                  xmlns:droidfu="http://github.com/droidfu/schema"
@@ -89,15 +90,16 @@
                  android:background="#CCC"
                  droidfu:progressDrawable="..." >
             </com.github.droidfu.widgets.WebImageView>
-
+            
             <TextView
                 android:id="@+id/txv_description_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
                 android:text="Media Text"
-                android:layout_toRightOf="@id/img_photo_detail"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
-        </RelativeLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
     

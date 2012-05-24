@@ -3,12 +3,13 @@ package com.moupress.app.friendshost.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -78,6 +79,90 @@ public class FeedDetailViewActivity extends Activity implements OnDrawerOpenList
 
 	private void fInitUI() {
 		
+		fInitUIBasic();
+		fInitUIWebView();
+		fInitUIPhoto();
+		fInitUIDrawer();
+		
+		
+	}
+	
+	WebImageView img_photo_detail = null;
+	private void fInitUIPhoto() {
+		WebImageView img_photo_detail = (WebImageView)findViewById(R.id.img_photo_detail);
+		TextView txv_description_detail = (TextView) findViewById(R.id.txv_description_detail);
+		
+		String sPhotoUrl = feed.getsPhotoPreviewLink();
+		if (sPhotoUrl != null && sPhotoUrl.startsWith("http://") && sPhotoUrl.endsWith(".jpg")) {
+			//sPhotoUrl = sPhotoUrl.replace("head", "large");
+			img_photo_detail.setVisibility(View.VISIBLE);
+			img_photo_detail.setImageUrl(sPhotoUrl);
+			img_photo_detail.loadImage();
+			
+			String descriptionDetail = null;
+			String sMsgBody = feed.getsMsgBody() ;
+			String sStory = feed.getsStory();
+			if ( sMsgBody  != null && sStory != null
+					//if first 4 chars are the same, means duplicate message display Story Only
+					//specially cater for Renren feed structure
+					&& sMsgBody.length() >3 && sStory.length() > 3
+					&& sMsgBody.substring(0, 4).compareToIgnoreCase(sStory.substring(0, 4)) != 0) {
+				descriptionDetail = sMsgBody + "\n" + sStory;
+			}  else if ( sStory != null ) {
+				descriptionDetail = sStory;
+			} else if ( sMsgBody != null ) {
+				descriptionDetail = sMsgBody;
+			} 
+			if (feed.getsPhotoPreviewName() != null) {
+				descriptionDetail += "\n" + feed.getsPhotoPreviewName();
+			}
+			if (feed.getsPhotoPreviewCaption() != null) {
+				descriptionDetail += "\n" + feed.getsPhotoPreviewCaption();
+			}
+			if (feed.getsPhotoPreviewDescription() != null ) {
+				descriptionDetail += "\n" + feed.getsPhotoPreviewDescription();
+			}
+			txv_description_detail.setText(descriptionDetail);
+			//Display display = getWindowManager().getDefaultDisplay();
+			//FlowTextHelper.tryFlowText(descriptionDetail, img_photo_detail, txv_description_detail, display);
+			
+			DetailPhotoClickListener listener = new DetailPhotoClickListener();
+			img_photo_detail.setOnClickListener(listener);
+		} else {
+			img_photo_detail.setVisibility(View.GONE);
+			txv_description_detail.setVisibility(View.GONE);
+		}
+	}
+
+	private void fInitUIDrawer() {
+		SlidingDrawer drawer_comments = (SlidingDrawer) findViewById(R.id.drawer_comments);
+		
+		drawer_comments.setOnDrawerOpenListener(this);
+		drawer_comments.setOnDrawerCloseListener(this);
+		
+		lstView_comments = (ListView) findViewById(R.id.lstV_detail_comment);
+		lstView_comments.setVisibility(View.GONE);
+		lstView_comments.setAdapter(arrAdapterComment);
+		
+		drawer_comments_content = (LinearLayout) findViewById(R.id.content);
+		drawer_comments_content.setVisibility(View.GONE);		
+	}
+
+	private void fInitUIWebView() {
+		WebView webV_detail = (WebView) findViewById(R.id.webV_detail);
+		if (
+				feed.getsFeedType() != null 
+				&& (feed.getsFeedType().equals("blog") || feed.getsFeedType().equals("21")) 
+			) {
+			webV_detail.setVisibility(View.VISIBLE);
+			webV_detail.setWebViewClient(new MyWebViewClient());
+			webV_detail.loadUrl(feed.getsLink());
+		} else {
+			webV_detail.setVisibility(View.GONE);
+		}		
+	}
+
+	private void fInitUIBasic() {
 		WebImageView img_feeduserhead_detail = (WebImageView)findViewById(R.id.img_userhead_detail);
 		img_feeduserhead_detail.setImageUrl(feed.getzFriend().getHeadurl());
 		img_feeduserhead_detail.loadImage();
@@ -104,58 +189,20 @@ public class FeedDetailViewActivity extends Activity implements OnDrawerOpenList
 				Toast.makeText(getBaseContext(), "Share Button Clicked", Toast.LENGTH_SHORT).show();
 			}
 		});
-		
-		WebView webV_detail = (WebView) findViewById(R.id.webV_detail);
-		if (
-				feed.getsFeedType() != null 
-				&& (feed.getsFeedType().equals("blog") || feed.getsFeedType().equals("21")) 
-			) {
-			webV_detail.setVisibility(View.VISIBLE);
-			webV_detail.setWebViewClient(new MyWebViewClient());
-			webV_detail.loadUrl(feed.getsLink());
-		} else {
-			webV_detail.setVisibility(View.GONE);
-		}
-		
-		WebImageView img_photo_detail = (WebImageView)findViewById(R.id.img_photo_detail);
-		TextView txv_description_detail = (TextView) findViewById(R.id.txv_description_detail);
-		if (webV_detail.getVisibility() == View.VISIBLE) {
-			img_photo_detail.setVisibility(View.GONE);
-			txv_description_detail.setVisibility(View.GONE);
-		} else {
-			String photoUrl = feed.getsPhotoPreviewLink();
-			if (photoUrl != null && photoUrl.length() > 0) {
-				img_photo_detail.setVisibility(View.VISIBLE);
-				img_photo_detail.setImageUrl(photoUrl);
-				img_photo_detail.loadImage();
-			} else {
-				img_photo_detail.setVisibility(View.GONE);
-			}
-			
-			String descriptionDetail = feed.getsMsgBody() + "\n" + feed.getsStory() + "\n";
-			if (photoUrl != null && photoUrl.length() > 0) {
-				descriptionDetail += "\n" + feed.getsPhotoPreviewName();
-				descriptionDetail += "\n" + feed.getsPhotoPreviewCaption();
-				descriptionDetail += "\n" + feed.getsPhotoPreviewDescription();
-			}
-			txv_description_detail.setText(descriptionDetail);
-			//Display display = getWindowManager().getDefaultDisplay();
-			//FlowTextHelper.tryFlowText(descriptionDetail, img_photo_detail, txv_description_detail, display);
-		}
-		
-		SlidingDrawer drawer_comments = (SlidingDrawer) findViewById(R.id.drawer_comments);
-		
-		drawer_comments.setOnDrawerOpenListener(this);
-		drawer_comments.setOnDrawerCloseListener(this);
-		
-		lstView_comments = (ListView) findViewById(R.id.lstV_detail_comment);
-		lstView_comments.setVisibility(View.GONE);
-		lstView_comments.setAdapter(arrAdapterComment);
-		
-		drawer_comments_content = (LinearLayout) findViewById(R.id.content);
-		drawer_comments_content.setVisibility(View.GONE);
+				
 	}
-	
+
+	class DetailPhotoClickListener implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+//			LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+//			View view = inflater.inflate(R.layout.feed_item_detail_photo, null);
+//			String sURL = img_photo_detail.getImageUrl();
+//			
+		}
+		
+	}
 	class MyWebViewClient extends WebViewClient {
 	    @Override
 	    public boolean shouldOverrideUrlLoading(WebView view, String url) {

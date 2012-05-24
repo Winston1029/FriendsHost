@@ -245,7 +245,7 @@ public class PubSub {
 //		zRenrenUtil = new RenrenUtil(this); //6.4M, 16ps
 //		zSinaUtil = new SinaUtil(this); //6.8M, 9ps
 //		zTwitterUtil = new TwitterUtil(this); // 7.0M, 10ps
-		
+		displayedSns = Const.SNS_RENREN;
 		this.zFeedOrg = new FeedOrganisor(this);
 		this.zSnsOrg = new SnsOrg(this);
 	}
@@ -283,7 +283,7 @@ public class PubSub {
 //				} else if (sns.equals(Const.SNS_SINA)) {
 //					zSinaUtil.fResend(feed);
 //				}
-				this.zSnsOrg.GetSnsInstance(sns).fResend(feed);
+				zSnsOrg.GetSnsInstance(sns).fResend(feed);
 
 			}
 		}
@@ -291,8 +291,8 @@ public class PubSub {
 	{  
 //			zRenrenUtil.onComplete(requestCode, resultCode, data);
 //			zFacebook.onComplete(requestCode, resultCode, data);
-			((RenrenUtil)this.zSnsOrg.GetSnsInstance(Const.SNS_RENREN)).onComplete(requestCode, resultCode, data);
-			((FacebookUtil)this.zSnsOrg.GetSnsInstance(Const.SNS_FACEBOOK)).onComplete(requestCode, resultCode, data);
+			((RenrenUtil)zSnsOrg.GetSnsInstance(Const.SNS_RENREN)).onComplete(requestCode, resultCode, data);
+			((FacebookUtil)zSnsOrg.GetSnsInstance(Const.SNS_FACEBOOK)).onComplete(requestCode, resultCode, data);
 
 		}
 

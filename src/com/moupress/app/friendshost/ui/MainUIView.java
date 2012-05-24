@@ -286,7 +286,6 @@ public class MainUIView extends View{
 			super.onActivityCreated(savedInstanceState);
 			this.setListAdapter(PubSub.zSnsOrg.GetSnsInstance(this.snsName).getFeedAdapter());
 			PubSub.zSnsOrg.GetSnsInstance(snsName).RefreshAdapter();
-			PubSub.setSNSDisplayed(snsName);
 			lstViewFeedPreview = (PullToRefreshListView) this.getListView();
 			lstViewFeedPreview.setOnRefreshListener(new OnRefreshListener() {
 				
