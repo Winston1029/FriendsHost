@@ -17,7 +17,9 @@
     android:id="@+id/linearLayout2"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:orientation="horizontal" xmlns:ns="http://github.com/droidfu/schema">
+    android:orientation="horizontal" xmlns:ns="http://github.com/droidfu/schema"
+    android:clickable="false"
+    android:focusable="false">
 <!--     <ImageView -->
 <!--         android:id="@+id/img_feeduser" -->
 <!--         android:layout_width="wrap_content" -->
@@ -80,7 +82,6 @@
             android:padding="5dp"
             android:textSize="18sp"
             android:textColor="@color/black"
-            android:clickable="true"
             />
 
         <LinearLayout

@@ -8,13 +8,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.AbsListView;
@@ -46,7 +45,7 @@ public class MainUIView extends View{
 
 	private ViewPager mPager;
 	private TabPageIndicator mIndicator;
-	private FragmentPagerAdapter mAdapter;
+	private FragmentStatePagerAdapter mAdapter;
 	private SlidingPanel slidingPanel;
 	
 	private LeftPanelView leftPanelView;
@@ -98,8 +97,12 @@ public class MainUIView extends View{
 		{
 			this.LoadData.clear();
 			LoadData.putCharSequenceArrayList(Const.SNS_SIGN_ON, PubSub.zSnsOrg.GetSignOnSnsNames());
+			
 			this.mAdapter.notifyDataSetChanged();
 			this.mIndicator.notifyDataSetChanged();
+			//this.mIndicator.setViewPager(mPager);
+			//this.LoadView(LoadData);
+			
 		}
 	}
 
@@ -140,7 +143,7 @@ public class MainUIView extends View{
 		
 	}
 	
-	public FragmentPagerAdapter getAdapter() {
+	public FragmentStatePagerAdapter getAdapter() {
 		return mAdapter;
 	}
 
@@ -172,7 +175,6 @@ public class MainUIView extends View{
 
 			@Override
 			public void onClick(android.view.View arg0) {
-				// TODO Auto-generated method stub
 				slidingPanel.Slide2Left();
 				//slidingPanel.setVisibility(android.view.View.GONE);
 			}});
@@ -183,7 +185,6 @@ public class MainUIView extends View{
 
 			@Override
 			public void onClick(android.view.View v) {
-				// TODO Auto-generated method stub
 				slidingPanel.Slide2Right();
 			}
     		
@@ -194,7 +195,6 @@ public class MainUIView extends View{
 
 			@Override
 			public void onClick(android.view.View v) {
-				// TODO Auto-generated method stub
 				slidingPanel.Slide2Right();
 			}});	
     }
@@ -207,12 +207,30 @@ public class MainUIView extends View{
 	}
     
 
-	public class SnsAdapter extends FragmentPagerAdapter implements TitleProvider
+	public class SnsAdapter extends FragmentStatePagerAdapter implements TitleProvider
 	{
 		public SnsAdapter(FragmentManager fm) {
 			super(fm);
-			// TODO Auto-generated constructor stub
 		}
+
+		
+		
+
+		@Override
+		public int getItemPosition(Object object) {
+			// TODO Auto-generated method stub
+			//return super.getItemPosition(object);
+			String snsName = ((SnsFeedListFragment)object).snsName;
+			if(PubSub.zSnsOrg.GetSnsInstance(snsName).isSelected())
+			{
+				return POSITION_UNCHANGED;
+			}
+			
+			return POSITION_NONE;
+		}
+
+
+
 
 		@Override
 		public Fragment getItem(int position) {
@@ -226,6 +244,7 @@ public class MainUIView extends View{
 		public int getCount() {
 			// TODO Auto-generated method stub
 			return LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON).size();
+			//return Const.SNSGROUPS.length;
 		}
 
 		@Override
