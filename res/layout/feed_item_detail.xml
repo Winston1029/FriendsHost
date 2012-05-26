@@ -64,8 +64,8 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/LinearLayout_Content_ItemDetail"
+    <RelativeLayout
+        android:id="@+id/RelativeLayout_Content_ItemDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/LinearLayout_UserInfo_ItemDetail"
@@ -97,11 +97,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:text="Media Text"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium">
+            </TextView>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
     
     <com.moupress.app.friendshost.uicomponent.WrapSlidingDrawer
         android:id="@+id/drawer_comments"

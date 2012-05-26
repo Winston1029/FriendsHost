@@ -23,7 +23,7 @@ import com.moupress.app.friendshost.sns.SnsOrg;
 import com.moupress.app.friendshost.sns.Renren.RenrenUtil;
 import com.moupress.app.friendshost.sns.facebook.FacebookUtil;
 import com.moupress.app.friendshost.ui.MainUIView;
-import com.moupress.app.friendshost.ui.listeners.DetailViewListener;
+import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
 import com.moupress.app.friendshost.util.FeedOrganisor;
 import com.moupress.app.friendshost.util.Mail;
@@ -84,7 +84,7 @@ public class PubSub {
 	private void fInitMainUI() {
 		mainUIView = new MainUIView();
 		mainUIView.InitTitle(PubSub.zActivity, titleBarListener);
-		mainUIView.InitDetail(PubSub.zActivity, detailViewListener);
+		mainUIView.InitContent(PubSub.zActivity, contentViewListener);
 	}
 	
 	
@@ -94,13 +94,13 @@ public class PubSub {
 		if(mainUIView != null)
 		{
 			Bundle snsFeedBundle = new Bundle();
-			snsFeedBundle.putCharSequenceArrayList(Const.SNS_SIGN_ON, this.zSnsOrg.GetSignOnSnsNames());
+			snsFeedBundle.putCharSequenceArrayList(Const.SNS_SIGN_ON, zSnsOrg.GetSignOnSnsNames());
 			this.mainUIView.LoadView(snsFeedBundle);
 			
 		}
 	}
 	
-	DetailViewListener detailViewListener = new DetailViewListener()
+	ContentViewListener contentViewListener = new ContentViewListener()
 	{
 		
 	};
@@ -245,8 +245,8 @@ public class PubSub {
 //		zRenrenUtil = new RenrenUtil(this); //6.4M, 16ps
 //		zSinaUtil = new SinaUtil(this); //6.8M, 9ps
 //		zTwitterUtil = new TwitterUtil(this); // 7.0M, 10ps
-		this.zFeedOrg = new FeedOrganisor(this);
-		this.zSnsOrg = new SnsOrg(this);
+		zFeedOrg = new FeedOrganisor(this);
+		zSnsOrg = new SnsOrg(this);
 	}
 	
 //	public FacebookUtil fGetFacebookUtil() {return zFacebook; }
@@ -283,7 +283,7 @@ public class PubSub {
 //				} else if (sns.equals(Const.SNS_SINA)) {
 //					zSinaUtil.fResend(feed);
 //				}
-				this.zSnsOrg.GetSnsInstance(snsName).fResend(feed);
+				zSnsOrg.GetSnsInstance(snsName).fResend(feed);
 
 			}
 		}

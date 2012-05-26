@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -15,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SlidingDrawer;
 import android.widget.SlidingDrawer.OnDrawerCloseListener;
 import android.widget.SlidingDrawer.OnDrawerOpenListener;
@@ -26,18 +29,22 @@ import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.sns.FeedEntry;
-import com.moupress.app.friendshost.util.FeedOrganisor;
+import com.moupress.app.friendshost.ui.DetailView;
+import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
+import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
 
 public class FeedDetailViewActivity extends Activity implements OnDrawerOpenListener, OnDrawerCloseListener {
 
 	//private FeedOrganisor zFeedOrg;
 	private FeedEntry feed;
+	private DetailView detailView;
 	
 	private ListView lstView_comments;
 	private LstViewCommentAdapter arrAdapterComment;
 	private LinearLayout drawer_comments_content;
 	
 	private int iScreenHeight;
+	private int iScreenWidth;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,21 +52,34 @@ public class FeedDetailViewActivity extends Activity implements OnDrawerOpenList
 		
 		this.setContentView(R.layout.feed_item_detail);
 		
+		//fInitDetailView();
+		
 		iScreenHeight = getWindowManager().getDefaultDisplay().getHeight();
+		iScreenWidth = getWindowManager().getDefaultDisplay().getWidth();
 		
 		fInitFeed();
 		fInitUI();
 	}
 	
+	private void fInitDetailView() {
+		detailView = new DetailView();
+		detailView.InitTitle(this, titleBarListener);
+		detailView.InitContent(this, contentViewListener);
+		
+	}
+	
+	ContentViewListener contentViewListener = new ContentViewListener()
+	{
+		
+	};
+	
+	TitleBarListener titleBarListener = new TitleBarListener()
+	{
+		
+	};
+
 	private void fInitFeed() {
 		Intent intent = this.getIntent();
-//		final FeedEntry feed = intent.getParcelableExtra(Const.FEED_ITEM);
-//		final ArrayList<Parcelable> comments = intent.getParcelableArrayListExtra(Const.COMMENTS);
-//		if (comments != null) {
-//			System.out.println();
-//		}
-		//zFeedOrg = new FeedOrganisor(this);
-		//zFeedOrg = PubSub.zFeedOrg;
 		
 		String displayedSns = intent.getStringExtra(Const.SNS);
 		String feed_id = intent.getStringExtra(Const.FID);
@@ -84,15 +104,48 @@ public class FeedDetailViewActivity extends Activity implements OnDrawerOpenList
 		fInitUIBasic();
 		fInitUIWebView();
 		fInitUIPhoto();
+		fInitUIDescription();
 		fInitUIDrawer();
 		
 		
 	}
 	
-	WebImageView img_photo_detail = null;
+	private void fInitUIDescription() {
+		String descriptionDetail = null;
+		String sMsgBody = feed.getsMsgBody() ;
+		String sStory = feed.getsStory();
+		if ( sMsgBody  != null && sStory != null
+				//if first 4 chars are the same, means duplicate message display Story Only
+				//specially cater for Renren feed structure
+				&& sMsgBody.length() >3 && sStory.length() > 3
+				&& sMsgBody.substring(0, 4).compareToIgnoreCase(sStory.substring(0, 4)) != 0) {
+			descriptionDetail = sMsgBody + "\n" + sStory;
+		}  else if ( sStory != null ) {
+			descriptionDetail = sStory;
+		} else if ( sMsgBody != null ) {
+			descriptionDetail = sMsgBody;
+		} 
+		if (feed.getsPhotoPreviewName() != null) {
+			descriptionDetail += "\n" + feed.getsPhotoPreviewName();
+		}
+		if (feed.getsPhotoPreviewCaption() != null) {
+			descriptionDetail += "\n" + feed.getsPhotoPreviewCaption();
+		}
+		if (feed.getsPhotoPreviewDescription() != null ) {
+			descriptionDetail += "\n" + feed.getsPhotoPreviewDescription();
+		}
+		TextView txv_description_detail = (TextView) findViewById(R.id.txv_description_detail);
+		if (webV_detail.getVisibility() == View.VISIBLE){
+			txv_description_detail = (TextView) findViewById(R.id.txv_description_detail);
+		} else {
+			txv_description_detail.setText(descriptionDetail);			
+		}
+		//Display display = getWindowManager().getDefaultDisplay();
+		//FlowTextHelper.tryFlowText(descriptionDetail, img_photo_detail, txv_description_detail, display);		
+	}
+
 	private void fInitUIPhoto() {
 		WebImageView img_photo_detail = (WebImageView)findViewById(R.id.img_photo_detail);
-		TextView txv_description_detail = (TextView) findViewById(R.id.txv_description_detail);
 		
 		String sPhotoUrl = feed.getsPhotoPreviewLink();
 		if (sPhotoUrl != null && sPhotoUrl.startsWith("http://") && sPhotoUrl.endsWith(".jpg")) {
@@ -101,38 +154,10 @@ public class FeedDetailViewActivity extends Activity implements OnDrawerOpenList
 			img_photo_detail.setImageUrl(sPhotoUrl);
 			img_photo_detail.loadImage();
 			
-			String descriptionDetail = null;
-			String sMsgBody = feed.getsMsgBody() ;
-			String sStory = feed.getsStory();
-			if ( sMsgBody  != null && sStory != null
-					//if first 4 chars are the same, means duplicate message display Story Only
-					//specially cater for Renren feed structure
-					&& sMsgBody.length() >3 && sStory.length() > 3
-					&& sMsgBody.substring(0, 4).compareToIgnoreCase(sStory.substring(0, 4)) != 0) {
-				descriptionDetail = sMsgBody + "\n" + sStory;
-			}  else if ( sStory != null ) {
-				descriptionDetail = sStory;
-			} else if ( sMsgBody != null ) {
-				descriptionDetail = sMsgBody;
-			} 
-			if (feed.getsPhotoPreviewName() != null) {
-				descriptionDetail += "\n" + feed.getsPhotoPreviewName();
-			}
-			if (feed.getsPhotoPreviewCaption() != null) {
-				descriptionDetail += "\n" + feed.getsPhotoPreviewCaption();
-			}
-			if (feed.getsPhotoPreviewDescription() != null ) {
-				descriptionDetail += "\n" + feed.getsPhotoPreviewDescription();
-			}
-			txv_description_detail.setText(descriptionDetail);
-			//Display display = getWindowManager().getDefaultDisplay();
-			//FlowTextHelper.tryFlowText(descriptionDetail, img_photo_detail, txv_description_detail, display);
-			
 			DetailPhotoClickListener listener = new DetailPhotoClickListener();
 			img_photo_detail.setOnClickListener(listener);
 		} else {
 			img_photo_detail.setVisibility(View.GONE);
-			txv_description_detail.setVisibility(View.GONE);
 		}
 	}
 
@@ -150,8 +175,9 @@ public class FeedDetailViewActivity extends Activity implements OnDrawerOpenList
 		drawer_comments_content.setVisibility(View.GONE);		
 	}
 
+	WebView webV_detail = null;
 	private void fInitUIWebView() {
-		WebView webV_detail = (WebView) findViewById(R.id.webV_detail);
+		webV_detail = (WebView) findViewById(R.id.webV_detail);
 		if (
 				feed.getsFeedType() != null 
 				&& (feed.getsFeedType().equals("blog") || feed.getsFeedType().equals("21")) 
@@ -197,10 +223,77 @@ public class FeedDetailViewActivity extends Activity implements OnDrawerOpenList
 	class DetailPhotoClickListener implements OnClickListener {
 
 		@Override
-		public void onClick(View v) {
-//			LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-//			View view = inflater.inflate(R.layout.feed_item_detail_photo, null);
-//			String sURL = img_photo_detail.getImageUrl();
+		public void onClick(View viewClicked) {
+			RelativeLayout layout_detail_view = (RelativeLayout) findViewById(R.id.RelativeLayout_Content_ItemDetail);
+			LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+			View view = inflater.inflate(R.layout.feed_item_detail_photo, layout_detail_view);
+			WebView img_large_photo_detail = (WebView)view.findViewById(R.id.img_large_photo_detail);
+			if (viewClicked instanceof WebImageView) {
+				String sLargeImgUrl = ((WebImageView) viewClicked).getImageUrl().replace("head", "large");
+				img_large_photo_detail.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+				img_large_photo_detail.getSettings().setBuiltInZoomControls(true);
+				img_large_photo_detail.getSettings().setUseWideViewPort(true);
+				img_large_photo_detail.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
+				img_large_photo_detail.loadUrl(sLargeImgUrl);
+			}
+/*
+			 * 
+			 
+			final WebImageView img_large_photo_detail = (WebImageView)view.findViewById(R.id.img_large_photo_detail);
+			if (viewClicked instanceof WebImageView) {
+				String sLargeImgUrl = ((WebImageView) viewClicked).getImageUrl().replace("head", "large");
+				img_large_photo_detail.setImageUrl(sLargeImgUrl);
+				img_large_photo_detail.loadImage();
+				// set maximum scroll amount (based on center of image)
+			    int maxX = (int)((img_large_photo_detail.getWidth() / 2) - (iScreenWidth / 2));
+			    int maxY = (int)((img_large_photo_detail.getHeight() / 2) - (iScreenHeight / 2));
+
+			    // set scroll limits
+			    final int maxLeft = (maxX * -1);
+			    final int maxRight = maxX;
+			    final int maxTop = (maxY * -1);
+			    final int maxBottom = maxY;
+				img_large_photo_detail.setOnTouchListener(new View.OnTouchListener() {
+
+			        float downX, downY;
+			        int totalX, totalY;
+			        int scrollByX, scrollByY;
+			        public boolean onTouch(View view, MotionEvent event)
+			        {
+			        	float curX, curY;
+			        	float mx = 0, my = 0;
+			            switch (event.getAction()) {
+
+			                case MotionEvent.ACTION_DOWN:
+			                    mx = event.getX();
+			                    my = event.getY();
+			                    break;
+			                case MotionEvent.ACTION_MOVE:
+			                    curX = event.getX();
+			                    curY = event.getY();
+			                    img_large_photo_detail.scrollBy((int) (mx - curX), (int) (my - curY));
+			                    mx = curX;
+			                    my = curY;
+			                    break;
+			                case MotionEvent.ACTION_UP:
+			                    curX = event.getX();
+			                    curY = event.getY();
+			                    img_large_photo_detail.scrollBy((int) (mx - curX), (int) (my - curY));
+			                    break;
+			            }
+
+			            return true;
+			        }
+			    });
+//				img_large_photo_detail.getSettings().setBuiltInZoomControls(true);
+//				img_large_photo_detail.getSettings().setUseWideViewPort(true);
+//				img_large_photo_detail.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
+ * */
+				
+			else {
+				view.setVisibility(View.GONE);
+			}
+			Toast.makeText(getApplicationContext(), "Image Clicked: " + viewClicked.getId() , Toast.LENGTH_SHORT).show();
 //			
 		}
 		

@@ -17,7 +17,7 @@ import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
-import com.moupress.app.friendshost.ui.listeners.DetailViewListener;
+import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
 
 public class LeftPanelView extends View{
@@ -47,10 +47,10 @@ public class LeftPanelView extends View{
 	}
 
 	@Override
-	public void InitDetail(Activity activity,
-			DetailViewListener detailViewListener) {
+	public void InitContent(Activity activity,
+			ContentViewListener detailViewListener) {
 		// TODO Auto-generated method stub
-		super.InitDetail(activity, detailViewListener);
+		super.InitContent(activity, detailViewListener);
 		
 		this.snsAccntLstAdapter = new SnsAccntLstAdapter(activity);
 		

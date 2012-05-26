@@ -3,18 +3,18 @@ package com.moupress.app.friendshost.ui;
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.moupress.app.friendshost.ui.listeners.DetailViewListener;
+import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
 
 public abstract class View {
 
 	protected int TitleLayoutId = -1;
 	
-	protected int DetailLayoutId = -1;
+	protected int ContentLayoutId = -1;
 	
 	protected TitleBarListener titleBarListener;
 	
-	protected DetailViewListener detailViewListener;
+	protected ContentViewListener contentViewListener;
 	
 	protected Bundle LoadData;
 	
@@ -24,9 +24,9 @@ public abstract class View {
 		
 	}
 	
-	public void InitDetail(Activity activity, DetailViewListener detailViewListener)
+	public void InitContent(Activity activity, ContentViewListener contentViewListener)
 	{
-		this.detailViewListener = detailViewListener;
+		this.contentViewListener = contentViewListener;
 		
 	}
 	
