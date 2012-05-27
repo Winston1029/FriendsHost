@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.ListFragment;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -97,7 +99,6 @@ public class MainUIView extends View{
 		{
 			this.LoadData.clear();
 			LoadData.putCharSequenceArrayList(Const.SNS_SIGN_ON, PubSub.zSnsOrg.GetSignOnSnsNames());
-			
 			this.mAdapter.notifyDataSetChanged();
 			this.mIndicator.notifyDataSetChanged();
 			//this.mIndicator.setViewPager(mPager);
@@ -213,20 +214,13 @@ public class MainUIView extends View{
 			super(fm);
 		}
 
-		
-		
 
 		@Override
 		public int getItemPosition(Object object) {
-			// TODO Auto-generated method stub
 			//return super.getItemPosition(object);
-			String snsName = ((SnsFeedListFragment)object).snsName;
-			if(PubSub.zSnsOrg.GetSnsInstance(snsName).isSelected())
-			{
-				return POSITION_UNCHANGED;
-			}
+			int status = PagerAdapter.POSITION_NONE;
 			
-			return POSITION_NONE;
+			return status;
 		}
 
 
@@ -235,9 +229,9 @@ public class MainUIView extends View{
 		@Override
 		public Fragment getItem(int position) {
 			// TODO Auto-generated method stub
-			//snsFeedListFragment = SnsFeedListFragment.newInstance(LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON).get(position).toString());
-			return SnsFeedListFragment.newInstance(LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON).get(position).toString());
-			//return snsFeedListFragment;
+			SnsFeedListFragment snsFeedListFragment = SnsFeedListFragment.newInstance(LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON).get(position).toString());
+			//return SnsFeedListFragment.newInstance(Const.SNSGROUPS[position]);
+			return snsFeedListFragment;
 		}
 
 		@Override
@@ -247,19 +241,23 @@ public class MainUIView extends View{
 			//return Const.SNSGROUPS.length;
 		}
 
+		
 		@Override
 		public String getTitle(int position) {
 			// TODO Auto-generated method stub
 			//return MainUIView.CONTENT[position % MainUIView.CONTENT.length].toUpperCase();
 			ArrayList<CharSequence> titles = LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON);
 			
-			
 			return titles.get(position%titles.size()).toString().toUpperCase();
 		}
+
+
+		@Override
+		public int getTitleCount() {
+			// TODO Auto-generated method stub
+			return LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON).size();
+		}
 		
-//		public SnsFeedListFragment getSnsFeedListFragment() {
-//			return snsFeedListFragment;
-//		}
 	}
 	
 	

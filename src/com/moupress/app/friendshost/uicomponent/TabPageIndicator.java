@@ -179,7 +179,7 @@ public class TabPageIndicator extends HorizontalScrollView{
 	        mTabLayout.removeAllViews();
 	        TitleProvider adapter = (TitleProvider)mViewPager.getAdapter();
 	        //((PagerAdapter)mViewPager.getAdapter()).notifyDataSetChanged();
-	        final int count = ((PagerAdapter)adapter).getCount();
+	        final int count = adapter.getTitleCount();
 	        for (int i = 0; i < count; i++) {
 	            addTab(adapter.getTitle(i), i);
 	        }
