@@ -27,7 +27,7 @@ import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
-import com.moupress.app.friendshost.ui.listeners.DetailViewListener;
+import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
 import com.moupress.app.friendshost.uicomponent.SlidingPanel;
 import com.moupress.app.friendshost.uicomponent.PullToRefreshListView;
@@ -77,7 +77,7 @@ public class MainUIView extends View{
 	public  MainUIView()
 	{
 		this.TitleLayoutId = R.layout.fh_title_bar;
-		this.DetailLayoutId = R.layout.fh_main_ui;
+		this.ContentLayoutId = R.layout.fh_main_ui;
 	}
 
 	
@@ -108,12 +108,12 @@ public class MainUIView extends View{
 	}
 
 	@Override
-	public void InitDetail(Activity activity, DetailViewListener detailViewListener) {
+	public void InitContent(Activity activity, ContentViewListener contentViewListener) {
 		// TODO Auto-generated method stub
-		super.InitDetail(activity, detailViewListener);
+		super.InitContent(activity, contentViewListener);
 		
-		if(DetailLayoutId != -1)
-			activity.setContentView(DetailLayoutId);
+		if(ContentLayoutId != -1)
+			activity.setContentView(ContentLayoutId);
 		
 		//if(TitleLayoutId != -1)
 			//activity.getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, this.TitleLayoutId);
@@ -203,7 +203,7 @@ public class MainUIView extends View{
 	private void InitLeftPanelView(Activity activity) {
 		
 		leftPanelView = new LeftPanelView(snsEventListener);
-		leftPanelView.InitDetail(activity, detailViewListener);
+		leftPanelView.InitContent(activity, contentViewListener);
 		
 	}
     
