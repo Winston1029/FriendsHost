@@ -2,11 +2,11 @@ package com.moupress.app.friendshost.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.webkit.WebSettings;
@@ -87,9 +87,6 @@ public class FeedDetailViewActivity extends Activity implements OnDrawerOpenList
 		feed = PubSub.zFeedOrg.fGetFeedByID( displayedSns, feed_id );
 		
 		arrAdapterComment = new LstViewCommentAdapter(this, R.layout.feed_item_detail_comment);
-//		for (FeedEntryComment comment : feed.getzComments()) {
-//			arrAdapterComment.addItem(comment);
-//		}
 		if (feed.getzComments() != null ) {
 			int size = feed.getzComments().size();
 			for (int i = 0; i< size; i++) {
@@ -103,7 +100,7 @@ public class FeedDetailViewActivity extends Activity implements OnDrawerOpenList
 		
 		fInitUIBasic();
 		fInitUIWebView();
-		fInitUIPhoto();
+		//fInitUIPhoto();
 		fInitUIDescription();
 		fInitUIDrawer();
 		
@@ -135,30 +132,9 @@ public class FeedDetailViewActivity extends Activity implements OnDrawerOpenList
 			descriptionDetail += "\n" + feed.getsPhotoPreviewDescription();
 		}
 		TextView txv_description_detail = (TextView) findViewById(R.id.txv_description_detail);
-		if (webV_detail.getVisibility() == View.VISIBLE){
-			txv_description_detail = (TextView) findViewById(R.id.txv_description_detail);
-		} else {
-			txv_description_detail.setText(descriptionDetail);			
-		}
+		txv_description_detail.setText(descriptionDetail);			
 		//Display display = getWindowManager().getDefaultDisplay();
 		//FlowTextHelper.tryFlowText(descriptionDetail, img_photo_detail, txv_description_detail, display);		
-	}
-
-	private void fInitUIPhoto() {
-		WebImageView img_photo_detail = (WebImageView)findViewById(R.id.img_photo_detail);
-		
-		String sPhotoUrl = feed.getsPhotoPreviewLink();
-		if (sPhotoUrl != null && sPhotoUrl.startsWith("http://") && sPhotoUrl.endsWith(".jpg")) {
-			//sPhotoUrl = sPhotoUrl.replace("head", "large");
-			img_photo_detail.setVisibility(View.VISIBLE);
-			img_photo_detail.setImageUrl(sPhotoUrl);
-			img_photo_detail.loadImage();
-			
-			DetailPhotoClickListener listener = new DetailPhotoClickListener();
-			img_photo_detail.setOnClickListener(listener);
-		} else {
-			img_photo_detail.setVisibility(View.GONE);
-		}
 	}
 
 	private void fInitUIDrawer() {
@@ -175,16 +151,40 @@ public class FeedDetailViewActivity extends Activity implements OnDrawerOpenList
 		drawer_comments_content.setVisibility(View.GONE);		
 	}
 
-	WebView webV_detail = null;
+	/*
+	 * Use WebView to load large image
+	 * Trying to make use of its default zooming and scrolling function
+	 * Need to set background to be transparent 
+	 * so that additional white space associated with WebView can be hidden from user
+	 */
 	private void fInitUIWebView() {
-		webV_detail = (WebView) findViewById(R.id.webV_detail);
-		if (
-				feed.getsFeedType() != null 
-				&& (feed.getsFeedType().equals("blog") || feed.getsFeedType().equals("21")) 
-			) {
-			webV_detail.setVisibility(View.VISIBLE);
-			webV_detail.setWebViewClient(new MyWebViewClient());
+		String sPhotoUrl = feed.getsPhotoPreviewLink();
+		String sFeedType = feed.getsFeedType();
+		WebView webV_detail = (WebView) findViewById(R.id.webV_detail);
+		webV_detail.setVisibility(View.VISIBLE);
+		webV_detail.setWebViewClient(new MyWebViewClient());
+		if (sFeedType != null && (sFeedType.equals("blog") || sFeedType.equals("21")) ) {
 			webV_detail.loadUrl(feed.getsLink());
+		} else if ((sPhotoUrl != null && sPhotoUrl.startsWith("http://") && sPhotoUrl.endsWith(".jpg"))) {
+			String sLargeImgUrl = sPhotoUrl.replace("head", "large");
+			webV_detail.getSettings().setBuiltInZoomControls(true);
+			webV_detail.getSettings().setUseWideViewPort(true);
+			webV_detail.getSettings().setLoadWithOverviewMode(true);
+			webV_detail.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
+			webV_detail.setInitialScale(1);
+			webV_detail.setBackgroundColor(Color.TRANSPARENT);
+			//img_large_photo_detail.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+			String HTML_FORMAT = 
+					"<html><head>" +
+						"<style>{margin:0;padding:0;}</style>" +
+						"<meta name=viewport />" +
+					"</head>" +
+					"<body " +
+						"style=\"background-color: whilte;\">" +
+						"<img src = \"%s\" />" +
+					"</body></html>";
+			String html = String.format(HTML_FORMAT, sLargeImgUrl);
+			webV_detail.loadDataWithBaseURL("", html, "text/html", "UTF-8", "");
 		} else {
 			webV_detail.setVisibility(View.GONE);
 		}		
@@ -219,90 +219,32 @@ public class FeedDetailViewActivity extends Activity implements OnDrawerOpenList
 		});
 				
 	}
-
-	class DetailPhotoClickListener implements OnClickListener {
-
-		@Override
-		public void onClick(View viewClicked) {
-			RelativeLayout layout_detail_view = (RelativeLayout) findViewById(R.id.RelativeLayout_Content_ItemDetail);
-			LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-			View view = inflater.inflate(R.layout.feed_item_detail_photo, layout_detail_view);
-			WebView img_large_photo_detail = (WebView)view.findViewById(R.id.img_large_photo_detail);
-			if (viewClicked instanceof WebImageView) {
-				String sLargeImgUrl = ((WebImageView) viewClicked).getImageUrl().replace("head", "large");
-				img_large_photo_detail.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-				img_large_photo_detail.getSettings().setBuiltInZoomControls(true);
-				img_large_photo_detail.getSettings().setUseWideViewPort(true);
-				img_large_photo_detail.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
-				img_large_photo_detail.loadUrl(sLargeImgUrl);
-			}
-/*
-			 * 
-			 
-			final WebImageView img_large_photo_detail = (WebImageView)view.findViewById(R.id.img_large_photo_detail);
-			if (viewClicked instanceof WebImageView) {
-				String sLargeImgUrl = ((WebImageView) viewClicked).getImageUrl().replace("head", "large");
-				img_large_photo_detail.setImageUrl(sLargeImgUrl);
-				img_large_photo_detail.loadImage();
-				// set maximum scroll amount (based on center of image)
-			    int maxX = (int)((img_large_photo_detail.getWidth() / 2) - (iScreenWidth / 2));
-			    int maxY = (int)((img_large_photo_detail.getHeight() / 2) - (iScreenHeight / 2));
-
-			    // set scroll limits
-			    final int maxLeft = (maxX * -1);
-			    final int maxRight = maxX;
-			    final int maxTop = (maxY * -1);
-			    final int maxBottom = maxY;
-				img_large_photo_detail.setOnTouchListener(new View.OnTouchListener() {
-
-			        float downX, downY;
-			        int totalX, totalY;
-			        int scrollByX, scrollByY;
-			        public boolean onTouch(View view, MotionEvent event)
-			        {
-			        	float curX, curY;
-			        	float mx = 0, my = 0;
-			            switch (event.getAction()) {
-
-			                case MotionEvent.ACTION_DOWN:
-			                    mx = event.getX();
-			                    my = event.getY();
-			                    break;
-			                case MotionEvent.ACTION_MOVE:
-			                    curX = event.getX();
-			                    curY = event.getY();
-			                    img_large_photo_detail.scrollBy((int) (mx - curX), (int) (my - curY));
-			                    mx = curX;
-			                    my = curY;
-			                    break;
-			                case MotionEvent.ACTION_UP:
-			                    curX = event.getX();
-			                    curY = event.getY();
-			                    img_large_photo_detail.scrollBy((int) (mx - curX), (int) (my - curY));
-			                    break;
-			            }
-
-			            return true;
-			        }
-			    });
-//				img_large_photo_detail.getSettings().setBuiltInZoomControls(true);
-//				img_large_photo_detail.getSettings().setUseWideViewPort(true);
-//				img_large_photo_detail.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
- * */
-				
-			else {
-				view.setVisibility(View.GONE);
-			}
-			Toast.makeText(getApplicationContext(), "Image Clicked: " + viewClicked.getId() , Toast.LENGTH_SHORT).show();
-//			
-		}
-		
-	}
+	
 	class MyWebViewClient extends WebViewClient {
 	    @Override
 	    public boolean shouldOverrideUrlLoading(WebView view, String url) {
 	        view.loadUrl(url);
 	        return true;
+	    }
+	    
+	    //not working yet !!!
+	    @Override
+	    public void onReceivedError  (WebView view, int errorCode, String description, String failingUrl) {
+	    	if (errorCode == ERROR_FILE_NOT_FOUND) {
+	    		String sPhotoUrl = feed.getsPhotoPreviewLink();
+	    		String sLargeImgUrl = sPhotoUrl.replace("large", "original");
+	    		String HTML_FORMAT = 
+					"<html><head>" +
+						"<style>{margin:0;padding:0;}</style>" +
+						"<meta name=viewport />" +
+					"</head>" +
+					"<body " +
+						"style=\"background-color: whilte;\">" +
+						"<img src = \"%s\" />" +
+					"</body></html>";
+				String html = String.format(HTML_FORMAT, sLargeImgUrl);
+				view.loadDataWithBaseURL("", html, "text/html", "UTF-8", "");
+	    	}
 	    }
 	}
 
@@ -334,4 +276,104 @@ public class FeedDetailViewActivity extends Activity implements OnDrawerOpenList
 			}
 		});
 	}
+	
+/*
+ * Below code is to be removed if the WebView( fInitUIWebView ) is stablized
+ * Below code is to use WebImageView from droid-fu to load large image and allow it to be scrollable
+ * 
+	private void fInitUIPhoto() {
+		WebImageView img_photo_detail = (WebImageView)findViewById(R.id.img_photo_detail);
+		
+		String sPhotoUrl = feed.getsPhotoPreviewLink();
+		if (sPhotoUrl != null && sPhotoUrl.startsWith("http://") && sPhotoUrl.endsWith(".jpg")) {
+			//sPhotoUrl = sPhotoUrl.replace("head", "large");
+			img_photo_detail.setVisibility(View.VISIBLE);
+			img_photo_detail.setScrollContainer(true);
+			img_photo_detail.setImageUrl(sPhotoUrl);
+			img_photo_detail.loadImage();
+			
+			DetailPhotoClickListener listener = new DetailPhotoClickListener();
+			img_photo_detail.setOnClickListener(listener);
+		} else {
+			img_photo_detail.setVisibility(View.GONE);
+		}
+	}
+
+	class DetailPhotoClickListener implements OnClickListener {
+
+		@Override
+		public void onClick(View viewClicked) {
+			RelativeLayout layout_detail_view = (RelativeLayout) findViewById(R.id.RelativeLayout_Content_ItemDetail);
+			LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+			View view = inflater.inflate(R.layout.feed_item_detail_photo, layout_detail_view);
+			WebView img_large_photo_detail = (WebView)view.findViewById(R.id.img_large_photo_detail);
+			if (viewClicked instanceof WebImageView) {
+				String sLargeImgUrl = ((WebImageView) viewClicked).getImageUrl().replace("head", "large");
+				img_large_photo_detail.getSettings().setBuiltInZoomControls(true);
+				img_large_photo_detail.getSettings().setUseWideViewPort(true);
+				img_large_photo_detail.getSettings().setLoadWithOverviewMode(true);
+				img_large_photo_detail.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
+				img_large_photo_detail.setInitialScale(1);
+				img_large_photo_detail.setBackgroundColor(Color.TRANSPARENT);
+				//img_large_photo_detail.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+				String HTML_FORMAT = "<html><head><style>{margin:0;padding:0;}</style>" +
+						"<meta name=viewport /></head>" +
+						"<body style=\"background-color: whilte;\">" +
+						"<img src = \"%s\" /></body></html>";
+				String html = String.format(HTML_FORMAT, sLargeImgUrl);
+				img_large_photo_detail.loadDataWithBaseURL("", html, "text/html", "UTF-8", "");
+				//img_large_photo_detail.loadUrl(sLargeImgUrl);
+			}
+			 
+			WebImageView img_large_photo_detail = (WebImageView)view.findViewById(R.id.img_large_photo_detail);
+			if (viewClicked instanceof WebImageView) {
+				String sLargeImgUrl = ((WebImageView) viewClicked).getImageUrl().replace("head", "large");
+				img_large_photo_detail.setImageUrl(sLargeImgUrl);
+				img_large_photo_detail.loadImage();
+			} 
+			else {
+				view.setVisibility(View.GONE);
+			}
+			Toast.makeText(getApplicationContext(), "Image Clicked: " + viewClicked.getId() , Toast.LENGTH_SHORT).show();
+		}
+		
+	}
+	
+	class MyTouchListener implements OnTouchListener {
+
+		float downX, downY;
+        int totalX, totalY;
+        int scrollByX, scrollByY;
+        
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+        	float curX, curY;
+        	float mx = 0, my = 0;
+            switch (event.getAction()) {
+
+                case MotionEvent.ACTION_DOWN:
+                    mx = event.getX();
+                    my = event.getY();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    curX = event.getX();
+                    curY = event.getY();
+                    v.scrollBy((int) (mx - curX), (int) (my - curY));
+                    mx = curX;
+                    my = curY;
+                    break;
+                case MotionEvent.ACTION_UP:
+                    curX = event.getX();
+                    curY = event.getY();
+                    v.scrollBy((int) (mx - curX), (int) (my - curY));
+                    break;
+            }
+
+            return true;
+		}
+		
+	}
+
+*/
+	
 }

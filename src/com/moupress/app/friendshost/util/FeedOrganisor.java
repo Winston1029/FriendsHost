@@ -321,16 +321,18 @@ public class FeedOrganisor {
 				
 				String feed_id = feeds[i][0];
 				comments = zDBHelper.fGetFeedComments(sns, feed_id);
-				for (int j = 0; j < comments.length; j++) {
-					index = 0;
-					FeedEntryComment comment = new FeedEntryComment();
-					comment.setCommentedID(comments[j][index++]);
-					comment.setCommentedUserID(comments[j][index++]);
-					comment.setCommentedName(comments[j][index++]);
-					comment.setCommentedHeadUrl(comments[j][index++]);
-					comment.setCommentedMsg(comments[j][index++]);
-					comment.setCommentedTime(comments[j][index++]);
-					item.getzComments().add(comment);
+				if (comments != null) {
+					for (int j = 0; j < comments.length; j++) {
+						index = 0;
+						FeedEntryComment comment = new FeedEntryComment();
+						comment.setCommentedID(comments[j][index++]);
+						comment.setCommentedUserID(comments[j][index++]);
+						comment.setCommentedName(comments[j][index++]);
+						comment.setCommentedHeadUrl(comments[j][index++]);
+						comment.setCommentedMsg(comments[j][index++]);
+						comment.setCommentedTime(comments[j][index++]);
+						item.getzComments().add(comment);
+					}
 				}
 				
 				items.add(item);

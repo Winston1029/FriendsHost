@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     xmlns:ns="http://github.com/droidfu/schema"
     android:orientation="vertical">
     
@@ -9,8 +9,6 @@
         android:id="@+id/img_large_photo_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fadingEdge="vertical|horizontal"
-        android:fadeScrollbars="true"
     />
 <!--     <com.github.droidfu.widgets.WebImageView -->
 <!--          xmlns:droidfu="http://github.com/droidfu/schema" -->
@@ -22,4 +20,4 @@
 <!--          droidfu:progressDrawable="..." > -->
 <!--     </com.github.droidfu.widgets.WebImageView> -->
 
-</ScrollView>
+</LinearLayout>
