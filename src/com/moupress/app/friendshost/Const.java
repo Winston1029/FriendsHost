@@ -88,5 +88,10 @@ public class Const {
 	public static final String SETTING_BASIC = "BasicSetting";
 	public static final String SETTING_FEEDBACKS = "FeedBacks";
 	public static final String[] SETTING_FEEDBACKS_GROUPS = { "FeedBacks", "Rate It","Help"};
+	
+	
+	//============Views Name =======================================
+	public static final String VIEW_MAIN = "MainUIView";
+	
 
 }

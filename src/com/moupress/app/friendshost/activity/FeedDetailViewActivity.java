@@ -26,7 +26,13 @@ public class FeedDetailViewActivity extends Activity {
 	
 	private void fInitDetailView() {
 		ContentViewListener contentViewListener = new ContentViewListener(){};
-		TitleBarListener titleBarListener = new TitleBarListener(){};
+		TitleBarListener titleBarListener = new TitleBarListener(){
+
+			@Override
+			public void OnTitleBarButtonClick(String viewName, int btnId,
+					String snsName) {
+				
+			}};
 		
 		detailView = new DetailView();
 		detailView.InitTitle(this, titleBarListener);

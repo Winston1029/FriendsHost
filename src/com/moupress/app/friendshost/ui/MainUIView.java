@@ -178,6 +178,7 @@ public class MainUIView extends View{
 			public void onClick(android.view.View arg0) {
 				slidingPanel.Slide2Left();
 				//slidingPanel.setVisibility(android.view.View.GONE);
+				
 			}});
     	
     	Button btnPub = (Button) activity.findViewById(R.id.writefeedbtn);
@@ -187,6 +188,7 @@ public class MainUIView extends View{
 			@Override
 			public void onClick(android.view.View v) {
 				slidingPanel.Slide2Right();
+				titleBarListener.OnTitleBarButtonClick(Const.VIEW_MAIN, 1, Const.SNS_RENREN);
 			}
     		
     	});

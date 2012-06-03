@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.moupress.app.friendshost.activity.FeedDetailViewActivity;
+import com.moupress.app.friendshost.activity.FeedPublishActivity;
 import com.moupress.app.friendshost.activity.FeedResendActivity;
 import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
@@ -107,6 +108,17 @@ public class PubSub {
 	
 	TitleBarListener titleBarListener = new TitleBarListener()
 	{
+
+		@Override
+		public void OnTitleBarButtonClick(String viewName, int btnId, String snsName) {
+			
+			if(viewName.equals(Const.VIEW_MAIN) && btnId == 1)
+			{
+				Intent intent = new Intent(zActivity, FeedPublishActivity.class);
+				intent.putExtra(Const.SNS, snsName);
+				zActivity.startActivity(intent);	
+			}
+		}
 		
 	};
 

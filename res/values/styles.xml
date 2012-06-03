@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Style for Title Bar -->
+ <style name="TitleBarLayout">
+  <item name="android:orientation">horizontal</item>
+  <item name="android:layout_width">match_parent</item>
+  <item name="android:layout_height">45dip</item>
+ </style>
+ 
  <style name="WindowTitleBackground">     
         <item name="android:background">@color/purple</item>
  </style>
+ 
+
  
  <style name="TitleBarButtonStyle">
  	  <item name="android:layout_width">match_parent</item>
@@ -11,7 +19,28 @@
   	  <item name="android:layout_weight">1</item>
   	   <item name="android:background">@drawable/fh_title_btn_bg</item>
  </style>
+ <style name="TitleBarButtonStyle.Pos">
+ 	 <item name="android:layout_marginTop">5dip</item>
+  	 <item name="android:layout_marginBottom">5dip</item>
+  	 <item name="android:layout_marginLeft">5dip</item>
+  	 <item name="android:layout_marginRight">5dip</item>
+</style>
+
+  <style name="TitleBarCancelButtonStyle">
+ 	  <item name="android:layout_width">match_parent</item>
+  	  <item name="android:layout_height">match_parent</item>
+  	  <item name="android:layout_weight">1</item>
+  	   <item name="android:background">@drawable/fh_btn_cancel</item>
+ </style>
  
+ <style name="BottomBarButtonStyle">
+   		<item name ="android:layout_marginTop">5dip</item> 
+  		<item name ="android:layout_marginBottom">5dip</item>
+  		<item name = "android:layout_height">35dip</item>
+  		<item name = "android:layout_width">35dip</item>
+ </style>
+ 
+
  <!-- Style for scroll Bar -->
   <style name="CustomTabPageIndicator" >
      <item name="android:gravity">center_horizontal</item>
@@ -49,4 +78,5 @@
   	 <item name="android:gravity">center_vertical</item>
   </style>
   
+ 
 </resources>
