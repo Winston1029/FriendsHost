@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.OAuthActivity;
 import com.moupress.app.friendshost.PubSub;
+import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.SnsUtil;
@@ -47,6 +48,7 @@ public class SinaUtil extends SnsUtil{
 		zSina = OAuthConstant.getInstance().getWeibo();
 		//zContext = pubSub.fGetContext();
 		//fSinaAuth();
+		this.logImg  = R.drawable.fh_sina_log;
 	}
 	
 	@Override

@@ -47,10 +47,17 @@ public class SlidingPanel extends LinearLayout{
 			toggle();
 	}
 	
-	public void Slide2Right()
+	public boolean Slide2Right()
 	{
 		if(isOpen)
+		{
 			toggle();
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	public void toggle() {

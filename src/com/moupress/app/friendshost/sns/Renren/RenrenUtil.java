@@ -16,6 +16,7 @@ import com.facebook.android.AsyncFacebookRunner;
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.PubSub;
+import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.SnsUtil;
@@ -57,6 +58,8 @@ public class RenrenUtil extends SnsUtil{
 		super(pubSub, Const.SNS_RENREN);
 		
 		this.zRenren = new Renren(API_KEY, SECRET_KEY, APP_ID, zContext);
+		
+		this.logImg  = R.drawable.fh_renren_logo;
 		//fRenrenAuth();
 	}
 	

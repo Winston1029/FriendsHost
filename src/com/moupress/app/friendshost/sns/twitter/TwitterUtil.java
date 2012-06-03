@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.PubSub;
+import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.SnsUtil;
@@ -138,6 +139,7 @@ public class TwitterUtil extends SnsUtil{
 		//this.zContext = zPubSub.fGetActivity();
 		//this.zPubSub = zPubSub;
 	    this.prefs = PreferenceManager.getDefaultSharedPreferences(zActivity);
+	    this.logImg = R.drawable.fh_twitter_logo;
 	}
 	
 	

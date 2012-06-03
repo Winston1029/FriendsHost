@@ -129,7 +129,6 @@ public class MainUIView extends View{
 		InitSlidingPanel(activity);
 		InitTitleButtons(activity);
 		InitLeftPanelView(activity);
-		
 	}
 
 
@@ -187,7 +186,7 @@ public class MainUIView extends View{
 
 			@Override
 			public void onClick(android.view.View v) {
-				slidingPanel.Slide2Right();
+				if(!slidingPanel.Slide2Right())
 				titleBarListener.OnTitleBarButtonClick(Const.VIEW_MAIN, 1, Const.SNS_RENREN);
 			}
     		

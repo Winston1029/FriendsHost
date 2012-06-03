@@ -23,7 +23,12 @@ public abstract class SnsUtil {
 	protected Activity zActivity;
 	
 	protected String SnsName;
+	protected int logImg = -1;
 	
+	public int GetLogImg() {
+		return logImg;
+	}
+
 	public SnsUtil(PubSub pubsub,String SnsName)
 	{
 		this.zPubSub = pubsub;
