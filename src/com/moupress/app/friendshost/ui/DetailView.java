@@ -190,7 +190,8 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		if (sFeedType != null && (sFeedType.equals("blog") || sFeedType.equals("21")) ) {
 			webV_detail.loadUrl(feed.getsLink());
 		} else if ((sPhotoUrl != null && sPhotoUrl.startsWith("http://") && sPhotoUrl.endsWith(".jpg"))) {
-			String sLargeImgUrl = fRetrieveLargeImgUrl(feed.getsFeedType(), sPhotoUrl);
+			//String sLargeImgUrl = fRetrieveLargeImgUrl(feed.getsFeedType(), sPhotoUrl);
+			String sLargeImgUrl = feed.getsPhotoLargeLink();
 			webV_detail.getSettings().setBuiltInZoomControls(true);
 			webV_detail.getSettings().setUseWideViewPort(true);
 			webV_detail.getSettings().setLoadWithOverviewMode(true);

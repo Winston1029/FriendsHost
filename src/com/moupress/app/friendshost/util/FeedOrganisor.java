@@ -1,10 +1,14 @@
 package com.moupress.app.friendshost.util;
 
-import java.text.SimpleDateFormat;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import twitter4j.ResponseList;
 import weibo4andriod.Status;
@@ -16,8 +20,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.widget.SimpleAdapter;
 
+import com.facebook.android.Util;
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.PubSub;
@@ -31,7 +35,6 @@ import com.moupress.app.friendshost.sns.Renren.RenrenFeedElementEntry;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeed;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntry;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryComments.FBFeedEntryComment;
-import com.moupress.app.friendshost.sns.facebook.FBHomeeedEntryLikes.FBFeedEntryLike;
 
 public class FeedOrganisor {
 	private Activity zActivity;
@@ -80,6 +83,10 @@ public class FeedOrganisor {
 				//String fromHeadUrl = "https://graph.facebook.com/" + fromID + "/picture";
 				entry.getFrom().setHeadurl(fromHeadUrl);
 				
+				if (entry.getType().equals("photo")) {
+					entry.setsPhotoLargeLink(fGetFbRawPicUrl(entry.getPicture()));					
+				}
+				
 				res += zDBHelper.fInsertFeed(entry);
 				zDBHelper.fInsertFriend(entry.getFrom());
 				
@@ -111,6 +118,32 @@ public class FeedOrganisor {
 			fShowNotification(Const.SNS_FACEBOOK, cntUnReadFeed, context);
 		}
 		
+	}
+	
+	/*
+	 * A temp workaround method to get FB pic_raw_url
+	 */
+	private String fGetFbRawPicUrl(String picUrl) {
+		String picRawUrl = null;
+		if ( picUrl != null ) {
+			String response = "";
+			Bundle mBundle = new Bundle();
+			String fbToken = Pref.getMyStringPref(zActivity.getApplicationContext(), "fbToken");
+			mBundle.putString("access_token", fbToken);
+			String url = "https://graph.facebook.com/" + picUrl.split("_")[1];
+			try {
+				response = com.facebook.android.Util.openUrl(url, "GET", mBundle);
+				JSONObject picSrcResponse = new JSONObject(response);
+				picRawUrl = picSrcResponse.getString("source");
+			} catch (JSONException e) {
+				e.printStackTrace();
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return picRawUrl;
 	}
 	
 	public void fSaveNewFeeds(FeedExtractResponseBean bean, Context context) {

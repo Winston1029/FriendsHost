@@ -48,7 +48,7 @@ public class FacebookUtil extends SnsUtil {
 	public static final String APP_ID = "337247706286700";
 	private static final String TAG = "FacebookUtil";
 	private static final String[] PERMISSIONS = new String[] {
-			"publish_stream", "read_stream" };
+			"publish_stream", "read_stream", "user_photos", "friends_photos" };
 	private static final String FBTOKEN = "fbToken";
 	private static final String FBTOKENEXPIRES = "fbAccessExpires";
 
@@ -92,12 +92,8 @@ public class FacebookUtil extends SnsUtil {
 
 	@Override
 	public void fGetNewsFeed(final Context context) {
-		SharedPreferences mPrefs = PreferenceManager
-				.getDefaultSharedPreferences(zContext);
-		sfbToken = mPrefs.getString(FBTOKEN, "");
-
 		// fFacebookAuth();
-		sfbToken = mPrefs.getString(FBTOKEN, "");
+		sfbToken = Pref.getMyStringPref(zActivity.getApplicationContext(), FBTOKEN);
 
 		// AsyncFacebookRunner asyncFB = new AsyncFacebookRunner(zFacebook);
 		asyncFB = fGetAsyncFacebook();
@@ -212,12 +208,7 @@ public class FacebookUtil extends SnsUtil {
 	}
 
 	private void fSaveFBToken(String token, long tokenExpires) {
-		SharedPreferences mPrefs = PreferenceManager
-				.getDefaultSharedPreferences(zContext);
-		mPrefs.edit().putString(FBTOKEN, token);
-		mPrefs.edit().putLong(FBTOKENEXPIRES, tokenExpires);
-		mPrefs.edit().commit();
-		
+		Pref.setMyStringPref(zActivity.getApplicationContext(), FBTOKEN, token);
 	}
 	
 	private void fSaveLoginProfile() {

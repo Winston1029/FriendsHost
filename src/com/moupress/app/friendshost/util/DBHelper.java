@@ -205,6 +205,7 @@ public class DBHelper {
 		values.put(C_FEED_FROM, entry.getFrom().getName());
 		values.put(C_FEED_OWNER_ID, entry.getFrom().getId());
 		values.put(C_FEED_PIC, entry.getPicture());
+		values.put(C_FEED_RAW_PIC, entry.getsPhotoLargeLink());
 		values.put(C_FEED_SOURCE, entry.getSource());
 		values.put(C_FEED_LINK, entry.getLink());
 		values.put(C_FEED_NAME, entry.getName());
