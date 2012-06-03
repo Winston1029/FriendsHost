@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.PubSub;
+import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.SnsUtil;
@@ -64,6 +65,8 @@ public class FacebookUtil extends SnsUtil {
 	private static final String FEED_DESC = "description";
 	private static final String FEED_PICS = "picture";
 	private static final String FEED_SRC = "source";
+	
+	
 
 	public FacebookUtil(PubSub pubSub) {
 
@@ -73,7 +76,8 @@ public class FacebookUtil extends SnsUtil {
 		if (zFacebook == null) {
 			zFacebook = new Facebook(APP_ID);
 		}
-
+		
+		this.logImg  = R.drawable.fh_facebook_logo;
 		//fFacebookAuth();
 	}
 

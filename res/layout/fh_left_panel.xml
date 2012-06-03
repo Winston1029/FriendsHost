@@ -4,11 +4,11 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical"
-  android:layout_marginTop="30dip">
+  android:layout_marginTop="35dip">
   
   <TextView
   	style="@style/LeftPanel"
-    android:text="Basic Settings">
+    android:text="Sign On">
   </TextView>
   
   <ImageView 
@@ -17,18 +17,54 @@
   	>
   </ImageView>
   
-  <ExpandableListView
-  	android:id="@+id/settingExpandLst"
+<!--  <ExpandableListView-->
+<!--  	android:id="@+id/settingExpandLst"-->
+<!--  	 android:textColor="@color/white"-->
+<!--  	 android:background="@android:color/transparent"-->
+<!--  	 android:divider="@android:color/transparent"-->
+<!--  	style="@style/LeftPanel">-->
+<!--  </ExpandableListView>-->
+   <ListView
+    android:id="@+id/signOnLst"
+    android:textColor="@color/white"
+    android:background="@android:color/transparent"
+    android:divider="@android:color/transparent"
+    style="@style/LeftPanel"
+   >
+   </ListView>
+  
+   <TextView
+  	style="@style/LeftPanel"
+    android:text="Settings"
+    android:layout_marginTop="30dip">
+  </TextView>
+  
+  <ImageView 
+  	style="@style/LeftPanel"
+  	android:background="@drawable/renren_sdk_line"
+  	>
+  </ImageView>
+  
+<!--    <ExpandableListView-->
+<!--  	 android:id="@+id/feedbksExpandLst"-->
+<!--  	 android:textColor="@color/white"-->
+<!--  	 android:background="@android:color/transparent"-->
+<!--  	 android:divider="@android:color/transparent"-->
+<!--  	style="@style/LeftPanel">-->
+<!--  </ExpandableListView>-->
+  
+  <ListView
+  	 android:id="@+id/settingLst"
   	 android:textColor="@color/white"
   	 android:background="@android:color/transparent"
   	 android:divider="@android:color/transparent"
   	style="@style/LeftPanel">
-  </ExpandableListView>
+  </ListView>
   
    <TextView
   	style="@style/LeftPanel"
     android:text="Feedbacks"
-    android:layout_marginTop="50dip">
+    android:layout_marginTop="30dip">
   </TextView>
   
   <ImageView 
@@ -37,12 +73,12 @@
   	>
   </ImageView>
   
-  <ExpandableListView
-  	 android:id="@+id/feedbksExpandLst"
+    <ListView
+  	 android:id="@+id/feedBksLst"
   	 android:textColor="@color/white"
   	 android:background="@android:color/transparent"
   	 android:divider="@android:color/transparent"
   	style="@style/LeftPanel">
-  </ExpandableListView>
+  </ListView>
   
 </LinearLayout>
