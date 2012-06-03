@@ -27,6 +27,7 @@ import com.moupress.app.friendshost.activity.LstViewCommentAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
+import com.moupress.app.friendshost.util.Pref;
 
 public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCloseListener{
 	
@@ -303,6 +304,9 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 
 	private void fInitMyCommentUI() {
 		WebImageView img_selfhead_detail_comment = (WebImageView) zActivity.findViewById(R.id.img_selfhead_detail_comment);
+		String selfHeadUrl = fRetrieveSelfHeadImgUrl(feed.getsFeedType());
+		img_selfhead_detail_comment.setImageUrl(selfHeadUrl);
+		img_selfhead_detail_comment.loadImage();
 		final EditText etx_commentmsg_detail_comment = (EditText) zActivity.findViewById(R.id.etx_commentmsg_detail_comment);
 		Button btn_send_detail_comment = (Button) zActivity.findViewById(R.id.btn_send_detail_comment);
 		btn_send_detail_comment.setOnClickListener(new OnClickListener() {
@@ -312,6 +316,15 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 				Toast.makeText(zActivity, myCommentMsg, Toast.LENGTH_SHORT).show();				
 			}
 		});
+	}
+	
+	private String fRetrieveSelfHeadImgUrl(String snsName) {
+		String headUrl = "";
+		if (snsName.equals(Const.SNS_FACEBOOK)) {
+			String login_id = Pref.getMyStringPref(zActivity.getApplicationContext(), Const.LOGIN_ID_FB);
+			headUrl = String.format(Const.USER_IMG_URL_FB, login_id);
+		}
+		return headUrl;
 	}
 	
 /*

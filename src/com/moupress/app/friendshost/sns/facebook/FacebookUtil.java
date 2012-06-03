@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.PubSub;
@@ -15,6 +18,7 @@ import com.moupress.app.friendshost.sns.SnsUtil;
 import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
 import com.moupress.app.friendshost.util.FeedOrganisor;
 import com.moupress.app.friendshost.util.NotificationTask;
+import com.moupress.app.friendshost.util.Pref;
 import com.renren.api.connect.android.Util;
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.AsyncFacebookRunner.RequestListener;
@@ -178,6 +182,7 @@ public class FacebookUtil extends SnsUtil {
 						Log.d(TAG, "Facebook.authorize Complete: ");
 						sfbToken = zFacebook.getAccessToken();
 						fSaveFBToken(sfbToken, zFacebook.getAccessExpires());
+						fSaveLoginProfile();
 						SnsAddEventCallback(snsEventListener,uptPref);
 					}
 
@@ -208,6 +213,21 @@ public class FacebookUtil extends SnsUtil {
 		mPrefs.edit().putString(FBTOKEN, token);
 		mPrefs.edit().putLong(FBTOKENEXPIRES, tokenExpires);
 		mPrefs.edit().commit();
+		
+	}
+	
+	private void fSaveLoginProfile() {
+		try {
+			JSONObject me = new JSONObject(zFacebook.request("me"));
+			Pref.setMyStringPref(zActivity.getApplicationContext(), Const.LOGIN_ID_FB, me.getString("id"));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} 
+		catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void onComplete(int requestCode, int resultCode, Intent data) {

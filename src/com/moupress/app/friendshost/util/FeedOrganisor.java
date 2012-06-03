@@ -76,7 +76,8 @@ public class FeedOrganisor {
 				//String msg = ((FBHomeFeedEntry) bean.getData().get(i)).getName()+" : "+((FBHomeFeedEntry) bean.getData().get(i)).getMessage();
 				FBHomeFeedEntry entry = (FBHomeFeedEntry) beans.getData().get(i);
 				String fromID = entry.getFrom().getId();
-				String fromHeadUrl = "https://graph.facebook.com/" + fromID + "/picture";
+				String fromHeadUrl = String.format(Const.USER_IMG_URL_FB, fromID);
+				//String fromHeadUrl = "https://graph.facebook.com/" + fromID + "/picture";
 				entry.getFrom().setHeadurl(fromHeadUrl);
 				
 				res += zDBHelper.fInsertFeed(entry);

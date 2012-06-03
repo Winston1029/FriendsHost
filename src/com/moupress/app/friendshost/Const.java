@@ -9,6 +9,9 @@ public class Const {
 	public static final String SNS_SINA = "Sina";
 	public static final String SNS_TWITTER="Twitter";
 	
+	public static final String USER_IMG_URL_FB = "https://graph.facebook.com/%s/picture";
+	public static final String LOGIN_ID_FB = "Login_Facebook_ID";
+	
 	public static final String SNS = "sns";
 	
 	public static final String SNS_SIGN_ON = "SnsSignOn";
