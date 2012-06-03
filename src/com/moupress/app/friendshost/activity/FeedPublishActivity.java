@@ -35,6 +35,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
@@ -83,16 +84,19 @@ public class FeedPublishActivity extends Activity{
 	private Uri mCapturedImageURI;
 	
 	//Notification & Handler;
-	private Handler mNotificationHandler = new Handler();
-	private Runnable mNotification; 
+//	private Handler mNotificationHandler = new Handler();
+//	private Runnable mNotification; 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		ScrollView layout = (ScrollView) LayoutInflater.from(this).inflate(R.layout.feed_publish_layout, null);
-		this.setContentView(layout);
-
+		//ScrollView layout = (ScrollView) LayoutInflater.from(this).inflate(R.layout.feed_publish_layout, null);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		this.setContentView(R.layout.feed_publish_layout);
+		
+		//ScrollView layout = (ScrollView) this.findViewById(R.id.scrollView);
+		
 		selectedImagePath = "";
 		uploadPicRotateDegree = 0;
 		activity= this;
@@ -129,7 +133,7 @@ public class FeedPublishActivity extends Activity{
 			editTextMessage.setText(title+" - "+ bodyText);
 		}
 		
-		publishButton = (Button) this.findViewById(R.id.publish);
+		publishButton = (Button) this.findViewById(R.id.secondbtn);
 		publishButton.setOnClickListener(new View.OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
@@ -183,9 +187,13 @@ public class FeedPublishActivity extends Activity{
 	//Initialize Buttons on UI
 	public void fInitPubButtons() {
 		final ImageButton imgBtn_Facebook = (ImageButton) this.findViewById(R.id.imgBtn_pubFacebook);
+		SetButtonVisibility(imgBtn_Facebook,Const.SNS_FACEBOOK);
 		final ImageButton imgBtn_Renren = (ImageButton) this.findViewById(R.id.imgBtn_pubRenren);
+		SetButtonVisibility(imgBtn_Renren,Const.SNS_RENREN);
 		final ImageButton imgBtn_Twitter = (ImageButton) this.findViewById(R.id.imgBtn_pubTwitter);
+		SetButtonVisibility(imgBtn_Twitter,Const.SNS_TWITTER);
 		final ImageButton imgBtn_Sina = (ImageButton) this.findViewById(R.id.imgBtn_pubSina);
+		SetButtonVisibility(imgBtn_Sina,Const.SNS_SINA);
 		//Facebook
 		imgBtn_Facebook.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -248,8 +256,14 @@ public class FeedPublishActivity extends Activity{
 		});
 	}
 	
+	private void SetButtonVisibility(ImageButton snsButton, String snsName) {
+		
+		    if(!PubSub.zSnsOrg.GetSnsInstance(snsName).isSelected())
+		    	snsButton.setVisibility(View.GONE);
+	}
+
 	public void fInitPicButtons() {
-		ScrollView layout = (ScrollView) LayoutInflater.from(this).inflate(R.layout.feed_publish_layout, null);
+		//ScrollView layout = (ScrollView) LayoutInflater.from(this).inflate(R.layout.feed_publish_layout, null);
 		
 		//Functions of Photos
 		btnUploadPic = (Button) this.findViewById(R.id.updPic);

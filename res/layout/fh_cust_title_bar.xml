@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  style="@style/TitleBarLayout"
+  android:background="@color/black">
+   <Button android:id="@+id/CancelBtn" 
+  		android:layout_gravity="left|center_vertical"
+  		android:layout_weight="0.9"
+  	    style="@style/TitleBarCancelButtonStyle"
+  		>
+  </Button>
+    <TextView android:id="@+id/CustTitleTv" 
+  			android:layout_width="match_parent"
+  			android:layout_height="match_parent"
+  			android:layout_gravity="center"
+  			android:layout_weight="0.7"
+  			android:textSize="20dip"
+  			android:gravity="center"
+  			>
+  </TextView>
+  
+  
+  <Button android:id="@+id/secondbtn" 
+  		style="@style/TitleBarButtonStyle.Pos"
+  		android:layout_weight="1"
+  		android:background="@android:color/transparent"
+  		android:layout_height="match_parent"
+  		>
+  </Button>
+  
+  <!--  android:background="@drawable/fh_camera"-->
+  
+     <Button android:id="@+id/thirdbtn" 
+  		style="@style/TitleBarButtonStyle.Pos"
+  		android:layout_weight="1"
+  		android:layout_height="match_parent"
+  		android:background="@drawable/fh_upload"
+  		>
+  </Button>
+</LinearLayout>

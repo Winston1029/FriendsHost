@@ -1,42 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
-
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="vertical"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@color/white"
+>
+<ScrollView
+    android:id="@+id/scrollView"
+	android:orientation="vertical" 
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	>
 	<LinearLayout
-	    xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
 	    android:orientation="vertical"
-	    android:padding="10dip" >
+	    android:background="@color/white"
+	    >
+	    
+	    <include android:id="@+id/fhCustTitle" layout="@layout/fh_cust_title_bar"/>
 
 	    <LinearLayout
 	        android:id="@+id/linearLayout1"
 	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content" >
+	        android:layout_height="wrap_content" 
+	        >
 
 	        <ImageButton
 	            android:id="@+id/imgBtn_pubFacebook"
-	            android:layout_width="64dp"
-	            android:layout_height="64dp"
-	            android:src="@drawable/facebook_selected_button" />
+	            android:layout_width="wrap_content" 
+	            android:layout_height="wrap_content"
+	            android:src="@drawable/facebook_selected_button" 
+	            />
 
 	        <ImageButton
 	            android:id="@+id/imgBtn_pubRenren"
-	            android:layout_width="64dp"
-	            android:layout_height="64dp"
+	            android:layout_width="wrap_content" 
+	            android:layout_height="wrap_content"
 	            android:src="@drawable/renren_selected_button" />
 
 	        <ImageButton
 	            android:id="@+id/imgBtn_pubTwitter"
-	            android:layout_width="64dp"
-	            android:layout_height="64dp"
+	           android:layout_width="wrap_content" 
+	            android:layout_height="wrap_content"
 	            android:src="@drawable/twitter_selected_button" />
 
 	        <ImageButton
 	            android:id="@+id/imgBtn_pubSina"
-	            android:layout_width="64dp"
-	            android:layout_height="64dp"
+	           android:layout_width="wrap_content" 
+	            android:layout_height="wrap_content"
 	            android:src="@drawable/sina_selected_button" />
 	    </LinearLayout>
 
@@ -61,39 +73,11 @@
 	        android:singleLine="true"
 	        android:textSize="14sp" />
 
-	    <LinearLayout
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:orientation="horizontal" >
-
-	        <Button
-	            android:id="@+id/publish"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginTop="10dip"
-	            android:text="Publish" />
-
-	        <Button
-	            android:id="@+id/updPic"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginTop="10dip"
-	            android:text="Upload Photo" >
-	        </Button>
-
-	        <Button
-	            android:id="@+id/tkePic"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginTop="10dip"
-	            android:text="Take Photo" >
-	        </Button>
-
-	    </LinearLayout>
+	   
 	    
 	    <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="match_parent" >
 
 	        <ImageView
 	            android:id="@+id/img_uploadPic"
@@ -105,7 +89,39 @@
 
         </FrameLayout>
 	</LinearLayout>
-	
-	
-	
 </ScrollView>
+ <RelativeLayout
+	        style="@style/TitleBarLayout"
+	        android:layout_alignParentBottom="true"
+	        android:layout_width="match_parent"
+	        android:background="@color/black"
+	        >
+
+<!--	        <Button-->
+<!--	            android:id="@+id/publish"-->
+<!--	            android:layout_width="wrap_content"-->
+<!--	            android:layout_height="wrap_content"-->
+<!--	            android:layout_marginTop="10dip"-->
+<!--	            android:text="Publish" />-->
+<!--	            -->
+	        <Button
+	           android:id="@+id/tkePic"
+  			   android:background="@drawable/fh_camera"
+  		       android:layout_marginLeft="55dip"
+  		       android:gravity="center_vertical"
+  		       style="@style/BottomBarButtonStyle"
+  		       >
+	        </Button>
+
+	        <Button
+	            android:id="@+id/updPic"
+  				android:background="@drawable/fh_attachment"
+  				style="@style/BottomBarButtonStyle"
+  				android:layout_alignParentRight="true"
+  				android:layout_marginRight="55dip"
+  				android:gravity="center_vertical"
+  				>
+	        </Button>
+
+	    </RelativeLayout>
+</RelativeLayout>

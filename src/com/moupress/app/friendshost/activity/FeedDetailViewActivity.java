@@ -75,6 +75,12 @@ public class FeedDetailViewActivity extends Activity implements OnDrawerOpenList
 	
 	TitleBarListener titleBarListener = new TitleBarListener()
 	{
+
+		@Override
+		public void OnTitleBarButtonClick(String viewName, int BtnId, String snsName) {
+			// TODO Auto-generated method stub
+			
+		}
 		
 	};
 

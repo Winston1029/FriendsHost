@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="horizontal"
-  android:layout_width="match_parent"
-  android:layout_height="45dip">
+ style="@style/TitleBarLayout">
   <Button android:id="@+id/leftpanelbtn" 
   		android:layout_gravity="left|center_vertical"
   	    style="@style/TitleBarButtonStyle"
