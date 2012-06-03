@@ -16,9 +16,12 @@ public class FeedEntry /*implements Parcelable*/{
 	private String sLink;
 	//private String sStory_Tags;
 	private String sPhotoPreviewLink;
+	private String sPhotoLargeLink;
 	private String sPhotoPreviewName;
 	private String sPhotoPreviewCaption;
 	private String sPhotoPreviewDescription;
+	
+	private String sCntLikes;
 	
 	private UserFriend zFriend;
 	private ArrayList<FeedEntryComment> zComments;
@@ -133,6 +136,22 @@ public class FeedEntry /*implements Parcelable*/{
 
 	public String getsLink() {
 		return sLink;
+	}
+
+	public void setsPhotoLargeLink(String sPhotoLargeLink) {
+		this.sPhotoLargeLink = sPhotoLargeLink;
+	}
+
+	public String getsPhotoLargeLink() {
+		return sPhotoLargeLink;
+	}
+
+	public void setsCntLikes(String sCntLikes) {
+		this.sCntLikes = sCntLikes;
+	}
+
+	public String getsCntLikes() {
+		return sCntLikes;
 	}
 	
 //	public FeedEntry(Parcel in)

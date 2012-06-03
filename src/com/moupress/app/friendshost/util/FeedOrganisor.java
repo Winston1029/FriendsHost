@@ -31,6 +31,7 @@ import com.moupress.app.friendshost.sns.Renren.RenrenFeedElementEntry;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeed;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntry;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryComments.FBFeedEntryComment;
+import com.moupress.app.friendshost.sns.facebook.FBHomeeedEntryLikes.FBFeedEntryLike;
 
 public class FeedOrganisor {
 	private Activity zActivity;
@@ -310,6 +311,8 @@ public class FeedOrganisor {
 				item.setsPhotoPreviewName(feeds[i][index++]);				//pic/album name
 				item.setsPhotoPreviewCaption(feeds[i][index++]);			//pic/album caption
 				item.setsPhotoPreviewDescription(feeds[i][index++]);		//pic/album description
+				item.setsCntLikes(feeds[i][index++]);
+				item.setsPhotoLargeLink(feeds[i][index++]);
 				
 				String feed_OwnerID = feeds[i][2];
 				owners = zDBHelper.fGetFeedOwner(sns, feed_OwnerID); //there should be only 1 owner for each feed

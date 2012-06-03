@@ -5,9 +5,6 @@ import java.util.List;
 import com.moupress.app.friendshost.sns.FeedEntry;
 
 public class FBHomeFeedEntry extends FeedEntry {
-	public final String TYPE_LINK = "link";
-	public final String TYPE_PHOTO = "photo";
-	public final String TYPE_STATUS = "status";
 	
 	private String caption;
 	private String id;
@@ -28,6 +25,7 @@ public class FBHomeFeedEntry extends FeedEntry {
 	//Nested classes for From entries
 	private FBHomeFeedEntryFrom from;
 	private FBHomeFeedEntryComments comments;
+	private FBHomeeedEntryLikes likes;
 	
 	//Nested collection for Actions entries
 	private List<FBHomeFeedEntryAction> actions;
@@ -171,13 +169,11 @@ public class FBHomeFeedEntry extends FeedEntry {
 		return comments;
 	}
 
-//	public void setStory_tags(String story_tags) {
-//		this.story_tags = story_tags;
-//	}
-//
-//	public String getStory_tags() {
-//		return story_tags;
-//	}
-	
-	//Getter methods should be declared.  Setter methods are optional 
+	public void setLikes(FBHomeeedEntryLikes likes) {
+		this.likes = likes;
+	}
+
+	public FBHomeeedEntryLikes getLikes() {
+		return likes;
+	}
 }

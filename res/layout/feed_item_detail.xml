@@ -5,14 +5,18 @@
     xmlns:ns="http://github.com/droidfu/schema"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     >
+    <include android:id="@+id/fhTitle" layout="@layout/fh_title_bar"/>
 
     <LinearLayout
         android:id="@+id/LinearLayout_UserInfo_ItemDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/fhTitle"
         android:orientation="horizontal" >
+        
         <LinearLayout 
             android:layout_width="wrap_content" 
             android:layout_height="match_parent" 
@@ -43,7 +47,9 @@
                 android:id="@+id/txv_username_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="left|center_horizontal"
+                android:paddingLeft="5dip"
+                android:textColor="@color/black"
                 android:text="Medium Text"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -51,7 +57,9 @@
                 android:id="@+id/txv_createdtime_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="left|center_horizontal"
+                android:paddingLeft="5dip"
+                android:textColor="@color/black"
                 android:text="Small Text"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </LinearLayout>
@@ -81,6 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
+                android:textColor="@color/black"
                 android:text="Media Text"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
             
