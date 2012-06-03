@@ -71,34 +71,34 @@
         android:layout_below="@+id/LinearLayout_UserInfo_ItemDetail"
         android:orientation="vertical" >
 
-        <WebView
-            android:id="@+id/webV_detail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal" >
-            
-            <com.github.droidfu.widgets.WebImageView
-                 xmlns:droidfu="http://github.com/droidfu/schema"
-                 android:id="@+id/img_photo_detail"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:adjustViewBounds="true"
-                 android:background="#CCC"
-                 droidfu:progressDrawable="..." >
-            </com.github.droidfu.widgets.WebImageView>
-            
+            android:orientation="vertical" >
+
             <TextView
                 android:id="@+id/txv_description_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
                 android:text="Media Text"
-                android:textAppearance="?android:attr/textAppearanceMedium">
-            </TextView>
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            
+            <WebView
+	            android:id="@+id/webV_detail"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content" />
+            
+            <com.github.droidfu.widgets.WebImageView
+                xmlns:droidfu="http://github.com/droidfu/schema"
+                android:id="@+id/img_photo_detail"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:background="#CCC"
+                droidfu:progressDrawable="..." >
+            </com.github.droidfu.widgets.WebImageView>
 
         </LinearLayout>
 
