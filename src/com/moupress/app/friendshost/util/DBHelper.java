@@ -62,6 +62,7 @@ public class DBHelper {
     static final String C_FEED_MSG = "msg";
     static final String C_FEED_STORY = "story";
     static final String C_FEED_PIC = "pic";
+    static final String C_FEED_RAW_PIC = "raw_pic";
     static final String C_FEED_SOURCE = "source";
     static final String C_FEED_LINK = "link";
     static final String C_FEED_NAME = "name";
@@ -69,6 +70,7 @@ public class DBHelper {
     static final String C_FEED_DESCRIPTION = "description";
     static final String C_FEED_ICON = "icon";
     static final String C_FEED_TYPE = "type";
+    static final String C_FEED_CNT_LIKE = "cntlike";
     static final String C_FEED_ISREAD = "isread";
     static final String C_FEED_CREATED_TIME = "created_time";
     static final String C_FEED_UPDATED_TIME = "updated_time";
@@ -104,6 +106,7 @@ public class DBHelper {
 										    + C_FEED_MSG + " TEXT,"
 										    + C_FEED_STORY + " TEXT,"
 										    + C_FEED_PIC + " TEXT,"
+										    + C_FEED_RAW_PIC + " TEXT,"
 										    + C_FEED_SOURCE + " TEXT,"
 										    + C_FEED_LINK + " TEXT,"
 										    + C_FEED_NAME + " TEXT,"
@@ -112,6 +115,7 @@ public class DBHelper {
 										    + C_FEED_ICON + " TEXT,"
 										    + C_FEED_TYPE + " TEXT,"
 										    + C_FEED_ISREAD + " TEXT,"
+										    + C_FEED_CNT_LIKE + " TEXT,"
 										    + C_FEED_CREATED_TIME + " TEXT,"
 										    + C_FEED_UPDATED_TIME + " TEXT"
 										    + ");";
@@ -208,6 +212,11 @@ public class DBHelper {
 		values.put(C_FEED_DESCRIPTION, entry.getDescription());
 		values.put(C_FEED_ICON, entry.getIcon());
 		values.put(C_FEED_TYPE, entry.getType());
+		if (entry.getLikes() != null) {
+			values.put(C_FEED_CNT_LIKE, entry.getLikes().getCount());
+		} else {
+			values.put(C_FEED_CNT_LIKE, 0);
+		}
 		values.put(C_FEED_ISREAD, "0");
 		values.put(C_FEED_CREATED_TIME, entry.getCreated_time());
 		values.put(C_FEED_UPDATED_TIME, entry.getUpdated_time());
@@ -235,7 +244,7 @@ public class DBHelper {
 		values.put(C_FEED_OWNER_ID, status.getUser().getId());
 		values.put(C_FEED_MSG, status.getText());
 		values.put(C_FEED_PIC, status.getThumbnail_pic());
-		values.put(C_FEED_LINK, status.getOriginal_pic());
+		values.put(C_FEED_RAW_PIC, status.getOriginal_pic());
 		values.put(C_FEED_UPDATED_TIME, simpleDateFormat.format(status.getCreatedAt()));
 		values.put(C_FEED_CREATED_TIME, simpleDateFormat.format(status.getCreatedAt()));
 		//values.put(C_FEED_FROM, status.getSource());
@@ -268,6 +277,7 @@ public class DBHelper {
 		}
 		values.put(C_FEED_FROM, entry.getName());
 		values.put(C_FEED_OWNER_ID, entry.getActor_id());
+		values.put(C_FEED_CNT_LIKE, entry.getLikes().getTotal_count());
 		values.put(C_FEED_ISREAD, "0");
 		values.put(C_FEED_CREATED_TIME, entry.getUpdate_time());
 		values.put(C_FEED_UPDATED_TIME, entry.getUpdate_time());
@@ -294,6 +304,7 @@ public class DBHelper {
 			
 			//values.put(C_FEED_PIC, entry.getFeed_media_src());
 			values.put(C_FEED_PIC, entry.getAttachment().get(0).getSrc());
+			values.put(C_FEED_RAW_PIC, entry.getAttachment().get(0).getRaw_src());
 		}
 		
 		ret = zSQLiteDB.insert(T_FEED, null, values);
@@ -439,7 +450,8 @@ public class DBHelper {
 		String[] columns = new String[] {C_FEED_ID,
 										 C_FEED_FROM, C_FEED_OWNER_ID, C_FEED_UPDATED_TIME, 
 										 C_FEED_TYPE, C_FEED_MSG, C_FEED_STORY, C_FEED_LINK,
-										 C_FEED_PIC, C_FEED_NAME, C_FEED_CAPTION, C_FEED_DESCRIPTION};
+										 C_FEED_PIC, C_FEED_NAME, C_FEED_CAPTION, C_FEED_DESCRIPTION, 
+										 C_FEED_CNT_LIKE, C_FEED_RAW_PIC};
 		String where = C_FEED_ISREAD + " = ? and " 
 						+ C_FEED_SNS + " = ? and "
 						+ C_FEED_UPDATED_TIME + " < ?";
@@ -473,7 +485,8 @@ public class DBHelper {
 		String[] columns = new String[] {C_FEED_ID,
 				 C_FEED_FROM, C_FEED_OWNER_ID, C_FEED_CREATED_TIME, 
 				 C_FEED_TYPE, C_FEED_MSG, C_FEED_STORY, C_FEED_LINK,
-				 C_FEED_PIC, C_FEED_NAME, C_FEED_CAPTION, C_FEED_DESCRIPTION};
+				 C_FEED_PIC, C_FEED_NAME, C_FEED_CAPTION, C_FEED_DESCRIPTION, 
+				 C_FEED_CNT_LIKE, C_FEED_RAW_PIC};
 		String where = C_FEED_ID + " = ? and " 
 						+ C_FEED_SNS + " = ?"; //and "
 		//+ C_FEED_TYPE + " in (\"status\", \"picture\", \"link\")";

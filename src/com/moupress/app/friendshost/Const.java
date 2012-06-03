@@ -46,6 +46,7 @@ public class Const {
 	public static final int FEED_PUBLISH = 2;
 	public static final int FEED_DISPLAY_DETAIL = 1;
 	public static final int FEED_DISPLAY_PREVIEW = 0;
+	public static final int FEED_DETAIL_RETURN_MAIN = 2000;
 	
 	//==============Feed Item Attributes========================
 	public static final String FEED_ITEM = "feeditem";
