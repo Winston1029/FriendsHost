@@ -224,7 +224,6 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 			largeImgUrl = largeImgUrl.replace("_s.jpg", "_n.jpg");
 		}
 		return largeImgUrl;
-		
 	}
 
 	private void fInitUIBasic() {
@@ -305,7 +304,7 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 
 	private void fInitMyCommentUI() {
 		WebImageView img_selfhead_detail_comment = (WebImageView) zActivity.findViewById(R.id.img_selfhead_detail_comment);
-		String selfHeadUrl = fRetrieveSelfHeadImgUrl(feed.getsFeedType());
+		String selfHeadUrl = fRetrieveProfileHeadImgUrl(feed.getsFeedType());
 		img_selfhead_detail_comment.setImageUrl(selfHeadUrl);
 		img_selfhead_detail_comment.loadImage();
 		final EditText etx_commentmsg_detail_comment = (EditText) zActivity.findViewById(R.id.etx_commentmsg_detail_comment);
@@ -319,11 +318,17 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		});
 	}
 	
-	private String fRetrieveSelfHeadImgUrl(String snsName) {
+	private String fRetrieveProfileHeadImgUrl(String snsName) {
 		String headUrl = "";
 		if (snsName.equals(Const.SNS_FACEBOOK)) {
-			String login_id = Pref.getMyStringPref(zActivity.getApplicationContext(), Const.LOGIN_ID_FB);
+			String login_id = Pref.getMyStringPref(zActivity.getApplicationContext(), Const.LOGIN_ID_FACEBOOK);
 			headUrl = String.format(Const.USER_IMG_URL_FB, login_id);
+		} else if (snsName.equals(Const.SNS_RENREN)) {
+			headUrl = Pref.getMyStringPref(zActivity.getApplicationContext(), Const.LOGIN_HEAD_RENREN);
+		} else if (snsName.equals(Const.SNS_SINA)) {
+			headUrl = Pref.getMyStringPref(zActivity.getApplicationContext(), Const.LOGIN_HEAD_SINA);
+		} else if (snsName.equals(Const.SNS_TWITTER)) {
+			headUrl = Pref.getMyStringPref(zActivity.getApplicationContext(), Const.LOGIN_HEAD_TWITTER);
 		}
 		return headUrl;
 	}

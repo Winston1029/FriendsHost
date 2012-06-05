@@ -214,7 +214,7 @@ public class FacebookUtil extends SnsUtil {
 	private void fSaveLoginProfile() {
 		try {
 			JSONObject me = new JSONObject(zFacebook.request("me"));
-			Pref.setMyStringPref(zActivity.getApplicationContext(), Const.LOGIN_ID_FB, me.getString("id"));
+			Pref.setMyStringPref(zActivity.getApplicationContext(), Const.LOGIN_ID_FACEBOOK, me.getString("id"));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		} 

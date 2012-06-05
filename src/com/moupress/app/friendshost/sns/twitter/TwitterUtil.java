@@ -1,17 +1,6 @@
 package com.moupress.app.friendshost.sns.twitter;
 
 import java.io.File;
-import java.util.ArrayList;
-
-import com.moupress.app.friendshost.Const;
-import com.moupress.app.friendshost.FriendsHostActivity;
-import com.moupress.app.friendshost.PubSub;
-import com.moupress.app.friendshost.R;
-import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
-import com.moupress.app.friendshost.sns.FeedEntry;
-import com.moupress.app.friendshost.sns.SnsUtil;
-import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
-import com.moupress.app.friendshost.util.NotificationTask;
 
 import oauth.signpost.OAuth;
 import oauth.signpost.OAuthConsumer;
@@ -21,10 +10,13 @@ import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 import twitter4j.AccountTotals;
 import twitter4j.AsyncTwitter;
 import twitter4j.AsyncTwitterFactory;
+import twitter4j.ProfileImage;
 import twitter4j.ResponseList;
 import twitter4j.Status;
+import twitter4j.Twitter;
 import twitter4j.TwitterAdapter;
 import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
 import twitter4j.TwitterListener;
 import twitter4j.TwitterMethod;
 import twitter4j.auth.AccessToken;
@@ -33,8 +25,6 @@ import twitter4j.conf.ConfigurationBuilder;
 import twitter4j.media.ImageUpload;
 import twitter4j.media.ImageUploadFactory;
 import twitter4j.media.MediaProvider;
-//import twitter4j.http.AccessToken;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -43,6 +33,16 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.moupress.app.friendshost.Const;
+import com.moupress.app.friendshost.FriendsHostActivity;
+import com.moupress.app.friendshost.PubSub;
+import com.moupress.app.friendshost.R;
+import com.moupress.app.friendshost.sns.FeedEntry;
+import com.moupress.app.friendshost.sns.SnsUtil;
+import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
+import com.moupress.app.friendshost.util.NotificationTask;
+import com.moupress.app.friendshost.util.Pref;
 
 
 public class TwitterUtil extends SnsUtil{
@@ -115,6 +115,12 @@ public class TwitterUtil extends SnsUtil{
 			isAuthenticated = true;
 			followActions();
 		}
+		
+		@Override
+		public void gotProfileImage(ProfileImage image) {
+			String headUrl = image.getURL();
+			Pref.setMyStringPref(zContext, Const.LOGIN_HEAD_TWITTER, headUrl);
+		}
 	 };
 	
 	private void followActions()
@@ -150,7 +156,7 @@ public class TwitterUtil extends SnsUtil{
 	
 	private String getTweetMsg() {
 		if(msgSend.length()>0)
-		return msgSend;
+			return msgSend;
 		else return null;
 	}	
 	
@@ -303,6 +309,20 @@ public class TwitterUtil extends SnsUtil{
 		twitter.setOAuthConsumer(Const.CONSUMER_KEY, Const.CONSUMER_SECRET);
 		twitter.setOAuthAccessToken(a);
 		
+		try {
+			// too slow need to find a way to async !!!!
+			Twitter t_sync = new TwitterFactory().getInstance();
+			t_sync.setOAuthConsumer(Const.CONSUMER_KEY, Const.CONSUMER_SECRET);
+			t_sync.setOAuthAccessToken(a);
+			String heardUrl = t_sync.getProfileImage(t_sync.getScreenName(), ProfileImage.NORMAL).getURL();
+			Pref.setMyStringPref(zContext, Const.LOGIN_HEAD_TWITTER, heardUrl);
+			//twitter.getProfileImage(twitter.get, ProfileImage.NORMAL);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (TwitterException e) {
+			e.printStackTrace();
+		}
+		
 		return twitter;
 	}
 	
@@ -319,8 +339,9 @@ public class TwitterUtil extends SnsUtil{
 		}
 		else
 		{
+			//Authentication(prefs,null);
 			if(isFollowUp)
-			this.followActions();
+				this.followActions();
 		}
 		return this.isAuthenticated;
 	}

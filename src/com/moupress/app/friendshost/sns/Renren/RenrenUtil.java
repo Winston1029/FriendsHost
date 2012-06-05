@@ -22,6 +22,7 @@ import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.SnsUtil;
 import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
 import com.moupress.app.friendshost.util.NotificationTask;
+import com.moupress.app.friendshost.util.Pref;
 import com.renren.api.connect.android.AsyncRenren;
 import com.renren.api.connect.android.Renren;
 import com.renren.api.connect.android.common.AbstractRequestListener;
@@ -31,6 +32,8 @@ import com.renren.api.connect.android.feed.FeedPublishRequestParam;
 import com.renren.api.connect.android.feed.FeedPublishResponseBean;
 import com.renren.api.connect.android.photos.PhotoUploadRequestParam;
 import com.renren.api.connect.android.photos.PhotoUploadResponseBean;
+import com.renren.api.connect.android.users.UsersGetInfoRequestParam;
+import com.renren.api.connect.android.users.UsersGetInfoResponseBean;
 import com.renren.api.connect.android.view.RenrenAuthListener;
 
 
@@ -78,13 +81,28 @@ public class RenrenUtil extends SnsUtil{
 			this.SnsAddEventCallback(snsEventListener,uptPref);
 			return;
 		}
+		final AbstractRequestListener<UsersGetInfoResponseBean> userinfo_listener = new AbstractRequestListener<UsersGetInfoResponseBean>(){
+			@Override
+			public void onComplete(UsersGetInfoResponseBean bean) {
+				String renren_headurl = bean.getUsersInfo().get(0).getTinyurl();
+				Pref.setMyStringPref(zContext, Const.LOGIN_HEAD_RENREN, renren_headurl);
+			}
+			@Override
+			public void onRenrenError(RenrenError renrenError) {
+			}
+			@Override
+			public void onFault(Throwable fault) {
+			}
+		};
 		
 		final RenrenAuthListener listener = new RenrenAuthListener() {
 
 			@Override
 			public void onComplete(Bundle values) {
-				Toast.makeText(zContext, "Renren Auth Complete",Toast.LENGTH_SHORT).show();
+				//Toast.makeText(zContext, "Renren Auth Complete",Toast.LENGTH_SHORT).show();
 				SnsAddEventCallback(snsEventListener,uptPref);
+				asyncRenren = fGetAsyncRenren();
+				asyncRenren.getUsersInfo(new UsersGetInfoRequestParam(new String[]{zRenren.getCurrentUid()+""}), userinfo_listener);
 			}
 
 			@Override
@@ -164,6 +182,7 @@ public class RenrenUtil extends SnsUtil{
 			}
 		};
 		asyncRenren.getFeed(param, listener, false);
+		
 	}
 	
 	public void fPublishFeeds(String name, String description,String url, String imageUrl, String caption, String message)

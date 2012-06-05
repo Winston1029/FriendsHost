@@ -97,6 +97,7 @@ public class SinaUtil extends SnsUtil{
 		sTokenKey = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENKEY);
 		sTokenSecret = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENSECRET);
 		zSina.setToken(sTokenKey, sTokenSecret);
+		
 		try {
 			List<Status> friendsTimeline = zSina.getFriendsTimeline();
 			//System.out.println("Sina news feed get listener on complete");
@@ -182,6 +183,13 @@ public class SinaUtil extends SnsUtil{
 			Pref.setMyStringPref(this.zContext, Const.SP_SINA_TOKENSECRET, accessToken.getTokenSecret());
 			
 			this.SnsAddEventCallback(snsEventListener, uptPref);
+			
+			try {
+				String headUrl = zSina.verifyCredentials().getProfileImageURL().toString();
+				Pref.setMyStringPref(zContext, Const.LOGIN_HEAD_SINA, headUrl);
+			} catch (WeiboException e1) {
+				e1.printStackTrace();
+			}
 	    }
     	catch (WeiboException e) {
 			e.printStackTrace();
