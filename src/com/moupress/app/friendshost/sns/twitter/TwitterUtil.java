@@ -13,12 +13,14 @@ import twitter4j.AsyncTwitterFactory;
 import twitter4j.ProfileImage;
 import twitter4j.ResponseList;
 import twitter4j.Status;
+import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterAdapter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.TwitterListener;
 import twitter4j.TwitterMethod;
+import twitter4j.User;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
@@ -121,6 +123,7 @@ public class TwitterUtil extends SnsUtil{
 			String headUrl = image.getURL();
 			Pref.setMyStringPref(zContext, Const.LOGIN_HEAD_TWITTER, headUrl);
 		}
+		
 	 };
 	
 	private void followActions()
@@ -160,6 +163,12 @@ public class TwitterUtil extends SnsUtil{
 		else return null;
 	}	
 	
+	public void fPostComments(String feedID, String message) {
+		if(twitter == null) {
+			twitter = Authentication(prefs,message);
+		}
+		twitter.updateStatus(new StatusUpdate(message).inReplyToStatusId(Long.valueOf(feedID)));
+	}
 
 	/**
 	 * Send Tweets to Twitter , this is called after Authentication
@@ -316,7 +325,9 @@ public class TwitterUtil extends SnsUtil{
 			t_sync.setOAuthAccessToken(a);
 			String heardUrl = t_sync.getProfileImage(t_sync.getScreenName(), ProfileImage.NORMAL).getURL();
 			Pref.setMyStringPref(zContext, Const.LOGIN_HEAD_TWITTER, heardUrl);
-			//twitter.getProfileImage(twitter.get, ProfileImage.NORMAL);
+//			twitter.getProfileImage(twitter.get, ProfileImage.NORMAL);
+//			twitter.showUser(twitter.getId());
+			
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (TwitterException e) {

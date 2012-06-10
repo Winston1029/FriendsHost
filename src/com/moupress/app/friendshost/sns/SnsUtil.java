@@ -58,6 +58,7 @@ public abstract class SnsUtil {
 	protected boolean isSessionValid(){return false;};
 	public void fGetNewsFeed(Context context){};
 	public void fDisplayFeed(){};
+	public void fPostComments(String feedID, String msg) {}
 	public void fPublishFeeds(String message){};
 	
 	
@@ -170,6 +171,7 @@ public abstract class SnsUtil {
 			
 		}
 	}
+
 	
 	//===============Use Selection Setting Functions Start==============
 }

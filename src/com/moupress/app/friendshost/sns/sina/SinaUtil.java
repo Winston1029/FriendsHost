@@ -125,6 +125,17 @@ public class SinaUtil extends SnsUtil{
 //		});
 //	}
 	
+	public void fPostComments(String feedID, String message) {
+		if (zSina != null) {
+			try {
+				zSina.updateComment(message, feedID, null);
+			} catch (WeiboException e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
+	
 	@Override
 	public void fPublishFeeds(String message) {
 		if (isSessionValid()) {

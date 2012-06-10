@@ -44,7 +44,7 @@ public class RenrenUtil extends SnsUtil{
 	private static final String APP_ID = "166341";
 	private static final String TAG = "RenrenUtil";
 	
-	private static final String[] PERMISSIONS = new String[] {"read_user_feed", "publish_feed", "publish_share"};
+	private static final String[] PERMISSIONS = new String[] {"read_user_feed", "publish_feed", "publish_share", "publish_comment"};
 	
 	//private PubSub zPubSub;
 	//private Context zContext;
@@ -183,6 +183,13 @@ public class RenrenUtil extends SnsUtil{
 		};
 		asyncRenren.getFeed(param, listener, false);
 		
+	}
+	
+	public void fPostComments(String feedID, String message) {
+		if (zRenren != null) {
+			asyncRenren = fGetAsyncRenren();
+			
+		}
 	}
 	
 	public void fPublishFeeds(String name, String description,String url, String imageUrl, String caption, String message)

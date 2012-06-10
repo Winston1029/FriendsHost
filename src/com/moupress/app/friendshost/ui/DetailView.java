@@ -1,10 +1,12 @@
 package com.moupress.app.friendshost.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -14,10 +16,10 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SlidingDrawer;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.SlidingDrawer.OnDrawerCloseListener;
 import android.widget.SlidingDrawer.OnDrawerOpenListener;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.droidfu.widgets.WebImageView;
 import com.moupress.app.friendshost.Const;
@@ -35,6 +37,7 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 	private ListView lstView_comments;
 	private LstViewCommentAdapter arrAdapterComment;
 	private LinearLayout drawer_comments_content;
+	private InputMethodManager imm;
 	
 	private Activity zActivity;
 	
@@ -215,18 +218,9 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		}		
 	}
 	
-	private String fRetrieveLargeImgUrl(String snsName, String smallImgUrl) {
-		String largeImgUrl = null;
-		if (snsName.equals(Const.SNS_RENREN)) {
-			largeImgUrl = feed.getsPhotoLargeLink();
-		} else if (snsName.equals(Const.SNS_FACEBOOK)) {
-			largeImgUrl = smallImgUrl.replace("http://photos-c.ak.fbcdn.net/", "http://a3.sphotos.ak.fbcdn.net/");
-			largeImgUrl = largeImgUrl.replace("_s.jpg", "_n.jpg");
-		}
-		return largeImgUrl;
-	}
-
 	private void fInitUIBasic() {
+		imm = (InputMethodManager)zActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+		
 		WebImageView img_feeduserhead_detail = (WebImageView)zActivity.findViewById(R.id.img_userhead_detail);
 		img_feeduserhead_detail.setImageUrl(feed.getzFriend().getHeadurl());
 		img_feeduserhead_detail.loadImage();
@@ -313,7 +307,15 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 			@Override
 			public void onClick(android.view.View v) {
 				String myCommentMsg = etx_commentmsg_detail_comment.getText().toString();
-				Toast.makeText(zActivity, myCommentMsg, Toast.LENGTH_SHORT).show();				
+				Toast.makeText(zActivity, myCommentMsg, Toast.LENGTH_SHORT).show();
+				if (feed.getsFeedType().equals(Const.SNS_TWITTER)) {
+					//twitter is reply 
+					//not comment
+					myCommentMsg = "@" + feed.getsName() + " " + myCommentMsg;
+				}
+				PubSub.zSnsOrg.GetSnsInstance(feed.getsFeedType()).fPostComments(feed.getsID(), myCommentMsg);
+				etx_commentmsg_detail_comment.setText("");
+				imm.hideSoftInputFromWindow(etx_commentmsg_detail_comment.getWindowToken(), 0);
 			}
 		});
 	}

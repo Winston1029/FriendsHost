@@ -238,6 +238,38 @@ public class FacebookUtil extends SnsUtil {
 		}
 		return asyncFB;
 	}
+	
+	public void fPostComments(String feedID, String message) {
+		if (zFacebook != null ) {
+			asyncFB = fGetAsyncFacebook();
+			Bundle params = new Bundle();
+
+			if (message.length() > 0) {
+				params.putString(FEED_MSG, message);
+			}
+			RequestListener listener = new RequestListener() {
+
+				@Override
+				public void onComplete(String response, Object state) {
+					//Toast.makeText(zActivity, "Comment Posted", Toast.LENGTH_SHORT).show();
+				}
+
+				@Override
+				public void onIOException(IOException e, Object state) {}
+
+				@Override
+				public void onFileNotFoundException(FileNotFoundException e,Object state) {}
+
+				@Override
+				public void onMalformedURLException(MalformedURLException e,Object state) {}
+
+				@Override
+				public void onFacebookError(FacebookError e, Object state) {}
+				
+			};
+			asyncFB.request(feedID + "/comments", params, "POST", listener, null);
+		}
+	}
 
 	public void fPublishFeeds(String name, String description, String url,
 			String imageUrl, String caption, String message) {
