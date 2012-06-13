@@ -312,6 +312,8 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 					//twitter is reply 
 					//not comment
 					myCommentMsg = "@" + feed.getsName() + " " + myCommentMsg;
+				} else if (feed.getsFeedType().equals(Const.SNS_RENREN)) {
+					myCommentMsg = feed.getsOwnerID() + "%" + myCommentMsg;
 				}
 				PubSub.zSnsOrg.GetSnsInstance(feed.getsFeedType()).fPostComments(feed.getsID(), myCommentMsg);
 				etx_commentmsg_detail_comment.setText("");

@@ -1,23 +1,28 @@
 package com.moupress.app.friendshost.sns.Renren;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import android.app.Activity;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.methods.PostMethod;
+
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import com.facebook.android.AsyncFacebookRunner;
 import com.moupress.app.friendshost.Const;
-import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
-import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.SnsUtil;
 import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
@@ -44,7 +49,7 @@ public class RenrenUtil extends SnsUtil{
 	private static final String APP_ID = "166341";
 	private static final String TAG = "RenrenUtil";
 	
-	private static final String[] PERMISSIONS = new String[] {"read_user_feed", "publish_feed", "publish_share", "publish_comment"};
+	private static final String[] PERMISSIONS = new String[] {"read_user_feed", "publish_feed", "publish_share", "publish_comment", "read_user_share", "read_user_status"};
 	
 	//private PubSub zPubSub;
 	//private Context zContext;
@@ -187,9 +192,54 @@ public class RenrenUtil extends SnsUtil{
 	
 	public void fPostComments(String feedID, String message) {
 		if (zRenren != null) {
-			asyncRenren = fGetAsyncRenren();
+			String[] comment = message.split("%");
+			String comment_user_id = comment[0];
+			String commentMsg = comment[1];
 			
+			Bundle parameters = new Bundle();
+			parameters.putString("method", "status.addComment");
+			parameters.putString("owner_id", comment_user_id);
+			parameters.putString("content", commentMsg);
+			parameters.putString("status_id", feedID);
+			String response = zRenren.requestJSON(parameters);
+			System.out.println(response);
 		}
+	}
+	
+	public String getSignature(Map<String, String> paramMap, String secret) {
+		List<String> paramList = new ArrayList<String>(paramMap.size());
+		//1、参数格式化
+		for(Map.Entry<String,String> param:paramMap.entrySet()){
+			paramList.add(param.getKey()+"="+param.getValue());
+		}
+		//2、排序并拼接成一个字符串
+		Collections.sort(paramList);
+		StringBuffer buffer = new StringBuffer();
+		for (String param : paramList) {
+			buffer.append(param);
+		}
+		//3、追加script key
+		buffer.append(secret);
+		//4、将拼好的字符串转成MD5值
+		try {
+		    java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+		    StringBuffer result = new StringBuffer();
+		    try {
+		        for (byte b : md.digest(buffer.toString().getBytes("UTF-8"))) {
+		            result.append(Integer.toHexString((b & 0xf0) >>> 4));
+		            result.append(Integer.toHexString(b & 0x0f));
+		        }
+		    } catch (UnsupportedEncodingException e) {
+		        for (byte b : md.digest(buffer.toString().getBytes())) {
+		            result.append(Integer.toHexString((b & 0xf0) >>> 4));
+		            result.append(Integer.toHexString(b & 0x0f));
+		        }
+		    }
+		    return result.toString();
+		} catch (java.security.NoSuchAlgorithmException ex) {
+		    ex.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void fPublishFeeds(String name, String description,String url, String imageUrl, String caption, String message)
