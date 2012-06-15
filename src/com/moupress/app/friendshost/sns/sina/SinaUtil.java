@@ -13,6 +13,7 @@ import weibo4andriod.http.RequestToken;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
@@ -206,4 +207,13 @@ public class SinaUtil extends SnsUtil{
 			e.printStackTrace();
 		}
     }
+    
+    public void fLikeFeeds(Bundle params) {
+	}
+	
+	public void fUnLikeFeeds(Bundle params) {
+	}
+	
+	public void fShareFeeds(Bundle params) {
+	}
 }

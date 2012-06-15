@@ -2,18 +2,15 @@ package com.moupress.app.friendshost.sns;
 
 import java.util.ArrayList;
 
-import com.moupress.app.friendshost.Const;
-import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
-
-import java.util.ArrayList;
-
-import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
-import com.moupress.app.friendshost.util.Pref;
-import com.moupress.app.friendshost.PubSub;
-import com.moupress.app.friendshost.R;
-
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
+
+import com.moupress.app.friendshost.PubSub;
+import com.moupress.app.friendshost.R;
+import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
+import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
+import com.moupress.app.friendshost.util.Pref;
 
 public abstract class SnsUtil {
  
@@ -60,6 +57,9 @@ public abstract class SnsUtil {
 	public void fDisplayFeed(){};
 	public void fPostComments(String feedID, String msg) {}
 	public void fPublishFeeds(String message){};
+	public void fLikeFeeds(Bundle params) {}
+	public void fUnLikeFeeds(Bundle params) {}
+	public void fShareFeeds(Bundle params) {}
 	
 	
 	//===============Adapter Related Functions Begin=================

@@ -279,7 +279,7 @@ public class FacebookUtil extends SnsUtil {
 
 			Bundle params = new Bundle();
 
-			if (message.length() > 0)
+			if (message!= null && message.length() > 0)
 				params.putString(FEED_MSG, message);
 
 			if (url != null && url.length() > 0 && url.startsWith("http"))
@@ -404,6 +404,66 @@ public class FacebookUtil extends SnsUtil {
 		this.fPublishFeeds(" ", feed.getsPhotoPreviewDescription(), feed
 				.getsPhotoPreviewLink(), feed.getsPhotoPreviewLink(), feed
 				.getsPhotoPreviewCaption(), feed.getsMsgBody());
+	}
+	
+	public void fLikeFeeds(Bundle params) {
+		if (zFacebook != null ) {
+			asyncFB = fGetAsyncFacebook();
+			String accessT = zFacebook.getAccessToken();
+			RequestListener listener = new RequestListener() {
+
+				@Override
+				public void onComplete(String response, Object state) {
+					//Toast.makeText(zActivity, "Comment Posted", Toast.LENGTH_SHORT).show();
+				}
+
+				@Override
+				public void onIOException(IOException e, Object state) {}
+
+				@Override
+				public void onFileNotFoundException(FileNotFoundException e,Object state) {}
+
+				@Override
+				public void onMalformedURLException(MalformedURLException e,Object state) {}
+
+				@Override
+				public void onFacebookError(FacebookError e, Object state) {}
+				
+			};
+			
+			asyncFB.request(params.getString("resourceid") + "/likes", params, Const.HTTP_METHOD_POST, listener, null);
+		}
+	}
+	
+	public void fUnLikeFeeds(Bundle params) {
+		if (zFacebook != null ) {
+			asyncFB = fGetAsyncFacebook();
+			RequestListener listener = new RequestListener() {
+
+				@Override
+				public void onComplete(String response, Object state) {
+					//Toast.makeText(zActivity, "Comment Posted", Toast.LENGTH_SHORT).show();
+				}
+
+				@Override
+				public void onIOException(IOException e, Object state) {}
+
+				@Override
+				public void onFileNotFoundException(FileNotFoundException e,Object state) {}
+
+				@Override
+				public void onMalformedURLException(MalformedURLException e,Object state) {}
+
+				@Override
+				public void onFacebookError(FacebookError e, Object state) {}
+				
+			};
+			
+			asyncFB.request(params.getString("resourceid") + "/likes", params, Const.HTTP_METHOD_POST, listener, null);
+		}
+	}
+	
+	public void fShareFeeds(Bundle params) {
 	}
 
 }

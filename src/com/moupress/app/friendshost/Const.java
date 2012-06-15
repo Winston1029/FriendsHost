@@ -101,6 +101,8 @@ public class Const {
 	
 	//============Views Name =======================================
 	public static final String VIEW_MAIN = "MainUIView";
+	public static final String HTTP_METHOD_POST = "POST";
+	public static final String HTTP_METHOD_DELETE = "DELETE";
 	
 
 }

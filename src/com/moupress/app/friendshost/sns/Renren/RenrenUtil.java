@@ -190,6 +190,7 @@ public class RenrenUtil extends SnsUtil{
 		
 	}
 	
+	// no working yet
 	public void fPostComments(String feedID, String message) {
 		if (zRenren != null) {
 			String[] comment = message.split("%");
@@ -204,42 +205,6 @@ public class RenrenUtil extends SnsUtil{
 			String response = zRenren.requestJSON(parameters);
 			System.out.println(response);
 		}
-	}
-	
-	public String getSignature(Map<String, String> paramMap, String secret) {
-		List<String> paramList = new ArrayList<String>(paramMap.size());
-		//1、参数格式化
-		for(Map.Entry<String,String> param:paramMap.entrySet()){
-			paramList.add(param.getKey()+"="+param.getValue());
-		}
-		//2、排序并拼接成一个字符串
-		Collections.sort(paramList);
-		StringBuffer buffer = new StringBuffer();
-		for (String param : paramList) {
-			buffer.append(param);
-		}
-		//3、追加script key
-		buffer.append(secret);
-		//4、将拼好的字符串转成MD5值
-		try {
-		    java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
-		    StringBuffer result = new StringBuffer();
-		    try {
-		        for (byte b : md.digest(buffer.toString().getBytes("UTF-8"))) {
-		            result.append(Integer.toHexString((b & 0xf0) >>> 4));
-		            result.append(Integer.toHexString(b & 0x0f));
-		        }
-		    } catch (UnsupportedEncodingException e) {
-		        for (byte b : md.digest(buffer.toString().getBytes())) {
-		            result.append(Integer.toHexString((b & 0xf0) >>> 4));
-		            result.append(Integer.toHexString(b & 0x0f));
-		        }
-		    }
-		    return result.toString();
-		} catch (java.security.NoSuchAlgorithmException ex) {
-		    ex.printStackTrace();
-		}
-		return null;
 	}
 	
 	public void fPublishFeeds(String name, String description,String url, String imageUrl, String caption, String message)
@@ -375,5 +340,14 @@ public class RenrenUtil extends SnsUtil{
 		String msg = (feed.getsMsgBody() == null ? " ":feed.getsMsgBody());
 		String story = (feed.getsStory()==null? " ":feed.getsStory());
 		this.fPublishFeeds(name, description, link, imgUrl, caption, msg+story);
+	}
+    
+    public void fLikeFeeds(Bundle params) {
+	}
+	
+	public void fUnLikeFeeds(Bundle params) {
+	}
+	
+	public void fShareFeeds(Bundle params) {
 	}
 }

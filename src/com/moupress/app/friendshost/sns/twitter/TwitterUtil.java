@@ -33,6 +33,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -466,6 +467,15 @@ public class TwitterUtil extends SnsUtil{
 	@Override
 	public void fResend(FeedEntry feed) {
 		this.SendFeed(feed.getsMsgBody());
+	}
+	
+	public void fLikeFeeds(Bundle params) {
+	}
+	
+	public void fUnLikeFeeds(Bundle params) {
+	}
+	
+	public void fShareFeeds(Bundle params) {
 	}
 	
 }
