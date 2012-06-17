@@ -64,6 +64,7 @@ public class Const {
 	public static final String SFEEDTYPE = "sFeedType";
 	public static final String SMSGBODY = "sMsgBody";
 	public static final String SLINK = "sLink";
+	public static final String SRESOURCEID = "sResource_id";
 	public static final String SSTORY = "sStory";
 	public static final String SSTORY_TAGS = "sStory_Tags";
 	public static final String SPHOTOPREVIEWLINK = "sPhotoPreviewLink";
@@ -103,6 +104,4 @@ public class Const {
 	public static final String VIEW_MAIN = "MainUIView";
 	public static final String HTTP_METHOD_POST = "POST";
 	public static final String HTTP_METHOD_DELETE = "DELETE";
-	
-
 }

@@ -1,5 +1,8 @@
 package com.moupress.app.friendshost.ui;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -87,6 +90,10 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 				params.putString(Const.SFEEDID, feed.getsID());
 				params.putString(Const.SOWNERID, feed.getsOwnerID());
 				params.putString(Const.SFEEDTYPE, feed.getsFeedType());
+				Matcher m = Pattern.compile("\\d+").matcher(feed.getsLink());
+				while (m.find()) {
+					params.putString(Const.SRESOURCEID, m.group());
+				}
 				if (bIsFeedLiked == false) {
 					v.setBackgroundResource(android.R.drawable.btn_star_big_on);
 					bIsFeedLiked = true;
@@ -97,7 +104,6 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 					PubSub.zSnsOrg.GetSnsInstance(displayedSns).fUnLikeFeeds(params);
 				}
 			}
-    		
     	});
     	
     	Button btnShare = (Button) activity.findViewById(R.id.refreshbtn);

@@ -286,6 +286,7 @@ public class DBHelper {
 		values.put(C_FEED_ISREAD, "0");
 		values.put(C_FEED_CREATED_TIME, entry.getUpdate_time());
 		values.put(C_FEED_UPDATED_TIME, entry.getUpdate_time());
+		values.put(C_FEED_SOURCE, entry.getSource_id());
 		if (entry.getDescription() != null && !entry.getDescription().equals("null") ) {
 			values.put(C_FEED_STORY, entry.getTitle() + "\n" + entry.getDescription());	
 		} else {
@@ -298,16 +299,16 @@ public class DBHelper {
 		if (entry.getAttachment().size() > 0 ) {
 			String media_type = entry.getAttachment().get(0).getMedia_type();
 			String link = entry.getAttachment().get(0).getHref();
-			
+			String actualUrl = "";
 			if (media_type != null && media_type.equals("blog")) {
-				//String actualBlog_Url = "http://blog.renren.com/blog/" + entry.getFeed_media_owner_id() + "/" + entry.getFeed_media_media_id();
-				String actualBlog_Url = "http://blog.renren.com/blog/" + entry.getAttachment().get(0).getOwner_id() + "/" + entry.getAttachment().get(0).getMedia_id();
-				values.put(C_FEED_LINK, actualBlog_Url);
+				actualUrl = "http://blog.renren.com/blog/" + entry.getAttachment().get(0).getOwner_id() + "/" + entry.getAttachment().get(0).getMedia_id();
+			} if (media_type != null && media_type.equals("photo")) {
+				actualUrl = "http://photo.renren.com/photo/" + entry.getAttachment().get(0).getOwner_id() + "/photo-" + entry.getAttachment().get(0).getMedia_id();
 			} else {
-				values.put(C_FEED_LINK, link);
+				actualUrl = link;
 			}
+			values.put(C_FEED_LINK, actualUrl);
 			
-			//values.put(C_FEED_PIC, entry.getFeed_media_src());
 			values.put(C_FEED_PIC, entry.getAttachment().get(0).getSrc());
 			values.put(C_FEED_RAW_PIC, entry.getAttachment().get(0).getRaw_src());
 		}

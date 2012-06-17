@@ -361,8 +361,9 @@ public class RenrenUtil extends SnsUtil{
 			} else if (iResType == 33) {
 				sResType = "album";
 			}
-			likeUrl = String.format(likeUrl, params.getString(Const.SOWNERID), params.getString(Const.SFEEDID), sResType);
+			likeUrl = String.format(likeUrl, params.getString(Const.SOWNERID), params.getString(Const.SRESOURCEID), sResType);
 			parameters.putString("url", likeUrl);
+			//parameters.putString("url", "http://photo.renren.com/photo/227794402/photo-6166039326");
 			String response = zRenren.requestJSON(parameters);
 			System.out.println(response);
     	}
@@ -383,7 +384,7 @@ public class RenrenUtil extends SnsUtil{
 			} else if (iResType == 33) {
 				sResType = "album";
 			}
-			likeUrl = String.format(likeUrl, params.getString(Const.SOWNERID), params.getString(Const.SFEEDID), sResType);
+			likeUrl = String.format(likeUrl, params.getString(Const.SOWNERID), params.getString(Const.SRESOURCEID), sResType);
 			parameters.putString("url", likeUrl);
 			String response = zRenren.requestJSON(parameters);
 			System.out.println(response);
