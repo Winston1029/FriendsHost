@@ -2,10 +2,12 @@ package com.moupress.app.friendshost.util;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,9 +21,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 
-import com.facebook.android.Util;
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.PubSub;
@@ -277,9 +277,12 @@ public class FeedOrganisor {
 	}
 	
 	public ArrayList<FeedEntry> fGetUnReadNewsFeed(String sns) {
-		Date d = new Date();
-		CharSequence currentDateTime  = DateFormat.format("yyyy-MM-dd hh:mm:ss", d.getTime());
-		ArrayList<FeedEntry> items = fGetUnReadNewsFeed(sns, currentDateTime.toString());
+		//Date d = new Date();
+		//CharSequence currentDateTime  = DateFormat.format("yyyy-MM-dd hh:mm:ss", d.getTime());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+		String updateTime = sdf.format(new Date());
+		ArrayList<FeedEntry> items = fGetUnReadNewsFeed(sns, updateTime);
 		return items;
 	}
 	

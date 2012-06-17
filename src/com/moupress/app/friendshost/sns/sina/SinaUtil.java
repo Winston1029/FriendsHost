@@ -209,9 +209,23 @@ public class SinaUtil extends SnsUtil{
     }
     
     public void fLikeFeeds(Bundle params) {
+    	try {
+			zSina.createFavorite(Long.valueOf(params.getString("feedid")));
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (WeiboException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void fUnLikeFeeds(Bundle params) {
+		try {
+			zSina.destroyFavorite(Long.valueOf(params.getString("feedid")));
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (WeiboException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void fShareFeeds(Bundle params) {

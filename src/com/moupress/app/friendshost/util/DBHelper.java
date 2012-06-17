@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 import weibo4andriod.Status;
 
@@ -74,6 +75,7 @@ public class DBHelper {
     static final String C_FEED_ISREAD = "isread";
     static final String C_FEED_CREATED_TIME = "created_time";
     static final String C_FEED_UPDATED_TIME = "updated_time";
+    static final String C_FEED_ISLIKED = "0";
     
     // Comments Columns
     static final String C_COMMENTS_ID = "id";
@@ -118,6 +120,7 @@ public class DBHelper {
 										    + C_FEED_CNT_LIKE + " TEXT,"
 										    + C_FEED_CREATED_TIME + " TEXT,"
 										    + C_FEED_UPDATED_TIME + " TEXT"
+										    + C_FEED_ISLIKED + " TEXT"
 										    + ");";
     
     static final String CREATE_COMMENTS_TABLE = "CREATE TABLE " + T_COMMENTS + " ("
@@ -145,6 +148,7 @@ public class DBHelper {
 		DatabaseHelper(Context context) {
 	        super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+	        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 	    }
 
 		@Override

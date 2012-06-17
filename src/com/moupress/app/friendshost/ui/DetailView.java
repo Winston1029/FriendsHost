@@ -82,8 +82,9 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 			public void onClick(android.view.View v) {
 				Toast.makeText(activity, "Like Button Clicked", Toast.LENGTH_SHORT).show();
 				v.setBackgroundResource(android.R.drawable.btn_star_big_on);
-				
-				PubSub.zSnsOrg.GetSnsInstance(feed.getsFeedType()).fLikeFeeds(new Bundle());
+				Bundle params = new Bundle();
+				params.putString("feedid", feed.getsID());
+				PubSub.zSnsOrg.GetSnsInstance(feed.getsFeedType()).fLikeFeeds(params);
 				//PubSub.zSnsOrg.GetSnsInstance(feed.getsFeedType()).fUnLikeFeeds(new Bundle());
 			}
     		
