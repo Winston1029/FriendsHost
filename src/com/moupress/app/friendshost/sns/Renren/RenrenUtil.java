@@ -49,7 +49,11 @@ public class RenrenUtil extends SnsUtil{
 	private static final String APP_ID = "166341";
 	private static final String TAG = "RenrenUtil";
 	
-	private static final String[] PERMISSIONS = new String[] {"read_user_feed", "publish_feed", "publish_share", "publish_comment", "read_user_share", "read_user_status"};
+	private static final String[] PERMISSIONS = new String[] {
+		"read_user_feed", "publish_feed", 
+		"read_user_share", "publish_share", "read_user_status",
+		"publish_comment",
+		"operate_like"};
 	
 	//private PubSub zPubSub;
 	//private Context zContext;
@@ -343,6 +347,24 @@ public class RenrenUtil extends SnsUtil{
 	}
     
     public void fLikeFeeds(Bundle params) {
+    	if (zRenren != null) {
+    		Bundle parameters = new Bundle();
+			parameters.putString("method", "Like.like");
+			parameters.putString("ownerid", params.getString("ownerid"));
+			parameters.putString("resourceid", params.getString("feedid"));
+			int iResType = Integer.parseInt(params.getString("feedtype"));
+			String sResType = ""; 
+			if (iResType >= 20 && iResType < 30 ) {
+				sResType = "blog";
+			} else if (iResType >= 30 && iResType < 40 && iResType != 33) {
+				sResType = "photo";
+			} else if (iResType == 33) {
+				sResType = "album";
+			}
+			parameters.putString("type", sResType);
+			String response = zRenren.requestJSON(parameters);
+			System.out.println(response);
+    	}
 	}
 	
 	public void fUnLikeFeeds(Bundle params) {

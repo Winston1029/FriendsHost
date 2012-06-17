@@ -270,7 +270,7 @@ public class DBHelper {
 		ContentValues values  = new ContentValues();
 		values.put(C_FEED_SNS, SNS_RENREN);
 		values.put(C_FEED_ID, entry.getPost_id());
-		values.put(C_FEED_TYPE, entry.getsFeedType());
+		values.put(C_FEED_TYPE, entry.getFeed_type());
 		if (entry.getFeed_type().equals("10")) { //prefix and message are the same if feedtype is "更新状态的新鲜事"
 			values.put(C_FEED_MSG, entry.getPrefix());
 		} else {

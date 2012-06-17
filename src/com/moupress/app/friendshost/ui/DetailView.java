@@ -34,6 +34,7 @@ import com.moupress.app.friendshost.util.Pref;
 public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCloseListener{
 	
 	private FeedEntry feed;
+	private String displayedSns;
 	private ListView lstView_comments;
 	private LstViewCommentAdapter arrAdapterComment;
 	private LinearLayout drawer_comments_content;
@@ -84,7 +85,9 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 				v.setBackgroundResource(android.R.drawable.btn_star_big_on);
 				Bundle params = new Bundle();
 				params.putString("feedid", feed.getsID());
-				PubSub.zSnsOrg.GetSnsInstance(feed.getsFeedType()).fLikeFeeds(params);
+				params.putString("ownerid", feed.getsOwnerID());
+				params.putString("feedtype", feed.getsFeedType());
+				PubSub.zSnsOrg.GetSnsInstance(displayedSns).fLikeFeeds(params);
 				//PubSub.zSnsOrg.GetSnsInstance(feed.getsFeedType()).fUnLikeFeeds(new Bundle());
 			}
     		
@@ -98,7 +101,7 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 			public void onClick(android.view.View v) {
 				Toast.makeText(activity, "Share Button Clicked", Toast.LENGTH_SHORT).show();//fResend
 				
-				PubSub.zSnsOrg.GetSnsInstance(feed.getsFeedType()).fShareFeeds(new Bundle());
+				PubSub.zSnsOrg.GetSnsInstance(displayedSns).fShareFeeds(new Bundle());
 			}
 		});	
     }
@@ -112,11 +115,11 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 	private void fInitFeed(Bundle loadData) {
 		//Intent intent = this.getIntent();
 		
-		String displayedSns = loadData.getString(Const.SNS);
+		displayedSns = loadData.getString(Const.SNS);
 		String feed_id = loadData.getString(Const.FID);
 		
 		feed = PubSub.zFeedOrg.fGetFeedByID( displayedSns, feed_id );
-		feed.setsFeedType(displayedSns);
+		//feed.setsFeedType(displayedSns);
 		
 		arrAdapterComment = new LstViewCommentAdapter(zActivity, R.layout.feed_item_detail_comment);
 		if (feed.getzComments() != null ) {
@@ -134,10 +137,10 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 	private void fInitUI() {
 		
 		fInitUIBasic();
-		fInitUIWebView();
 		//fInitUIPhoto();
 		fInitUIDescription();
 		fInitUIDrawer();
+		fInitUIWebView();
 	}
 	
 	private void fInitUIDescription() {
@@ -165,7 +168,8 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 			descriptionDetail += "\n" + feed.getsPhotoPreviewDescription();
 		}
 		TextView txv_description_detail = (TextView) zActivity.findViewById(R.id.txv_description_detail);
-		txv_description_detail.setText(descriptionDetail);			
+		txv_description_detail.setText(descriptionDetail);
+		txv_description_detail.setVisibility(android.view.View.VISIBLE);
 		//Display display = getWindowManager().getDefaultDisplay();
 		//FlowTextHelper.tryFlowText(descriptionDetail, img_photo_detail, txv_description_detail, display);		
 	}
@@ -198,6 +202,8 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		webV_detail.setWebViewClient(new MyWebViewClient());
 		if (sFeedType != null && (sFeedType.equals("blog") || sFeedType.equals("21")) ) {
 			webV_detail.loadUrl(feed.getsLink());
+			TextView txv_description_detail = (TextView) zActivity.findViewById(R.id.txv_description_detail);
+			txv_description_detail.setVisibility(android.view.View.GONE);
 		} else if ((sPhotoUrl != null && sPhotoUrl.startsWith("http://") && sPhotoUrl.endsWith(".jpg"))) {
 			//String sLargeImgUrl = fRetrieveLargeImgUrl(feed.getsFeedType(), sPhotoUrl);
 			String sLargeImgUrl = feed.getsPhotoLargeLink();
@@ -304,7 +310,7 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 
 	private void fInitMyCommentUI() {
 		WebImageView img_selfhead_detail_comment = (WebImageView) zActivity.findViewById(R.id.img_selfhead_detail_comment);
-		String selfHeadUrl = fRetrieveProfileHeadImgUrl(feed.getsFeedType());
+		String selfHeadUrl = fRetrieveProfileHeadImgUrl(displayedSns);
 		img_selfhead_detail_comment.setImageUrl(selfHeadUrl);
 		img_selfhead_detail_comment.loadImage();
 		final EditText etx_commentmsg_detail_comment = (EditText) zActivity.findViewById(R.id.etx_commentmsg_detail_comment);
@@ -314,14 +320,14 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 			public void onClick(android.view.View v) {
 				String myCommentMsg = etx_commentmsg_detail_comment.getText().toString();
 				Toast.makeText(zActivity, myCommentMsg, Toast.LENGTH_SHORT).show();
-				if (feed.getsFeedType().equals(Const.SNS_TWITTER)) {
+				if (displayedSns.equals(Const.SNS_TWITTER)) {
 					//twitter is reply 
 					//not comment
 					myCommentMsg = "@" + feed.getsName() + " " + myCommentMsg;
-				} else if (feed.getsFeedType().equals(Const.SNS_RENREN)) {
+				} else if (displayedSns.equals(Const.SNS_RENREN)) {
 					myCommentMsg = feed.getsOwnerID() + "%" + myCommentMsg;
 				}
-				PubSub.zSnsOrg.GetSnsInstance(feed.getsFeedType()).fPostComments(feed.getsID(), myCommentMsg);
+				PubSub.zSnsOrg.GetSnsInstance(displayedSns).fPostComments(feed.getsID(), myCommentMsg);
 				etx_commentmsg_detail_comment.setText("");
 				imm.hideSoftInputFromWindow(etx_commentmsg_detail_comment.getWindowToken(), 0);
 			}
