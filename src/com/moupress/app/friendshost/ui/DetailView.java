@@ -35,6 +35,7 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 	
 	private FeedEntry feed;
 	private String displayedSns;
+	private boolean bIsFeedLiked;
 	private ListView lstView_comments;
 	private LstViewCommentAdapter arrAdapterComment;
 	private LinearLayout drawer_comments_content;
@@ -82,13 +83,19 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 			@Override
 			public void onClick(android.view.View v) {
 				Toast.makeText(activity, "Like Button Clicked", Toast.LENGTH_SHORT).show();
-				v.setBackgroundResource(android.R.drawable.btn_star_big_on);
 				Bundle params = new Bundle();
 				params.putString("feedid", feed.getsID());
 				params.putString("ownerid", feed.getsOwnerID());
 				params.putString("feedtype", feed.getsFeedType());
-				PubSub.zSnsOrg.GetSnsInstance(displayedSns).fLikeFeeds(params);
-				//PubSub.zSnsOrg.GetSnsInstance(feed.getsFeedType()).fUnLikeFeeds(new Bundle());
+				if (bIsFeedLiked == false) {
+					v.setBackgroundResource(android.R.drawable.btn_star_big_on);
+					bIsFeedLiked = true;
+					PubSub.zSnsOrg.GetSnsInstance(displayedSns).fLikeFeeds(params);
+				} else {
+					v.setBackgroundResource(android.R.drawable.btn_star_big_off);
+					bIsFeedLiked = false;
+					PubSub.zSnsOrg.GetSnsInstance(displayedSns).fUnLikeFeeds(params);
+				}
 			}
     		
     	});
@@ -114,7 +121,7 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 	
 	private void fInitFeed(Bundle loadData) {
 		//Intent intent = this.getIntent();
-		
+		bIsFeedLiked = false;
 		displayedSns = loadData.getString(Const.SNS);
 		String feed_id = loadData.getString(Const.FID);
 		
