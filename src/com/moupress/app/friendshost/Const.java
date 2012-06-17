@@ -56,7 +56,7 @@ public class Const {
 	
 	//==============Feed Item Attributes========================
 	public static final String FEED_ITEM = "feeditem";
-	
+	public static final String SFEEDID = "feedid";
 	public static final String SHEADIMG = "sHeadImg";
 	public static final String SNAME = "sName";
 	public static final String SOWNERID = "sOwnerID";

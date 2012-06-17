@@ -55,7 +55,7 @@ public abstract class SnsUtil {
 	protected boolean isSessionValid(){return false;};
 	public void fGetNewsFeed(Context context){};
 	public void fDisplayFeed(){};
-	public void fPostComments(String feedID, String msg) {}
+	public void fPostComments(Bundle params) {}
 	public void fPublishFeeds(String message){};
 	public void fLikeFeeds(Bundle params) {}
 	public void fUnLikeFeeds(Bundle params) {}

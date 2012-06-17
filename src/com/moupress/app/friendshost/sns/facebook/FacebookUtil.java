@@ -239,14 +239,11 @@ public class FacebookUtil extends SnsUtil {
 		return asyncFB;
 	}
 	
-	public void fPostComments(String feedID, String message) {
+	public void fPostComments(Bundle params) {
 		if (zFacebook != null ) {
 			asyncFB = fGetAsyncFacebook();
-			Bundle params = new Bundle();
-
-			if (message.length() > 0) {
-				params.putString(FEED_MSG, message);
-			}
+			params.putString(FEED_MSG, params.getString(Const.COMMENTED_MSG));
+			
 			RequestListener listener = new RequestListener() {
 
 				@Override
@@ -267,7 +264,7 @@ public class FacebookUtil extends SnsUtil {
 				public void onFacebookError(FacebookError e, Object state) {}
 				
 			};
-			asyncFB.request(feedID + "/comments", params, "POST", listener, null);
+			asyncFB.request(params.getString(Const.SFEEDID) + "/comments", params, "POST", listener, null);
 		}
 	}
 
@@ -409,7 +406,6 @@ public class FacebookUtil extends SnsUtil {
 	public void fLikeFeeds(Bundle params) {
 		if (zFacebook != null ) {
 			asyncFB = fGetAsyncFacebook();
-			String accessT = zFacebook.getAccessToken();
 			RequestListener listener = new RequestListener() {
 
 				@Override
@@ -431,7 +427,7 @@ public class FacebookUtil extends SnsUtil {
 				
 			};
 			
-			asyncFB.request(params.getString("resourceid") + "/likes", params, Const.HTTP_METHOD_POST, listener, null);
+			asyncFB.request(params.getString(Const.SFEEDID) + "/likes", params, Const.HTTP_METHOD_POST, listener, null);
 		}
 	}
 	
@@ -459,7 +455,7 @@ public class FacebookUtil extends SnsUtil {
 				
 			};
 			
-			asyncFB.request(params.getString("resourceid") + "/likes", params, Const.HTTP_METHOD_POST, listener, null);
+			asyncFB.request(params.getString(Const.SFEEDID) + "/likes", params, Const.HTTP_METHOD_POST, listener, null);
 		}
 	}
 	

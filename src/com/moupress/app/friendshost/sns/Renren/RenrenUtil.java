@@ -347,12 +347,12 @@ public class RenrenUtil extends SnsUtil{
 	}
     
     public void fLikeFeeds(Bundle params) {
+    	String likeUrl = "http://www.renren.com/g?ownerid=%s&resourceid=%s&type=%s";
     	if (zRenren != null) {
     		Bundle parameters = new Bundle();
-			parameters.putString("method", "Like.like");
-			parameters.putString("ownerid", params.getString("ownerid"));
-			parameters.putString("resourceid", params.getString("feedid"));
-			int iResType = Integer.parseInt(params.getString("feedtype"));
+			parameters.putString("method", "like.like");
+			
+			int iResType = Integer.parseInt(params.getString(Const.SFEEDTYPE));
 			String sResType = ""; 
 			if (iResType >= 20 && iResType < 30 ) {
 				sResType = "blog";
@@ -361,13 +361,33 @@ public class RenrenUtil extends SnsUtil{
 			} else if (iResType == 33) {
 				sResType = "album";
 			}
-			parameters.putString("type", sResType);
+			likeUrl = String.format(likeUrl, params.getString(Const.SOWNERID), params.getString(Const.SFEEDID), sResType);
+			parameters.putString("url", likeUrl);
 			String response = zRenren.requestJSON(parameters);
 			System.out.println(response);
     	}
 	}
 	
 	public void fUnLikeFeeds(Bundle params) {
+		String likeUrl = "http://www.renren.com/g?ownerid=%s&resourceid=%s&type=%s";
+    	if (zRenren != null) {
+    		Bundle parameters = new Bundle();
+			parameters.putString("method", "like.unlike");
+			
+			int iResType = Integer.parseInt(params.getString(Const.SFEEDTYPE));
+			String sResType = ""; 
+			if (iResType >= 20 && iResType < 30 ) {
+				sResType = "blog";
+			} else if (iResType >= 30 && iResType < 40 && iResType != 33) {
+				sResType = "photo";
+			} else if (iResType == 33) {
+				sResType = "album";
+			}
+			likeUrl = String.format(likeUrl, params.getString(Const.SOWNERID), params.getString(Const.SFEEDID), sResType);
+			parameters.putString("url", likeUrl);
+			String response = zRenren.requestJSON(parameters);
+			System.out.println(response);
+    	}
 	}
 	
 	public void fShareFeeds(Bundle params) {

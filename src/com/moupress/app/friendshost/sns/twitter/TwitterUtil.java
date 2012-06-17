@@ -166,11 +166,13 @@ public class TwitterUtil extends SnsUtil{
 		else return null;
 	}	
 	
-	public void fPostComments(String feedID, String message) {
+	public void fPostComments(Bundle params) {
+		String message = params.getString(Const.COMMENTED_MSG);
 		if(twitterAsync == null) {
 			twitterAsync = Authentication(prefs,message);
 		}
-		twitterAsync.updateStatus(new StatusUpdate(message).inReplyToStatusId(Long.valueOf(feedID)));
+		twitterAsync.updateStatus(new StatusUpdate(message)
+			.inReplyToStatusId(Long.valueOf(params.getString(Const.SFEEDID))));
 	}
 
 	/**
@@ -457,7 +459,7 @@ public class TwitterUtil extends SnsUtil{
 	
 	public void fLikeFeeds(Bundle params) {
 		try {
-			twitter.createFavorite(Long.valueOf(params.getString("feedid")));
+			twitter.createFavorite(Long.valueOf(params.getString(Const.SFEEDID)));
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (TwitterException e) {
@@ -467,7 +469,7 @@ public class TwitterUtil extends SnsUtil{
 	
 	public void fUnLikeFeeds(Bundle params) {
 		try {
-			twitter.destroyFavorite(Long.valueOf(params.getString("feedid")));
+			twitter.destroyFavorite(Long.valueOf(params.getString(Const.SFEEDID)));
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (TwitterException e) {
@@ -476,6 +478,13 @@ public class TwitterUtil extends SnsUtil{
 	}
 	
 	public void fShareFeeds(Bundle params) {
+		try {
+			twitter.retweetStatus(Long.valueOf(params.getString(Const.SFEEDID)));
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (TwitterException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

@@ -84,9 +84,9 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 			public void onClick(android.view.View v) {
 				Toast.makeText(activity, "Like Button Clicked", Toast.LENGTH_SHORT).show();
 				Bundle params = new Bundle();
-				params.putString("feedid", feed.getsID());
-				params.putString("ownerid", feed.getsOwnerID());
-				params.putString("feedtype", feed.getsFeedType());
+				params.putString(Const.SFEEDID, feed.getsID());
+				params.putString(Const.SOWNERID, feed.getsOwnerID());
+				params.putString(Const.SFEEDTYPE, feed.getsFeedType());
 				if (bIsFeedLiked == false) {
 					v.setBackgroundResource(android.R.drawable.btn_star_big_on);
 					bIsFeedLiked = true;
@@ -107,8 +107,10 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 			@Override
 			public void onClick(android.view.View v) {
 				Toast.makeText(activity, "Share Button Clicked", Toast.LENGTH_SHORT).show();//fResend
-				
-				PubSub.zSnsOrg.GetSnsInstance(displayedSns).fShareFeeds(new Bundle());
+				Bundle params = new Bundle();
+				params.putString(Const.SFEEDID, feed.getsID());
+				params.putString(Const.SOWNERID, feed.getsOwnerID());
+				PubSub.zSnsOrg.GetSnsInstance(displayedSns).fShareFeeds(params);
 			}
 		});	
     }
@@ -325,16 +327,14 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		btn_send_detail_comment.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(android.view.View v) {
-				String myCommentMsg = etx_commentmsg_detail_comment.getText().toString();
-				Toast.makeText(zActivity, myCommentMsg, Toast.LENGTH_SHORT).show();
-				if (displayedSns.equals(Const.SNS_TWITTER)) {
-					//twitter is reply 
-					//not comment
-					myCommentMsg = "@" + feed.getsName() + " " + myCommentMsg;
-				} else if (displayedSns.equals(Const.SNS_RENREN)) {
-					myCommentMsg = feed.getsOwnerID() + "%" + myCommentMsg;
-				}
-				PubSub.zSnsOrg.GetSnsInstance(displayedSns).fPostComments(feed.getsID(), myCommentMsg);
+				String sCommentMsg = etx_commentmsg_detail_comment.getText().toString();
+				Toast.makeText(zActivity, sCommentMsg, Toast.LENGTH_SHORT).show();
+				Bundle params = new Bundle();
+				params.putString(Const.SFEEDID, feed.getsID());
+				params.putString(Const.COMMENTED_MSG, sCommentMsg);
+				params.putString(Const.SNAME, feed.getsName());
+				params.putString(Const.SOWNERID, feed.getsOwnerID());
+				PubSub.zSnsOrg.GetSnsInstance(displayedSns).fPostComments(params);
 				etx_commentmsg_detail_comment.setText("");
 				imm.hideSoftInputFromWindow(etx_commentmsg_detail_comment.getWindowToken(), 0);
 			}

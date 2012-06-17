@@ -126,10 +126,10 @@ public class SinaUtil extends SnsUtil{
 //		});
 //	}
 	
-	public void fPostComments(String feedID, String message) {
+	public void fPostComments(Bundle params) {
 		if (zSina != null) {
 			try {
-				zSina.updateComment(message, feedID, null);
+				zSina.updateComment(params.getString(Const.COMMENTED_MSG), params.getString(Const.SFEEDID), null);
 			} catch (WeiboException e) {
 				e.printStackTrace();
 			}
@@ -210,7 +210,7 @@ public class SinaUtil extends SnsUtil{
     
     public void fLikeFeeds(Bundle params) {
     	try {
-			zSina.createFavorite(Long.valueOf(params.getString("feedid")));
+			zSina.createFavorite(Long.valueOf(params.getString(Const.SFEEDID)));
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (WeiboException e) {
@@ -220,7 +220,7 @@ public class SinaUtil extends SnsUtil{
 	
 	public void fUnLikeFeeds(Bundle params) {
 		try {
-			zSina.destroyFavorite(Long.valueOf(params.getString("feedid")));
+			zSina.destroyFavorite(Long.valueOf(params.getString(Const.SFEEDID)));
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (WeiboException e) {
@@ -229,5 +229,12 @@ public class SinaUtil extends SnsUtil{
 	}
 	
 	public void fShareFeeds(Bundle params) {
+		try {
+			zSina.retweetStatus(Long.valueOf(params.getString(Const.SFEEDID)));
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (WeiboException e) {
+			e.printStackTrace();
+		}
 	}
 }
