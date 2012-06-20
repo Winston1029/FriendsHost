@@ -48,6 +48,7 @@ public class DBHelper {
     static final String T_FEED = "Feed";
     static final String T_COMMENTS = "Comments";
     static final String T_ACTIONS = "Actions";
+    static final String T_ERRORS = "Errors";
     
     // User Columns
     static final String C_USER_ID = "id";
@@ -91,6 +92,11 @@ public class DBHelper {
     static final String C_ACTIONS_FEEDID = "feedid";
     static final String C_ACTIONS_NAME = "name";
     static final String C_ACTIONS_LINK = "link";
+    
+    // Error DB
+    static final String C_ERROR_MSG = "message";
+    static final String C_ERROR_TIME = "created_time";
+    static final String C_ERROR_SRC = "source";
     
     // Create table SQL statement
     static final String CREATE_USER_TABLE = "CREATE TABLE " + T_USER + " ("
@@ -139,6 +145,12 @@ public class DBHelper {
 										    + C_ACTIONS_NAME + " TEXT,"
 										    + C_ACTIONS_LINK + " TEXT"
 										    + ");";
+    
+    static final String CREATE_ERRORS_TABLE = "CREATE TABLE " + T_ERRORS + " ("
+										    + C_ERROR_SRC + " TEXT PRIMARY KEY,"
+										    + C_ERROR_MSG + " TEXT,"
+										    + C_ERROR_TIME + " TEXT"
+										    + ");";
 
     private static SimpleDateFormat simpleDateFormat;
     private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -157,6 +169,7 @@ public class DBHelper {
 			db.execSQL(CREATE_FEED_TABLE);
 			db.execSQL(CREATE_COMMENTS_TABLE);
 			db.execSQL(CREATE_ACTIONS_TABLE);
+			db.execSQL(CREATE_ERRORS_TABLE);
 		}
 
 		@Override
@@ -170,6 +183,7 @@ public class DBHelper {
 			db.execSQL("DROP TABLE IF EXISTS " + CREATE_FEED_TABLE);
 			db.execSQL("DROP TABLE IF EXISTS " + CREATE_COMMENTS_TABLE);
 			db.execSQL("DROP TABLE IF EXISTS " + CREATE_ACTIONS_TABLE);
+			db.execSQL("DROP TABLE IF EXISTS " + CREATE_ERRORS_TABLE);
 			onCreate(db);
 		}
 
@@ -417,8 +431,19 @@ public class DBHelper {
 		return ret;
 	}
 	
-	public static void fUpdateFeedRead() {
-		
+	public int fUpdateFeedRead(String sns, String updatedTime) {
+		ContentValues values  = new ContentValues();
+		values.put(C_FEED_ISREAD, "1");
+		String where = C_FEED_SNS + " = ? and " 
+						+ C_FEED_UPDATED_TIME + " = ? ";
+		String[] selectionArgs = new String[] {sns, updatedTime};
+		int res = 0;
+		try {
+			zSQLiteDB.update(T_FEED, values, where, selectionArgs);
+		} catch (Exception e) {
+			res = -1;
+		}
+		return res;
 	}
 	
 	public String[] fGetFeedSummary(String sns) {

@@ -21,6 +21,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
@@ -256,9 +257,13 @@ public class FeedOrganisor {
 	
 	/**
 	 * Mark feeds that has been read
+	 * At the moment mark all feed as read as user will always start at position 0 when the start the app
 	 */
-	public void fUpdateReadFeeds() {
-		
+	public void fUpdateReadFeeds(String sns, String updatedTime) {
+		int status = zDBHelper.fUpdateFeedRead(sns, updatedTime);
+		if (status == -1) {
+			Log.e("FeedOrg", "Error in update feed status to read");
+		}
 	}
 	
 	/**
@@ -283,6 +288,7 @@ public class FeedOrganisor {
 		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 		String updateTime = sdf.format(new Date());
 		ArrayList<FeedEntry> items = fGetUnReadNewsFeed(sns, updateTime);
+		fUpdateReadFeeds(sns, updateTime);
 		return items;
 	}
 	
@@ -401,7 +407,7 @@ public class FeedOrganisor {
 		for ( String key: hmUnreadFeed.keySet()) {
 			int iUnreadFeed = hmUnreadFeed.get(key);
 			if ( iUnreadFeed > 0) {
-				contentText = key + ":" + iUnreadFeed + " ";
+				contentText = contentText + " " + key + ":" + iUnreadFeed + " ";
 			}
 		}
 		Intent notificationIntent = new Intent(context, FriendsHostActivity.class);
