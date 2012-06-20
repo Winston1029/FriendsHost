@@ -56,10 +56,10 @@ public class TwitterUtil extends SnsUtil{
 	
     private OAuthConsumer consumer; 
     private OAuthProvider provider;
-    private String msgSend;
+    //private String msgSend;
 	
-	private static enum AUTH_METHODS {GET_FEEDS, UPDATE_STATUS};
-	private AUTH_METHODS authMethod = AUTH_METHODS.GET_FEEDS;
+	//private static enum AUTH_METHODS {GET_FEEDS, UPDATE_STATUS};
+	//private AUTH_METHODS authMethod = AUTH_METHODS.GET_FEEDS;
 	
 	//private PubSub zPubSub;
 	private static final String TAG = "TwitterUtil";
@@ -69,22 +69,24 @@ public class TwitterUtil extends SnsUtil{
 	private Twitter twitter;
 	private NotificationTask notificationTask;
 	
-	 private TwitterListener listener = new TwitterAdapter()
-	 {
+	public TwitterUtil(PubSub zPubSub) {
+		super(zPubSub,Const.SNS_TWITTER);
+	    this.prefs = PreferenceManager.getDefaultSharedPreferences(zActivity);
+	    this.logImg = R.drawable.fh_twitter_logo;
+	}
+
+	private TwitterListener listener = new TwitterAdapter() {
 
 		@Override
 		public void onException(TwitterException ex, TwitterMethod method) {
 			
-			if(method == TwitterMethod.ACCOUNT_TOTALS)
-			{
-				if(!isAuthenticated)
-				{
+			if(method == TwitterMethod.ACCOUNT_TOTALS) {
+				if(!isAuthenticated) {
 					isAuthenticated = true;
 					//Authentication();
 				}
 			}
-			else if(method == TwitterMethod.UPDATE_STATUS)
-			{
+			else if(method == TwitterMethod.UPDATE_STATUS) {
 				Log.i(TAG, "Update Status Exception");
 				stopNotification();
 			}
@@ -110,15 +112,14 @@ public class TwitterUtil extends SnsUtil{
 			Log.i(TAG, "Twitters are downloaded! " + statuses.size());
 			zPubSub.fGetFeedOrganisor().fSaveNewFeeds(statuses, zContext);
 		}
-
 		
-		@Override
-		public void gotAccountTotals(AccountTotals totals) {
-			//super.gotAccountSettings(settings);
-			Log.i(TAG, "Get Account Setting");
-			isAuthenticated = true;
-			followActions();
-		}
+//		@Override
+//		public void gotAccountTotals(AccountTotals totals) {
+//			//super.gotAccountSettings(settings);
+//			Log.i(TAG, "Get Account Setting");
+//			isAuthenticated = true;
+//			followActions();
+//		}
 		
 		@Override
 		public void gotProfileImage(ProfileImage image) {
@@ -129,82 +130,7 @@ public class TwitterUtil extends SnsUtil{
 		
 	 };
 	
-	private void followActions()
-	{
-		if(authMethod.equals(AUTH_METHODS.UPDATE_STATUS))
-		{
-			Log.i(TAG, "Send Tweets!");
-			sendTweet(prefs,getTweetMsg());
-		}
-			else if(authMethod.equals(AUTH_METHODS.GET_FEEDS))
-		{
-			getTweets(prefs);
-		}
-	}
-	
-
-	//public TwitterUtil(Activity activity,final Context context)
-	public TwitterUtil(PubSub zPubSub)
-	{
-		super(zPubSub,Const.SNS_TWITTER);
-		//this.zActivity = zPubSub.fGetActivity();
-		//this.zContext = zPubSub.fGetActivity();
-		//this.zPubSub = zPubSub;
-	    this.prefs = PreferenceManager.getDefaultSharedPreferences(zActivity);
-	    this.logImg = R.drawable.fh_twitter_logo;
-	}
-	
-	
-	private void setMessage(String msg)
-	{
-		this.msgSend = msg;
-	}
-	
-	private String getTweetMsg() {
-		if(msgSend.length()>0)
-			return msgSend;
-		else return null;
-	}	
-	
-	public void fPostComments(Bundle params) {
-		String message = params.getString(Const.COMMENTED_MSG);
-		if(twitterAsync == null) {
-			twitterAsync = Authentication(prefs,message);
-		}
-		twitterAsync.updateStatus(new StatusUpdate(message)
-			.inReplyToStatusId(Long.valueOf(params.getString(Const.SFEEDID))));
-	}
-
-	/**
-	 * Send Tweets to Twitter , this is called after Authentication
-	 * @param prefs
-	 * @param msg
-	 */
-	public void sendTweet(SharedPreferences prefs,String msg)  {
-		
-		if(twitterAsync == null) {
-			 twitterAsync = Authentication(prefs,msg);
-		}
-		
-	    startNotification(1,"Tweet");
-        twitterAsync.updateStatus(msg);
-	}
-	
-	/**
-	 * Get Tweets from Twitter, this is called after Authentication
-	 * @param prefs
-	 */
-	public void getTweets(SharedPreferences prefs)
-	{
-		if(twitterAsync == null) {
-			 twitterAsync = Authentication(prefs,null);
-		}			
-		twitterAsync.getHomeTimeline();
-	}
-				
-
 	public class RetrieveAccessTokenTask extends AsyncTask<Uri, Void, Void> {
-
 		private Context	context;
 		private OAuthProvider provider;
 		private OAuthConsumer consumer;
@@ -252,18 +178,10 @@ public class TwitterUtil extends SnsUtil{
 
 		private void executeAfterAccessTokenRetrieval() {
 			Log.i(TAG, "Execute after access token Retrieval");
-			followActions();
+			//followActions();
 		}
 	}
-	
-	
-	public void SendFeed(String feed) {
-		setMessage(feed);
-		authMethod = AUTH_METHODS.UPDATE_STATUS;
-		checkAuthenticated(prefs,true);;
-	}
 
-	
 	public void CallBackTrigger(Uri uri, int requestCode, int resultCode,
 			Intent data) {
 		new RetrieveAccessTokenTask(zActivity,consumer,provider,prefs).execute(uri);
@@ -272,7 +190,6 @@ public class TwitterUtil extends SnsUtil{
 	}
 
 	//Variables that passing to call back function
-	
 	private SnsEventListener snsEventListener = null;
 	private boolean uptPref = false;
 	
@@ -299,7 +216,7 @@ public class TwitterUtil extends SnsUtil{
 	}
 	
 	
-	public AsyncTwitter Authentication(SharedPreferences prefs,String msg) {
+	public AsyncTwitter Authentication(SharedPreferences prefs) {
 		//super.Autentication(prefs);
 		String token = prefs.getString(OAuth.OAUTH_TOKEN, "1-1");
 		String secret = prefs.getString(OAuth.OAUTH_TOKEN_SECRET, "");
@@ -330,57 +247,49 @@ public class TwitterUtil extends SnsUtil{
 		return twitterAsync;
 	}
 	
-	public boolean checkAuthenticated(SharedPreferences prefs,boolean isFollowUp) {
-		
-		Log.i(TAG, "Authentication " + this.isAuthenticated);
-		if(!this.isAuthenticated) {
-			if(twitterAsync == null) {
-				 twitterAsync = Authentication(prefs,null);
-				 twitterAsync.getAccountTotals();
-			}
-		} else {
-			//Authentication(prefs,null);
-			if(isFollowUp)
-				this.followActions();
-		}
-		return this.isAuthenticated;
-	}
-	
     @Override
 	public boolean isSessionValid() {
-		// TODO Auto-generated method stub
-		return checkAuthenticated(prefs,false);
+		//return checkAuthenticated(prefs,false);
+    	if (twitter != null ) {
+			try {
+				return twitter.test();
+			} catch (TwitterException e) {
+				e.printStackTrace();
+				return false;
+			}
+		} else {
+			return false;
+		}
 	}
 
     @Override
 	public void fGetNewsFeed(Context applicationContext) {
-		// TODO Auto-generated method stub
-		 authMethod = AUTH_METHODS.GET_FEEDS;
-		 checkAuthenticated(prefs,true);
+    	if(twitterAsync == null) {
+			 twitterAsync = Authentication(prefs);
+		}			
+		twitterAsync.getHomeTimeline();
+	}
+    
+    public void fPublishFeeds(String message) {
+    	if(twitterAsync == null) {
+			 twitterAsync = Authentication(prefs);
+		}
+		
+	    startNotification(1,"Tweet");
+       twitterAsync.updateStatus(message);
+    }
+    
+    public void fPostComments(Bundle params) {
+		String message = params.getString(Const.COMMENTED_MSG);
+		if(twitterAsync == null) {
+			twitterAsync = Authentication(prefs);
+		}
+		twitterAsync.updateStatus(new StatusUpdate(message)
+			.inReplyToStatusId(Long.valueOf(params.getString(Const.SFEEDID))));
 	}
 
-
-	//public void fDisplayTwitterFeed() {
-//    @Override
-//    public void fDisplayFeed(){
-//		zPubSub.fGetActivity().runOnUiThread(new Runnable() {
-//			public void run() {
-//
-//				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
-//				feedAdapter.clear();
-//				ArrayList<FeedEntry> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_TWITTER);
-//				for (FeedEntry item : feeds ) {
-//					feedAdapter.addItem(item);
-//				}
-//				feedAdapter.notifyDataSetChanged();
-//			}
-//		});
-//	}
-
-	
 	//Upload Photo to Twitter
-	 public void fUploadPic(String message, String selectedImagePath)
-    {
+    public void fUploadPic(String message, String selectedImagePath) {
 	 
 		 Configuration conf = new ConfigurationBuilder()
 	        .setOAuthConsumerKey( Const.CONSUMER_KEY )
@@ -391,34 +300,28 @@ public class TwitterUtil extends SnsUtil{
 		 
 		(new UploadPhotoTaskTask(conf,message,selectedImagePath)).execute("");
 		 
-    }
+	}
 	 
-    private void startNotification(int notificationId,String fileType)
-    {
+    private void startNotification(int notificationId,String fileType) {
     	notificationTask = new NotificationTask(this.zContext);
-		 if(notificationTask != null)
-		{
+		if(notificationTask != null) {
 			notificationTask.SetNotificationTask(notificationId, "Twitter", fileType);
 			notificationTask.execute(0);
 		}
     }
     
-    private void stopNotification()
-    {
-    	if(notificationTask != null)
-		{
+	private void stopNotification() {
+		if(notificationTask != null) {
 			notificationTask.setTaskDone(true);
 		}
-    }
+	}
 	 
-	 public class UploadPhotoTaskTask extends AsyncTask<String,String,String>
-	 {
+	public class UploadPhotoTaskTask extends AsyncTask<String,String,String> {
 		private Configuration conf;
 		private String message;
 		private String ImagePath;
 		
-		public UploadPhotoTaskTask(Configuration conf, String message, String ImagePath)
-		{
+		public UploadPhotoTaskTask(Configuration conf, String message, String ImagePath) {
 			this.conf = conf;
 			this.message = message;
 			this.ImagePath = ImagePath;
@@ -445,7 +348,6 @@ public class TwitterUtil extends SnsUtil{
 				 mediaUrl = upload.upload(new File(ImagePath),message);
 				 Log.i(TAG, "Media URL is "+mediaUrl);
 				} catch (TwitterException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			return null;
@@ -454,7 +356,7 @@ public class TwitterUtil extends SnsUtil{
 	 
 	@Override
 	public void fResend(FeedEntry feed) {
-		this.SendFeed(feed.getsMsgBody());
+		this.fPublishFeeds(feed.getsMsgBody());
 	}
 	
 	public void fLikeFeeds(Bundle params) {
@@ -486,5 +388,94 @@ public class TwitterUtil extends SnsUtil{
 			e.printStackTrace();
 		}
 	}
+	
+	
+	//public void fDisplayTwitterFeed() {
+//  @Override
+//  public void fDisplayFeed(){
+//		zPubSub.fGetActivity().runOnUiThread(new Runnable() {
+//			public void run() {
+//
+//				LstViewFeedAdapter feedAdapter = zPubSub.fGetAdapterFeedPreview();
+//				feedAdapter.clear();
+//				ArrayList<FeedEntry> feeds = zPubSub.fGetFeedOrganisor().fGetUnReadNewsFeed(Const.SNS_TWITTER);
+//				for (FeedEntry item : feeds ) {
+//					feedAdapter.addItem(item);
+//				}
+//				feedAdapter.notifyDataSetChanged();
+//			}
+//		});
+//	}
+	
+//	public boolean checkAuthenticated(SharedPreferences prefs,boolean isFollowUp) {
+//	
+//	Log.i(TAG, "Authentication " + this.isAuthenticated);
+//	if(!this.isAuthenticated) {
+//		if(twitterAsync == null) {
+//			 twitterAsync = Authentication(prefs);
+//			 twitterAsync.getAccountTotals();
+//		}
+//	} else {
+//		//Authentication(prefs,null);
+//		if(isFollowUp)
+//			this.followActions();
+//	}
+//	return this.isAuthenticated;
+//}
+	
+//	private void setMessage(String msg)
+//	{
+//		this.msgSend = msg;
+//	}
+//	
+//	private String getTweetMsg() {
+//		if(msgSend.length()>0)
+//			return msgSend;
+//		else return null;
+//	}	
+//	
+//	/**
+//	 * Send Tweets to Twitter , this is called after Authentication
+//	 * @param prefs
+//	 * @param msg
+//	 */
+//	public void sendTweet(SharedPreferences prefs,String msg)  {
+//		
+//		if(twitterAsync == null) {
+//			 twitterAsync = Authentication(prefs);
+//		}
+//		
+//	    startNotification(1,"Tweet");
+//        twitterAsync.updateStatus(msg);
+//	}
+//	
+//	/**
+//	 * Get Tweets from Twitter, this is called after Authentication
+//	 * @param prefs
+//	 */
+//	public void getTweets(SharedPreferences prefs)
+//	{
+//		if(twitterAsync == null) {
+//			 twitterAsync = Authentication(prefs);
+//		}			
+//		twitterAsync.getHomeTimeline();
+//	}
+	
+//	private void followActions() {
+//	if(authMethod.equals(AUTH_METHODS.UPDATE_STATUS)) {
+//		Log.i(TAG, "Send Tweets!");
+//		sendTweet(prefs,getTweetMsg());
+//	}
+//	else if(authMethod.equals(AUTH_METHODS.GET_FEEDS)) {
+//		getTweets(prefs);
+//	}
+//}
+	
+	
+//	public void SendFeed(String feed) {
+//		setMessage(feed);
+//		authMethod = AUTH_METHODS.UPDATE_STATUS;
+//		checkAuthenticated(prefs,true);;
+//	}
 	
 }
