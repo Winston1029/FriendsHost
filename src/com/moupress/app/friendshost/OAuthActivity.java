@@ -26,7 +26,7 @@ public class OAuthActivity extends Activity {
 			//Twitter Call Back trigger
 			//PubSub.zTwitterUtil.CallBackTrigger(uri, 0, 0, null);
 			((TwitterUtil)PubSub.zSnsOrg.GetSnsInstance(Const.SNS_TWITTER)).CallBackTrigger(uri, 0, 0, null);
-			//startActivity(new Intent(this, FriendsHostActivity.class));
+			startActivity(new Intent(this, FriendsHostActivity.class));
 		}
 		else if(uri != null && uri.getScheme().equals(Const.SINA_AUTH))
 		{

@@ -7,7 +7,7 @@
     <uses-sdk android:minSdkVersion="8" />
 
     <application
-        android:icon="@drawable/fh_icon"
+        android:icon="@drawable/ic_launcher_template_72_fw"
         android:label="@string/app_name"
         >
 <!--        android:theme="@style/customTheme"-->
