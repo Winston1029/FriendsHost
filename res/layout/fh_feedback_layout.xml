@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  style="@style/DialogStyle"
+ >
+   <include android:id="@+id/fhCustTitle" layout="@layout/fh_cust_title_bar"/>
+   
+   <EditText 
+    android:id="@+id/edtTxtEmlAddr"
+   	android:layout_width="match_parent"
+   	android:layout_height="wrap_content"
+   	android:hint="Your Email Address"
+   	android:layout_marginTop="10dip"
+   	android:layout_marginBottom="10dip">
+   </EditText>
+   
+  <ExpandableListView
+   	android:id="@+id/feedBackExpList"
+   	android:layout_width="match_parent"
+   	android:layout_height="match_parent"
+   	android:groupIndicator="@drawable/fh_group_ind"
+   	>
+  </ExpandableListView>
+  
+</LinearLayout>
+

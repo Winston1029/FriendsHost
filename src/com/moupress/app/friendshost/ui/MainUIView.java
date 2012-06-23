@@ -3,6 +3,7 @@ package com.moupress.app.friendshost.ui;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -205,7 +206,7 @@ public class MainUIView extends View{
 		
 		leftPanelView = new LeftPanelView(snsEventListener);
 		leftPanelView.InitContent(activity, contentViewListener);
-		
+		leftPanelView.LoadView(null);
 	}
     
 
@@ -385,6 +386,12 @@ public class MainUIView extends View{
 	        }
 	    }
 		 
+	}
+
+
+	public void DialogCallBack(Intent data) {
+		// TODO Auto-generated method stub
+		this.leftPanelView.DialogCallBack(data);
 	}
 
 

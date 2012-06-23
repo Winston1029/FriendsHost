@@ -19,6 +19,7 @@
   	  <item name="android:layout_weight">1</item>
   	   <item name="android:background">@drawable/fh_title_btn_bg</item>
  </style>
+ 
  <style name="TitleBarButtonStyle.Pos">
  	 <item name="android:layout_marginTop">5dip</item>
   	 <item name="android:layout_marginBottom">5dip</item>
@@ -26,7 +27,7 @@
   	 <item name="android:layout_marginRight">5dip</item>
 </style>
 
-  <style name="TitleBarCancelButtonStyle">
+ <style name="TitleBarCancelButtonStyle">
  	  <item name="android:layout_width">match_parent</item>
   	  <item name="android:layout_height">match_parent</item>
   	  <item name="android:layout_weight">1</item>
@@ -34,8 +35,8 @@
  </style>
  
  <style name="BottomBarButtonStyle">
-   		<item name ="android:layout_marginTop">5dip</item> 
-  		<item name ="android:layout_marginBottom">5dip</item>
+   		<item name = "android:layout_marginTop">5dip</item> 
+  		<item name = "android:layout_marginBottom">5dip</item>
   		<item name = "android:layout_height">35dip</item>
   		<item name = "android:layout_width">35dip</item>
  </style>
@@ -67,7 +68,8 @@
   </style>
   
   <style name="LeftPanel.ExpandGroupTV" >
-     <item name="android:paddingTop">6dip</item>
+     <item name="android:paddingTop">4dip</item>
+     <item name="android:paddingBottom">4dip</item>
 <!--     <item name="android:height">35dip</item>-->
   	 <item name="android:gravity">center_vertical</item>
   </style>
@@ -77,5 +79,42 @@
   	 <item name="android:gravity">center_vertical</item>
   </style>
   
+ <style name="DialogStyle">
+ 	<item name = "android:layout_width">match_parent</item> 
+ 	<item name = "android:layout_height">match_parent</item>
+ 	<item name="android:background">@drawable/fh_dialog_bg</item>
+ </style>
+ 
+ <style name="RadioBtnStyle">
+   <item name="android:textColor">@color/black</item>
+   <item name="android:layout_width">match_parent</item>
+   <item name="android:layout_height">wrap_content</item>
+   <item name="android:gravity">center_horizontal</item>
+ </style>
+ 
+ <style name="RadioBtnLayout">
+  <item name="android:layout_width">match_parent</item> 
+  <item name="android:layout_height">wrap_content</item>
+   <item name="android:layout_weight">1</item>
+   <item name="android:layout_marginLeft">3dip</item>
+   <item name="android:layout_marginRight">3dip</item>
+   <item name="android:layout_gravity">center_horizontal</item>
+   <item name="android:gravity">center_horizontal</item>
+ </style>
+ 
+ <style name = "RadioBtnText">
+  <item name="android:layout_width">wrap_content</item>
+  <item name="android:layout_height">match_parent</item>
+  <item name="android:textSize">10dip</item> 
+  <item name="android:gravity">center_horizontal</item>
+  <item name="android:layout_gravity">center_horizontal</item>
+ </style>
+ 
+ <style name="DialogSettingBtn">
+ <item name="android:layout_width">match_parent</item> 
+ <item name="android:layout_height">wrap_content</item> 
+ <item name="android:layout_weight">1</item>
+ <item name="android:layout_margin">7dip</item>
+ </style>
  
 </resources>

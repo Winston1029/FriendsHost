@@ -11,8 +11,25 @@
 	<string name="renren_sdk_password">密码</string>
 	<string name="renren_sdk_login">登录</string>
 	
+	<!-- Tag Names for Pull to Refresh Controls  -->
 	<string name="pull_to_refresh_pull_label">Pull to refresh...</string>
     <string name="pull_to_refresh_release_label">Release to refresh...</string>
     <string name="pull_to_refresh_refreshing_label">Loading...</string>
     <string name="pull_to_refresh_tap_label">Tap to refresh...</string>
+    
+    <!-- Dialog Activity -->
+    <string name="upt_frequency_title">Set Feed Update Schedule</string>
+    <string name="rate_app_title">Rate This App</string>
+    <string name="feedback_app_title">Write Feedbacks</string>
+    <string name="upt_frequency_btn_txt">Set</string>
+    <string name="rate_app_btn_txt">Rate</string>
+    <string name="feedback_app_btn_txt">Rate</string>
+    
+    
+    <!-- Feedback Dialog Activity -->
+     <string-array name="fh_feedback_items">
+     	<item>Necessary enhancements to existing features ?</item>
+     	<item>Additional features necessary to add in ? </item>
+     	<item>Other good ideas to make this app better ? </item>
+     </string-array>
 </resources>

@@ -7,7 +7,7 @@
     <uses-sdk android:minSdkVersion="8" />
 
     <application
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/fh_icon"
         android:label="@string/app_name"
         >
 <!--        android:theme="@style/customTheme"-->
@@ -57,16 +57,17 @@
             android:name=".activity.FeedDetailViewActivity"
             android:screenOrientation="portrait" 
             android:launchMode="singleTask">
-            
         </activity>
         
-        <service android:enabled="true" android:name=".FeedRetrievalService" />
-          <activity android:name=".activity.FeedResendActivity"
+        <service android:enabled="true" android:name=".service.FeedRetrievalService" />
+        
+          <activity android:name=".activity.FHDialogActivity"
         			android:theme="@android:style/Theme.Dialog"
         			android:label="Resend Feed"
         			android:screenOrientation="portrait"
         			>
         </activity>
+        
     </application>
     
     <uses-permission android:name="android.permission.INTERNET" />

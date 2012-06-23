@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+  <LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="horizontal"
+  android:layout_height="wrap_content"
+  style="@style/DialogStyle"
+  >
+  <Button
+  android:id = "@+id/setBtn"
+  android:text="Set"
+  style="@style/DialogSettingBtn"
+ />
+ <Button
+ 	android:id = "@+id/canBtn"
+ 	android:text="Cancel"
+ 	style="@style/DialogSettingBtn"
+ 	>
+ </Button>
+</LinearLayout>

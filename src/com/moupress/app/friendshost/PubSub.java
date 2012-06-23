@@ -15,10 +15,11 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.moupress.app.friendshost.activity.FHDialogActivity;
 import com.moupress.app.friendshost.activity.FeedDetailViewActivity;
 import com.moupress.app.friendshost.activity.FeedPublishActivity;
-import com.moupress.app.friendshost.activity.FeedResendActivity;
 import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
+import com.moupress.app.friendshost.service.FeedRetrieveServiceConnection;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.SnsOrg;
 import com.moupress.app.friendshost.sns.Renren.RenrenUtil;
@@ -27,7 +28,7 @@ import com.moupress.app.friendshost.ui.MainUIView;
 import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
 import com.moupress.app.friendshost.util.FeedOrganisor;
-import com.moupress.app.friendshost.util.Mail;
+
 
 public class PubSub {
 	private final String TAG = "PubSub"; 
@@ -48,7 +49,11 @@ public class PubSub {
 	
 	//private static String displayedSns;
 	
-	ListView uLstFeed;
+	//private ListView uLstFeed;
+	
+	//====Service Connection==============
+	private FeedRetrieveServiceConnection svcConn;
+	
 	public PubSub(Context context, Activity activity) {
 		PubSub.zContext = context;
 		PubSub.zActivity = activity;
@@ -72,6 +77,8 @@ public class PubSub {
 		//fInitSinaUI();
 		//fInitTwitter();
 		//fInitPubUI();
+		
+		//fInitSvc();
 	}
 
 //        private void fInitUIMgr() {
@@ -80,6 +87,19 @@ public class PubSub {
 //		
 //	}
 
+
+	//===================Service Connection Methods =========
+	public void fBindSvc() {
+		// TODO Auto-generated method stub
+		this.svcConn = new FeedRetrieveServiceConnection(this);
+		this.svcConn.BindToService();
+	}
+	
+	public void UnBindToService() {
+		// TODO Auto-generated method stub
+		if(this.svcConn != null)
+			this.svcConn.UnBindToService();
+	}
 
 	//=====================Main UI Initialization=================
 	private void fInitMainUI() {
@@ -160,14 +180,14 @@ public class PubSub {
 //	}
 	
 	//Feed Resend UI
-	public void fFeedResendUI(FeedEntry feed, String snsName)
-	{
-		Intent intent = new Intent(zActivity, FeedResendActivity.class);
-		//intent.putExtra(Const.FEED_ITEM, feed);
-		intent.putExtra(Const.FID, feed.getsID());
-		intent.putExtra(Const.SNS, snsName);
-		zActivity.startActivityForResult(intent, Const.FEED_RESEND_REQ_CD);
-	}
+//	public void fFeedResendUI(FeedEntry feed, String snsName)
+//	{
+//		Intent intent = new Intent(zActivity, FHDialogActivity.class);
+//		//intent.putExtra(Const.FEED_ITEM, feed);
+//		intent.putExtra(Const.FID, feed.getsID());
+//		intent.putExtra(Const.SNS, snsName);
+//		zActivity.startActivityForResult(intent, Const.FEED_RESEND_REQ_CD);
+//	}
 	
 	//Feed Display Detail View UI
 	public void fFeedDisplayDetailUI(FeedEntry feed, String snsName)
@@ -296,18 +316,27 @@ public class PubSub {
 //					zSinaUtil.fResend(feed);
 //				}
 				zSnsOrg.GetSnsInstance(snsName).fResend(feed);
-
 			}
 		}
-		else 
-	{  
-//			zRenrenUtil.onComplete(requestCode, resultCode, data);
-//			zFacebook.onComplete(requestCode, resultCode, data);
-			((RenrenUtil)zSnsOrg.GetSnsInstance(Const.SNS_RENREN)).onComplete(requestCode, resultCode, data);
-			((FacebookUtil)zSnsOrg.GetSnsInstance(Const.SNS_FACEBOOK)).onComplete(requestCode, resultCode, data);
-
+		else if(requestCode == Const.CD_REQ_DIALOG)
+		{
+		   if(resultCode == Activity.RESULT_OK)
+		   {
+			   int index = data.getIntExtra(Const.SETTING_BASIC_GROUPS[0]+"_SET", -1);
+			   this.svcConn.SendMessage(Const.SERVICE_UPDATE_FREQ, index, 0);
+			   mainUIView.DialogCallBack(data);
+		   }
+		}
+		else
+		{  
+		//			zRenrenUtil.onComplete(requestCode, resultCode, data);
+		//			zFacebook.onComplete(requestCode, resultCode, data);
+				((RenrenUtil)zSnsOrg.GetSnsInstance(Const.SNS_RENREN)).onComplete(requestCode, resultCode, data);
+				((FacebookUtil)zSnsOrg.GetSnsInstance(Const.SNS_FACEBOOK)).onComplete(requestCode, resultCode, data);
 		}
 
 	}
+
+	
 	
 }

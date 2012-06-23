@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  style="@style/DialogStyle"
+ >
+ <include android:id="@+id/fhDialogTitle" layout="@layout/fh_dialog_header"/>
+  <LinearLayout
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="horizontal"
+  >
+<!--  <RadioGroup-->
+<!--  android:id="@+id/selDur"-->
+<!--  android:layout_width="match_parent"-->
+<!--  android:layout_height="wrap_content"-->
+<!--  android:orientation="horizontal"-->
+<!--  android:gravity="center_vertical"-->
+<!--  android:layout_gravity="center_vertical">-->
+  
+  <LinearLayout
+  style="@style/RadioBtnLayout"
+  android:orientation="vertical"
+  >
+	  <RadioButton
+	  android:id="@+id/duration1"
+	  style="@style/RadioBtnStyle"
+	  >
+	  </RadioButton>
+	  <TextView
+	  android:id="@+id/radtioTxt1"
+	  style="@style/RadioBtnText"
+	  android:textColor="@color/black"
+	  android:text="Never">
+	  </TextView>
+    </LinearLayout>
+    
+  <LinearLayout
+  style="@style/RadioBtnLayout"
+  android:orientation="vertical"
+  >
+	  <RadioButton
+	  android:id="@+id/duration2"
+	  style="@style/RadioBtnStyle"
+	  >
+	  </RadioButton>
+	  <TextView
+	  android:id="@+id/radtioTxt2"
+	  style="@style/RadioBtnText"
+	  android:textColor="@color/black"
+	  android:text="30mins">
+	  </TextView>
+  </LinearLayout>
+  
+<LinearLayout
+  style="@style/RadioBtnLayout"
+  android:orientation="vertical"
+  >
+  <RadioButton
+  android:id="@+id/duration3"
+  style="@style/RadioBtnStyle"
+  >
+  </RadioButton>
+  	  <TextView
+  	  android:id="@+id/radtioTxt3"
+	  style="@style/RadioBtnText"
+	  android:textColor="@color/black"
+	  android:text="2hours">
+	  </TextView>
+  </LinearLayout>
+  
+  <LinearLayout
+  style="@style/RadioBtnLayout"
+  android:orientation="vertical"
+  >
+	  <RadioButton
+	  android:id="@+id/duration4"
+	  style="@style/RadioBtnStyle"
+	  >
+	  </RadioButton>
+	<TextView
+	  android:id="@+id/radtioTxt4"
+	  style="@style/RadioBtnText"
+	  android:textColor="@color/black"
+	  android:text="6hours">
+	  </TextView>
+  </LinearLayout>
+  
+  
+  <LinearLayout
+  style="@style/RadioBtnLayout"
+  android:orientation="vertical"
+  >
+   <RadioButton
+  android:id="@+id/duration5"
+  style="@style/RadioBtnStyle"
+  >
+  </RadioButton>
+  	<TextView
+  	  android:id="@+id/radtioTxt5"
+	  style="@style/RadioBtnText"
+	  android:textColor="@color/black"
+	  android:text="1day">
+	  </TextView>
+  </LinearLayout>
+  
+<!--  </RadioGroup>-->
+  
+  </LinearLayout>
+ 	<include android:id="@+id/fhDialogFooter" layout="@layout/fh_dialog_footer"/>
+
+</LinearLayout>
+

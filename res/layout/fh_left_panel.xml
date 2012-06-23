@@ -4,7 +4,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical"
-  android:layout_marginTop="35dip">
+  android:layout_marginTop="23dip">
   
   <TextView
   	style="@style/LeftPanel"
@@ -28,9 +28,10 @@
     android:id="@+id/signOnLst"
     android:textColor="@color/white"
     android:background="@android:color/transparent"
-    android:divider="@android:color/transparent"
+    
     style="@style/LeftPanel"
    >
+<!--   android:divider="@android:color/transparent"-->
    </ListView>
   
    <TextView
@@ -57,10 +58,11 @@
   	 android:id="@+id/settingLst"
   	 android:textColor="@color/white"
   	 android:background="@android:color/transparent"
-  	 android:divider="@android:color/transparent"
   	style="@style/LeftPanel">
   </ListView>
   
+<!--  android:divider="@android:color/transparent"-->
+
    <TextView
   	style="@style/LeftPanel"
     android:text="Feedbacks"
@@ -77,8 +79,8 @@
   	 android:id="@+id/feedBksLst"
   	 android:textColor="@color/white"
   	 android:background="@android:color/transparent"
-  	 android:divider="@android:color/transparent"
   	style="@style/LeftPanel">
   </ListView>
+<!--  android:divider="@android:color/transparent"-->
   
 </LinearLayout>
