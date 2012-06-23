@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  style="@style/DialogStyle"
+ >
+ <include android:id="@+id/fhDialogTitle" layout="@layout/fh_dialog_header"/>
+ 
+  <LinearLayout
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="horizontal"
+  >
+	
+  <RatingBar android:id="@+id/rtBar"
+  	android:layout_width="match_parent"
+  	android:layout_height="wrap_content"
+  	>
+  </RatingBar>
+	
+ </LinearLayout>
+  
+ 	<include android:id="@+id/fhDialogFooter" layout="@layout/fh_dialog_footer"/>
+ 	
+</LinearLayout>
+

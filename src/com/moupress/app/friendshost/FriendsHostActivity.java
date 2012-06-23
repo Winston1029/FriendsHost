@@ -1,6 +1,8 @@
 package com.moupress.app.friendshost;
 
+import com.moupress.app.friendshost.service.FeedRetrievalService;
 import com.moupress.app.friendshost.util.Mail;
+import com.moupress.app.friendshost.util.Pref;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,9 +24,15 @@ public class FriendsHostActivity extends FragmentActivity {
         
         fInit();
         fAnalyseIntent();
+        fBindService();
     }
     
-    public static PubSub zPubsub;
+    private void fBindService() {
+		// TODO Auto-generated method stub
+		this.zPubsub.fBindSvc();
+	}
+
+	public static PubSub zPubsub;
     private void fInit() {
     	if (zPubsub == null ) {
     		zPubsub = new PubSub(this);
@@ -34,6 +42,9 @@ public class FriendsHostActivity extends FragmentActivity {
     private void fAnalyseIntent() {
     	Bundle extras = getIntent().getExtras();
         if (extras == null) {
+        	//Intent intent = new Intent(this, FeedRetrievalService.class);
+        	//intent.putExtra(Const.SETTING_BASIC+"_UPT_FREQ", Pref.getMyIntPref(getApplicationContext(), Const.SETTING_BASIC+"_UPT_FREQ"));
+        	//this.startService(intent);
         	this.startService(new Intent(this, FeedRetrievalService.class));
         } else {
         	String action = extras.getString(Const.ACTION_DISPLAYFEED);
@@ -102,4 +113,13 @@ public class FriendsHostActivity extends FragmentActivity {
         }		
 		return true;
 	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		this.zPubsub.UnBindToService();
+	}
+	
+	
 }

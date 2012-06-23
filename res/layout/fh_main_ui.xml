@@ -14,14 +14,6 @@
 	android:clickable="true"
 	android:background="@color/black"
 	> 
-	
-	<TextView  
-	android:id="@+id/tv"
-    android:layout_width="match_parent" 
-    android:layout_height="wrap_content"
-    android:text="FriendHost Setting"
-    />
-    
     <include android:id="@+id/fhLeftPanel" layout="@layout/fh_left_panel"/>
     
  </LinearLayout>

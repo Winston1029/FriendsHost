@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<LinearLayout-->
+<!--  xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--  android:layout_width="match_parent"-->
+<!--  android:layout_height="match_parent">-->
+<!--</LinearLayout>-->
+<EditText 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/edtTxFeedbacks"
+	android:layout_width="match_parent"
+	android:layout_height="81dip"
+	android:inputType="textMultiLine"
+	android:gravity="top|left"
+	android:textSize="13dip"
+	android:lines="5"
+    android:maxLines="7"
+    android:minLines="3"
+	>
+</EditText>
+
+<!--android:hint="Write your feedbacks"-->

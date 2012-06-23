@@ -2,6 +2,7 @@ package com.moupress.app.friendshost.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -12,18 +13,23 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
+import com.moupress.app.friendshost.activity.FHDialogActivity;
 import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
 import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
+import com.moupress.app.friendshost.util.Pref;
 
 public class LeftPanelView extends View{
 	
 	//private ExpandableListView settingExpLstV;
 	//private ExpandableListView feedBksExpLstV;
+	private Activity zActivity;
+	
 	private ListView acntLstV;
 	private ListView settingLstV;
 	private ListView feedBksLstV;
@@ -35,7 +41,6 @@ public class LeftPanelView extends View{
 	
 	//private ExpandableListAdapter settingExpandableListAdapter;
 	//private ExpandableListAdapter feedBksExpandableListAdapter;
-	
 	
 	
 	public LeftPanelView(SnsEventListener snsEventListener) {
@@ -57,21 +62,22 @@ public class LeftPanelView extends View{
 			ContentViewListener detailViewListener) {
 		// TODO Auto-generated method stub
 		super.InitContent(activity, detailViewListener);
+		this.zActivity = activity;
 		
 		this.snsAccntLstAdapter = new LstAdapter(activity,Const.SNSGROUPS, Const.SETTING_ACNT);
 		this.settingLstAdapter = new LstAdapter(activity,Const.SETTING_BASIC_GROUPS, Const.SETTING_BASIC);
 		this.feedBksLstAdapter = new LstAdapter(activity,Const.SETTING_FEEDBACKS_GROUPS, Const.SETTING_FEEDBACKS);
 		
+		int index = Pref.getMyIntPref(zActivity.getApplicationContext(), Const.SETTING_BASIC+"_UPT_FREQ");
+		if(index >= 0 && index < Const.SETTING_UPT_FREQ_BTN_TEXT.length)
+		{
+			this.settingLstAdapter.SetDtlText(new String[]{Const.SETTING_UPT_FREQ_BTN_TEXT[index]});
+		}
 		
 		this.acntLstV = (ListView) activity.findViewById(R.id.signOnLst);
-		this.acntLstV.setAdapter(snsAccntLstAdapter);
-		
 		this.settingLstV = (ListView) activity.findViewById(R.id.settingLst);
-		this.settingLstV.setAdapter(settingLstAdapter);
-		
-		//this.feedBksLstV = (ListView) activity.findViewById(R.id.fe)
 		this.feedBksLstV = (ListView) activity.findViewById(R.id.feedBksLst);
-		this.feedBksLstV.setAdapter(feedBksLstAdapter);
+		
 		 
 		//Setting Expander List View
 		//settingLstV = (ListView) activity.findViewById(R.id.settingExpandLst);
@@ -93,9 +99,12 @@ public class LeftPanelView extends View{
 
 
 	@Override
-	protected void LoadView(Bundle loadData) {
+	public void LoadView(Bundle loadData) {
 		// TODO Auto-generated method stub
 		//super.LoadView(loadData);
+		this.acntLstV.setAdapter(snsAccntLstAdapter);
+		this.settingLstV.setAdapter(settingLstAdapter);
+		this.feedBksLstV.setAdapter(feedBksLstAdapter);
 	}
 	
 	
@@ -103,13 +112,14 @@ public class LeftPanelView extends View{
 	{
 		private LayoutInflater viewInflator;
 		private String[] displayArray;
-		private String snsName;
+		private String grpName;
+		private String[] dtlText;
 		
-		public LstAdapter(Activity activity, String[] displayArray, String snsName)
+		public LstAdapter(Activity activity, String[] displayArray, String grpName)
 		{
 			viewInflator = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			this.displayArray = displayArray;
-			this.snsName = snsName;
+			this.grpName = grpName;
 		}
 		
 
@@ -148,25 +158,57 @@ public class LeftPanelView extends View{
 			textView.setText(displayArray[position]);
             
             //ListView listView = (ListView) convertView.findViewById(R.id.snsAccountsLst);
-			if(this.snsName.equals(Const.SETTING_ACNT))
+			final ImageView imgView = (ImageView) convertView.findViewById(R.id.snsStatusInd);
+			final TextView dtlView = (TextView) convertView.findViewById(R.id.txtDetail);
+			if(this.grpName.equals(Const.SETTING_ACNT))
 			{
-            final ImageView imgView = (ImageView) convertView.findViewById(R.id.snsStatusInd);
-            //setSnsStatus(imgView, PubSub.zSnsOrg.GetSnsInstance(Const.SNSGROUPS[position]).isSelected());
-            setSnsStatus(imgView, PubSub.zSnsOrg.GetSnsInstance(displayArray[position]).isSelected());
-            
-            final ImageView logView = (ImageView) convertView.findViewById(R.id.snsLogo);
-            logView.setImageResource(PubSub.zSnsOrg.GetSnsInstance(displayArray[position]).GetLogImg());
-            
+				//setSnsStatus(imgView, PubSub.zSnsOrg.GetSnsInstance(Const.SNSGROUPS[position]).isSelected());
+				setSnsStatus(imgView, PubSub.zSnsOrg.GetSnsInstance(displayArray[position]).isSelected());
+			}
+			
+			final ImageView logView = (ImageView) convertView.findViewById(R.id.snsLogo);
+			
+			
+			if(this.grpName.equals(Const.SETTING_ACNT))
+			{
+				logView.setImageResource(PubSub.zSnsOrg.GetSnsInstance(displayArray[position]).GetLogImg());
+			}
+			else if(this.grpName.equals(Const.SETTING_BASIC) && ((String)this.getItem(position)).contains(Const.SETTING_BASIC_GROUPS[0]))
+			{
+				logView.setImageResource(R.drawable.fh_update_time);
+				imgView.setVisibility(android.view.View.GONE);
+				dtlView.setVisibility(android.view.View.VISIBLE);
+				
+				if(this.dtlText != null && dtlText.length > position && dtlText[position].length() > 0)
+				dtlView.setText(dtlText[position]);
+			}
+			else if(this.grpName.equals(Const.SETTING_FEEDBACKS) && ((String)this.getItem(position)).equals(Const.SETTING_FEEDBACKS_GROUPS[1]))
+			{
+				logView.setImageResource(R.drawable.fh_rate);
+			}
+			else if(this.grpName.equals(Const.SETTING_FEEDBACKS) && ((String)this.getItem(position)).equals(Const.SETTING_FEEDBACKS_GROUPS[2]))
+			{
+				logView.setImageResource(R.drawable.fh_rate);
+			}
+			
+			
             convertView.setOnClickListener(new OnClickListener(){
 
 				@Override
 				public void onClick(android.view.View view) {
 					
 					//PubSub.zSnsOrg.GetSnsInstance(Const.SNSGROUPS[position]).ToggleSelectSNS(snsEventListener);
-					PubSub.zSnsOrg.GetSnsInstance(displayArray[position]).ToggleSelectSNS(snsEventListener);
+					if(grpName.equals(Const.SETTING_ACNT))
+					{
+						PubSub.zSnsOrg.GetSnsInstance(displayArray[position]).ToggleSelectSNS(snsEventListener);
+					}
+					else if(grpName.equals(Const.SETTING_BASIC) || grpName.equals(Const.SETTING_FEEDBACKS))
+					{
+						LaunchDialog(grpName,(String)getItem(position));
+					}
 					
 				}});
-			}
+			
 			return convertView;
 		}
 
@@ -175,11 +217,74 @@ public class LeftPanelView extends View{
 			
 			if(selected)
 			{
-				imgView.setImageResource(R.drawable.chk_option);
+				imgView.setImageResource(R.drawable.fh_remove);
 			}
 			else
 			{
-				imgView.setImageResource(R.drawable.unchk_option);
+				imgView.setImageResource(R.drawable.fh_add);
+			}
+		}
+		
+		private void LaunchDialog(String grpName, String optionName)
+		{
+			int displayView = -1;
+			int themeId = -1;
+			if(grpName.equals(Const.SETTING_BASIC) && optionName.contains(Const.SETTING_BASIC_GROUPS[0]))
+			{
+				displayView = R.layout.fh_upt_req_layout;
+				themeId = android.R.style.Theme_Dialog;
+			}
+			else if (grpName.equals(Const.SETTING_FEEDBACKS) && optionName.equals(Const.SETTING_FEEDBACKS_GROUPS[1]))
+			{
+				displayView = R.layout.fh_rate_layout;
+				themeId = android.R.style.Theme_Dialog;
+			}
+			else if(grpName.equals(Const.SETTING_FEEDBACKS) && optionName.equals(Const.SETTING_FEEDBACKS_GROUPS[0]))
+			{
+				displayView = R.layout.fh_feedback_layout;
+			}
+			else if (grpName.equals(Const.SETTING_FEEDBACKS) && optionName.equals(Const.SETTING_FEEDBACKS_GROUPS[2]))
+			{
+				displayView = R.layout.fh_help_layout;
+			}
+			
+			popUpDialogActivity(displayView,optionName,themeId);
+		}
+
+
+		private void popUpDialogActivity(int displayView, String optionName, int themeId) {
+			
+			if(displayView > 0)
+			{
+				Intent intent = new Intent(zActivity,FHDialogActivity.class);
+				intent.putExtra(Const.DIALOG_VIEW_ID, displayView);
+				intent.putExtra(Const.SETTING_REQ_KEY, optionName);
+				intent.putExtra(Const.DIALOG_THEME_ID, themeId);
+				zActivity.startActivityForResult(intent, Const.CD_REQ_DIALOG);
+			}
+			else
+			{
+				Toast.makeText(zActivity, "Invalid View", 1000);
+			}
+		}
+		
+		
+		public void SetDtlText(String[] dtlText)
+		{
+			this.dtlText = dtlText;
+		}
+	}
+
+
+	public void DialogCallBack(Intent data) {
+		
+		if(data.getIntExtra(Const.DIALOG_VIEW_ID, -1) == R.layout.fh_upt_req_layout)
+		{
+			int index = data.getIntExtra(Const.SETTING_BASIC_GROUPS[0]+"_SET", -1);
+			if(index >=0)
+			{
+				this.settingLstAdapter.SetDtlText(new String[]{Const.SETTING_UPT_FREQ_BTN_TEXT[index]});
+				this.settingLstAdapter.notifyDataSetChanged();
 			}
 		}
 		

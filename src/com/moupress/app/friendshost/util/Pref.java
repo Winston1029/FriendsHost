@@ -15,7 +15,7 @@ public class Pref {
     }
 
     public static int getMyIntPref(Context context, String key) {
-        return getPrefs(context).getInt(key, 0);
+        return getPrefs(context).getInt(key, -1);
     }
     
     public static boolean getMyBoolPref(Context context, String key)
