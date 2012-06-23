@@ -3,8 +3,8 @@
    
     <!-- Application -->
     <string name="hello">Hello World,FriendsHost Activity!</string>
-    <string name="app_name">FriendsHost</string>
-    <string name="title_text">FriendsHost</string>
+    <string name="app_name">MelonFriends</string>
+    <string name="title_text">MelonFriends (Beta)</string>
    
     <!-- SDK String for Renren -->
     <string name="renren_sdk_username">账号</string>

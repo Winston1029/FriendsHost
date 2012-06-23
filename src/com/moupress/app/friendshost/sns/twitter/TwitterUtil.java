@@ -7,6 +7,10 @@ import oauth.signpost.OAuthConsumer;
 import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
+import oauth.signpost.exception.OAuthCommunicationException;
+import oauth.signpost.exception.OAuthExpectationFailedException;
+import oauth.signpost.exception.OAuthMessageSignerException;
+import oauth.signpost.exception.OAuthNotAuthorizedException;
 import twitter4j.AccountTotals;
 import twitter4j.AsyncTwitter;
 import twitter4j.AsyncTwitterFactory;
@@ -27,6 +31,7 @@ import twitter4j.conf.ConfigurationBuilder;
 import twitter4j.media.ImageUpload;
 import twitter4j.media.ImageUploadFactory;
 import twitter4j.media.MediaProvider;
+import weibo4andriod.http.RequestToken;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -44,6 +49,7 @@ import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.SnsUtil;
 import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
+import com.moupress.app.friendshost.sns.sina.OAuthConstant;
 import com.moupress.app.friendshost.util.NotificationTask;
 import com.moupress.app.friendshost.util.Pref;
 
@@ -113,21 +119,11 @@ public class TwitterUtil extends SnsUtil{
 			zPubSub.fGetFeedOrganisor().fSaveNewFeeds(statuses, zContext);
 		}
 		
-//		@Override
-//		public void gotAccountTotals(AccountTotals totals) {
-//			//super.gotAccountSettings(settings);
-//			Log.i(TAG, "Get Account Setting");
-//			isAuthenticated = true;
-//			followActions();
-//		}
-		
 		@Override
 		public void gotProfileImage(ProfileImage image) {
 			String headUrl = image.getURL();
 			Pref.setMyStringPref(zContext, Const.LOGIN_HEAD_TWITTER, headUrl);
 		}
-		
-		
 	 };
 	
 	public class RetrieveAccessTokenTask extends AsyncTask<Uri, Void, Void> {
@@ -167,7 +163,7 @@ public class TwitterUtil extends SnsUtil{
 				consumer.setTokenWithSecret(token, secret);
 				context.startActivity(new Intent(context,FriendsHostActivity.class));
 
-				executeAfterAccessTokenRetrieval();
+				//executeAfterAccessTokenRetrieval();
 				
 			} catch (Exception e) {
 			}
@@ -176,22 +172,39 @@ public class TwitterUtil extends SnsUtil{
 		}
 
 
-		private void executeAfterAccessTokenRetrieval() {
-			Log.i(TAG, "Execute after access token Retrieval");
-			//followActions();
-		}
+//		private void executeAfterAccessTokenRetrieval() {
+//			Log.i(TAG, "Execute after access token Retrieval");
+//			//followActions();
+//		}
 	}
 
 	public void CallBackTrigger(Uri uri, int requestCode, int resultCode,
 			Intent data) {
-		new RetrieveAccessTokenTask(zActivity,consumer,provider,prefs).execute(uri);
-		this.SnsAddEventCallback(snsEventListener, uptPref);
-		
+		//new RetrieveAccessTokenTask(zActivity,consumer,provider,prefs).execute(uri);
+		String oauth_verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
+		try {
+			provider.retrieveAccessToken(consumer, oauth_verifier);
+			Pref.setMyStringPref(this.zContext, OAuth.OAUTH_TOKEN, consumer.getToken());
+			Pref.setMyStringPref(this.zContext, OAuth.OAUTH_TOKEN_SECRET, consumer.getTokenSecret());
+			
+			this.SnsAddEventCallback(snsEventListener, uptPref);
+		} catch (OAuthMessageSignerException e) {
+			e.printStackTrace();
+		} catch (OAuthNotAuthorizedException e) {
+			e.printStackTrace();
+		} catch (OAuthExpectationFailedException e) {
+			e.printStackTrace();
+		} catch (OAuthCommunicationException e) {
+			e.printStackTrace();
+		}
 	}
 
 	//Variables that passing to call back function
 	private SnsEventListener snsEventListener = null;
 	private boolean uptPref = false;
+	
+	private static String sTokenKey = "";
+    private static String sTokenSecret = "";
 	
 	@Override
 	protected void fSnsAuth(SnsEventListener snsEventListener, boolean uptPref) {
@@ -199,6 +212,13 @@ public class TwitterUtil extends SnsUtil{
 		this.snsEventListener = snsEventListener;
 		this.uptPref = uptPref;
 		
+		sTokenKey = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENKEY);
+		sTokenSecret = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENSECRET);
+		
+		if ( sTokenKey.length() > 0 && sTokenSecret.length() > 0) {
+			this.SnsAddEventCallback(snsEventListener, uptPref);
+			return;
+		}
 		try {
     		this.consumer = new CommonsHttpOAuthConsumer(Const.CONSUMER_KEY, Const.CONSUMER_SECRET);
     	    this.provider = new CommonsHttpOAuthProvider(Const.REQUEST_URL,Const.ACCESS_URL,Const.AUTHORIZE_URL);

@@ -98,15 +98,17 @@ public class SinaUtil extends SnsUtil{
 		sTokenKey = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENKEY);
 		sTokenSecret = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENSECRET);
 		zSina.setToken(sTokenKey, sTokenSecret);
-		
-		try {
-			List<Status> friendsTimeline = zSina.getFriendsTimeline();
-			//System.out.println("Sina news feed get listener on complete");
-			Log.i(TAG, "Sing news feed get listener on complete");
-			zPubSub.fGetFeedOrganisor().fSaveNewFeeds(friendsTimeline, context);
-		} catch (WeiboException e) {
-			e.printStackTrace();
+		if (isSessionValid()) {
+			try {
+				List<Status> friendsTimeline = zSina.getFriendsTimeline();
+				//System.out.println("Sina news feed get listener on complete");
+				Log.i(TAG, "Sing news feed get listener on complete");
+				zPubSub.fGetFeedOrganisor().fSaveNewFeeds(friendsTimeline, context);
+			} catch (WeiboException e) {
+				e.printStackTrace();
+			}
 		}
+		
 	}
 	
 	//public void fDisplaySinaFeed() {
