@@ -13,6 +13,7 @@ import weibo4andriod.http.RequestToken;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
@@ -97,6 +98,7 @@ public class SinaUtil extends SnsUtil{
 		sTokenKey = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENKEY);
 		sTokenSecret = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENSECRET);
 		zSina.setToken(sTokenKey, sTokenSecret);
+		
 		try {
 			List<Status> friendsTimeline = zSina.getFriendsTimeline();
 			//System.out.println("Sina news feed get listener on complete");
@@ -123,6 +125,17 @@ public class SinaUtil extends SnsUtil{
 //			}
 //		});
 //	}
+	
+	public void fPostComments(Bundle params) {
+		if (zSina != null) {
+			try {
+				zSina.updateComment(params.getString(Const.COMMENTED_MSG), params.getString(Const.SFEEDID), null);
+			} catch (WeiboException e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
 	
 	@Override
 	public void fPublishFeeds(String message) {
@@ -182,9 +195,46 @@ public class SinaUtil extends SnsUtil{
 			Pref.setMyStringPref(this.zContext, Const.SP_SINA_TOKENSECRET, accessToken.getTokenSecret());
 			
 			this.SnsAddEventCallback(snsEventListener, uptPref);
+			
+			try {
+				String headUrl = zSina.verifyCredentials().getProfileImageURL().toString();
+				Pref.setMyStringPref(zContext, Const.LOGIN_HEAD_SINA, headUrl);
+			} catch (WeiboException e1) {
+				e1.printStackTrace();
+			}
 	    }
     	catch (WeiboException e) {
 			e.printStackTrace();
 		}
     }
+    
+    public void fLikeFeeds(Bundle params) {
+    	try {
+			zSina.createFavorite(Long.valueOf(params.getString(Const.SFEEDID)));
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (WeiboException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void fUnLikeFeeds(Bundle params) {
+		try {
+			zSina.destroyFavorite(Long.valueOf(params.getString(Const.SFEEDID)));
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (WeiboException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void fShareFeeds(Bundle params) {
+		try {
+			zSina.retweetStatus(Long.valueOf(params.getString(Const.SFEEDID)));
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (WeiboException e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -143,6 +143,8 @@ public final class Util {
 
         if (method.equals("GET")) {
             url = url + "?" + encodeUrl(params);
+        } else {
+        	Log.d("Facebook-Util", method + " URL: " + url);
         }
         Log.d("Facebook-Util", method + " URL: " + url);
         HttpURLConnection conn =

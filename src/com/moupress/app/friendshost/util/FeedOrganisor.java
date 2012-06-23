@@ -1,10 +1,16 @@
 package com.moupress.app.friendshost.util;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import twitter4j.ResponseList;
 import weibo4andriod.Status;
@@ -15,8 +21,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.format.DateFormat;
-import android.widget.SimpleAdapter;
+import android.util.Log;
 
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
@@ -31,7 +36,6 @@ import com.moupress.app.friendshost.sns.Renren.RenrenFeedElementEntry;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeed;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntry;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryComments.FBFeedEntryComment;
-import com.moupress.app.friendshost.sns.facebook.FBHomeeedEntryLikes.FBFeedEntryLike;
 
 public class FeedOrganisor {
 	private Activity zActivity;
@@ -76,8 +80,13 @@ public class FeedOrganisor {
 				//String msg = ((FBHomeFeedEntry) bean.getData().get(i)).getName()+" : "+((FBHomeFeedEntry) bean.getData().get(i)).getMessage();
 				FBHomeFeedEntry entry = (FBHomeFeedEntry) beans.getData().get(i);
 				String fromID = entry.getFrom().getId();
-				String fromHeadUrl = "https://graph.facebook.com/" + fromID + "/picture";
+				String fromHeadUrl = String.format(Const.USER_IMG_URL_FB, fromID);
+				//String fromHeadUrl = "https://graph.facebook.com/" + fromID + "/picture";
 				entry.getFrom().setHeadurl(fromHeadUrl);
+				
+				if (entry.getType().equals("photo")) {
+					entry.setsPhotoLargeLink(fGetFbRawPicUrl(entry.getPicture()));					
+				}
 				
 				res += zDBHelper.fInsertFeed(entry);
 				zDBHelper.fInsertFriend(entry.getFrom());
@@ -110,6 +119,32 @@ public class FeedOrganisor {
 			fShowNotification(Const.SNS_FACEBOOK, cntUnReadFeed, context);
 		}
 		
+	}
+	
+	/*
+	 * A temp workaround method to get FB pic_raw_url
+	 */
+	private String fGetFbRawPicUrl(String picUrl) {
+		String picRawUrl = null;
+		if ( picUrl != null ) {
+			String response = "";
+			Bundle mBundle = new Bundle();
+			String fbToken = Pref.getMyStringPref(zActivity.getApplicationContext(), "fbToken");
+			mBundle.putString("access_token", fbToken);
+			String url = "https://graph.facebook.com/" + picUrl.split("_")[1];
+			try {
+				response = com.facebook.android.Util.openUrl(url, "GET", mBundle);
+				JSONObject picSrcResponse = new JSONObject(response);
+				picRawUrl = picSrcResponse.getString("source");
+			} catch (JSONException e) {
+				e.printStackTrace();
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return picRawUrl;
 	}
 	
 	public void fSaveNewFeeds(FeedExtractResponseBean bean, Context context) {
@@ -222,9 +257,13 @@ public class FeedOrganisor {
 	
 	/**
 	 * Mark feeds that has been read
+	 * At the moment mark all feed as read as user will always start at position 0 when the start the app
 	 */
-	public void fUpdateReadFeeds() {
-		
+	public void fUpdateReadFeeds(String sns, String updatedTime) {
+		int status = zDBHelper.fUpdateFeedRead(sns, updatedTime);
+		if (status == -1) {
+			Log.e("FeedOrg", "Error in update feed status to read");
+		}
 	}
 	
 	/**
@@ -243,9 +282,14 @@ public class FeedOrganisor {
 	}
 	
 	public ArrayList<FeedEntry> fGetUnReadNewsFeed(String sns) {
+		//Date d = new Date();
+		//CharSequence currentDateTime  = DateFormat.format("yyyy-MM-dd hh:mm:ss", d.getTime());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 		Date d = new Date();
-		CharSequence currentDateTime  = DateFormat.format("yyyy-MM-dd hh:mm:ss", d.getTime());
-		ArrayList<FeedEntry> items = fGetUnReadNewsFeed(sns, currentDateTime.toString());
+		String updateTime = sdf.format(d);
+		ArrayList<FeedEntry> items = fGetUnReadNewsFeed(sns, updateTime);
+		fUpdateReadFeeds(sns, updateTime);
 		return items;
 	}
 	
@@ -364,7 +408,7 @@ public class FeedOrganisor {
 		for ( String key: hmUnreadFeed.keySet()) {
 			int iUnreadFeed = hmUnreadFeed.get(key);
 			if ( iUnreadFeed > 0) {
-				contentText = key + ":" + iUnreadFeed + " ";
+				contentText = contentText + " " + key + ":" + iUnreadFeed + " ";
 			}
 		}
 		Intent notificationIntent = new Intent(context, FriendsHostActivity.class);

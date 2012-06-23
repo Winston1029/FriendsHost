@@ -1,10 +1,15 @@
 package com.moupress.app.friendshost.ui;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -14,10 +19,10 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SlidingDrawer;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.SlidingDrawer.OnDrawerCloseListener;
 import android.widget.SlidingDrawer.OnDrawerOpenListener;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.droidfu.widgets.WebImageView;
 import com.moupress.app.friendshost.Const;
@@ -27,13 +32,17 @@ import com.moupress.app.friendshost.activity.LstViewCommentAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
+import com.moupress.app.friendshost.util.Pref;
 
 public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCloseListener{
 	
 	private FeedEntry feed;
+	private String displayedSns;
+	private boolean bIsFeedLiked;
 	private ListView lstView_comments;
 	private LstViewCommentAdapter arrAdapterComment;
 	private LinearLayout drawer_comments_content;
+	private InputMethodManager imm;
 	
 	private Activity zActivity;
 	
@@ -77,9 +86,24 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 			@Override
 			public void onClick(android.view.View v) {
 				Toast.makeText(activity, "Like Button Clicked", Toast.LENGTH_SHORT).show();
-				v.setBackgroundResource(android.R.drawable.btn_star_big_on);
+				Bundle params = new Bundle();
+				params.putString(Const.SFEEDID, feed.getsID());
+				params.putString(Const.SOWNERID, feed.getsOwnerID());
+				params.putString(Const.SFEEDTYPE, feed.getsFeedType());
+				Matcher m = Pattern.compile("\\d+").matcher(feed.getsLink());
+				while (m.find()) {
+					params.putString(Const.SRESOURCEID, m.group());
+				}
+				if (bIsFeedLiked == false) {
+					v.setBackgroundResource(android.R.drawable.btn_star_big_on);
+					bIsFeedLiked = true;
+					PubSub.zSnsOrg.GetSnsInstance(displayedSns).fLikeFeeds(params);
+				} else {
+					v.setBackgroundResource(android.R.drawable.btn_star_big_off);
+					bIsFeedLiked = false;
+					PubSub.zSnsOrg.GetSnsInstance(displayedSns).fUnLikeFeeds(params);
+				}
 			}
-    		
     	});
     	
     	Button btnShare = (Button) activity.findViewById(R.id.refreshbtn);
@@ -88,7 +112,11 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 
 			@Override
 			public void onClick(android.view.View v) {
-				Toast.makeText(activity, "Share Button Clicked", Toast.LENGTH_SHORT).show();
+				Toast.makeText(activity, "Share Button Clicked", Toast.LENGTH_SHORT).show();//fResend
+				Bundle params = new Bundle();
+				params.putString(Const.SFEEDID, feed.getsID());
+				params.putString(Const.SOWNERID, feed.getsOwnerID());
+				PubSub.zSnsOrg.GetSnsInstance(displayedSns).fShareFeeds(params);
 			}
 		});	
     }
@@ -101,12 +129,12 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 	
 	private void fInitFeed(Bundle loadData) {
 		//Intent intent = this.getIntent();
-		
-		String displayedSns = loadData.getString(Const.SNS);
+		bIsFeedLiked = false;
+		displayedSns = loadData.getString(Const.SNS);
 		String feed_id = loadData.getString(Const.FID);
 		
 		feed = PubSub.zFeedOrg.fGetFeedByID( displayedSns, feed_id );
-		feed.setsFeedType(displayedSns);
+		//feed.setsFeedType(displayedSns);
 		
 		arrAdapterComment = new LstViewCommentAdapter(zActivity, R.layout.feed_item_detail_comment);
 		if (feed.getzComments() != null ) {
@@ -124,10 +152,10 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 	private void fInitUI() {
 		
 		fInitUIBasic();
-		fInitUIWebView();
 		//fInitUIPhoto();
 		fInitUIDescription();
 		fInitUIDrawer();
+		fInitUIWebView();
 	}
 	
 	private void fInitUIDescription() {
@@ -155,7 +183,8 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 			descriptionDetail += "\n" + feed.getsPhotoPreviewDescription();
 		}
 		TextView txv_description_detail = (TextView) zActivity.findViewById(R.id.txv_description_detail);
-		txv_description_detail.setText(descriptionDetail);			
+		txv_description_detail.setText(descriptionDetail);
+		txv_description_detail.setVisibility(android.view.View.VISIBLE);
 		//Display display = getWindowManager().getDefaultDisplay();
 		//FlowTextHelper.tryFlowText(descriptionDetail, img_photo_detail, txv_description_detail, display);		
 	}
@@ -188,8 +217,11 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		webV_detail.setWebViewClient(new MyWebViewClient());
 		if (sFeedType != null && (sFeedType.equals("blog") || sFeedType.equals("21")) ) {
 			webV_detail.loadUrl(feed.getsLink());
+			TextView txv_description_detail = (TextView) zActivity.findViewById(R.id.txv_description_detail);
+			txv_description_detail.setVisibility(android.view.View.GONE);
 		} else if ((sPhotoUrl != null && sPhotoUrl.startsWith("http://") && sPhotoUrl.endsWith(".jpg"))) {
-			String sLargeImgUrl = fRetrieveLargeImgUrl(feed.getsFeedType(), sPhotoUrl);
+			//String sLargeImgUrl = fRetrieveLargeImgUrl(feed.getsFeedType(), sPhotoUrl);
+			String sLargeImgUrl = feed.getsPhotoLargeLink();
 			webV_detail.getSettings().setBuiltInZoomControls(true);
 			webV_detail.getSettings().setUseWideViewPort(true);
 			webV_detail.getSettings().setLoadWithOverviewMode(true);
@@ -213,19 +245,9 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		}		
 	}
 	
-	private String fRetrieveLargeImgUrl(String snsName, String smallImgUrl) {
-		String largeImgUrl = null;
-		if (snsName.equals(Const.SNS_RENREN)) {
-			largeImgUrl = feed.getsPhotoLargeLink();
-		} else if (snsName.equals(Const.SNS_FACEBOOK)) {
-			largeImgUrl = smallImgUrl.replace("http://photos-c.ak.fbcdn.net/", "http://a3.sphotos.ak.fbcdn.net/");
-			largeImgUrl = largeImgUrl.replace("_s.jpg", "_n.jpg");
-		}
-		return largeImgUrl;
-		
-	}
-
 	private void fInitUIBasic() {
+		imm = (InputMethodManager)zActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+		
 		WebImageView img_feeduserhead_detail = (WebImageView)zActivity.findViewById(R.id.img_userhead_detail);
 		img_feeduserhead_detail.setImageUrl(feed.getzFriend().getHeadurl());
 		img_feeduserhead_detail.loadImage();
@@ -303,15 +325,41 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 
 	private void fInitMyCommentUI() {
 		WebImageView img_selfhead_detail_comment = (WebImageView) zActivity.findViewById(R.id.img_selfhead_detail_comment);
+		String selfHeadUrl = fRetrieveProfileHeadImgUrl(displayedSns);
+		img_selfhead_detail_comment.setImageUrl(selfHeadUrl);
+		img_selfhead_detail_comment.loadImage();
 		final EditText etx_commentmsg_detail_comment = (EditText) zActivity.findViewById(R.id.etx_commentmsg_detail_comment);
 		Button btn_send_detail_comment = (Button) zActivity.findViewById(R.id.btn_send_detail_comment);
 		btn_send_detail_comment.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(android.view.View v) {
-				String myCommentMsg = etx_commentmsg_detail_comment.getText().toString();
-				Toast.makeText(zActivity, myCommentMsg, Toast.LENGTH_SHORT).show();				
+				String sCommentMsg = etx_commentmsg_detail_comment.getText().toString();
+				Toast.makeText(zActivity, sCommentMsg, Toast.LENGTH_SHORT).show();
+				Bundle params = new Bundle();
+				params.putString(Const.SFEEDID, feed.getsID());
+				params.putString(Const.COMMENTED_MSG, sCommentMsg);
+				params.putString(Const.SNAME, feed.getsName());
+				params.putString(Const.SOWNERID, feed.getsOwnerID());
+				PubSub.zSnsOrg.GetSnsInstance(displayedSns).fPostComments(params);
+				etx_commentmsg_detail_comment.setText("");
+				imm.hideSoftInputFromWindow(etx_commentmsg_detail_comment.getWindowToken(), 0);
 			}
 		});
+	}
+	
+	private String fRetrieveProfileHeadImgUrl(String snsName) {
+		String headUrl = "";
+		if (snsName.equals(Const.SNS_FACEBOOK)) {
+			String login_id = Pref.getMyStringPref(zActivity.getApplicationContext(), Const.LOGIN_ID_FACEBOOK);
+			headUrl = String.format(Const.USER_IMG_URL_FB, login_id);
+		} else if (snsName.equals(Const.SNS_RENREN)) {
+			headUrl = Pref.getMyStringPref(zActivity.getApplicationContext(), Const.LOGIN_HEAD_RENREN);
+		} else if (snsName.equals(Const.SNS_SINA)) {
+			headUrl = Pref.getMyStringPref(zActivity.getApplicationContext(), Const.LOGIN_HEAD_SINA);
+		} else if (snsName.equals(Const.SNS_TWITTER)) {
+			headUrl = Pref.getMyStringPref(zActivity.getApplicationContext(), Const.LOGIN_HEAD_TWITTER);
+		}
+		return headUrl;
 	}
 	
 /*

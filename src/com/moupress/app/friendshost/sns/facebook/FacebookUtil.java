@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.PubSub;
@@ -16,6 +19,7 @@ import com.moupress.app.friendshost.sns.SnsUtil;
 import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
 import com.moupress.app.friendshost.util.FeedOrganisor;
 import com.moupress.app.friendshost.util.NotificationTask;
+import com.moupress.app.friendshost.util.Pref;
 import com.renren.api.connect.android.Util;
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.AsyncFacebookRunner.RequestListener;
@@ -44,7 +48,7 @@ public class FacebookUtil extends SnsUtil {
 	public static final String APP_ID = "337247706286700";
 	private static final String TAG = "FacebookUtil";
 	private static final String[] PERMISSIONS = new String[] {
-			"publish_stream", "read_stream" };
+			"publish_stream", "read_stream", "user_photos", "friends_photos" };
 	private static final String FBTOKEN = "fbToken";
 	private static final String FBTOKENEXPIRES = "fbAccessExpires";
 
@@ -88,12 +92,8 @@ public class FacebookUtil extends SnsUtil {
 
 	@Override
 	public void fGetNewsFeed(final Context context) {
-		SharedPreferences mPrefs = PreferenceManager
-				.getDefaultSharedPreferences(zContext);
-		sfbToken = mPrefs.getString(FBTOKEN, "");
-
 		// fFacebookAuth();
-		sfbToken = mPrefs.getString(FBTOKEN, "");
+		sfbToken = Pref.getMyStringPref(zActivity.getApplicationContext(), FBTOKEN);
 
 		// AsyncFacebookRunner asyncFB = new AsyncFacebookRunner(zFacebook);
 		asyncFB = fGetAsyncFacebook();
@@ -182,6 +182,7 @@ public class FacebookUtil extends SnsUtil {
 						Log.d(TAG, "Facebook.authorize Complete: ");
 						sfbToken = zFacebook.getAccessToken();
 						fSaveFBToken(sfbToken, zFacebook.getAccessExpires());
+						fSaveLoginProfile();
 						SnsAddEventCallback(snsEventListener,uptPref);
 					}
 
@@ -207,11 +208,21 @@ public class FacebookUtil extends SnsUtil {
 	}
 
 	private void fSaveFBToken(String token, long tokenExpires) {
-		SharedPreferences mPrefs = PreferenceManager
-				.getDefaultSharedPreferences(zContext);
-		mPrefs.edit().putString(FBTOKEN, token);
-		mPrefs.edit().putLong(FBTOKENEXPIRES, tokenExpires);
-		mPrefs.edit().commit();
+		Pref.setMyStringPref(zActivity.getApplicationContext(), FBTOKEN, token);
+	}
+	
+	private void fSaveLoginProfile() {
+		try {
+			JSONObject me = new JSONObject(zFacebook.request("me"));
+			Pref.setMyStringPref(zActivity.getApplicationContext(), Const.LOGIN_ID_FACEBOOK, me.getString("id"));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} 
+		catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void onComplete(int requestCode, int resultCode, Intent data) {
@@ -227,6 +238,35 @@ public class FacebookUtil extends SnsUtil {
 		}
 		return asyncFB;
 	}
+	
+	public void fPostComments(Bundle params) {
+		if (zFacebook != null ) {
+			asyncFB = fGetAsyncFacebook();
+			params.putString(FEED_MSG, params.getString(Const.COMMENTED_MSG));
+			
+			RequestListener listener = new RequestListener() {
+
+				@Override
+				public void onComplete(String response, Object state) {
+					//Toast.makeText(zActivity, "Comment Posted", Toast.LENGTH_SHORT).show();
+				}
+
+				@Override
+				public void onIOException(IOException e, Object state) {}
+
+				@Override
+				public void onFileNotFoundException(FileNotFoundException e,Object state) {}
+
+				@Override
+				public void onMalformedURLException(MalformedURLException e,Object state) {}
+
+				@Override
+				public void onFacebookError(FacebookError e, Object state) {}
+				
+			};
+			asyncFB.request(params.getString(Const.SFEEDID) + "/comments", params, "POST", listener, null);
+		}
+	}
 
 	public void fPublishFeeds(String name, String description, String url,
 			String imageUrl, String caption, String message) {
@@ -236,7 +276,7 @@ public class FacebookUtil extends SnsUtil {
 
 			Bundle params = new Bundle();
 
-			if (message.length() > 0)
+			if (message!= null && message.length() > 0)
 				params.putString(FEED_MSG, message);
 
 			if (url != null && url.length() > 0 && url.startsWith("http"))
@@ -361,6 +401,65 @@ public class FacebookUtil extends SnsUtil {
 		this.fPublishFeeds(" ", feed.getsPhotoPreviewDescription(), feed
 				.getsPhotoPreviewLink(), feed.getsPhotoPreviewLink(), feed
 				.getsPhotoPreviewCaption(), feed.getsMsgBody());
+	}
+	
+	public void fLikeFeeds(Bundle params) {
+		if (zFacebook != null ) {
+			asyncFB = fGetAsyncFacebook();
+			RequestListener listener = new RequestListener() {
+
+				@Override
+				public void onComplete(String response, Object state) {
+					//Toast.makeText(zActivity, "Comment Posted", Toast.LENGTH_SHORT).show();
+				}
+
+				@Override
+				public void onIOException(IOException e, Object state) {}
+
+				@Override
+				public void onFileNotFoundException(FileNotFoundException e,Object state) {}
+
+				@Override
+				public void onMalformedURLException(MalformedURLException e,Object state) {}
+
+				@Override
+				public void onFacebookError(FacebookError e, Object state) {}
+				
+			};
+			
+			asyncFB.request(params.getString(Const.SFEEDID) + "/likes", params, Const.HTTP_METHOD_POST, listener, null);
+		}
+	}
+	
+	public void fUnLikeFeeds(Bundle params) {
+		if (zFacebook != null ) {
+			asyncFB = fGetAsyncFacebook();
+			RequestListener listener = new RequestListener() {
+
+				@Override
+				public void onComplete(String response, Object state) {
+					//Toast.makeText(zActivity, "Comment Posted", Toast.LENGTH_SHORT).show();
+				}
+
+				@Override
+				public void onIOException(IOException e, Object state) {}
+
+				@Override
+				public void onFileNotFoundException(FileNotFoundException e,Object state) {}
+
+				@Override
+				public void onMalformedURLException(MalformedURLException e,Object state) {}
+
+				@Override
+				public void onFacebookError(FacebookError e, Object state) {}
+				
+			};
+			
+			asyncFB.request(params.getString(Const.SFEEDID) + "/likes", params, Const.HTTP_METHOD_POST, listener, null);
+		}
+	}
+	
+	public void fShareFeeds(Bundle params) {
 	}
 
 }

@@ -9,6 +9,12 @@ public class Const {
 	public static final String SNS_SINA = "Sina";
 	public static final String SNS_TWITTER="Twitter";
 	
+	public static final String USER_IMG_URL_FB = "https://graph.facebook.com/%s/picture";
+	public static final String LOGIN_ID_FACEBOOK = "Login_ID_Facebook";
+	public static final String LOGIN_HEAD_RENREN = "Login_Head_Renren";
+	public static final String LOGIN_HEAD_SINA = "Login_Head_Sina";
+	public static final String LOGIN_HEAD_TWITTER = "Login_Head_Twitter";
+	
 	public static final String SNS = "sns";
 	
 	public static final String SNS_SIGN_ON = "SnsSignOn";
@@ -50,7 +56,7 @@ public class Const {
 	
 	//==============Feed Item Attributes========================
 	public static final String FEED_ITEM = "feeditem";
-	
+	public static final String SFEEDID = "feedid";
 	public static final String SHEADIMG = "sHeadImg";
 	public static final String SNAME = "sName";
 	public static final String SOWNERID = "sOwnerID";
@@ -58,6 +64,7 @@ public class Const {
 	public static final String SFEEDTYPE = "sFeedType";
 	public static final String SMSGBODY = "sMsgBody";
 	public static final String SLINK = "sLink";
+	public static final String SRESOURCEID = "sResource_id";
 	public static final String SSTORY = "sStory";
 	public static final String SSTORY_TAGS = "sStory_Tags";
 	public static final String SPHOTOPREVIEWLINK = "sPhotoPreviewLink";
@@ -101,7 +108,9 @@ public class Const {
 	
 	//============Views Name =======================================
 	public static final String VIEW_MAIN = "MainUIView";
-	
+	public static final String HTTP_METHOD_POST = "POST";
+	public static final String HTTP_METHOD_DELETE = "DELETE";
+
 	  //=============Dialog View======================================
 	public static final String DIALOG_VIEW_ID = "DialogViewId";
 	public static final int CD_REQ_DIALOG = 1;
@@ -111,5 +120,5 @@ public class Const {
 	//============Service Message===================================
 	public static final int SERVICE_REFRESH_FEED = 1;
 	public static final int SERVICE_UPDATE_FREQ = 2;
-	
+
 }

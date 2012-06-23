@@ -98,7 +98,7 @@ public class SnsOrg {
 	
 	public void SnsGetNewFeed(Context ctx)
 	{
-		for(int i=0; i< Const.SNSGROUPS.length; i++)
+		for(int i=0; i< Const.SNSGROUPS.length; i++) 
 		{
 			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).isSelected())
 			{

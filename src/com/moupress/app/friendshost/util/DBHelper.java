@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 import weibo4andriod.Status;
 
@@ -47,6 +48,7 @@ public class DBHelper {
     static final String T_FEED = "Feed";
     static final String T_COMMENTS = "Comments";
     static final String T_ACTIONS = "Actions";
+    static final String T_ERRORS = "Errors";
     
     // User Columns
     static final String C_USER_ID = "id";
@@ -74,6 +76,7 @@ public class DBHelper {
     static final String C_FEED_ISREAD = "isread";
     static final String C_FEED_CREATED_TIME = "created_time";
     static final String C_FEED_UPDATED_TIME = "updated_time";
+    static final String C_FEED_ISLIKED = "0";
     
     // Comments Columns
     static final String C_COMMENTS_ID = "id";
@@ -89,6 +92,11 @@ public class DBHelper {
     static final String C_ACTIONS_FEEDID = "feedid";
     static final String C_ACTIONS_NAME = "name";
     static final String C_ACTIONS_LINK = "link";
+    
+    // Error DB
+    static final String C_ERROR_MSG = "message";
+    static final String C_ERROR_TIME = "created_time";
+    static final String C_ERROR_SRC = "source";
     
     // Create table SQL statement
     static final String CREATE_USER_TABLE = "CREATE TABLE " + T_USER + " ("
@@ -118,6 +126,7 @@ public class DBHelper {
 										    + C_FEED_CNT_LIKE + " TEXT,"
 										    + C_FEED_CREATED_TIME + " TEXT,"
 										    + C_FEED_UPDATED_TIME + " TEXT"
+										    + C_FEED_ISLIKED + " TEXT"
 										    + ");";
     
     static final String CREATE_COMMENTS_TABLE = "CREATE TABLE " + T_COMMENTS + " ("
@@ -136,6 +145,12 @@ public class DBHelper {
 										    + C_ACTIONS_NAME + " TEXT,"
 										    + C_ACTIONS_LINK + " TEXT"
 										    + ");";
+    
+    static final String CREATE_ERRORS_TABLE = "CREATE TABLE " + T_ERRORS + " ("
+										    + C_ERROR_SRC + " TEXT PRIMARY KEY,"
+										    + C_ERROR_MSG + " TEXT,"
+										    + C_ERROR_TIME + " TEXT"
+										    + ");";
 
     private static SimpleDateFormat simpleDateFormat;
     private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -145,6 +160,7 @@ public class DBHelper {
 		DatabaseHelper(Context context) {
 	        super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+	        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 	    }
 
 		@Override
@@ -153,6 +169,7 @@ public class DBHelper {
 			db.execSQL(CREATE_FEED_TABLE);
 			db.execSQL(CREATE_COMMENTS_TABLE);
 			db.execSQL(CREATE_ACTIONS_TABLE);
+			db.execSQL(CREATE_ERRORS_TABLE);
 		}
 
 		@Override
@@ -166,6 +183,7 @@ public class DBHelper {
 			db.execSQL("DROP TABLE IF EXISTS " + CREATE_FEED_TABLE);
 			db.execSQL("DROP TABLE IF EXISTS " + CREATE_COMMENTS_TABLE);
 			db.execSQL("DROP TABLE IF EXISTS " + CREATE_ACTIONS_TABLE);
+			db.execSQL("DROP TABLE IF EXISTS " + CREATE_ERRORS_TABLE);
 			onCreate(db);
 		}
 
@@ -205,6 +223,7 @@ public class DBHelper {
 		values.put(C_FEED_FROM, entry.getFrom().getName());
 		values.put(C_FEED_OWNER_ID, entry.getFrom().getId());
 		values.put(C_FEED_PIC, entry.getPicture());
+		values.put(C_FEED_RAW_PIC, entry.getsPhotoLargeLink());
 		values.put(C_FEED_SOURCE, entry.getSource());
 		values.put(C_FEED_LINK, entry.getLink());
 		values.put(C_FEED_NAME, entry.getName());
@@ -265,7 +284,7 @@ public class DBHelper {
 		ContentValues values  = new ContentValues();
 		values.put(C_FEED_SNS, SNS_RENREN);
 		values.put(C_FEED_ID, entry.getPost_id());
-		values.put(C_FEED_TYPE, entry.getsFeedType());
+		values.put(C_FEED_TYPE, entry.getFeed_type());
 		if (entry.getFeed_type().equals("10")) { //prefix and message are the same if feedtype is "更新状态的新鲜事"
 			values.put(C_FEED_MSG, entry.getPrefix());
 		} else {
@@ -281,6 +300,7 @@ public class DBHelper {
 		values.put(C_FEED_ISREAD, "0");
 		values.put(C_FEED_CREATED_TIME, entry.getUpdate_time());
 		values.put(C_FEED_UPDATED_TIME, entry.getUpdate_time());
+		values.put(C_FEED_SOURCE, entry.getSource_id());
 		if (entry.getDescription() != null && !entry.getDescription().equals("null") ) {
 			values.put(C_FEED_STORY, entry.getTitle() + "\n" + entry.getDescription());	
 		} else {
@@ -293,16 +313,16 @@ public class DBHelper {
 		if (entry.getAttachment().size() > 0 ) {
 			String media_type = entry.getAttachment().get(0).getMedia_type();
 			String link = entry.getAttachment().get(0).getHref();
-			
+			String actualUrl = "";
 			if (media_type != null && media_type.equals("blog")) {
-				//String actualBlog_Url = "http://blog.renren.com/blog/" + entry.getFeed_media_owner_id() + "/" + entry.getFeed_media_media_id();
-				String actualBlog_Url = "http://blog.renren.com/blog/" + entry.getAttachment().get(0).getOwner_id() + "/" + entry.getAttachment().get(0).getMedia_id();
-				values.put(C_FEED_LINK, actualBlog_Url);
+				actualUrl = "http://blog.renren.com/blog/" + entry.getAttachment().get(0).getOwner_id() + "/" + entry.getAttachment().get(0).getMedia_id();
+			} if (media_type != null && media_type.equals("photo")) {
+				actualUrl = "http://photo.renren.com/photo/" + entry.getAttachment().get(0).getOwner_id() + "/photo-" + entry.getAttachment().get(0).getMedia_id();
 			} else {
-				values.put(C_FEED_LINK, link);
+				actualUrl = link;
 			}
+			values.put(C_FEED_LINK, actualUrl);
 			
-			//values.put(C_FEED_PIC, entry.getFeed_media_src());
 			values.put(C_FEED_PIC, entry.getAttachment().get(0).getSrc());
 			values.put(C_FEED_RAW_PIC, entry.getAttachment().get(0).getRaw_src());
 		}
@@ -411,8 +431,19 @@ public class DBHelper {
 		return ret;
 	}
 	
-	public static void fUpdateFeedRead() {
-		
+	public int fUpdateFeedRead(String sns, String updatedTime) {
+		ContentValues values  = new ContentValues();
+		values.put(C_FEED_ISREAD, "1");
+		String where = C_FEED_SNS + " = ? and " 
+						+ C_FEED_UPDATED_TIME + " = ? ";
+		String[] selectionArgs = new String[] {sns, updatedTime};
+		int res = 0;
+		try {
+			zSQLiteDB.update(T_FEED, values, where, selectionArgs);
+		} catch (Exception e) {
+			res = -1;
+		}
+		return res;
 	}
 	
 	public String[] fGetFeedSummary(String sns) {

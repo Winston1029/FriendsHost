@@ -1,27 +1,33 @@
 package com.moupress.app.friendshost.sns.Renren;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import android.app.Activity;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.methods.PostMethod;
+
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import com.facebook.android.AsyncFacebookRunner;
 import com.moupress.app.friendshost.Const;
-import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
-import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.SnsUtil;
 import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
 import com.moupress.app.friendshost.util.NotificationTask;
+import com.moupress.app.friendshost.util.Pref;
 import com.renren.api.connect.android.AsyncRenren;
 import com.renren.api.connect.android.Renren;
 import com.renren.api.connect.android.common.AbstractRequestListener;
@@ -31,6 +37,8 @@ import com.renren.api.connect.android.feed.FeedPublishRequestParam;
 import com.renren.api.connect.android.feed.FeedPublishResponseBean;
 import com.renren.api.connect.android.photos.PhotoUploadRequestParam;
 import com.renren.api.connect.android.photos.PhotoUploadResponseBean;
+import com.renren.api.connect.android.users.UsersGetInfoRequestParam;
+import com.renren.api.connect.android.users.UsersGetInfoResponseBean;
 import com.renren.api.connect.android.view.RenrenAuthListener;
 
 
@@ -41,7 +49,11 @@ public class RenrenUtil extends SnsUtil{
 	private static final String APP_ID = "166341";
 	private static final String TAG = "RenrenUtil";
 	
-	private static final String[] PERMISSIONS = new String[] {"read_user_feed", "publish_feed", "publish_share"};
+	private static final String[] PERMISSIONS = new String[] {
+		"read_user_feed", "publish_feed", 
+		"read_user_share", "publish_share", "read_user_status",
+		"publish_comment",
+		"operate_like"};
 	
 	//private PubSub zPubSub;
 	//private Context zContext;
@@ -78,13 +90,28 @@ public class RenrenUtil extends SnsUtil{
 			this.SnsAddEventCallback(snsEventListener,uptPref);
 			return;
 		}
+		final AbstractRequestListener<UsersGetInfoResponseBean> userinfo_listener = new AbstractRequestListener<UsersGetInfoResponseBean>(){
+			@Override
+			public void onComplete(UsersGetInfoResponseBean bean) {
+				String renren_headurl = bean.getUsersInfo().get(0).getTinyurl();
+				Pref.setMyStringPref(zContext, Const.LOGIN_HEAD_RENREN, renren_headurl);
+			}
+			@Override
+			public void onRenrenError(RenrenError renrenError) {
+			}
+			@Override
+			public void onFault(Throwable fault) {
+			}
+		};
 		
 		final RenrenAuthListener listener = new RenrenAuthListener() {
 
 			@Override
 			public void onComplete(Bundle values) {
-				Toast.makeText(zContext, "Renren Auth Complete",Toast.LENGTH_SHORT).show();
+				//Toast.makeText(zContext, "Renren Auth Complete",Toast.LENGTH_SHORT).show();
 				SnsAddEventCallback(snsEventListener,uptPref);
+				asyncRenren = fGetAsyncRenren();
+				asyncRenren.getUsersInfo(new UsersGetInfoRequestParam(new String[]{zRenren.getCurrentUid()+""}), userinfo_listener);
 			}
 
 			@Override
@@ -164,6 +191,24 @@ public class RenrenUtil extends SnsUtil{
 			}
 		};
 		asyncRenren.getFeed(param, listener, false);
+		
+	}
+	
+	// no working yet
+	public void fPostComments(String feedID, String message) {
+		if (zRenren != null) {
+			String[] comment = message.split("%");
+			String comment_user_id = comment[0];
+			String commentMsg = comment[1];
+			
+			Bundle parameters = new Bundle();
+			parameters.putString("method", "status.addComment");
+			parameters.putString("owner_id", comment_user_id);
+			parameters.putString("content", commentMsg);
+			parameters.putString("status_id", feedID);
+			String response = zRenren.requestJSON(parameters);
+			System.out.println(response);
+		}
 	}
 	
 	public void fPublishFeeds(String name, String description,String url, String imageUrl, String caption, String message)
@@ -299,5 +344,53 @@ public class RenrenUtil extends SnsUtil{
 		String msg = (feed.getsMsgBody() == null ? " ":feed.getsMsgBody());
 		String story = (feed.getsStory()==null? " ":feed.getsStory());
 		this.fPublishFeeds(name, description, link, imgUrl, caption, msg+story);
+	}
+    
+    public void fLikeFeeds(Bundle params) {
+    	String likeUrl = "http://www.renren.com/g?ownerid=%s&resourceid=%s&type=%s";
+    	if (zRenren != null) {
+    		Bundle parameters = new Bundle();
+			parameters.putString("method", "like.like");
+			
+			int iResType = Integer.parseInt(params.getString(Const.SFEEDTYPE));
+			String sResType = ""; 
+			if (iResType >= 20 && iResType < 30 ) {
+				sResType = "blog";
+			} else if (iResType >= 30 && iResType < 40 && iResType != 33) {
+				sResType = "photo";
+			} else if (iResType == 33) {
+				sResType = "album";
+			}
+			likeUrl = String.format(likeUrl, params.getString(Const.SOWNERID), params.getString(Const.SRESOURCEID), sResType);
+			parameters.putString("url", likeUrl);
+			//parameters.putString("url", "http://photo.renren.com/photo/227794402/photo-6166039326");
+			String response = zRenren.requestJSON(parameters);
+			System.out.println(response);
+    	}
+	}
+	
+	public void fUnLikeFeeds(Bundle params) {
+		String likeUrl = "http://www.renren.com/g?ownerid=%s&resourceid=%s&type=%s";
+    	if (zRenren != null) {
+    		Bundle parameters = new Bundle();
+			parameters.putString("method", "like.unlike");
+			
+			int iResType = Integer.parseInt(params.getString(Const.SFEEDTYPE));
+			String sResType = ""; 
+			if (iResType >= 20 && iResType < 30 ) {
+				sResType = "blog";
+			} else if (iResType >= 30 && iResType < 40 && iResType != 33) {
+				sResType = "photo";
+			} else if (iResType == 33) {
+				sResType = "album";
+			}
+			likeUrl = String.format(likeUrl, params.getString(Const.SOWNERID), params.getString(Const.SRESOURCEID), sResType);
+			parameters.putString("url", likeUrl);
+			String response = zRenren.requestJSON(parameters);
+			System.out.println(response);
+    	}
+	}
+	
+	public void fShareFeeds(Bundle params) {
 	}
 }
