@@ -116,17 +116,28 @@ public class FeedPublishActivity extends Activity{
 			@Override
 			public void onClick(View arg0) {
 				Log.i(TAG, "Publish Button is Clicked!");
-				message = editTextMessage.getText().toString();	
+				message = editTextMessage.getText().toString();
+				boolean bPublished = false;
 				if(selectedImagePath != null && selectedImagePath.length() > 0)
 				{
-					uploadPhoto();
+					bPublished = uploadPhoto();
 					selectedImagePath="";
 				}
 				else 
 				{
-					publishFeed();
+					if (message == null || message.length() == 0 ) {
+						Toast.makeText(getApplicationContext(), "Empty feed message and No Photo attached", Toast.LENGTH_SHORT).show();
+					} else {
+						bPublished = publishFeed();
+					}
 				}
-				activity.finish();
+				if (bPublished) {
+					Toast.makeText(getApplicationContext(), "Your feed will be published shortly", Toast.LENGTH_SHORT).show();
+					activity.finish();
+				} else {
+					Toast.makeText(getApplicationContext(), "Please check you selection. No feed has been published", Toast.LENGTH_SHORT).show();
+				}
+				
 			}
 		});
 	}
@@ -362,11 +373,11 @@ public class FeedPublishActivity extends Activity{
 	}
 	
 	
-	private void publishFeed() {
+	private boolean publishFeed() {
 		Bundle params = new Bundle();
 		params.putString(Const.SMSGBODY, message);
 		
-		PubSub.zSnsOrg.SnsPublishNewFeed(params);
+		return PubSub.zSnsOrg.SnsPublishNewFeed(params);
 //		
 //		if(this.WBSelected)
 //		{
@@ -387,8 +398,8 @@ public class FeedPublishActivity extends Activity{
 	    
 	    
 	}
-	private void uploadPhoto() {
-		PubSub.zSnsOrg.SnsUploadPic(message, selectedImagePath);
+	private boolean uploadPhoto() {
+		return PubSub.zSnsOrg.SnsUploadPic(message, selectedImagePath);
 //		
 //		if(this.WBSelected)
 //		{

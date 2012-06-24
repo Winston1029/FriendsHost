@@ -113,12 +113,15 @@ public class SnsOrg {
 		}
 	}
 	
-	public void SnsPublishNewFeed(Bundle params) {
+	public boolean SnsPublishNewFeed(Bundle params) {
+		boolean bPublished = false;
 		for(int i=0; i< Const.SNSGROUPS.length; i++)  {
 			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).fIsSelectedToPublish()) {
 				this.GetSnsInstance(Const.SNSGROUPS[i]).fPublishFeeds(params);
+				bPublished = true;
 			}
 		}
+		return bPublished;
 	}
 	
 	public void SnsResetPublishNewFeedSelected() {
@@ -129,12 +132,15 @@ public class SnsOrg {
 		}
 	}
 	
-	public void SnsUploadPic(String message, String selectedImagePath) {
+	public boolean SnsUploadPic(String message, String selectedImagePath) {
+		boolean bPublished = false;
 		for(int i=0; i< Const.SNSGROUPS.length; i++)  {
 			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).fIsSelectedToPublish()) {
 				this.GetSnsInstance(Const.SNSGROUPS[i]).fUploadPic(message, selectedImagePath);
+				bPublished = true;
 			}
 		}
+		return bPublished;
 	}
 	
 	

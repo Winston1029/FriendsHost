@@ -100,6 +100,9 @@ public abstract class SnsUtil {
 		ArrayList<FeedEntry> feeds = zPubSub.fGetFeedOrganisor().fGet10MoreNewsFeed(this.SnsName);
 		FeedEntry lastItem = null;
 		for (FeedEntry item : feeds ) {
+			if (item.getsName().equals("No Unread Feed in Local")) {
+				return;
+			}
 			FeedAdapter.addItem(item);
 			lastItem = item;
 		}
