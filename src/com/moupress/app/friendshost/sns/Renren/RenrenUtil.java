@@ -46,7 +46,8 @@ public class RenrenUtil extends SnsUtil{
 	private static final String[] PERMISSIONS = new String[] {
 		"read_user_feed", "publish_feed", 
 		"read_user_share", "publish_share", "read_user_status",
-		"publish_comment",
+		"publish_comment", 
+		"photo_upload", "create_album", "read_user_album",
 		"operate_like"};
 	
 	//private PubSub zPubSub;
@@ -212,14 +213,19 @@ public class RenrenUtil extends SnsUtil{
 			//AsyncRenren asyncRenren = new AsyncRenren(zRenren);
 			asyncRenren = fGetAsyncRenren();
 			//showProgress();
+			String name = params.getString(Const.SNAME);
+			String description = params.getString(Const.SPHOTOPREVIEWDESCRIPTION);
+			String url = params.getString(Const.SLINK);
+			String imageUrl = params.getString(Const.SHEADIMG);
+			String caption = params.getString(Const.SPHOTOPREVIEWCAPTION);
+			String message = params.getString(Const.SMSGBODY);
 			FeedPublishRequestParam param = new FeedPublishRequestParam(
-					params.getString(Const.SNAME), 
-					params.getString(Const.SPHOTOPREVIEWDESCRIPTION), 
-					params.getString(Const.SLINK), 
-					params.getString(Const.SHEADIMG), 
-					params.getString(Const.SPHOTOPREVIEWCAPTION),
-					params.getString(Const.SMSGBODY),
-					params.getString("action_name"),  params.getString("action_link"));
+					(name != null ? name : " "),
+					(description != null ? description : " "),
+					(url != null ? url : " "),
+					(imageUrl != null ? imageUrl : ""),
+					(caption != null ? caption : ""),
+					null,  null,(message != null ? message : ""));
 			
 			this.startNotification(4, "Feed");
 			AbstractRequestListener<FeedPublishResponseBean> listener = new AbstractRequestListener<FeedPublishResponseBean>() {
