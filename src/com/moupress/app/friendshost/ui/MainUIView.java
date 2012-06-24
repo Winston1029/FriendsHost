@@ -40,7 +40,6 @@ import com.moupress.app.friendshost.uicomponent.SlidingPanel.PanelSlidingListene
 import com.moupress.app.friendshost.uicomponent.interfaces.TitleProvider;
 
 
-
 /**
  * @author Li Ji
  *
@@ -54,7 +53,6 @@ public class MainUIView extends View{
 	private SlidingPanel slidingPanel;
 	
 	private LeftPanelView leftPanelView;
-	
 	
 	//Interface between Presenter (MainUIView) and Model (SnsUtil)
 	
@@ -71,9 +69,7 @@ public class MainUIView extends View{
 		public void OnSnsUtilRemoved(String snsName) {
 			leftPanelView.RefreshView();
 			RefreshView();
-			
 		}
-		
 	};
 	
 	
@@ -170,7 +166,7 @@ public class MainUIView extends View{
     }
     
     
-    private void InitTitleButtons(Activity activity)
+    private void InitTitleButtons(final Activity activity)
     {
     	ImageButton btnSetting = (ImageButton) activity.findViewById(R.id.leftpanelbtn);
     	btnSetting.setOnClickListener(new OnClickListener(){
@@ -202,13 +198,17 @@ public class MainUIView extends View{
 				//slidingPanel.Slide2Right();
 				int index = mPager.getCurrentItem();
 				//String snsName = Const.SNSGROUPS[index];
-//				final ListView lv = ((SnsFeedListFragment)mAdapter.getItem(index)).getListView();
-//				lv.post(new  Runnable(){
-//
-//					@Override
-//					public void run() {
-//						lv.setSelection(0);						
-//					}});
+				//final ListView lv = (SnsFeedListFragment)mPager.ge ().getListView();
+				SnsFeedListFragment lstFrag = (SnsFeedListFragment) ((FragmentActivity)activity).getSupportFragmentManager().findFragmentByTag(Const.SNSGROUPS[index]);
+				
+				final ListView lv = (ListView) lstFrag.getListView();
+				
+				lv.post(new  Runnable(){
+
+					@Override
+					public void run() {
+						lv.setSelection(0);						
+					}});
 				
 			}});	
     }
@@ -223,8 +223,14 @@ public class MainUIView extends View{
 
 	public class SnsAdapter extends FragmentStatePagerAdapter implements TitleProvider
 	{
+		FragmentManager fm;
+		//Bundle framentBundle;
+		
+		
 		public SnsAdapter(FragmentManager fm) {
 			super(fm);
+			this.fm = fm;
+			//framentBundle = new Bundle();
 		}
 
 
@@ -243,7 +249,8 @@ public class MainUIView extends View{
 		public Fragment getItem(int position) {
 			// TODO Auto-generated method stub
 			SnsFeedListFragment snsFeedListFragment = SnsFeedListFragment.newInstance(LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON).get(position).toString());
-			//return SnsFeedListFragment.newInstance(Const.SNSGROUPS[position]);
+			fm.beginTransaction().add(snsFeedListFragment, LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON).get(position).toString()).commit();
+			
 			return snsFeedListFragment;
 		}
 
@@ -270,6 +277,7 @@ public class MainUIView extends View{
 			// TODO Auto-generated method stub
 			return LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON).size();
 		}
+		
 		
 	}
 	

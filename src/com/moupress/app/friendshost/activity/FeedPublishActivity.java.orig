@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -113,6 +112,7 @@ public class FeedPublishActivity extends Activity{
 			editTextMessage.setText(title+" - "+ bodyText);
 		}
 		
+<<<<<<< HEAD
 		cancelButton = (Button) this.findViewById(R.id.CancelBtn);
 		cancelButton.setOnClickListener(new OnClickListener(){
 
@@ -123,7 +123,10 @@ public class FeedPublishActivity extends Activity{
 				
 			}});
 		
+		publishButton = (Button) this.findViewById(R.id.secondbtn);
+=======
 		publishButton = (Button) this.findViewById(R.id.thirdbtn);
+>>>>>>> 56347895ee4f04eec33b7993d6c16753b56052f7
 		publishButton.setOnClickListener(new View.OnClickListener(){
 			@Override
 			public void onClick(View arg0) {

@@ -79,7 +79,7 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 			}
 		});
     	
-    	Button btnLikes = (Button) activity.findViewById(R.id.writefeedbtn);
+    	ImageButton btnLikes = (ImageButton) activity.findViewById(R.id.writefeedbtn);
     	btnLikes.setBackgroundResource(android.R.drawable.btn_star_big_off);
     	btnLikes.setOnClickListener(new OnClickListener() {
 
@@ -106,7 +106,7 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 			}
     	});
     	
-    	Button btnShare = (Button) activity.findViewById(R.id.refreshbtn);
+    	ImageButton btnShare = (ImageButton) activity.findViewById(R.id.refreshbtn);
     	btnShare.setBackgroundResource(android.R.drawable.ic_menu_share);
     	btnShare.setOnClickListener(new OnClickListener() {
 
