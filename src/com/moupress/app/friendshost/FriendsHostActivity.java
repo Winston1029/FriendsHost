@@ -21,13 +21,22 @@ public class FriendsHostActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.main);
-        
         fInit();
         fAnalyseIntent();
-        fBindService();
     }
     
-    private void fBindService() {
+    
+    
+    @Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		  fBindService();
+	}
+
+
+
+	private void fBindService() {
 		// TODO Auto-generated method stub
 		this.zPubsub.fBindSvc();
 	}

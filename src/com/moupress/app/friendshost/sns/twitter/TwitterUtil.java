@@ -86,6 +86,7 @@ public class TwitterUtil extends SnsUtil{
 		super(zPubSub,Const.SNS_TWITTER);
 	    //this.prefs = PreferenceManager.getDefaultSharedPreferences(zActivity);
 	    this.logImg = R.drawable.fh_twitter_logo;
+	    Authentication();
 	}
 
 	private TwitterListener listener = new TwitterAdapter() {

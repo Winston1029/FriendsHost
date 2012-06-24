@@ -82,7 +82,10 @@ public class FacebookUtil extends SnsUtil {
 		
 		this.logImg  = R.drawable.fh_facebook_logo;
 		//fFacebookAuth();
+		inifFBToken();
 	}
+
+
 
 	@Override
 	public boolean isSessionValid() {
@@ -212,6 +215,14 @@ public class FacebookUtil extends SnsUtil {
 
 	private void fSaveFBToken(String token, long tokenExpires) {
 		Pref.setMyStringPref(zActivity.getApplicationContext(), FBTOKEN, token);
+	}
+	
+	private void inifFBToken() {
+		// TODO Auto-generated method stub
+		if(zFacebook.getAccessToken() == null)
+		{
+			zFacebook.setAccessToken(Pref.getMyStringPref(zActivity.getApplicationContext(), FBTOKEN));
+		}
 	}
 	
 	private void fSaveLoginProfile() {
