@@ -131,8 +131,11 @@ public class FeedRetrievalService extends Service {
 		zTimedTask = new TimerTask() {
 			@Override
 			public void run() {
-				Log.v(TAG, "Feed Retrieved Triggered! ");
-				PubSub.zSnsOrg.SnsGetNewFeed(getApplicationContext());
+				Log.v(TAG, "Feed Retrieved Triggered! " );
+				
+				if(PubSub.zSnsOrg != null) 
+					PubSub.zSnsOrg.SnsGetNewFeed(getApplicationContext());
+				
 				}
 			};
 	}

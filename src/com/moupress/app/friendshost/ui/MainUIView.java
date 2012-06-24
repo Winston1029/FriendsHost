@@ -20,6 +20,8 @@ import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.AbsListView;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.Toast;
 
@@ -141,7 +143,6 @@ public class MainUIView extends View{
 		this.LoadData = loadData;
 		mPager.setAdapter(mAdapter);
 		mIndicator.setViewPager(mPager);
-		
 	}
 	
 	public FragmentStatePagerAdapter getAdapter() {
@@ -171,7 +172,7 @@ public class MainUIView extends View{
     
     private void InitTitleButtons(Activity activity)
     {
-    	Button btnSetting = (Button) activity.findViewById(R.id.leftpanelbtn);
+    	ImageButton btnSetting = (ImageButton) activity.findViewById(R.id.leftpanelbtn);
     	btnSetting.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -181,7 +182,7 @@ public class MainUIView extends View{
 				
 			}});
     	
-    	Button btnPub = (Button) activity.findViewById(R.id.writefeedbtn);
+    	ImageButton btnPub = (ImageButton) activity.findViewById(R.id.writefeedbtn);
     	btnPub.setOnClickListener(new OnClickListener()
     	{
 
@@ -193,12 +194,22 @@ public class MainUIView extends View{
     		
     	});
     	
-    	Button btnRefresh = (Button) activity.findViewById(R.id.refreshbtn);
+    	ImageButton btnRefresh = (ImageButton) activity.findViewById(R.id.refreshbtn);
     	btnRefresh.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(android.view.View v) {
-				slidingPanel.Slide2Right();
+				//slidingPanel.Slide2Right();
+				int index = mPager.getCurrentItem();
+				//String snsName = Const.SNSGROUPS[index];
+//				final ListView lv = ((SnsFeedListFragment)mAdapter.getItem(index)).getListView();
+//				lv.post(new  Runnable(){
+//
+//					@Override
+//					public void run() {
+//						lv.setSelection(0);						
+//					}});
+				
 			}});	
     }
     
@@ -265,13 +276,21 @@ public class MainUIView extends View{
 	
 	public static class SnsFeedListFragment extends ListFragment
 	{
+		 //private android.view.View v;
 		 private String snsName;
 		 private PullToRefreshListView lstViewFeedPreview;
 		 private int iCountScrollEvent;
 		 private boolean bScrolling;
 		 private int iPrevScrollState;
 		 
-		 static SnsFeedListFragment newInstance(String sns)
+//		 @Override
+//		public ListView getListView() {
+//			// TODO Auto-generated method stub
+//			//return super.getListView();
+//			 return (ListView) v;
+//		}
+
+		static SnsFeedListFragment newInstance(String sns)
 		 {
 			 SnsFeedListFragment snsFeedListFragment = new SnsFeedListFragment();
 			 

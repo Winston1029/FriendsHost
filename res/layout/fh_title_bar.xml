@@ -2,11 +2,12 @@
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
  style="@style/TitleBarLayout">
-  <Button android:id="@+id/leftpanelbtn" 
+  <ImageButton android:id="@+id/leftpanelbtn" 
   		android:layout_gravity="left|center_vertical"
+  		android:src="@drawable/fh_setting_btn"
   	    style="@style/TitleBarButtonStyle"
   		>
-  </Button>
+  </ImageButton>
   <TextView android:id="@+id/fhtitletv" 
   			android:layout_width="match_parent"
   			android:layout_height="match_parent"
@@ -18,14 +19,16 @@
   			android:background="@color/purple"
   			>
   </TextView>
-  <Button android:id="@+id/writefeedbtn" 
+  <ImageButton android:id="@+id/writefeedbtn" 
   		android:layout_gravity="right"
+  		android:src="@drawable/fh_pub_icon"
   		style="@style/TitleBarButtonStyle"
   		>
-  </Button>
-  <Button android:id="@+id/refreshbtn"
+  </ImageButton>
+  <ImageButton android:id="@+id/refreshbtn"
   		android:layout_gravity="right"
+  		android:src="@drawable/fh_back_top"
   		style="@style/TitleBarButtonStyle"
   		>
-  </Button>
+  </ImageButton>
 </LinearLayout>
