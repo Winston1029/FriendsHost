@@ -43,10 +43,15 @@ import com.renren.api.connect.android.view.RenrenAuthListener;
 
 
 public class RenrenUtil extends SnsUtil{
+	//friendshost
+	//private static final String API_KEY = "7872469fdd144ef792233e56dca0eb31";
+	//private static final String SECRET_KEY = "938ebb14322d40c89015483b2479d144";
+	//private static final String APP_ID = "166341";
+	//melonfriends
+	private static final String API_KEY = "ff40a6bf3ae2421fab637a16ed990f67";
+	private static final String SECRET_KEY = "61e107d1d35f4a41a3df5742df12f8ba";
+	private static final String APP_ID = "199556";
 	
-	private static final String API_KEY = "7872469fdd144ef792233e56dca0eb31";
-	private static final String SECRET_KEY = "938ebb14322d40c89015483b2479d144";
-	private static final String APP_ID = "166341";
 	private static final String TAG = "RenrenUtil";
 	
 	private static final String[] PERMISSIONS = new String[] {

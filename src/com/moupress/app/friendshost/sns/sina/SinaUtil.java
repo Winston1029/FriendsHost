@@ -33,6 +33,12 @@ public class SinaUtil extends SnsUtil{
 	private static final String TAG = "SinaUtil";
     private static String sTokenKey = "";
     private static String sTokenSecret = "";
+	//friendshost
+    //private static final String CONSUMER_KEY = "1255140182";
+	//private static final String CONSUMER_SECRET= "ace86405a2aea9d30c5986d5465e163f";
+    //melonfriends
+    private static final String CONSUMER_KEY = "194048236";
+	private static final String CONSUMER_SECRET= "f224d6f3ee63132ab16459b59dfc9bdf";
 	
 	//private PubSub zPubSub;
 	//private Context zContext;
@@ -44,8 +50,8 @@ public class SinaUtil extends SnsUtil{
 	public SinaUtil(PubSub pubSub) {
 		super(pubSub,Const.SNS_SINA);
 		//zPubSub = pubSub;
-		System.setProperty("weibo4j.oauth.consumerKey", Weibo.CONSUMER_KEY);
-    	System.setProperty("weibo4j.oauth.consumerSecret", Weibo.CONSUMER_SECRET);
+		System.setProperty("weibo4j.oauth.consumerKey", CONSUMER_KEY);
+    	System.setProperty("weibo4j.oauth.consumerSecret", CONSUMER_SECRET);
 		zSina = OAuthConstant.getInstance().getWeibo();
 		//zContext = pubSub.fGetContext();
 		//fSinaAuth();
