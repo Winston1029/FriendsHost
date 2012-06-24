@@ -17,10 +17,8 @@
    
   <ExpandableListView
    	android:id="@+id/feedBackExpList"
-   	android:layout_width="match_parent"
-   	android:layout_height="match_parent"
-   	android:clickable="false"
-   	android:groupIndicator="@drawable/fh_group_ind"
+   	android:cacheColorHint="#00000000"
+    style="@style/DialogExpLstView"
    	>
   </ExpandableListView>
   

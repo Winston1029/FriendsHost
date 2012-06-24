@@ -103,6 +103,7 @@ public class FeedRetrievalService extends Service {
 	private void iniUptInterval() {
 		// TODO Auto-generated method stub
 		int index = Pref.getMyIntPref(this.getApplicationContext(), Const.SETTING_BASIC+"_UPT_FREQ");
+		if(index < 0) index = 1;
 		this.setUpdateDuration(index);
 	}
 
@@ -174,6 +175,8 @@ public class FeedRetrievalService extends Service {
 	 
 	private void setUpdateDuration(int index) {
 		// TODO Auto-generated method stub
+		index = -1;
+		
 		if(index >=0 && index < Const.SETTING_UPT_FREQ_DURATION.length)
 		{
 			this.update_interval = Const.SETTING_UPT_FREQ_DURATION[index] * 1000;
