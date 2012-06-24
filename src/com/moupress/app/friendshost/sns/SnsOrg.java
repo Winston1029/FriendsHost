@@ -2,15 +2,16 @@ package com.moupress.app.friendshost.sns;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.sns.Renren.RenrenUtil;
 import com.moupress.app.friendshost.sns.facebook.FacebookUtil;
 import com.moupress.app.friendshost.sns.sina.SinaUtil;
 import com.moupress.app.friendshost.sns.twitter.TwitterUtil;
-
-import android.app.Activity;
-import android.content.Context;
 
 public class SnsOrg {
 
@@ -96,15 +97,38 @@ public class SnsOrg {
 		}
 	}
 	
-	public void SnsGetNewFeed(Context ctx)
-	{
-		for(int i=0; i< Const.SNSGROUPS.length; i++) 
-		{
-			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).isSelected())
-			{
+	public void SnsGetNewFeed(Context ctx) {
+		for(int i=0; i< Const.SNSGROUPS.length; i++)  {
+			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).isSelected()) {
 				this.GetSnsInstance(Const.SNSGROUPS[i]).fGetNewsFeed(ctx);
 			}
 		}
 	}
+	
+	public void SnsPublishNewFeed(Bundle params) {
+		for(int i=0; i< Const.SNSGROUPS.length; i++)  {
+			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).fIsSelectedToPublish()) {
+				this.GetSnsInstance(Const.SNSGROUPS[i]).fPublishFeeds(params);
+			}
+		}
+	}
+	
+	public void SnsResetPublishNewFeedSelected() {
+		for(int i=0; i< Const.SNSGROUPS.length; i++)  {
+			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).fIsSelectedToPublish()) {
+				this.GetSnsInstance(Const.SNSGROUPS[i]).fUnSelectToPublish();
+			}
+		}
+	}
+	
+	public void SnsUploadPic(String message, String selectedImagePath) {
+		for(int i=0; i< Const.SNSGROUPS.length; i++)  {
+			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).fIsSelectedToPublish()) {
+				this.GetSnsInstance(Const.SNSGROUPS[i]).fUploadPic(message, selectedImagePath);
+			}
+		}
+	}
+	
+	
 	
 }

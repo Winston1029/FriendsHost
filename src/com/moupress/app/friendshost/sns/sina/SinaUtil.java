@@ -146,11 +146,11 @@ public class SinaUtil extends SnsUtil{
 	}
 	
 	@Override
-	public void fPublishFeeds(String message) {
+	public void fPublishFeeds(Bundle params) {
 		if (isSessionValid()) {
 			try {
 				startNotification(7, "Feed");
-				zSina.updateStatus(message);
+				zSina.updateStatus(params.getString(Const.SMSGBODY));
 			} catch (WeiboException e) {
 				e.printStackTrace();
 			} finally {
@@ -172,7 +172,7 @@ public class SinaUtil extends SnsUtil{
 	
 	@Override
 	public void fResend(FeedEntry feed) {
-		this.fPublishFeeds(feed.getsMsgBody());
+		//this.fPublishFeeds(feed.getsMsgBody());
 	}
 	
 	private void startNotification(int notificationId,String fileType)

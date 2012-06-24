@@ -118,7 +118,7 @@ public class FriendsHostActivity extends FragmentActivity {
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		this.zPubsub.UnBindToService();
+		//this.zPubsub.UnBindToService();
 	}
 	
 	

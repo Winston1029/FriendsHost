@@ -271,31 +271,32 @@ public class FacebookUtil extends SnsUtil {
 		}
 	}
 
-	public void fPublishFeeds(String name, String description, String url,
-			String imageUrl, String caption, String message) {
+	@Override
+	public void fPublishFeeds(Bundle params) {
+		//String name, String description, String url,String imageUrl, String caption, String message
 		if (zFacebook != null) {
 			// AsyncFacebookRunner asyncFB = new AsyncFacebookRunner(zFacebook);
 			asyncFB = fGetAsyncFacebook();
 
-			Bundle params = new Bundle();
-
-			if (message!= null && message.length() > 0)
-				params.putString(FEED_MSG, message);
-
-			if (url != null && url.length() > 0 && url.startsWith("http"))
-				params.putString(FEED_LINK, url);
-
-			if (name != null && name.length() > 0)
-				params.putString(FEED_NAME, name);
-
-			if (caption != null && caption.length() > 0)
-				params.putString(FEED_CAPTION, caption);
-
-			if (description != null && description.length() > 0)
-				params.putString(FEED_DESC, description);
-
-			if (imageUrl != null && imageUrl.length() > 0)
-				params.putString(FEED_PICS, imageUrl);
+			Bundle data = new Bundle();
+//
+//			if (message!= null && message.length() > 0)
+			data.putString(FEED_MSG, params.getString(Const.SMSGBODY));
+//
+//			if (url != null && url.length() > 0 && url.startsWith("http"))
+//				params.putString(FEED_LINK, url);
+//
+//			if (name != null && name.length() > 0)
+//				params.putString(FEED_NAME, name);
+//
+//			if (caption != null && caption.length() > 0)
+//				params.putString(FEED_CAPTION, caption);
+//
+//			if (description != null && description.length() > 0)
+//				params.putString(FEED_DESC, description);
+//
+//			if (imageUrl != null && imageUrl.length() > 0)
+//				params.putString(FEED_PICS, imageUrl);
 
 			this.startNotification(6, "Feed");
 			RequestListener listener = new RequestListener() {
@@ -334,7 +335,7 @@ public class FacebookUtil extends SnsUtil {
 				}
 			};
 
-			asyncFB.request("me/feed", params, "POST", listener, null);
+			asyncFB.request("me/feed", data, "POST", listener, null);
 		}
 	}
 
@@ -401,9 +402,9 @@ public class FacebookUtil extends SnsUtil {
 
 	@Override
 	public void fResend(FeedEntry feed) {
-		this.fPublishFeeds(" ", feed.getsPhotoPreviewDescription(), feed
-				.getsPhotoPreviewLink(), feed.getsPhotoPreviewLink(), feed
-				.getsPhotoPreviewCaption(), feed.getsMsgBody());
+//		this.fPublishFeeds(" ", feed.getsPhotoPreviewDescription(), feed
+//				.getsPhotoPreviewLink(), feed.getsPhotoPreviewLink(), feed
+//				.getsPhotoPreviewCaption(), feed.getsMsgBody());
 	}
 	
 	public void fLikeFeeds(Bundle params) {

@@ -33,10 +33,26 @@ public abstract class SnsUtil {
 		this.zActivity = pubsub.fGetActivity();
 		this.SnsName = SnsName;
 		
+		bSelectToPublish = false;
 		//Update IsSelected Variable
 		this.GetSelectedPref();
 		
 		this.FeedAdapter = new LstViewFeedAdapter(zActivity, R.layout.feed_item_preview, this.SnsName);
+	}
+	
+	//publish intention for each SNS
+	protected boolean bSelectToPublish;
+	public boolean fIsSelectedToPublish() {
+		return bSelectToPublish;
+	}
+	public void fToogleSelectToPublish() {
+		bSelectToPublish = !bSelectToPublish;
+	}
+	public void fUnSelectToPublish() {
+		bSelectToPublish = false;
+	}
+	public void fSelectToPublish() {
+		bSelectToPublish = true;
 	}
 	
 	//Login Status for Each SNS
@@ -56,7 +72,8 @@ public abstract class SnsUtil {
 	public void fGetNewsFeed(Context context){};
 	public void fDisplayFeed(){};
 	public void fPostComments(Bundle params) {}
-	public void fPublishFeeds(String message){};
+	public void fPublishFeeds(Bundle params){};
+	public void fUploadPic(String message, String selectedImagePath){};
 	public void fLikeFeeds(Bundle params) {}
 	public void fUnLikeFeeds(Bundle params) {}
 	public void fShareFeeds(Bundle params) {}
