@@ -45,7 +45,7 @@
                 android:adjustViewBounds="true"
                 android:background="#CCC"
                 droidfu:progressDrawable="..."
-                ns:autoLoad="true" >
+                ns:autoLoad="true" android:visibility="invisible">
             </com.github.droidfu.widgets.WebImageView>
         </LinearLayout>
 
@@ -72,7 +72,7 @@
             android:padding="1dp"
             android:text="creation time"
             android:textColor="@color/black"
-            android:textAppearance="?android:attr/textAppearanceSmall"/>
+            android:textAppearance="?android:attr/textAppearanceSmall" android:visibility="invisible"/>
 
         <TextView
             android:id="@+id/txt_msgbody"
@@ -82,7 +82,7 @@
             android:padding="5dp"
             android:textSize="18sp"
             android:textColor="@color/black"
-            />
+            android:visibility="invisible"/>
 
         <LinearLayout
             android:id="@+id/layout_img"
@@ -106,7 +106,7 @@
                         android:adjustViewBounds="true"
                         android:background="#CCC"
                         droidfu:progressDrawable="..."
-                        ns:autoLoad="true" >
+                        ns:autoLoad="true" android:visibility="invisible">
                     </com.github.droidfu.widgets.WebImageView>
 
                 </LinearLayout>
@@ -126,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:text="Medium Text"
                     android:textColor="@color/black"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium" android:visibility="invisible"/>
 
                 <TextView
                     android:id="@+id/txv_imgCaption"
@@ -135,7 +135,7 @@
                     android:layout_height="wrap_content"
                     android:text="Small Text"
                     android:textColor="@color/black"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                    android:textAppearance="?android:attr/textAppearanceSmall" android:visibility="invisible"/>
 
                 <TextView
                     android:id="@+id/txv_imgdescription"
@@ -144,7 +144,7 @@
                     android:layout_height="wrap_content"
                     android:text="Image Description"
                     android:textColor="@color/black"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium" android:visibility="invisible"/>
             </LinearLayout>
 
         </LinearLayout>
