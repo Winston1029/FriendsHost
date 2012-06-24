@@ -221,7 +221,8 @@ public class FacebookUtil extends SnsUtil {
 		// TODO Auto-generated method stub
 		if(zFacebook.getAccessToken() == null)
 		{
-			zFacebook.setAccessToken(Pref.getMyStringPref(zActivity.getApplicationContext(), FBTOKEN));
+			String token = Pref.getMyStringPref(zActivity.getApplicationContext(), FBTOKEN);
+			if(token.length() > 0) zFacebook.setAccessToken(token);
 		}
 	}
 	

@@ -69,8 +69,7 @@ public class PubSub {
         //uLstFeed = (ListView) zActivity.findViewById(R.id.uLstVFBFeed);
 		//fInitUIMgr();
 		fInitAcc();
-		fInitMainUI();
-		fLoadMainUI();
+		LoadUI();
 		//fInitFeedUIPreview();
 		//fFBInitUI();
 		//fInitRenrenUI();
@@ -79,6 +78,12 @@ public class PubSub {
 		//fInitPubUI();
 		
 		//fInitSvc();
+	}
+	
+	public void LoadUI()
+	{
+		fInitMainUI();
+		fLoadMainUI();
 	}
 
 //        private void fInitUIMgr() {
@@ -91,8 +96,17 @@ public class PubSub {
 	//===================Service Connection Methods =========
 	public void fBindSvc() {
 		// TODO Auto-generated method stub
-		this.svcConn = new FeedRetrieveServiceConnection(this);
+		if(svcConn == null)
+			this.svcConn = new FeedRetrieveServiceConnection(this);
 		this.svcConn.BindToService();
+	}
+	
+	public boolean fCheckSvcRunning()
+	{
+		if(svcConn == null)
+			this.svcConn = new FeedRetrieveServiceConnection(this);
+		
+		return svcConn.CheckSvcRunning();
 	}
 	
 	public void UnBindToService() {

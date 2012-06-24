@@ -43,9 +43,11 @@ public class FriendsHostActivity extends FragmentActivity {
 
 	public static PubSub zPubsub;
     private void fInit() {
-    	if (zPubsub == null ) {
+    	//if (zPubsub == null ) {
     		zPubsub = new PubSub(this);
-    	}
+    	//}
+    	
+    	//zPubsub.LoadUI();
 	}
     
     private void fAnalyseIntent() {
