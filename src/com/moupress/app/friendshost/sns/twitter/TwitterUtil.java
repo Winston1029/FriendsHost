@@ -56,9 +56,16 @@ import com.moupress.app.friendshost.util.Pref;
 
 public class TwitterUtil extends SnsUtil{
 
-	private SharedPreferences prefs;
+	//private SharedPreferences prefs;
 	//private Activity zActivity;
 	//private Context zContext;
+	
+	//friendshost
+	//private static final String CONSUMER_KEY = "g6dQOeQIPrT7eXpSE7FGQ";
+	//private static final String CONSUMER_SECRET= "8MUOI1ShvCyj1IlUWQDlFEfFzSOjNQIugClDGLLUop4";
+	//melonfriends
+	private static final String CONSUMER_KEY = "XovyfTP04DfpmxPeeRfbg";
+	private static final String CONSUMER_SECRET= "ZmJRoKUKkf69QvXd3zGVRhkdl8VT3FsgBp3Ky5JQJ8";
 	
     private OAuthConsumer consumer; 
     private OAuthProvider provider;
@@ -77,7 +84,7 @@ public class TwitterUtil extends SnsUtil{
 	
 	public TwitterUtil(PubSub zPubSub) {
 		super(zPubSub,Const.SNS_TWITTER);
-	    this.prefs = PreferenceManager.getDefaultSharedPreferences(zActivity);
+	    //this.prefs = PreferenceManager.getDefaultSharedPreferences(zActivity);
 	    this.logImg = R.drawable.fh_twitter_logo;
 	}
 
@@ -220,7 +227,7 @@ public class TwitterUtil extends SnsUtil{
 			return;
 		}
 		try {
-    		this.consumer = new CommonsHttpOAuthConsumer(Const.CONSUMER_KEY, Const.CONSUMER_SECRET);
+    		this.consumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
     	    this.provider = new CommonsHttpOAuthProvider(Const.REQUEST_URL,Const.ACCESS_URL,Const.AUTHORIZE_URL);
     	} catch (Exception e) {
     		System.out.println("Erro creating consumer / provider" + e);
@@ -235,11 +242,10 @@ public class TwitterUtil extends SnsUtil{
 			}});
 	}
 	
-	
-	public AsyncTwitter Authentication(SharedPreferences prefs) {
+	public AsyncTwitter Authentication() {
 		//super.Autentication(prefs);
-		String token = prefs.getString(OAuth.OAUTH_TOKEN, "1-1");
-		String secret = prefs.getString(OAuth.OAUTH_TOKEN_SECRET, "");
+		String token = Pref.getMyStringPref(this.zContext, OAuth.OAUTH_TOKEN);
+		String secret = Pref.getMyStringPref(this.zContext, OAuth.OAUTH_TOKEN_SECRET);
 		
 		AccessToken a = new AccessToken(token,secret);
 		//Twitter twitter = new TwitterFactory().getInstance();
@@ -248,11 +254,11 @@ public class TwitterUtil extends SnsUtil{
 		twitterAsync = factory.getInstance();
 		twitterAsync.addListener(listener);
 		
-		twitterAsync.setOAuthConsumer(Const.CONSUMER_KEY, Const.CONSUMER_SECRET);
+		twitterAsync.setOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
 		twitterAsync.setOAuthAccessToken(a);
 		
 		twitter = new TwitterFactory().getInstance();
-		twitter.setOAuthConsumer(Const.CONSUMER_KEY, Const.CONSUMER_SECRET);
+		twitter.setOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
 		twitter.setOAuthAccessToken(a);
 		
 //		try {
@@ -285,14 +291,14 @@ public class TwitterUtil extends SnsUtil{
     @Override
 	public void fGetNewsFeed(Context applicationContext) {
     	if(twitterAsync == null) {
-			 twitterAsync = Authentication(prefs);
+			 twitterAsync = Authentication();
 		}			
 		twitterAsync.getHomeTimeline();
 	}
     
     public void fPublishFeeds(String message) {
     	if(twitterAsync == null) {
-			 twitterAsync = Authentication(prefs);
+			 twitterAsync = Authentication();
 		}
 		
 	    startNotification(1,"Tweet");
@@ -302,7 +308,7 @@ public class TwitterUtil extends SnsUtil{
     public void fPostComments(Bundle params) {
 		String message = params.getString(Const.COMMENTED_MSG);
 		if(twitterAsync == null) {
-			twitterAsync = Authentication(prefs);
+			twitterAsync = Authentication();
 		}
 		twitterAsync.updateStatus(new StatusUpdate(message)
 			.inReplyToStatusId(Long.valueOf(params.getString(Const.SFEEDID))));
@@ -312,10 +318,10 @@ public class TwitterUtil extends SnsUtil{
     public void fUploadPic(String message, String selectedImagePath) {
 	 
 		 Configuration conf = new ConfigurationBuilder()
-	        .setOAuthConsumerKey( Const.CONSUMER_KEY )
-	        .setOAuthConsumerSecret( Const.CONSUMER_SECRET )
-	        .setOAuthAccessToken(prefs.getString(OAuth.OAUTH_TOKEN, ""))
-	        .setOAuthAccessTokenSecret(prefs.getString(OAuth.OAUTH_TOKEN_SECRET, ""))
+	        .setOAuthConsumerKey( CONSUMER_KEY )
+	        .setOAuthConsumerSecret( CONSUMER_SECRET )
+	        .setOAuthAccessToken(Pref.getMyStringPref(this.zContext, OAuth.OAUTH_TOKEN))
+	        .setOAuthAccessTokenSecret(Pref.getMyStringPref(this.zContext, OAuth.OAUTH_TOKEN_SECRET))
 	        .build();
 		 
 		(new UploadPhotoTaskTask(conf,message,selectedImagePath)).execute("");

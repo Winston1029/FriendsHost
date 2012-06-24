@@ -45,10 +45,13 @@ public class FacebookUtil extends SnsUtil {
 	// private Context zContext;
 	// private PubSub zPubSub;
 
-	public static final String APP_ID = "337247706286700";
+	//friendshost
+	//public static final String APP_ID = "337247706286700";
+	//melonfriends
+	public static final String APP_ID = "158943034230205";
+	
+	private static final String[] PERMISSIONS = new String[] {"publish_stream", "read_stream", "user_photos", "friends_photos" };
 	private static final String TAG = "FacebookUtil";
-	private static final String[] PERMISSIONS = new String[] {
-			"publish_stream", "read_stream", "user_photos", "friends_photos" };
 	private static final String FBTOKEN = "fbToken";
 	private static final String FBTOKENEXPIRES = "fbAccessExpires";
 
