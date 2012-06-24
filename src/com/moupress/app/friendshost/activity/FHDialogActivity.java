@@ -6,6 +6,7 @@ import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.ui.DialogView;
 import com.moupress.app.friendshost.ui.FeedBackView;
+import com.moupress.app.friendshost.ui.HelpView;
 import com.moupress.app.friendshost.ui.UptFreqView;
 import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
@@ -196,11 +197,12 @@ public class FHDialogActivity extends Activity{
 //===== START Help Screen =======================
 	private void InitHelpUI()
 	{
-		Button sendBtn = (Button) this.findViewById(R.id.thirdbtn);
-		sendBtn.setVisibility(View.INVISIBLE);
+
+		this.diaLogView = new HelpView(this,intentBack);
 		
-		Button closeBtn = (Button) this.findViewById(R.id.CancelBtn);
-		closeBtn.setOnClickListener(this.cancelBtnListener);
+		((HelpView)diaLogView).InitTitle(this, titleBarListener);
+		((HelpView)diaLogView).InitContent(this, contentViewListener);
+		((HelpView)diaLogView).LoadView(null);
 	}
 //===== END Help Screen =======================
 	

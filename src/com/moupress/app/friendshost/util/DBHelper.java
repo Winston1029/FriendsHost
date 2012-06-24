@@ -512,7 +512,7 @@ public class DBHelper {
 		return result;
 	}
 	
-	public String[][] fGetFeedByID(String sns, String feedid) {
+	public String[][]  fGetFeedByID(String sns, String feedid) {
 		String[] columns = new String[] {C_FEED_ID,
 				 C_FEED_FROM, C_FEED_OWNER_ID, C_FEED_CREATED_TIME, 
 				 C_FEED_TYPE, C_FEED_MSG, C_FEED_STORY, C_FEED_LINK,

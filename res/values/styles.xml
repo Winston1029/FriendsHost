@@ -117,4 +117,11 @@
  <item name="android:layout_margin">7dip</item>
  </style>
  
+ <style name="DialogExpLstView">
+	 <item	name="android:layout_width">match_parent</item>
+	 <item 	name="android:layout_height">match_parent</item>
+	 <item  name="android:clickable">false</item>
+	 <item	name="android:groupIndicator">@drawable/fh_group_ind</item> 
+ </style>
+ 
 </resources>

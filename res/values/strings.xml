@@ -32,4 +32,12 @@
      	<item>Additional features necessary to add in ? </item>
      	<item>Other good ideas to make this app better ? </item>
      </string-array>
+     
+     <!-- Help Dialog Activity -->
+     <string-array name="fh_help_items">
+     	<item>1. Check Feed Details and Comments</item>
+     	<item>2. Send Feed and Pictures</item>
+     	<item>3. Sign In/Out Account</item>
+     	<item>4. Change Update Frequency</item>
+     </string-array>
 </resources>

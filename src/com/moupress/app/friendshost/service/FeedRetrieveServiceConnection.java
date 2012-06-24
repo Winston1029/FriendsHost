@@ -1,9 +1,14 @@
 package com.moupress.app.friendshost.service;
 
+import java.util.List;
+
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.PubSub;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.Application;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -102,5 +107,18 @@ public class FeedRetrieveServiceConnection {
 				Log.v(TAG, " Message Send Error " + e.toString());
 			}
 		}
+	}
+
+	public boolean CheckSvcRunning() {
+
+		final ActivityManager activityManager = (ActivityManager)zActivity.getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+        final List<RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
+
+        for (RunningServiceInfo runningServiceInfo : services) {
+            if (runningServiceInfo.service.getClassName().equals("com.moupress.app.friendshost.service.FeedRetrievalService")){
+                return true;
+            }
+        }
+		return false;
 	}
 }

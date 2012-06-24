@@ -12,9 +12,13 @@ import com.moupress.app.friendshost.sns.Renren.RenrenUtil;
 import com.moupress.app.friendshost.sns.facebook.FacebookUtil;
 import com.moupress.app.friendshost.sns.sina.SinaUtil;
 import com.moupress.app.friendshost.sns.twitter.TwitterUtil;
+import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
 
 public class SnsOrg {
 
+	private static final String TAG = "SnsOrg";
 	//private SharedPreferences prefs;
 	private Activity zActivity;
 	private Context zContext;
@@ -88,7 +92,6 @@ public class SnsOrg {
 	}
 	
 	
-	
 	public void InitSns()
 	{
 		for(int i=0; i< Const.SNSGROUPS.length; i++)
@@ -97,9 +100,14 @@ public class SnsOrg {
 		}
 	}
 	
-	public void SnsGetNewFeed(Context ctx) {
-		for(int i=0; i< Const.SNSGROUPS.length; i++)  {
-			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).isSelected()) {
+	public void SnsGetNewFeed(Context ctx)
+	{
+		for(int i=0; i< Const.SNSGROUPS.length; i++) 
+		{
+			Log.v(TAG,this.GetSnsInstance(Const.SNSGROUPS[i]).SnsName + " "+this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid());
+			
+			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).isSelected())
+			{
 				this.GetSnsInstance(Const.SNSGROUPS[i]).fGetNewsFeed(ctx);
 			}
 		}

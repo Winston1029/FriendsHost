@@ -86,6 +86,7 @@ public class TwitterUtil extends SnsUtil{
 		super(zPubSub,Const.SNS_TWITTER);
 	    //this.prefs = PreferenceManager.getDefaultSharedPreferences(zActivity);
 	    this.logImg = R.drawable.fh_twitter_logo;
+	    twitterAsync = Authentication();
 	}
 
 	private TwitterListener listener = new TwitterAdapter() {
@@ -246,6 +247,9 @@ public class TwitterUtil extends SnsUtil{
 		//super.Autentication(prefs);
 		String token = Pref.getMyStringPref(this.zContext, OAuth.OAUTH_TOKEN);
 		String secret = Pref.getMyStringPref(this.zContext, OAuth.OAUTH_TOKEN_SECRET);
+		
+		if(token.length() ==0 || secret.length() == 0)
+			return null;
 		
 		AccessToken a = new AccessToken(token,secret);
 		//Twitter twitter = new TwitterFactory().getInstance();

@@ -6,54 +6,53 @@
  >
    <include android:id="@+id/fhCustTitle" layout="@layout/fh_cust_title_bar"/>
  
-<!--  <ExpandableListView -->
-<!--  	android:id="@+id/helpExpandLst" -->
-<!--  	 android:textColor="@color/black" -->
-<!--  	 android:background="@android:color/transparent" -->
-<!--  	 android:divider="@android:color/transparent" -->
-<!--  	style="@style/LeftPanel"> -->
-<!--  </ExpandableListView> -->
+  <ExpandableListView 
+  	android:id="@+id/helpExpandLst"
+  	android:cacheColorHint="#00000000"
+  	style="@style/DialogExpLstView" 
+  	> 
+  </ExpandableListView> 
 
- <TextView
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:textStyle="bold"
-  android:layout_marginTop="10dip"  
-  android:text="1. Check Feed Details and Comments"
-  android:textSize="15dip"
-  android:textColor="@color/black">
-  </TextView>
-  
-  
-   <TextView
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:textStyle="bold"
-  android:layout_marginTop="10dip"  
-  android:text="2. Send Feed and Pictures"
-  android:textSize="15dip"
-  android:textColor="@color/black">
-  </TextView>
-  
-     <TextView
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:textStyle="bold"
-  android:layout_marginTop="10dip"  
-  android:text="3. Sign In/Out Account"
-  android:textSize="15dip"
-  android:textColor="@color/black">
-  </TextView>
-  
-     <TextView
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:textStyle="bold"
-  android:layout_marginTop="10dip"  
-  android:text="4. Change Update Frequency"
-  android:textSize="15dip"
-  android:textColor="@color/black">
-  </TextView>
+<!-- <TextView-->
+<!--  android:layout_width="match_parent"-->
+<!--  android:layout_height="wrap_content"-->
+<!--  android:textStyle="bold"-->
+<!--  android:layout_marginTop="10dip"  -->
+<!--  android:text="1. Check Feed Details and Comments"-->
+<!--  android:textSize="15dip"-->
+<!--  android:textColor="@color/black">-->
+<!--  </TextView>-->
+<!--  -->
+<!--  -->
+<!--   <TextView-->
+<!--  android:layout_width="match_parent"-->
+<!--  android:layout_height="wrap_content"-->
+<!--  android:textStyle="bold"-->
+<!--  android:layout_marginTop="10dip"  -->
+<!--  android:text="2. Send Feed and Pictures"-->
+<!--  android:textSize="15dip"-->
+<!--  android:textColor="@color/black">-->
+<!--  </TextView>-->
+<!--  -->
+<!--     <TextView-->
+<!--  android:layout_width="match_parent"-->
+<!--  android:layout_height="wrap_content"-->
+<!--  android:textStyle="bold"-->
+<!--  android:layout_marginTop="10dip"  -->
+<!--  android:text="3. Sign In/Out Account"-->
+<!--  android:textSize="15dip"-->
+<!--  android:textColor="@color/black">-->
+<!--  </TextView>-->
+<!--  -->
+<!--     <TextView-->
+<!--  android:layout_width="match_parent"-->
+<!--  android:layout_height="wrap_content"-->
+<!--  android:textStyle="bold"-->
+<!--  android:layout_marginTop="10dip"  -->
+<!--  android:text="4. Change Update Frequency"-->
+<!--  android:textSize="15dip"-->
+<!--  android:textColor="@color/black">-->
+<!--  </TextView>-->
   
   
 </LinearLayout>

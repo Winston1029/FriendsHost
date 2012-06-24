@@ -69,6 +69,7 @@ public class LeftPanelView extends View{
 		this.feedBksLstAdapter = new LstAdapter(activity,Const.SETTING_FEEDBACKS_GROUPS, Const.SETTING_FEEDBACKS);
 		
 		int index = Pref.getMyIntPref(zActivity.getApplicationContext(), Const.SETTING_BASIC+"_UPT_FREQ");
+		if(index <0) index = 1;
 		if(index >= 0 && index < Const.SETTING_UPT_FREQ_BTN_TEXT.length)
 		{
 			this.settingLstAdapter.SetDtlText(new String[]{Const.SETTING_UPT_FREQ_BTN_TEXT[index]});
