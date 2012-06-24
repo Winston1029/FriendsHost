@@ -71,7 +71,7 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 	}
 	
 	private void InitTitleButtons(final Activity activity) {
-    	Button btnReturnMain = (Button) activity.findViewById(R.id.leftpanelbtn);
+    	ImageButton btnReturnMain = (ImageButton) activity.findViewById(R.id.leftpanelbtn);
     	btnReturnMain.setBackgroundResource(android.R.drawable.ic_menu_revert);
     	btnReturnMain.setOnClickListener(new OnClickListener() {
 
@@ -135,6 +135,7 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		displayedSns = loadData.getString(Const.SNS);
 		String feed_id = loadData.getString(Const.FID);
 		
+		if(PubSub.zFeedOrg != null)
 		feed = PubSub.zFeedOrg.fGetFeedByID( displayedSns, feed_id );
 		//feed.setsFeedType(displayedSns);
 		

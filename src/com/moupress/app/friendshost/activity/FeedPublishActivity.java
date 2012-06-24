@@ -59,6 +59,7 @@ public class FeedPublishActivity extends Activity{
 	
 	//Button to publish msg
 	private Button publishButton;
+	private Button cancelButton;
 	
 	//Uri of captured Image
 	private Uri mCapturedImageURI;
@@ -110,6 +111,16 @@ public class FeedPublishActivity extends Activity{
 		{
 			editTextMessage.setText(title+" - "+ bodyText);
 		}
+		
+		cancelButton = (Button) this.findViewById(R.id.CancelBtn);
+		cancelButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				
+				activity.finish();
+				
+			}});
 		
 		publishButton = (Button) this.findViewById(R.id.thirdbtn);
 		publishButton.setOnClickListener(new View.OnClickListener(){

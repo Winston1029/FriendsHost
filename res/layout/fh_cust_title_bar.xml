@@ -34,7 +34,7 @@
   		style="@style/TitleBarButtonStyle.Pos"
   		android:layout_weight="1"
   		android:layout_height="match_parent"
-  		android:background="@drawable/fh_upload"
+  		android:background="@drawable/fh_feed_send"
   		>
   </Button>
 </LinearLayout>
