@@ -118,7 +118,7 @@ public class UptFreqView extends DialogView {
  private int LoadRadioBtns(ArrayList<RadioBtn> radioBtns, OnCheckedChangeListener onCheckedChangeListener) 
  	{
 	    int chkInd = Pref.getMyIntPref(zActivity.getApplicationContext(), Const.SETTING_BASIC+"_UPT_FREQ");;
-	    if(chkInd < 0) chkInd = -1;
+	    if(chkInd < 0) chkInd = 1;
 	    
 	 	for(int i=0 ; i < Const.SETTING_UPT_FREQ_BTN_TEXT.length; i++)
 	 	{

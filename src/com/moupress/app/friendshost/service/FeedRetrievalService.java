@@ -175,7 +175,7 @@ public class FeedRetrievalService extends Service {
 	 
 	private void setUpdateDuration(int index) {
 		// TODO Auto-generated method stub
-		index = -1;
+		//index = -1;
 		
 		if(index >=0 && index < Const.SETTING_UPT_FREQ_DURATION.length)
 		{
