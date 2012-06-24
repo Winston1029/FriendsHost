@@ -174,14 +174,15 @@ public class Mail extends javax.mail.Authenticator {
 		this._subject = _subject;
 	}
 
-	public static void sendFeedbackEmail(Context context) {
+	public static void sendFeedbackEmail(Context context, String content) {
 		Mail m = new Mail("advice@moupress.com", "Kindle2011"); 
 		 
-		String[] toArr = {"advice@moupress.com", "cq01.liu@gmail.com"}; 
+		//String[] toArr = {"advice@moupress.com", "cq01.liu@gmail.com"};
+		String[] toArr = {"aleremail@gmail.com"};
 		m.setTo(toArr); 
 		m.setFrom("MouPress"); 
-		m.setSubject("This is an email sent using my Mail JavaMail wrapper from an Android device."); 
-		m.setBody("Email body."); 
+		m.setSubject("MelonFriends Feedbacks"); 
+		m.setBody(content); 
  
 	    try { 
 	    	//m.addAttachment("/sdcard/filelocation"); 

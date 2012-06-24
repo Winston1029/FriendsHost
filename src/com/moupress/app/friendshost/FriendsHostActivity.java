@@ -103,7 +103,7 @@ public class FriendsHostActivity extends FragmentActivity {
         	break;
         case R.id.menu_item_feedback:
         	Toast.makeText(getApplicationContext(), "FeedBack", Toast.LENGTH_SHORT).show();
-        	Mail.sendFeedbackEmail(this);
+        	Mail.sendFeedbackEmail(this,"Email Body");
         	break;
         case R.id.menu_item_rate:
         	Toast.makeText(getApplicationContext(), "Rate", Toast.LENGTH_SHORT).show();

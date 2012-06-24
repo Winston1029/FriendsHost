@@ -3,6 +3,8 @@ package com.moupress.app.friendshost.ui;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
+import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
+import com.moupress.app.friendshost.util.Mail;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -64,6 +67,53 @@ public class FeedBackView extends DialogView{
 		
 	}
 	
+	
+	
+	@Override
+	public void InitTitle(final Activity activity, TitleBarListener titleBarListener) {
+		// TODO Auto-generated method stub
+		//super.InitTitle(activity, titleBarListener);
+		Button btnClose = (Button) activity.findViewById(R.id.CancelBtn);
+		btnClose.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				activity.finish();
+			}});
+		
+		Button btnSend = (Button) activity.findViewById(R.id.thirdbtn);
+		btnSend.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				Mail.sendFeedbackEmail(activity, makeEmailContent());
+				activity.finish();
+			}
+
+			}
+		);
+	}
+
+	private String makeEmailContent() {
+		String emailCnt = null;
+		EditText edtTxtBoxEmailAdrr = (EditText) zActivity.findViewById(R.id.edtTxtEmlAddr);
+		
+		if(edtTxtBoxEmailAdrr.getText().toString() != null)
+		{
+			emailCnt += "Email: "+edtTxtBoxEmailAdrr.getText().toString()+"\n";
+		}
+		
+		for(int i=0 ; i< this.feedBackList.length;i++)
+		{
+			if(this.feedBackCntList.length > i && this.feedBackCntList[i] != null)
+			{
+				emailCnt +=  this.feedBackList[i]+"  "+this.feedBackCntList[i]+"\n";
+			}
+		}
+		
+		return emailCnt;
+	}
+
 	@Override
 	public void InitContent(Activity activity,
 			ContentViewListener contentViewListener) {

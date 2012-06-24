@@ -8,6 +8,7 @@ import com.moupress.app.friendshost.ui.DialogView;
 import com.moupress.app.friendshost.ui.FeedBackView;
 import com.moupress.app.friendshost.ui.UptFreqView;
 import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
+import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
 import com.moupress.app.friendshost.util.Pref;
 
 import android.app.Activity;
@@ -63,6 +64,14 @@ public class FHDialogActivity extends Activity{
 	};
 
 	private ContentViewListener contentViewListener = new ContentViewListener(){};
+	private TitleBarListener titleBarListener = new TitleBarListener(){
+
+		@Override
+		public void OnTitleBarButtonClick(String viewName, int btnId,
+				String snsName) {
+			// TODO Auto-generated method stub
+			
+		}};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -174,6 +183,7 @@ public class FHDialogActivity extends Activity{
 		//this.titleId = R.string.feedback_app_title;
 		//this.setBtnMsgId = R.string.feedback_app_btn_txt;
 		this.diaLogView = new FeedBackView(this, intentBack);
+		((FeedBackView)diaLogView).InitTitle(this, titleBarListener);
 		((FeedBackView)diaLogView).InitContent(this, contentViewListener);
 		((FeedBackView)diaLogView).LoadView(null);
 		//Button sendBtn = (Button) this.findViewById(R.id.thirdbtn);
