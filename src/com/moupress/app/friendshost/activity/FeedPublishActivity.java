@@ -1,26 +1,7 @@
 package com.moupress.app.friendshost.activity;
 
-import java.io.File;
-
-import org.apache.commons.httpclient.cookie.IgnoreCookiesSpec;
-
-import twitter4j.TwitterException;
-
-import com.facebook.android.AsyncFacebookRunner;
-import com.facebook.android.Facebook;
-import com.moupress.app.friendshost.Const;
-import com.moupress.app.friendshost.PubSub;
-import com.moupress.app.friendshost.R;
-import com.renren.api.connect.android.AsyncRenren;
-import com.renren.api.connect.android.Renren;
-import com.renren.api.connect.android.common.AbstractRequestListener;
-import com.renren.api.connect.android.exception.RenrenError;
-import com.renren.api.connect.android.feed.FeedPublishRequestParam;
-import com.renren.api.connect.android.feed.FeedPublishResponseBean;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -29,21 +10,20 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.Toast;
-import android.widget.ImageView.ScaleType;
+
+import com.moupress.app.friendshost.Const;
+import com.moupress.app.friendshost.PubSub;
+import com.moupress.app.friendshost.R;
 
 /**
  * @author Li Ji
@@ -57,10 +37,10 @@ public class FeedPublishActivity extends Activity{
 	private ProgressDialog progressDialog;
 	
 	//Sns Boolean Selected Indicator
-	private boolean FBSelected = false;
-	private boolean RRSelected = false;
-	private boolean TWSelected = false;
-	private boolean WBSelected = false;
+//	private boolean FBSelected = false;
+//	private boolean RRSelected = false;
+//	private boolean TWSelected = false;
+//	private boolean WBSelected = false;
 	
 	//Controls & variables to publish Photos
 	private Button btnUploadPic;
@@ -102,8 +82,6 @@ public class FeedPublishActivity extends Activity{
 		uploadPicRotateDegree = 0;
 		activity= this;
 		
-	
-		
 		fGetIntent();
 		fInitFieldUI();
 		fInitPicButtons();
@@ -121,7 +99,7 @@ public class FeedPublishActivity extends Activity{
 		Bundle extras = intent.getExtras();
 		title = extras.getString(Intent.EXTRA_SUBJECT);
 		bodyText = extras.getString(Intent.EXTRA_TEXT);
-		
+		PubSub.zSnsOrg.SnsResetPublishNewFeedSelected();
 	}
 
 	private void fInitFieldUI() {
@@ -144,22 +122,33 @@ public class FeedPublishActivity extends Activity{
 				
 			}});
 		
-		publishButton = (Button) this.findViewById(R.id.secondbtn);
+		publishButton = (Button) this.findViewById(R.id.thirdbtn);
 		publishButton.setOnClickListener(new View.OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
 				Log.i(TAG, "Publish Button is Clicked!");
-				message = editTextMessage.getText().toString();	
+				message = editTextMessage.getText().toString();
+				boolean bPublished = false;
 				if(selectedImagePath != null && selectedImagePath.length() > 0)
 				{
-					uploadPhoto();
+					bPublished = uploadPhoto();
 					selectedImagePath="";
 				}
 				else 
 				{
-					publishFeed();
+					if (message == null || message.length() == 0 ) {
+						Toast.makeText(getApplicationContext(), "Empty feed message and No Photo attached", Toast.LENGTH_SHORT).show();
+					} else {
+						bPublished = publishFeed();
+					}
 				}
-				activity.finish();
+				if (bPublished) {
+					Toast.makeText(getApplicationContext(), "Your feed will be published shortly", Toast.LENGTH_SHORT).show();
+					activity.finish();
+				} else {
+					Toast.makeText(getApplicationContext(), "Please check you selection. No feed has been published", Toast.LENGTH_SHORT).show();
+				}
+				
 			}
 		});
 	}
@@ -184,15 +173,6 @@ public class FeedPublishActivity extends Activity{
 					"\nWe will disable other sns you have selected";
 		}
 		Toast.makeText(activity, text, Toast.LENGTH_LONG).show();
-		
-//		mNotification = new Runnable(){
-//			@Override
-//			public void run() {
-//				 Toast.makeText(activity, text, Toast.LENGTH_LONG).show();
-//				}
-//			};
-//			
-//		this.mNotificationHandler.post(mNotification);
 	}
 	
 	//Initialize Buttons on UI
@@ -210,12 +190,17 @@ public class FeedPublishActivity extends Activity{
 			@Override
 			public void onClick(View v) {
 				toggleBtnSelected(imgBtn_Facebook);
-				if (imgBtn_Facebook.isSelected()) {
+				PubSub.zSnsOrg.GetSnsInstance(Const.SNS_FACEBOOK).fToogleSelectToPublish();
+				if (PubSub.zSnsOrg.GetSnsInstance(Const.SNS_FACEBOOK).fIsSelectedToPublish()) {
 					imgBtn_Sina.setSelected(false);
-					WBSelected = false;
+					PubSub.zSnsOrg.GetSnsInstance(Const.SNS_SINA).fUnSelectToPublish();
 				}
-				FBSelected = imgBtn_Facebook.isSelected();
-				popUpToast(Const.SNS_FACEBOOK,FBSelected);
+//				if (imgBtn_Facebook.isSelected()) {
+//					imgBtn_Sina.setSelected(false);
+//					WBSelected = false;
+//				}
+//				FBSelected = imgBtn_Facebook.isSelected();
+//				popUpToast(Const.SNS_FACEBOOK,FBSelected);
 			}
 		});
 		
@@ -224,12 +209,17 @@ public class FeedPublishActivity extends Activity{
 			@Override
 			public void onClick(View v) {
 				toggleBtnSelected(imgBtn_Renren);
-				if (imgBtn_Renren.isSelected()) {
+				PubSub.zSnsOrg.GetSnsInstance(Const.SNS_RENREN).fToogleSelectToPublish();
+				if (PubSub.zSnsOrg.GetSnsInstance(Const.SNS_RENREN).fIsSelectedToPublish()) {
 					imgBtn_Sina.setSelected(false);
-					WBSelected = false;
+					PubSub.zSnsOrg.GetSnsInstance(Const.SNS_SINA).fUnSelectToPublish();
 				}
-				RRSelected = imgBtn_Renren.isSelected();
-				popUpToast(Const.SNS_RENREN,RRSelected);
+//				if (imgBtn_Renren.isSelected()) {
+//					imgBtn_Sina.setSelected(false);
+//					WBSelected = false;
+//				}
+//				RRSelected = imgBtn_Renren.isSelected();
+//				popUpToast(Const.SNS_RENREN,RRSelected);
 			}
 		});
 		
@@ -238,13 +228,18 @@ public class FeedPublishActivity extends Activity{
 			@Override
 			public void onClick(View v) {
 				toggleBtnSelected(imgBtn_Twitter);
-				if (imgBtn_Twitter.isSelected()) {
+				PubSub.zSnsOrg.GetSnsInstance(Const.SNS_TWITTER).fToogleSelectToPublish();
+				if (PubSub.zSnsOrg.GetSnsInstance(Const.SNS_TWITTER).fIsSelectedToPublish()) {
 					imgBtn_Sina.setSelected(false);
-					WBSelected = false;
+					PubSub.zSnsOrg.GetSnsInstance(Const.SNS_SINA).fUnSelectToPublish();
 				}
-				
-				TWSelected = imgBtn_Twitter.isSelected();
-				popUpToast(Const.SNS_TWITTER,TWSelected);
+//				if (imgBtn_Twitter.isSelected()) {
+//					imgBtn_Sina.setSelected(false);
+//					WBSelected = false;
+//				}
+//				
+//				TWSelected = imgBtn_Twitter.isSelected();
+//				popUpToast(Const.SNS_TWITTER,TWSelected);
 			}
 		});
 		
@@ -253,16 +248,25 @@ public class FeedPublishActivity extends Activity{
 			@Override
 			public void onClick(View v) {
 				toggleBtnSelected(imgBtn_Sina);
-				if (imgBtn_Sina.isSelected()) {
+				PubSub.zSnsOrg.GetSnsInstance(Const.SNS_SINA).fToogleSelectToPublish();
+				if (PubSub.zSnsOrg.GetSnsInstance(Const.SNS_SINA).fIsSelectedToPublish()) {
 					imgBtn_Facebook.setSelected(false);
-					FBSelected = false;
+					PubSub.zSnsOrg.GetSnsInstance(Const.SNS_FACEBOOK).fUnSelectToPublish();
 					imgBtn_Renren.setSelected(false);
-					RRSelected = false;
+					PubSub.zSnsOrg.GetSnsInstance(Const.SNS_RENREN).fUnSelectToPublish();
 					imgBtn_Twitter.setSelected(false);
-					TWSelected = false;
+					PubSub.zSnsOrg.GetSnsInstance(Const.SNS_TWITTER).fUnSelectToPublish();
 				}
-				WBSelected = imgBtn_Sina.isSelected();
-				popUpToast(Const.SNS_SINA, WBSelected);
+//				if (imgBtn_Sina.isSelected()) {
+//					imgBtn_Facebook.setSelected(false);
+//					FBSelected = false;
+//					imgBtn_Renren.setSelected(false);
+//					RRSelected = false;
+//					imgBtn_Twitter.setSelected(false);
+//					TWSelected = false;
+//				}
+//				WBSelected = imgBtn_Sina.isSelected();
+				popUpToast(Const.SNS_SINA, PubSub.zSnsOrg.GetSnsInstance(Const.SNS_SINA).fIsSelectedToPublish());
 			}
 		});
 	}
@@ -380,8 +384,11 @@ public class FeedPublishActivity extends Activity{
 	}
 	
 	
-	private void publishFeed()
-	{
+	private boolean publishFeed() {
+		Bundle params = new Bundle();
+		params.putString(Const.SMSGBODY, message);
+		
+		return PubSub.zSnsOrg.SnsPublishNewFeed(params);
 //		
 //		if(this.WBSelected)
 //		{
@@ -402,7 +409,8 @@ public class FeedPublishActivity extends Activity{
 	    
 	    
 	}
-	private void uploadPhoto() {
+	private boolean uploadPhoto() {
+		return PubSub.zSnsOrg.SnsUploadPic(message, selectedImagePath);
 //		
 //		if(this.WBSelected)
 //		{

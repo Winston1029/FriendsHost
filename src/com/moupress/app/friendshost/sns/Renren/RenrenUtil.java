@@ -1,22 +1,11 @@
 package com.moupress.app.friendshost.sns.Renren;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.methods.PostMethod;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -57,7 +46,8 @@ public class RenrenUtil extends SnsUtil{
 	private static final String[] PERMISSIONS = new String[] {
 		"read_user_feed", "publish_feed", 
 		"read_user_share", "publish_share", "read_user_status",
-		"publish_comment",
+		"publish_comment", 
+		"photo_upload", "create_album", "read_user_album",
 		"operate_like"};
 	
 	//private PubSub zPubSub;
@@ -216,38 +206,46 @@ public class RenrenUtil extends SnsUtil{
 		}
 	}
 	
-	public void fPublishFeeds(String name, String description,String url, String imageUrl, String caption, String message)
-	{
+	@Override
+	public void fPublishFeeds(Bundle params) {
+		//String name, String description,String url, String imageUrl, String caption, String message
 		if (zRenren != null) {
 			//AsyncRenren asyncRenren = new AsyncRenren(zRenren);
 			asyncRenren = fGetAsyncRenren();
 			//showProgress();
-			
+			String name = params.getString(Const.SNAME);
+			String description = params.getString(Const.SPHOTOPREVIEWDESCRIPTION);
+			String url = params.getString(Const.SLINK);
+			String imageUrl = params.getString(Const.SHEADIMG);
+			String caption = params.getString(Const.SPHOTOPREVIEWCAPTION);
+			String message = params.getString(Const.SMSGBODY);
 			FeedPublishRequestParam param = new FeedPublishRequestParam(
-					name, description, url, imageUrl, caption,
-					null, null, message);
+					(name != null ? name : " "),
+					(description != null ? description : " "),
+					(url != null ? url : " "),
+					(imageUrl != null ? imageUrl : ""),
+					(caption != null ? caption : ""),
+					null,  null,(message != null ? message : ""));
 			
 			this.startNotification(4, "Feed");
 			AbstractRequestListener<FeedPublishResponseBean> listener = new AbstractRequestListener<FeedPublishResponseBean>() {
 
 				@Override
 				public void onComplete(final FeedPublishResponseBean bean) {
-							//editTextLog.setText(bean.toString());
-							Log.d(TAG, bean.toString());
-							stopNotification();
+					Log.d(TAG, bean.toString());
+					stopNotification();
 				}
-
 
 				@Override
 				public void onFault(final Throwable fault) {
-							Log.d(TAG, fault.getMessage());
-							stopNotification();
+					Log.d(TAG, fault.getMessage());
+					stopNotification();
 				}
 
 				@Override
 				public void onRenrenError(final RenrenError renrenError) {
-							Log.d(TAG, renrenError.getMessage());
-							stopNotification();
+					Log.d(TAG, renrenError.getMessage());
+					stopNotification();
 				}
 			};
 			asyncRenren.publishFeed(param, listener, true);
@@ -339,16 +337,15 @@ public class RenrenUtil extends SnsUtil{
 
     @Override
 	public void fResend(FeedEntry feed) {
-		// TODO Auto-generated method stub
-		//String name = (feed.getsName() == null?" ":feed.getsName());
-		String name = " ";
-		String description = (feed.getsPhotoPreviewDescription() == null? " ":feed.getsPhotoPreviewDescription());
-		String link = (feed.getsPhotoPreviewLink() == null ? " ":feed.getsPhotoPreviewLink());
-		String imgUrl = (feed.getsPhotoPreviewLink() == null ? " ":feed.getsPhotoPreviewLink());
-		String caption = (feed.getsPhotoPreviewCaption() == null ? " ":feed.getsPhotoPreviewCaption());
-		String msg = (feed.getsMsgBody() == null ? " ":feed.getsMsgBody());
-		String story = (feed.getsStory()==null? " ":feed.getsStory());
-		this.fPublishFeeds(name, description, link, imgUrl, caption, msg+story);
+//		//String name = (feed.getsName() == null?" ":feed.getsName());
+//		String name = " ";
+//		String description = (feed.getsPhotoPreviewDescription() == null? " ":feed.getsPhotoPreviewDescription());
+//		String link = (feed.getsPhotoPreviewLink() == null ? " ":feed.getsPhotoPreviewLink());
+//		String imgUrl = (feed.getsPhotoPreviewLink() == null ? " ":feed.getsPhotoPreviewLink());
+//		String caption = (feed.getsPhotoPreviewCaption() == null ? " ":feed.getsPhotoPreviewCaption());
+//		String msg = (feed.getsMsgBody() == null ? " ":feed.getsMsgBody());
+//		String story = (feed.getsStory()==null? " ":feed.getsStory());
+//		this.fPublishFeeds(name, description, link, imgUrl, caption, msg+story);
 	}
     
     public void fLikeFeeds(Bundle params) {

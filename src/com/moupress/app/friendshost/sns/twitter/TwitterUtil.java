@@ -300,13 +300,13 @@ public class TwitterUtil extends SnsUtil{
 		twitterAsync.getHomeTimeline();
 	}
     
-    public void fPublishFeeds(String message) {
-    	if(twitterAsync == null) {
-			 twitterAsync = Authentication();
+    @Override
+    public void fPublishFeeds(Bundle params) {
+		if(twitterAsync == null) {
+			twitterAsync = Authentication();
 		}
-		
-	    startNotification(1,"Tweet");
-       twitterAsync.updateStatus(message);
+		startNotification(1,"Tweet");
+		twitterAsync.updateStatus(params.getString(Const.SMSGBODY));
     }
     
     public void fPostComments(Bundle params) {
@@ -386,7 +386,7 @@ public class TwitterUtil extends SnsUtil{
 	 
 	@Override
 	public void fResend(FeedEntry feed) {
-		this.fPublishFeeds(feed.getsMsgBody());
+		//this.fPublishFeeds(feed.getsMsgBody());
 	}
 	
 	public void fLikeFeeds(Bundle params) {

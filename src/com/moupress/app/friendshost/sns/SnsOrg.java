@@ -2,13 +2,16 @@ package com.moupress.app.friendshost.sns;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.sns.Renren.RenrenUtil;
 import com.moupress.app.friendshost.sns.facebook.FacebookUtil;
 import com.moupress.app.friendshost.sns.sina.SinaUtil;
 import com.moupress.app.friendshost.sns.twitter.TwitterUtil;
-
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
@@ -109,5 +112,37 @@ public class SnsOrg {
 			}
 		}
 	}
+	
+	public boolean SnsPublishNewFeed(Bundle params) {
+		boolean bPublished = false;
+		for(int i=0; i< Const.SNSGROUPS.length; i++)  {
+			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).fIsSelectedToPublish()) {
+				this.GetSnsInstance(Const.SNSGROUPS[i]).fPublishFeeds(params);
+				bPublished = true;
+			}
+		}
+		return bPublished;
+	}
+	
+	public void SnsResetPublishNewFeedSelected() {
+		for(int i=0; i< Const.SNSGROUPS.length; i++)  {
+			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).fIsSelectedToPublish()) {
+				this.GetSnsInstance(Const.SNSGROUPS[i]).fUnSelectToPublish();
+			}
+		}
+	}
+	
+	public boolean SnsUploadPic(String message, String selectedImagePath) {
+		boolean bPublished = false;
+		for(int i=0; i< Const.SNSGROUPS.length; i++)  {
+			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).fIsSelectedToPublish()) {
+				this.GetSnsInstance(Const.SNSGROUPS[i]).fUploadPic(message, selectedImagePath);
+				bPublished = true;
+			}
+		}
+		return bPublished;
+	}
+	
+	
 	
 }
