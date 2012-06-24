@@ -7,7 +7,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
@@ -241,6 +243,14 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 					"</body></html>";
 			String html = String.format(HTML_FORMAT, sLargeImgUrl);
 			webV_detail.loadDataWithBaseURL("", html, "text/html", "UTF-8", "");
+			webV_detail.setOnTouchListener(new OnTouchListener() {
+
+				@Override
+				public boolean onTouch(android.view.View v, MotionEvent event) {
+					Toast.makeText(zActivity.getApplicationContext(), "Double Tap or Pinch to Zoom", Toast.LENGTH_SHORT).show();
+					return false;
+				}
+			});
 		} else {
 			webV_detail.setVisibility(android.view.View.GONE);
 		}		

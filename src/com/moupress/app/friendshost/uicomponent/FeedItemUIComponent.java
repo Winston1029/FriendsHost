@@ -23,6 +23,7 @@ public class FeedItemUIComponent {
 		return img_Head;
 	}
 	public void setImg_Head(WebImageView img_Head) {
+		img_Head.setVisibility(View.VISIBLE);
 		this.img_Head = img_Head;
 		this.img_Head.setDrawingCacheEnabled(true);
 	}
@@ -30,18 +31,21 @@ public class FeedItemUIComponent {
 		return txv_FeedUser;
 	}
 	public void setTxv_FeedUser(TextView txv_FeedUser) {
+		txv_FeedUser.setVisibility(View.VISIBLE);
 		this.txv_FeedUser = txv_FeedUser;
 	}
 	public TextView getTxv_MsgCreationTime() {
 		return txv_MsgCreationTime;
 	}
 	public void setTxv_MsgCreationTime(TextView txv_MsgCreationTime) {
+		txv_MsgCreationTime.setVisibility(View.VISIBLE);
 		this.txv_MsgCreationTime = txv_MsgCreationTime;
 	}
 	public TextView getTxv_MsgBody() {
 		return txv_MsgBody;
 	}
 	public void setTxv_MsgBody(TextView txv_MsgBody) {
+		txv_MsgBody.setVisibility(View.VISIBLE);
 		this.txv_MsgBody = txv_MsgBody;
 	}
 	public WebImageView getImg_PhotoPreview() {

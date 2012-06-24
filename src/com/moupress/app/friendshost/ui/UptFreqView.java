@@ -2,24 +2,27 @@ package com.moupress.app.friendshost.ui;
 
 import java.util.ArrayList;
 
-import com.moupress.app.friendshost.Const;
-import com.moupress.app.friendshost.R;
-import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
-import com.moupress.app.friendshost.util.Pref;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View.OnClickListener;
 import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.CompoundButton.OnCheckedChangeListener;
+
+import com.moupress.app.friendshost.Const;
+import com.moupress.app.friendshost.R;
+import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
+import com.moupress.app.friendshost.util.FlurryUtil;
+import com.moupress.app.friendshost.util.Pref;
 
 public class UptFreqView extends DialogView {
 
 	private Activity zActivity;
 	private Intent intentBack;
+	
+	public static final String TAG = "UptFreqView";
 	
 	//Radio Buttons Index
 	private int prevInd = -1;
@@ -90,6 +93,7 @@ public class UptFreqView extends DialogView {
 				 if(prevInd != curInd )
 				 {
 					 Pref.setMyIntPref((zActivity).getApplicationContext(), Const.SETTING_BASIC+"_UPT_FREQ", curInd);
+					 FlurryUtil.logEvent(TAG+":selBtnOnClickListener", Const.SETTING_UPT_FREQ_BTN_TEXT[curInd]);  
 				 }
 				 
 				 if(intentBack != null )

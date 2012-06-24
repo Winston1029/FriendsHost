@@ -1,9 +1,5 @@
 package com.moupress.app.friendshost;
 
-import com.moupress.app.friendshost.service.FeedRetrievalService;
-import com.moupress.app.friendshost.util.Mail;
-import com.moupress.app.friendshost.util.Pref;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -14,6 +10,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+import com.moupress.app.friendshost.service.FeedRetrievalService;
+import com.moupress.app.friendshost.util.FlurryUtil;
+import com.moupress.app.friendshost.util.Mail;
 
 public class FriendsHostActivity extends FragmentActivity {
     /** Called when the activity is first created. */
@@ -29,15 +28,14 @@ public class FriendsHostActivity extends FragmentActivity {
     
     @Override
 	protected void onStart() {
-		// TODO Auto-generated method stub
 		super.onStart();
-		  fBindService();
+		fBindService();
+		FlurryUtil.onStart(this);
 	}
 
 
 
 	private void fBindService() {
-		// TODO Auto-generated method stub
 		this.zPubsub.fBindSvc();
 	}
 
@@ -127,9 +125,9 @@ public class FriendsHostActivity extends FragmentActivity {
 
 	@Override
 	protected void onStop() {
-		// TODO Auto-generated method stub
 		super.onStop();
 		//this.zPubsub.UnBindToService();
+		FlurryUtil.onStop(this);
 	}
 	
 	
