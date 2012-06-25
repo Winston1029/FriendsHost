@@ -8,7 +8,8 @@
     android:background="@color/white"
     android:orientation="vertical"
     >
-    <include android:id="@+id/fhTitle" layout="@layout/fh_title_bar"/>
+<!--    <include android:id="@+id/fhTitle" layout="@layout/fh_title_bar"/>-->
+	<include android:id="@+id/fhTitle" layout="@layout/fh_dtl_title_bar"/>
 
     <LinearLayout
         android:id="@+id/LinearLayout_UserInfo_ItemDetail"

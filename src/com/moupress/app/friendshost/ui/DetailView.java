@@ -71,8 +71,8 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 	}
 	
 	private void InitTitleButtons(final Activity activity) {
-    	ImageButton btnReturnMain = (ImageButton) activity.findViewById(R.id.leftpanelbtn);
-    	btnReturnMain.setBackgroundResource(android.R.drawable.ic_menu_revert);
+    	ImageButton btnReturnMain = (ImageButton) activity.findViewById(R.id.CancelBtn);
+    	//btnReturnMain.setBackgroundResource(android.R.drawable.ic_menu_revert);
     	btnReturnMain.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -81,8 +81,8 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 			}
 		});
     	
-    	ImageButton btnLikes = (ImageButton) activity.findViewById(R.id.writefeedbtn);
-    	btnLikes.setBackgroundResource(android.R.drawable.btn_star_big_off);
+    	ImageButton btnLikes = (ImageButton) activity.findViewById(R.id.thirdbtn);
+    	//btnLikes.setBackgroundResource(android.R.drawable.btn_star_big_off);
     	btnLikes.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -97,19 +97,19 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 					params.putString(Const.SRESOURCEID, m.group());
 				}
 				if (bIsFeedLiked == false) {
-					v.setBackgroundResource(android.R.drawable.btn_star_big_on);
+					//v.setBackgroundResource(android.R.drawable.btn_star_big_on);
 					bIsFeedLiked = true;
 					PubSub.zSnsOrg.GetSnsInstance(displayedSns).fLikeFeeds(params);
 				} else {
-					v.setBackgroundResource(android.R.drawable.btn_star_big_off);
+					//v.setBackgroundResource(android.R.drawable.btn_star_big_off);
 					bIsFeedLiked = false;
 					PubSub.zSnsOrg.GetSnsInstance(displayedSns).fUnLikeFeeds(params);
 				}
 			}
     	});
     	
-    	ImageButton btnShare = (ImageButton) activity.findViewById(R.id.refreshbtn);
-    	btnShare.setBackgroundResource(android.R.drawable.ic_menu_share);
+    	ImageButton btnShare = (ImageButton) activity.findViewById(R.id.secondbtn);
+    	//btnShare.setBackgroundResource(android.R.drawable.ic_menu_share);
     	btnShare.setOnClickListener(new OnClickListener() {
 
 			@Override
