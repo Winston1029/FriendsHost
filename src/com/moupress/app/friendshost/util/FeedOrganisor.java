@@ -284,10 +284,10 @@ public class FeedOrganisor {
 	public ArrayList<FeedEntry> fGetUnReadNewsFeed(String sns) {
 		//Date d = new Date();
 		//CharSequence currentDateTime  = DateFormat.format("yyyy-MM-dd hh:mm:ss", d.getTime());
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
-		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-		Date d = new Date();
-		String updateTime = sdf.format(d);
+		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+		//sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+		//String updateTime = sdf.format(new Date(););
+		String updateTime = zDBHelper.fGetDateFormat().format(new Date());
 		ArrayList<FeedEntry> items = fGetUnReadNewsFeed(sns, updateTime);
 		fUpdateReadFeeds(sns, updateTime);
 		return items;

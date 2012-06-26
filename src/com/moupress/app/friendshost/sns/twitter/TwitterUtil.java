@@ -86,7 +86,7 @@ public class TwitterUtil extends SnsUtil{
 		super(zPubSub,Const.SNS_TWITTER);
 	    //this.prefs = PreferenceManager.getDefaultSharedPreferences(zActivity);
 	    this.logImg = R.drawable.fh_twitter_logo;
-	    twitterAsync = Authentication();
+	    fSnsAuth(null, false);
 	}
 
 	private TwitterListener listener = new TwitterAdapter() {
@@ -220,12 +220,15 @@ public class TwitterUtil extends SnsUtil{
 		this.snsEventListener = snsEventListener;
 		this.uptPref = uptPref;
 		
-		sTokenKey = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENKEY);
-		sTokenSecret = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENSECRET);
+		sTokenKey = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), OAuth.OAUTH_TOKEN);
+		sTokenSecret = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), OAuth.OAUTH_TOKEN_SECRET);
 		
 		if ( sTokenKey.length() > 0 && sTokenSecret.length() > 0) {
-			this.SnsAddEventCallback(snsEventListener, uptPref);
-			return;
+			Authentication();
+			if ( isSessionValid() ) {
+				this.SnsAddEventCallback(snsEventListener, uptPref);
+				return;
+			}
 		}
 		try {
     		this.consumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
@@ -238,20 +241,19 @@ public class TwitterUtil extends SnsUtil{
 
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				new OAuthRequestTokenTask(zActivity,consumer,provider).execute();
 			}});
 	}
 	
-	public AsyncTwitter Authentication() {
+	public void Authentication() {
 		//super.Autentication(prefs);
-		String token = Pref.getMyStringPref(this.zContext, OAuth.OAUTH_TOKEN);
-		String secret = Pref.getMyStringPref(this.zContext, OAuth.OAUTH_TOKEN_SECRET);
+//		String token = Pref.getMyStringPref(this.zContext, OAuth.OAUTH_TOKEN);
+//		String secret = Pref.getMyStringPref(this.zContext, OAuth.OAUTH_TOKEN_SECRET);
 		
-		if(token.length() ==0 || secret.length() == 0)
-			return null;
+//		if(token.length() ==0 || secret.length() == 0)
+//			return null;
 		
-		AccessToken a = new AccessToken(token,secret);
+		AccessToken a = new AccessToken(sTokenKey,sTokenSecret);
 		//Twitter twitter = new TwitterFactory().getInstance();
 		//AsyncTwitterFactory factory = new AsyncTwitterFactory(listener);
 		AsyncTwitterFactory factory = new AsyncTwitterFactory();
@@ -274,7 +276,6 @@ public class TwitterUtil extends SnsUtil{
 //			e.printStackTrace();
 //		}
 		
-		return twitterAsync;
 	}
 	
     @Override
@@ -284,7 +285,6 @@ public class TwitterUtil extends SnsUtil{
 			try {
 				return twitter.test();
 			} catch (TwitterException e) {
-				e.printStackTrace();
 				return false;
 			}
 		} else {
@@ -295,7 +295,7 @@ public class TwitterUtil extends SnsUtil{
     @Override
 	public void fGetNewsFeed(Context applicationContext) {
     	if(twitterAsync == null) {
-			 twitterAsync = Authentication();
+			 Authentication();
 		}			
 		twitterAsync.getHomeTimeline();
 	}
@@ -303,7 +303,7 @@ public class TwitterUtil extends SnsUtil{
     @Override
     public void fPublishFeeds(Bundle params) {
 		if(twitterAsync == null) {
-			twitterAsync = Authentication();
+			Authentication();
 		}
 		startNotification(1,"Tweet");
 		twitterAsync.updateStatus(params.getString(Const.SMSGBODY));
@@ -312,7 +312,7 @@ public class TwitterUtil extends SnsUtil{
     public void fPostComments(Bundle params) {
 		String message = params.getString(Const.COMMENTED_MSG);
 		if(twitterAsync == null) {
-			twitterAsync = Authentication();
+			Authentication();
 		}
 		twitterAsync.updateStatus(new StatusUpdate(message)
 			.inReplyToStatusId(Long.valueOf(params.getString(Const.SFEEDID))));

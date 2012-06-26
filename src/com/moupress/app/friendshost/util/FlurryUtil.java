@@ -10,7 +10,7 @@ import com.flurry.android.FlurryAgent;
 public class FlurryUtil {
 	//	2RB6SIPR2RL6B84S6KJS
 	// MN4C6SHMKI5W6FX38BWE
-	private static boolean bEnabled = true;
+	private static boolean bEnabled = false;
 	private static String FlurryAPI_Key = "66FFT4FSX8DPRXGQRW8V";
 	
 	public static void onStart(Context context) {
