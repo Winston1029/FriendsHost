@@ -1,6 +1,8 @@
 package com.moupress.app.friendshost.ui;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -38,6 +40,7 @@ import com.moupress.app.friendshost.uicomponent.PullToRefreshListView.OnRefreshL
 import com.moupress.app.friendshost.uicomponent.TabPageIndicator;
 import com.moupress.app.friendshost.uicomponent.SlidingPanel.PanelSlidingListener;
 import com.moupress.app.friendshost.uicomponent.interfaces.TitleProvider;
+import com.moupress.app.friendshost.util.FlurryUtil;
 
 
 /**
@@ -45,7 +48,7 @@ import com.moupress.app.friendshost.uicomponent.interfaces.TitleProvider;
  *
  */
 public class MainUIView extends View{
-	
+	private static final String TAG = "MainUIView";
 
 	private ViewPager mPager;
 	private TabPageIndicator mIndicator;
@@ -337,9 +340,10 @@ public class MainUIView extends View{
 				
 				@Override
 				public void onRefresh() {
-					// TODO Auto-generated method stub
+					// FlurryUtil
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+					FlurryUtil.logEvent(TAG + ":SnsFeedListFragment:onRefresh", snsName + "," +sdf.format(new Date()));
 					new GetDataTask().execute();
-					
 				}
 			});
 			

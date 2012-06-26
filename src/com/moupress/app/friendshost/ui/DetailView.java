@@ -1,10 +1,13 @@
 package com.moupress.app.friendshost.ui;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -34,9 +37,12 @@ import com.moupress.app.friendshost.activity.LstViewCommentAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
+import com.moupress.app.friendshost.util.FlurryUtil;
 import com.moupress.app.friendshost.util.Pref;
 
 public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCloseListener{
+	
+	private static final String TAG = "DetailView";
 	
 	private FeedEntry feed;
 	private String displayedSns;
@@ -71,8 +77,8 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 	}
 	
 	private void InitTitleButtons(final Activity activity) {
-    	ImageButton btnReturnMain = (ImageButton) activity.findViewById(R.id.leftpanelbtn);
-    	btnReturnMain.setBackgroundResource(android.R.drawable.ic_menu_revert);
+    	ImageButton btnReturnMain = (ImageButton) activity.findViewById(R.id.CancelBtn);
+    	//btnReturnMain.setBackgroundResource(android.R.drawable.ic_menu_revert);
     	btnReturnMain.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -81,8 +87,8 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 			}
 		});
     	
-    	ImageButton btnLikes = (ImageButton) activity.findViewById(R.id.writefeedbtn);
-    	btnLikes.setBackgroundResource(android.R.drawable.btn_star_big_off);
+    	ImageButton btnLikes = (ImageButton) activity.findViewById(R.id.thirdbtn);
+    	//btnLikes.setBackgroundResource(android.R.drawable.btn_star_big_off);
     	btnLikes.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -97,19 +103,21 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 					params.putString(Const.SRESOURCEID, m.group());
 				}
 				if (bIsFeedLiked == false) {
-					v.setBackgroundResource(android.R.drawable.btn_star_big_on);
+					//v.setBackgroundResource(android.R.drawable.btn_star_big_on);
 					bIsFeedLiked = true;
 					PubSub.zSnsOrg.GetSnsInstance(displayedSns).fLikeFeeds(params);
+					FlurryUtil.logEvent(TAG+":btnLikes", displayedSns + ", Like");
 				} else {
-					v.setBackgroundResource(android.R.drawable.btn_star_big_off);
+					//v.setBackgroundResource(android.R.drawable.btn_star_big_off);
 					bIsFeedLiked = false;
 					PubSub.zSnsOrg.GetSnsInstance(displayedSns).fUnLikeFeeds(params);
+					FlurryUtil.logEvent(TAG+":btnLikes", displayedSns + ", UnLike");
 				}
 			}
     	});
     	
-    	ImageButton btnShare = (ImageButton) activity.findViewById(R.id.refreshbtn);
-    	btnShare.setBackgroundResource(android.R.drawable.ic_menu_share);
+    	ImageButton btnShare = (ImageButton) activity.findViewById(R.id.secondbtn);
+    	//btnShare.setBackgroundResource(android.R.drawable.ic_menu_share);
     	btnShare.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -118,7 +126,15 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 				Bundle params = new Bundle();
 				params.putString(Const.SFEEDID, feed.getsID());
 				params.putString(Const.SOWNERID, feed.getsOwnerID());
-				PubSub.zSnsOrg.GetSnsInstance(displayedSns).fShareFeeds(params);
+				//PubSub.zSnsOrg.GetSnsInstance(displayedSns).fShareFeeds(params);
+				Intent intent=new Intent(android.content.Intent.ACTION_SEND);
+				intent.setType("text/plain");
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+				// Add data to the intent, the receiving app will decide what to do with it.
+				intent.putExtra(Intent.EXTRA_SUBJECT, "Some Subject Line");
+				intent.putExtra(Intent.EXTRA_TEXT, "Body of the message, woot!");
+				zActivity.startActivity(Intent.createChooser(intent, "Share via"));
 			}
 		});	
     }
@@ -138,6 +154,8 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		if(PubSub.zFeedOrg != null)
 		feed = PubSub.zFeedOrg.fGetFeedByID( displayedSns, feed_id );
 		//feed.setsFeedType(displayedSns);
+		// FlurryUtil
+		FlurryUtil.logEvent(TAG+":fInitFeed", displayedSns +"," + feed.getsFeedType());
 		
 		arrAdapterComment = new LstViewCommentAdapter(zActivity, R.layout.feed_item_detail_comment);
 		if (feed.getzComments() != null ) {
@@ -323,6 +341,9 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 	public void onDrawerClosed() {
 		drawer_comments_content.setVisibility(android.view.View.GONE);
 		lstView_comments.setVisibility(android.view.View.GONE);
+		//FlurryUtil
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+		FlurryUtil.logEvent(TAG+":onDrawerClosed", sdf.format(new Date()));
 	}
 
 	@Override
@@ -332,6 +353,9 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		
 		arrAdapterComment.notifyDataSetChanged();
 		fInitMyCommentUI();
+		//FlurryUtil
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+		FlurryUtil.logEvent(TAG+":onDrawerOpened", displayedSns+","+arrAdapterComment.getCount() + sdf.format(new Date()));
 	}
 
 	private void fInitMyCommentUI() {
@@ -352,6 +376,8 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 				params.putString(Const.SNAME, feed.getsName());
 				params.putString(Const.SOWNERID, feed.getsOwnerID());
 				PubSub.zSnsOrg.GetSnsInstance(displayedSns).fPostComments(params);
+				// FlurryUtil
+				FlurryUtil.logEvent(TAG+":fInitMyCommentUI:btn_send_detail_comment", displayedSns+","+sCommentMsg.length());
 				etx_commentmsg_detail_comment.setText("");
 				imm.hideSoftInputFromWindow(etx_commentmsg_detail_comment.getWindowToken(), 0);
 			}

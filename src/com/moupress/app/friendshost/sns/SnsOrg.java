@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.PubSub;
@@ -12,9 +13,7 @@ import com.moupress.app.friendshost.sns.Renren.RenrenUtil;
 import com.moupress.app.friendshost.sns.facebook.FacebookUtil;
 import com.moupress.app.friendshost.sns.sina.SinaUtil;
 import com.moupress.app.friendshost.sns.twitter.TwitterUtil;
-import android.app.Activity;
-import android.content.Context;
-import android.util.Log;
+import com.moupress.app.friendshost.util.FlurryUtil;
 
 public class SnsOrg {
 
@@ -47,13 +46,17 @@ public class SnsOrg {
 	{
 		ArrayList<CharSequence> signOnSnsNames = new ArrayList<CharSequence>();
 		signOnSnsNames.clear();
-		
+		String flurry_sns_signedon="";
 		for(int i=0 ; i < Const.SNSGROUPS.length; i++)
 		{
 			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSelected())
 			{
 				signOnSnsNames.add(Const.SNSGROUPS[i]);
+				flurry_sns_signedon += Const.SNSGROUPS[i] + ",";
 			}
+		}
+		if (flurry_sns_signedon.length() > 0) {
+			FlurryUtil.logEvent(TAG + ":GetSignOnSnsNames", flurry_sns_signedon);
 		}
 		
 		return signOnSnsNames;
@@ -115,11 +118,17 @@ public class SnsOrg {
 	
 	public boolean SnsPublishNewFeed(Bundle params) {
 		boolean bPublished = false;
+		String flurry_sns_topublish="";
 		for(int i=0; i< Const.SNSGROUPS.length; i++)  {
 			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).fIsSelectedToPublish()) {
 				this.GetSnsInstance(Const.SNSGROUPS[i]).fPublishFeeds(params);
+				flurry_sns_topublish += Const.SNSGROUPS[i] + ":" + params.getString(Const.SMSGBODY).length() + ",";
 				bPublished = true;
 			}
+		}
+		//FlurryUtil
+		if (bPublished) {
+			FlurryUtil.logEvent(TAG + ":SnsPublishNewFeed", flurry_sns_topublish);
 		}
 		return bPublished;
 	}
@@ -134,11 +143,17 @@ public class SnsOrg {
 	
 	public boolean SnsUploadPic(String message, String selectedImagePath) {
 		boolean bPublished = false;
+		String flurry_sns_topublish="";
 		for(int i=0; i< Const.SNSGROUPS.length; i++)  {
 			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).fIsSelectedToPublish()) {
 				this.GetSnsInstance(Const.SNSGROUPS[i]).fUploadPic(message, selectedImagePath);
+				flurry_sns_topublish += Const.SNSGROUPS[i] + ":" + message.length() + ",";
 				bPublished = true;
 			}
+		}
+		//FlurryUtil
+		if (bPublished) {
+			FlurryUtil.logEvent(TAG + ":SnsPublishNewFeed", flurry_sns_topublish);
 		}
 		return bPublished;
 	}
