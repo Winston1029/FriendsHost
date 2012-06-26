@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  style="@style/TitleBarLayout"
+  android:background="@color/black">
+   <ImageButton android:id="@+id/CancelBtn" 
+  		android:layout_gravity="left|center_vertical"
+  		android:layout_weight="0.9"
+  	    style="@style/TitleBarCancelButtonStyle"
+  		>
+  </ImageButton>
+    <TextView android:id="@+id/CustTitleTv" 
+  			android:layout_width="match_parent"
+  			android:layout_height="match_parent"
+  			android:layout_gravity="center"
+  			android:layout_weight="0.7"
+  			android:textSize="20dip"
+  			android:gravity="center"
+  			>
+  </TextView>
+  
+  
+  <ImageButton android:id="@+id/secondbtn" 
+  		android:layout_weight="1"
+  		android:layout_marginRight="3dip"
+  		android:layout_width="match_parent"
+  		android:layout_height="match_parent"
+  		android:background="@drawable/fh_feed_share"
+  		>
+  </ImageButton>
+<!--  style="@style/TitleBarButtonStyle.Pos"-->
+<!--  android:background="@android:color/transparent"-->
+  <!--  android:background="@drawable/fh_camera"-->
+  
+    <ImageButton android:id="@+id/thirdbtn" 
+  		android:layout_weight="1"
+  		android:layout_marginRight="3dip"
+  		android:layout_width="match_parent"
+  		android:layout_height="match_parent"
+  		android:background="@drawable/fh_feed_like"
+  		>
+  </ImageButton>
+<!--  style="@style/TitleBarButtonStyle.Pos"-->
+<!--  android:background="@android:color/transparent"-->
+</LinearLayout>
