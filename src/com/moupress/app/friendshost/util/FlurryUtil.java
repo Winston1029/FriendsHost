@@ -15,7 +15,8 @@ public class FlurryUtil {
 	
 	public static void onStart(Context context) {
 		if(bEnabled) {
-			FlurryAgent.setReportLocation(false);
+			//FlurryAgent.setReportLocation(true);
+			FlurryAgent.setCaptureUncaughtExceptions(true);
 			FlurryAgent.onStartSession(context, FlurryAPI_Key);
 		}
 	}
