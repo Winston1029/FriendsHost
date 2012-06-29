@@ -1,6 +1,7 @@
 package com.moupress.app.friendshost.ui;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,6 +40,7 @@ import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
 import com.moupress.app.friendshost.util.FlurryUtil;
 import com.moupress.app.friendshost.util.Pref;
+import com.moupress.app.friendshost.util.StringUtil;
 
 public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCloseListener{
 	
@@ -98,9 +100,9 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 				params.putString(Const.SFEEDID, feed.getsID());
 				params.putString(Const.SOWNERID, feed.getsOwnerID());
 				params.putString(Const.SFEEDTYPE, feed.getsFeedType());
-				Matcher m = Pattern.compile("\\d+").matcher(feed.getsLink());
-				while (m.find()) {
-					params.putString(Const.SRESOURCEID, m.group());
+				ArrayList<String> ids = StringUtil.retrieveID(feed.getsLink());
+				if (ids != null && ids.size() > 0) {
+					params.putString(Const.SRESOURCEID, ids.get(0));	
 				}
 				if (bIsFeedLiked == false) {
 					//v.setBackgroundResource(android.R.drawable.btn_star_big_on);
@@ -203,12 +205,17 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		if (feed.getsPhotoPreviewDescription() != null ) {
 			descriptionDetail += "\n" + feed.getsPhotoPreviewDescription();
 		}
+		ArrayList<String> urls = StringUtil.retrieveURL(descriptionDetail);
+		for (String url:urls) {
+			descriptionDetail = descriptionDetail.replace(url, url + " ");
+		}
 		TextView txv_description_detail = (TextView) zActivity.findViewById(R.id.txv_description_detail);
 		txv_description_detail.setText(descriptionDetail);
 		txv_description_detail.setVisibility(android.view.View.VISIBLE);
 		//Display display = getWindowManager().getDefaultDisplay();
 		//FlowTextHelper.tryFlowText(descriptionDetail, img_photo_detail, txv_description_detail, display);		
 	}
+
 
 	private void fInitUIDrawer() {
 		SlidingDrawer drawer_comments = (SlidingDrawer) zActivity.findViewById(R.id.drawer_comments);

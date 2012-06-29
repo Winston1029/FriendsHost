@@ -1,10 +1,13 @@
 package com.moupress.app.friendshost.uicomponent;
 
+import java.util.ArrayList;
+
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.droidfu.widgets.WebImageView;
+import com.moupress.app.friendshost.util.StringUtil;
 
 public class FeedItemUIComponent {
 
@@ -103,20 +106,26 @@ public class FeedItemUIComponent {
 	
 	public void TxtMsgBodyLoad(String sMsgBody,String sStory )
 	{
+		String message = "";
 		txv_MsgBody.setVisibility(View.VISIBLE);
 		if ( sMsgBody != null && sStory != null
 				//if first 4 chars are the same, means duplicate message display Story Only
 				//specially cater for Renren feed structure
 				&& sMsgBody.length() >3 && sStory.length() > 3
 				&& sMsgBody.substring(0, 4).compareToIgnoreCase(sStory.substring(0, 4)) != 0) {
-			txv_MsgBody.setText(sMsgBody + "\n" + sStory);
+			message = sMsgBody + "\n" + sStory;
 		}  else if ( sStory != null ) {
-			txv_MsgBody.setText(sStory);
+			message = sStory;
 		} else if ( sMsgBody != null ) {
-				txv_MsgBody.setText(sMsgBody);
+			message = sMsgBody;
 		} else {
 			txv_MsgBody.setVisibility(View.GONE);
 		}
+		ArrayList<String> urls = StringUtil.retrieveURL(message);
+		for (String url:urls) {
+			message = message.replace(url, url + " ");
+		}
+		txv_MsgBody.setText(message);
 	}
 	
 	public void ImgPhotoPreviewLoad(String sImgSrc)
