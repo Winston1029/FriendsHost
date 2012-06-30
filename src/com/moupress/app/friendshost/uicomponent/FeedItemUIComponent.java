@@ -2,11 +2,15 @@ package com.moupress.app.friendshost.uicomponent;
 
 import java.util.ArrayList;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.droidfu.widgets.WebImageView;
+import com.moupress.app.friendshost.ui.listeners.TextLinkClickListener;
 import com.moupress.app.friendshost.util.StringUtil;
 
 public class FeedItemUIComponent {
@@ -14,7 +18,7 @@ public class FeedItemUIComponent {
 	private WebImageView img_Head;
 	private TextView txv_FeedUser;
 	private TextView txv_MsgCreationTime;
-	private TextView txv_MsgBody;
+	private LinkEnabledTextView txv_MsgBody;
 	private WebImageView img_PhotoPreview;
 	
 	private TextView txv_ImgName;
@@ -44,10 +48,10 @@ public class FeedItemUIComponent {
 		txv_MsgCreationTime.setVisibility(View.VISIBLE);
 		this.txv_MsgCreationTime = txv_MsgCreationTime;
 	}
-	public TextView getTxv_MsgBody() {
+	public LinkEnabledTextView getTxv_MsgBody() {
 		return txv_MsgBody;
 	}
-	public void setTxv_MsgBody(TextView txv_MsgBody) {
+	public void setTxv_MsgBody(LinkEnabledTextView txv_MsgBody) {
 		txv_MsgBody.setVisibility(View.VISIBLE);
 		this.txv_MsgBody = txv_MsgBody;
 	}
@@ -121,11 +125,12 @@ public class FeedItemUIComponent {
 		} else {
 			txv_MsgBody.setVisibility(View.GONE);
 		}
-		ArrayList<String> urls = StringUtil.retrieveURL(message);
-		for (String url:urls) {
-			message = message.replace(url, url + " ");
-		}
-		txv_MsgBody.setText(message);
+//		ArrayList<String> urls = StringUtil.retrieveURL(message);
+//		for (String url:urls) {
+//			message = message.replace(url, url + " ");
+//		}
+		txv_MsgBody.gatherLinksForText(message);
+		//txv_MsgBody.setText(message);
 	}
 	
 	public void ImgPhotoPreviewLoad(String sImgSrc)

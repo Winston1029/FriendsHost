@@ -6,8 +6,11 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,9 +22,10 @@ import android.widget.TextView;
 import com.github.droidfu.widgets.WebImageView;
 import com.moupress.app.friendshost.FriendsHostActivity;
 import com.moupress.app.friendshost.R;
-import com.moupress.app.friendshost.R.id;
 import com.moupress.app.friendshost.sns.FeedEntry;
+import com.moupress.app.friendshost.ui.listeners.TextLinkClickListener;
 import com.moupress.app.friendshost.uicomponent.FeedItemUIComponent;
+import com.moupress.app.friendshost.uicomponent.LinkEnabledTextView;
 
 public class LstViewFeedAdapter extends BaseAdapter{
 	
@@ -86,7 +90,20 @@ public class LstViewFeedAdapter extends BaseAdapter{
 			feedItemUIComponent.setTxv_MsgCreationTime((TextView)convertView.findViewById(R.id.txt_msgcreatedtime));
 			
 			//txt_msgbody
-			feedItemUIComponent.setTxv_MsgBody((TextView)convertView.findViewById(R.id.txt_msgbody));
+			LinkEnabledTextView txvLink = (LinkEnabledTextView)convertView.findViewById(R.id.txt_msgbody);
+			txvLink.setOnTextLinkClickListener(new TextLinkClickListener() {
+				
+				@Override
+				public void onTextLinkClick(View textView, String clickedString) {
+					if (clickedString.startsWith("http://")) {
+						Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(clickedString));
+					    zActivity.startActivity(viewIntent);
+					}				
+				}
+			});
+			txvLink.setTextColor(Color.BLACK);
+			txvLink.setLinkTextColor(Color.BLUE);
+			feedItemUIComponent.setTxv_MsgBody(txvLink);
 			
 			//img_photopreview
 			feedItemUIComponent.setImg_PhotoPreview((WebImageView) convertView.findViewById(R.id.img_photopreview));

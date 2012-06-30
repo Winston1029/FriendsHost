@@ -74,7 +74,7 @@
             android:textColor="@color/black"
             android:textAppearance="?android:attr/textAppearanceSmall" android:visibility="invisible"/>
 
-        <TextView
+        <com.moupress.app.friendshost.uicomponent.LinkEnabledTextView
             android:id="@+id/txt_msgbody"
             android:autoLink="web|map"
             android:layout_width="match_parent"

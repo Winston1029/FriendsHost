@@ -3,13 +3,12 @@ package com.moupress.app.friendshost.ui;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View.OnClickListener;
@@ -37,12 +36,14 @@ import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.activity.LstViewCommentAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
+import com.moupress.app.friendshost.ui.listeners.TextLinkClickListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
+import com.moupress.app.friendshost.uicomponent.LinkEnabledTextView;
 import com.moupress.app.friendshost.util.FlurryUtil;
 import com.moupress.app.friendshost.util.Pref;
 import com.moupress.app.friendshost.util.StringUtil;
 
-public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCloseListener{
+public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCloseListener, TextLinkClickListener{
 	
 	private static final String TAG = "DetailView";
 	
@@ -205,12 +206,17 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		if (feed.getsPhotoPreviewDescription() != null ) {
 			descriptionDetail += "\n" + feed.getsPhotoPreviewDescription();
 		}
-		ArrayList<String> urls = StringUtil.retrieveURL(descriptionDetail);
-		for (String url:urls) {
-			descriptionDetail = descriptionDetail.replace(url, url + " ");
-		}
-		TextView txv_description_detail = (TextView) zActivity.findViewById(R.id.txv_description_detail);
-		txv_description_detail.setText(descriptionDetail);
+		LinkEnabledTextView txv_description_detail = (LinkEnabledTextView) zActivity.findViewById(R.id.txv_description_detail);
+		txv_description_detail.gatherLinksForText(descriptionDetail);
+		txv_description_detail.setOnTextLinkClickListener(this);
+		txv_description_detail.setTextColor(Color.BLACK);
+		txv_description_detail.setLinkTextColor(Color.BLUE);
+//		MovementMethod m = txv_description_detail.getMovementMethod();
+//	    if ((m == null) || !(m instanceof LinkMovementMethod)) {
+//	        if (txv_description_detail.getLinksClickable()) {
+//	        	txv_description_detail.setMovementMethod(LinkMovementMethod.getInstance());
+//	        }
+//	    }
 		txv_description_detail.setVisibility(android.view.View.VISIBLE);
 		//Display display = getWindowManager().getDefaultDisplay();
 		//FlowTextHelper.tryFlowText(descriptionDetail, img_photo_detail, txv_description_detail, display);		
@@ -364,6 +370,14 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
 		FlurryUtil.logEvent(TAG+":onDrawerOpened", displayedSns+","+arrAdapterComment.getCount() + sdf.format(new Date()));
 	}
+	
+	@Override
+	public void onTextLinkClick(android.view.View textView, String clickedString) {
+		if (clickedString.startsWith("http://")) {
+			Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(clickedString));
+		    zActivity.startActivity(viewIntent);
+		}
+	}
 
 	private void fInitMyCommentUI() {
 		WebImageView img_selfhead_detail_comment = (WebImageView) zActivity.findViewById(R.id.img_selfhead_detail_comment);
@@ -405,7 +419,7 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		}
 		return headUrl;
 	}
-	
+
 /*
  * Below code is to be removed if the WebView( fInitUIWebView ) is stablized
  * Below code is to use WebImageView from droid-fu to load large image and allow it to be scrollable

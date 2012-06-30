@@ -85,7 +85,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical" >
 
-            <TextView
+            <com.moupress.app.friendshost.uicomponent.LinkEnabledTextView
                 android:id="@+id/txv_description_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
