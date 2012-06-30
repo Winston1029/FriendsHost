@@ -37,13 +37,14 @@ import com.moupress.app.friendshost.activity.LstViewCommentAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
 import com.moupress.app.friendshost.ui.listeners.TextLinkClickListener;
+import com.moupress.app.friendshost.ui.listeners.TextLinkClickListenerImpl;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
 import com.moupress.app.friendshost.uicomponent.LinkEnabledTextView;
 import com.moupress.app.friendshost.util.FlurryUtil;
 import com.moupress.app.friendshost.util.Pref;
 import com.moupress.app.friendshost.util.StringUtil;
 
-public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCloseListener, TextLinkClickListener{
+public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCloseListener{
 	
 	private static final String TAG = "DetailView";
 	
@@ -208,7 +209,7 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		}
 		LinkEnabledTextView txv_description_detail = (LinkEnabledTextView) zActivity.findViewById(R.id.txv_description_detail);
 		txv_description_detail.gatherLinksForText(descriptionDetail);
-		txv_description_detail.setOnTextLinkClickListener(this);
+		txv_description_detail.setOnTextLinkClickListener(new TextLinkClickListenerImpl(zActivity));
 		txv_description_detail.setTextColor(Color.BLACK);
 		txv_description_detail.setLinkTextColor(Color.BLUE);
 //		MovementMethod m = txv_description_detail.getMovementMethod();
@@ -371,14 +372,6 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		FlurryUtil.logEvent(TAG+":onDrawerOpened", displayedSns+","+arrAdapterComment.getCount() + sdf.format(new Date()));
 	}
 	
-	@Override
-	public void onTextLinkClick(android.view.View textView, String clickedString) {
-		if (clickedString.startsWith("http://")) {
-			Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(clickedString));
-		    zActivity.startActivity(viewIntent);
-		}
-	}
-
 	private void fInitMyCommentUI() {
 		WebImageView img_selfhead_detail_comment = (WebImageView) zActivity.findViewById(R.id.img_selfhead_detail_comment);
 		String selfHeadUrl = fRetrieveProfileHeadImgUrl(displayedSns);
