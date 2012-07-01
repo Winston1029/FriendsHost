@@ -60,6 +60,7 @@ public class LinkEnabledTextView  extends TextView {
 	     *  gatherLinks basically collects the Links depending upon the Pattern that we supply
 	     *  and add the links to the ArrayList of the links
 	     */
+	    listOfLinks = new ArrayList<Hyperlink>();
 	    gatherLinks(listOfLinks, linkableText, screenNamePattern);
 	    gatherLinks(listOfLinks, linkableText, hashTagsPattern);
 	    gatherLinks(listOfLinks, linkableText, hyperLinksPattern);
@@ -94,7 +95,6 @@ public class LinkEnabledTextView  extends TextView {
 	private final void gatherLinks(ArrayList<Hyperlink> links, Spannable s, Pattern pattern) {
 	    // Matcher matching the pattern
 	    Matcher m = pattern.matcher(s);
-	
 	    while (m.find()) {
 	        int start = m.start();
 	        int end = m.end();
