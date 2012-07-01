@@ -8,12 +8,18 @@
   	    style="@style/TitleBarButtonStyle"
   		>
   </ImageButton>
-  <TextView android:id="@+id/fhtitletv" 
-  		    style="@style/TitleBarTextViewStyle"
-  			android:text="@string/title_text" 
-  			android:background="@color/purple"
-  			>
-  </TextView>
+<!--  <TextView android:id="@+id/fhtitletv" -->
+<!--  		    style="@style/TitleBarTextViewStyle"-->
+<!--  			android:text="@string/title_text" -->
+<!--  			android:background="@color/purple"-->
+<!--  			>-->
+<!--  </TextView>-->
+<ImageView android:id="@+id/fhtitletv"
+		style="@style/TitleBarTextViewStyle"
+		android:background="@color/purple"
+		android:src="@drawable/fh_title_bg"
+>
+</ImageView>
   <ImageButton android:id="@+id/writefeedbtn" 
   		android:layout_gravity="right"
   		android:src="@drawable/fh_pub_icon"
