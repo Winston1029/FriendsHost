@@ -11,7 +11,14 @@
         <item name="android:background">@color/purple</item>
  </style>
  
-
+<style name="TitleBarTextViewStyle">
+	<item name="android:layout_width">match_parent</item>
+	<item name="android:layout_height">match_parent</item>
+	<item name="android:layout_gravity">center</item>
+	<item name="android:layout_weight">0.5</item>
+	<item name="android:textSize">20dip</item>
+	<item name="android:gravity">center</item>
+</style>
  
  <style name="TitleBarButtonStyle">
  	  <item name="android:layout_width">match_parent</item>

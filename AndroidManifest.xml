@@ -61,11 +61,18 @@
         
         <service android:enabled="true" android:name=".service.FeedRetrievalService" />
         
-          <activity android:name=".activity.FHDialogActivity"
+        <activity android:name=".activity.FHDialogActivity"
         			android:theme="@android:style/Theme.Dialog"
         			android:label="Resend Feed"
         			android:screenOrientation="portrait"
         			>
+        </activity>
+        
+        <activity android:name=".activity.FHGuideActivity"
+        		android:theme="@android:style/Theme.Translucent.NoTitleBar"
+        		android:screenOrientation="portrait"
+        		android:launchMode="singleTask"
+        		>
         </activity>
         
     </application>

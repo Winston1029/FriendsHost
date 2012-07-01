@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
+import com.moupress.app.friendshost.activity.FHGuideActivity;
 import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
 import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
@@ -38,6 +39,7 @@ import com.moupress.app.friendshost.uicomponent.PullToRefreshListView.OnRefreshL
 import com.moupress.app.friendshost.uicomponent.TabPageIndicator;
 import com.moupress.app.friendshost.uicomponent.SlidingPanel.PanelSlidingListener;
 import com.moupress.app.friendshost.uicomponent.interfaces.TitleProvider;
+import com.moupress.app.friendshost.util.Pref;
 
 
 /**
@@ -128,7 +130,19 @@ public class MainUIView extends View{
 		InitSlidingPanel(activity);
 		InitTitleButtons(activity);
 		InitLeftPanelView(activity);
+		InitGuide(activity);
 	}
+		private void InitGuide(Activity activity) {
+		
+		if(!Pref.getMyBoolPref(activity.getApplicationContext(), Const.VIEW_GUIDE))
+		{
+			this.launchGuide();
+		}
+	}
+
+
+
+
 
 
 
@@ -191,6 +205,12 @@ public class MainUIView extends View{
     	});
     	
     	ImageButton btnRefresh = (ImageButton) activity.findViewById(R.id.refreshbtn);
+//    	btnRefresh.setOnClickListener(new OnClickListener(){
+//
+//			@Override
+//			public void onClick(android.view.View arg0) {
+//				launchGuide();
+//			}});
     	btnRefresh.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -212,6 +232,14 @@ public class MainUIView extends View{
 				
 			}});	
     }
+    
+    	
+	private void launchGuide() {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent(this.zActivity,FHGuideActivity.class);
+		this.zActivity.startActivity(intent);
+		
+	}
     
 	private void InitLeftPanelView(Activity activity) {
 		
@@ -415,12 +443,9 @@ public class MainUIView extends View{
 		 
 	}
 
-
 	public void DialogCallBack(Intent data) {
 		// TODO Auto-generated method stub
 		this.leftPanelView.DialogCallBack(data);
 	}
-
-
 	
 }

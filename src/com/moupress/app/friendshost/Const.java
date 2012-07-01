@@ -118,4 +118,7 @@ public class Const {
 	public static final int SERVICE_REFRESH_FEED = 1;
 	public static final int SERVICE_UPDATE_FREQ = 2;
 
+	
+	//============Initial Guide=====================================
+	public static final String VIEW_GUIDE = "ViewGuide"; 
 }

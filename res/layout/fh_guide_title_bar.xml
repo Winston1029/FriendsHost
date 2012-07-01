@@ -4,26 +4,25 @@
  style="@style/TitleBarLayout">
   <ImageButton android:id="@+id/leftpanelbtn" 
   		android:layout_gravity="left|center_vertical"
-  		android:src="@drawable/fh_setting_btn"
+  		android:background="@drawable/fh_guide_btn_bg"
   	    style="@style/TitleBarButtonStyle"
   		>
   </ImageButton>
   <TextView android:id="@+id/fhtitletv" 
   		    style="@style/TitleBarTextViewStyle"
-  			android:text="@string/title_text" 
-  			android:background="@color/purple"
+  			android:background="@android:color/transparent"
   			>
   </TextView>
   <ImageButton android:id="@+id/writefeedbtn" 
   		android:layout_gravity="right"
-  		android:src="@drawable/fh_pub_icon"
   		style="@style/TitleBarButtonStyle"
+  		android:background="@drawable/fh_guide_btn_bg"
   		>
   </ImageButton>
   <ImageButton android:id="@+id/refreshbtn"
   		android:layout_gravity="right"
-  		android:src="@drawable/fh_back_top"
   		style="@style/TitleBarButtonStyle"
+  		android:background="@drawable/fh_guide_btn_bg"
   		>
   </ImageButton>
 </LinearLayout>
