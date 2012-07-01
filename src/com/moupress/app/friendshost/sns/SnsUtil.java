@@ -1,6 +1,8 @@
 package com.moupress.app.friendshost.sns;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,10 +12,11 @@ import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.activity.LstViewFeedAdapter;
 import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
+import com.moupress.app.friendshost.util.FlurryUtil;
 import com.moupress.app.friendshost.util.Pref;
 
 public abstract class SnsUtil {
- 
+	public static final String TAG = "SnsUtil";
 	
 	protected PubSub zPubSub;
 	protected Context zContext;
@@ -106,6 +109,9 @@ public abstract class SnsUtil {
 			FeedAdapter.addItem(item);
 			lastItem = item;
 		}
+		// FlurryUtil
+		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+		FlurryUtil.logEvent(TAG + ":LoadAdapter10MoreFeed", SnsName + "," + FeedAdapter.getCount());
 		fSaveLastLoadedFeed(lastItem);
 	}
 

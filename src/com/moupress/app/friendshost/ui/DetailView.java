@@ -1,11 +1,14 @@
 package com.moupress.app.friendshost.ui;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View.OnClickListener;
@@ -33,10 +36,17 @@ import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.activity.LstViewCommentAdapter;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
+import com.moupress.app.friendshost.ui.listeners.TextLinkClickListener;
+import com.moupress.app.friendshost.ui.listeners.TextLinkClickListenerImpl;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
+import com.moupress.app.friendshost.uicomponent.LinkEnabledTextView;
+import com.moupress.app.friendshost.util.FlurryUtil;
 import com.moupress.app.friendshost.util.Pref;
+import com.moupress.app.friendshost.util.StringUtil;
 
 public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCloseListener{
+	
+	private static final String TAG = "DetailView";
 	
 	private FeedEntry feed;
 	private String displayedSns;
@@ -92,18 +102,20 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 				params.putString(Const.SFEEDID, feed.getsID());
 				params.putString(Const.SOWNERID, feed.getsOwnerID());
 				params.putString(Const.SFEEDTYPE, feed.getsFeedType());
-				Matcher m = Pattern.compile("\\d+").matcher(feed.getsLink());
-				while (m.find()) {
-					params.putString(Const.SRESOURCEID, m.group());
+				ArrayList<String> ids = StringUtil.retrieveID(feed.getsLink());
+				if (ids != null && ids.size() > 0) {
+					params.putString(Const.SRESOURCEID, ids.get(0));	
 				}
 				if (bIsFeedLiked == false) {
 					//v.setBackgroundResource(android.R.drawable.btn_star_big_on);
 					bIsFeedLiked = true;
 					PubSub.zSnsOrg.GetSnsInstance(displayedSns).fLikeFeeds(params);
+					FlurryUtil.logEvent(TAG+":btnLikes", displayedSns + ", Like");
 				} else {
 					//v.setBackgroundResource(android.R.drawable.btn_star_big_off);
 					bIsFeedLiked = false;
 					PubSub.zSnsOrg.GetSnsInstance(displayedSns).fUnLikeFeeds(params);
+					FlurryUtil.logEvent(TAG+":btnLikes", displayedSns + ", UnLike");
 				}
 			}
     	});
@@ -118,7 +130,15 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 				Bundle params = new Bundle();
 				params.putString(Const.SFEEDID, feed.getsID());
 				params.putString(Const.SOWNERID, feed.getsOwnerID());
-				PubSub.zSnsOrg.GetSnsInstance(displayedSns).fShareFeeds(params);
+				//PubSub.zSnsOrg.GetSnsInstance(displayedSns).fShareFeeds(params);
+				Intent intent=new Intent(android.content.Intent.ACTION_SEND);
+				intent.setType("text/plain");
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+				// Add data to the intent, the receiving app will decide what to do with it.
+				intent.putExtra(Intent.EXTRA_SUBJECT, "Some Subject Line");
+				intent.putExtra(Intent.EXTRA_TEXT, "Body of the message, woot!");
+				zActivity.startActivity(Intent.createChooser(intent, "Share via"));
 			}
 		});	
     }
@@ -138,6 +158,8 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		if(PubSub.zFeedOrg != null)
 		feed = PubSub.zFeedOrg.fGetFeedByID( displayedSns, feed_id );
 		//feed.setsFeedType(displayedSns);
+		// FlurryUtil
+		FlurryUtil.logEvent(TAG+":fInitFeed", displayedSns +"," + feed.getsFeedType());
 		
 		arrAdapterComment = new LstViewCommentAdapter(zActivity, R.layout.feed_item_detail_comment);
 		if (feed.getzComments() != null ) {
@@ -185,12 +207,22 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		if (feed.getsPhotoPreviewDescription() != null ) {
 			descriptionDetail += "\n" + feed.getsPhotoPreviewDescription();
 		}
-		TextView txv_description_detail = (TextView) zActivity.findViewById(R.id.txv_description_detail);
-		txv_description_detail.setText(descriptionDetail);
+		LinkEnabledTextView txv_description_detail = (LinkEnabledTextView) zActivity.findViewById(R.id.txv_description_detail);
+		txv_description_detail.gatherLinksForText(descriptionDetail);
+		txv_description_detail.setOnTextLinkClickListener(new TextLinkClickListenerImpl(zActivity));
+		txv_description_detail.setTextColor(Color.BLACK);
+		txv_description_detail.setLinkTextColor(Color.BLUE);
+//		MovementMethod m = txv_description_detail.getMovementMethod();
+//	    if ((m == null) || !(m instanceof LinkMovementMethod)) {
+//	        if (txv_description_detail.getLinksClickable()) {
+//	        	txv_description_detail.setMovementMethod(LinkMovementMethod.getInstance());
+//	        }
+//	    }
 		txv_description_detail.setVisibility(android.view.View.VISIBLE);
 		//Display display = getWindowManager().getDefaultDisplay();
 		//FlowTextHelper.tryFlowText(descriptionDetail, img_photo_detail, txv_description_detail, display);		
 	}
+
 
 	private void fInitUIDrawer() {
 		SlidingDrawer drawer_comments = (SlidingDrawer) zActivity.findViewById(R.id.drawer_comments);
@@ -323,6 +355,9 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 	public void onDrawerClosed() {
 		drawer_comments_content.setVisibility(android.view.View.GONE);
 		lstView_comments.setVisibility(android.view.View.GONE);
+		//FlurryUtil
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+		FlurryUtil.logEvent(TAG+":onDrawerClosed", sdf.format(new Date()));
 	}
 
 	@Override
@@ -332,8 +367,11 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		
 		arrAdapterComment.notifyDataSetChanged();
 		fInitMyCommentUI();
+		//FlurryUtil
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+		FlurryUtil.logEvent(TAG+":onDrawerOpened", displayedSns+","+arrAdapterComment.getCount() + sdf.format(new Date()));
 	}
-
+	
 	private void fInitMyCommentUI() {
 		WebImageView img_selfhead_detail_comment = (WebImageView) zActivity.findViewById(R.id.img_selfhead_detail_comment);
 		String selfHeadUrl = fRetrieveProfileHeadImgUrl(displayedSns);
@@ -352,6 +390,8 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 				params.putString(Const.SNAME, feed.getsName());
 				params.putString(Const.SOWNERID, feed.getsOwnerID());
 				PubSub.zSnsOrg.GetSnsInstance(displayedSns).fPostComments(params);
+				// FlurryUtil
+				FlurryUtil.logEvent(TAG+":fInitMyCommentUI:btn_send_detail_comment", displayedSns+","+sCommentMsg.length());
 				etx_commentmsg_detail_comment.setText("");
 				imm.hideSoftInputFromWindow(etx_commentmsg_detail_comment.getWindowToken(), 0);
 			}
@@ -372,7 +412,7 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		}
 		return headUrl;
 	}
-	
+
 /*
  * Below code is to be removed if the WebView( fInitUIWebView ) is stablized
  * Below code is to use WebImageView from droid-fu to load large image and allow it to be scrollable

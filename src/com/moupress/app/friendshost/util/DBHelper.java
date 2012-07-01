@@ -1,8 +1,10 @@
 package com.moupress.app.friendshost.util;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -151,6 +153,7 @@ public class DBHelper {
 										    + C_ERROR_MSG + " TEXT,"
 										    + C_ERROR_TIME + " TEXT"
 										    + ");";
+	private static final String TAG = "DBHelper";
 
     private static SimpleDateFormat simpleDateFormat;
     private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -160,7 +163,7 @@ public class DBHelper {
 		DatabaseHelper(Context context) {
 	        super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
-	        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+	        //simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 	    }
 
 		@Override
@@ -237,8 +240,16 @@ public class DBHelper {
 			values.put(C_FEED_CNT_LIKE, 0);
 		}
 		values.put(C_FEED_ISREAD, "0");
-		values.put(C_FEED_CREATED_TIME, entry.getCreated_time());
-		values.put(C_FEED_UPDATED_TIME, entry.getUpdated_time());
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+SSSS");
+		try {
+			Date dCreatedTime = sdf.parse(entry.getCreated_time());
+			Date dUpdatedTime = sdf.parse(entry.getUpdated_time());
+			values.put(C_FEED_CREATED_TIME, simpleDateFormat.format(dCreatedTime));
+			values.put(C_FEED_UPDATED_TIME, simpleDateFormat.format(dUpdatedTime));
+		} catch (ParseException e) {
+			Log.w(TAG, "Unable to parse date string \"" + entry.getCreated_time() + "\"");
+		}
 		
 		ret = zSQLiteDB.insert(T_FEED, null, values);
 		
