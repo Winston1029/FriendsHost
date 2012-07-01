@@ -193,8 +193,10 @@ public class TwitterUtil extends SnsUtil{
 		String oauth_verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
 		try {
 			provider.retrieveAccessToken(consumer, oauth_verifier);
-			Pref.setMyStringPref(this.zContext, OAuth.OAUTH_TOKEN, consumer.getToken());
-			Pref.setMyStringPref(this.zContext, OAuth.OAUTH_TOKEN_SECRET, consumer.getTokenSecret());
+			this.sTokenKey = consumer.getToken();
+			this.sTokenSecret = consumer.getTokenSecret();
+			Pref.setMyStringPref(this.zContext, OAuth.OAUTH_TOKEN, this.sTokenKey);
+			Pref.setMyStringPref(this.zContext, OAuth.OAUTH_TOKEN_SECRET, this.sTokenSecret);
 			
 			sTokenKey = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), OAuth.OAUTH_TOKEN);
 			sTokenSecret = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), OAuth.OAUTH_TOKEN_SECRET);

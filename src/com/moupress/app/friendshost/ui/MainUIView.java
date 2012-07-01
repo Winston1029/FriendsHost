@@ -451,7 +451,13 @@ public class MainUIView extends View{
 						Toast.LENGTH_SHORT).show();
 	        	PubSub.zSnsOrg.GetSnsInstance(snsName).RefreshAdapter();
 	            // Call onRefreshComplete when the list has been refreshed.
+	        	try{
 	            ((PullToRefreshListView) getListView()).onRefreshComplete();
+	        	}
+	        	catch(Exception e)
+	        	{
+	        		Log.i(TAG, "Main UI View "+ e.getMessage());
+	        	}
 
 	            super.onPostExecute(result);
 	        }
