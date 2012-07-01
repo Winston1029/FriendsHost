@@ -398,7 +398,7 @@ public class FeedOrganisor {
 		// create notification
 		CharSequence tickerText = "Unread Feed From " + sFromSNS;
 		long when = System.currentTimeMillis();
-		Notification notification = new Notification(R.drawable.ic_launcher, tickerText, when);
+		Notification notification = new Notification(R.drawable.notification_newfeed, tickerText, when);
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		
 		// preparation
