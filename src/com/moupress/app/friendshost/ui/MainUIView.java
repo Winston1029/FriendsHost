@@ -183,6 +183,10 @@ public class MainUIView extends View{
 			}});
     }
     
+    public boolean SlidePanelBack()
+    {
+    	return slidingPanel.Slide2Right();
+    }
     
     private void InitTitleButtons(final Activity activity)
     {

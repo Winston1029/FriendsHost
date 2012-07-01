@@ -7,6 +7,7 @@ import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.ui.DialogView;
 import com.moupress.app.friendshost.ui.FeedBackView;
 import com.moupress.app.friendshost.ui.HelpView;
+import com.moupress.app.friendshost.ui.RateView;
 import com.moupress.app.friendshost.ui.UptFreqView;
 import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
@@ -210,6 +211,7 @@ public class FHDialogActivity extends Activity{
 	private void InitRateAppUI() {
 		//this.titleId = R.string.rate_app_title;
 		//this.setBtnMsgId = R.string.rate_app_btn_txt;
+		this.diaLogView = new RateView(this,intentBack);
 	}
 	
 //======END Rate App===============================
