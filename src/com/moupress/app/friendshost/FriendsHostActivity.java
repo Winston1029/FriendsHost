@@ -29,6 +29,7 @@ public class FriendsHostActivity extends FragmentActivity {
     @Override
 	protected void onSaveInstanceState(Bundle outState) {
 		// TODO Auto-generated method stub
+    	 outState.putString("WORKAROUND_FOR_BUG_19917_KEY", "WORKAROUND_FOR_BUG_19917_VALUE");
 		super.onSaveInstanceState(outState);
 	}
 

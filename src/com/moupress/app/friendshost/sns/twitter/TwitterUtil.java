@@ -31,7 +31,6 @@ import twitter4j.conf.ConfigurationBuilder;
 import twitter4j.media.ImageUpload;
 import twitter4j.media.ImageUploadFactory;
 import twitter4j.media.MediaProvider;
-import weibo4andriod.http.RequestToken;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;

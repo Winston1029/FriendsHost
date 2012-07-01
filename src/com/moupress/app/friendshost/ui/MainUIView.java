@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.ListFragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -224,16 +225,20 @@ public class MainUIView extends View{
 				//final ListView lv = (SnsFeedListFragment)mPager.ge ().getListView();
 				SnsFeedListFragment lstFrag = (SnsFeedListFragment) ((FragmentActivity)activity).getSupportFragmentManager().findFragmentByTag(Const.SNSGROUPS[index]);
 				
-				final ListView lv = (ListView) lstFrag.getListView();
+				if(lstFrag != null)
+				{
+					final ListView lv = (ListView) lstFrag.getListView();
+					
+					lv.post(new  Runnable(){
+	
+						@Override
+						public void run() {
+							lv.setSelection(0);						
+						}});
+				}	
 				
-				lv.post(new  Runnable(){
-
-					@Override
-					public void run() {
-						lv.setSelection(0);						
-					}});
-				
-			}});	
+			}});
+    		  	
     }
     
     	
@@ -280,7 +285,14 @@ public class MainUIView extends View{
 		public Fragment getItem(int position) {
 			// TODO Auto-generated method stub
 			SnsFeedListFragment snsFeedListFragment = SnsFeedListFragment.newInstance(LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON).get(position).toString());
-			fm.beginTransaction().add(snsFeedListFragment, LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON).get(position).toString()).commit();
+			
+			try{
+				fm.beginTransaction().add(snsFeedListFragment, LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON).get(position).toString()).commit();
+			}
+			catch(Exception e)
+			{
+				Log.i(TAG, "Error + "+e.toString());
+			}
 			
 			return snsFeedListFragment;
 		}
