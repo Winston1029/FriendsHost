@@ -12,6 +12,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ClickableSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,6 +20,8 @@ import com.moupress.app.friendshost.ui.listeners.TextLinkClickListener;
 import com.moupress.app.friendshost.util.StringUtil;
 
 public class LinkEnabledTextView  extends TextView {
+	private static final String TAG = "LinkEnabledTextView";
+
 	// The String Containing the Text that we have to gather links from private SpannableString linkableText;
 	// Populating and gathering all the links that are present in the Text
 	private ArrayList<Hyperlink> listOfLinks; 
@@ -27,10 +30,10 @@ public class LinkEnabledTextView  extends TextView {
 	TextLinkClickListener mListener;
 	
 	// Pattern for gathering @usernames from the Text
-	Pattern screenNamePattern = Pattern.compile("(@[a-zA-Z0-9_]+)");
+	Pattern screenNamePattern = Pattern.compile("( @[a-zA-Z0-9_]+)");
 	
 	// Pattern for gathering #hasttags from the Text
-	Pattern hashTagsPattern = Pattern.compile("(#[a-zA-Z0-9_-]+)");
+	Pattern hashTagsPattern = Pattern.compile("( #[a-zA-Z0-9_-]+)");
 	
 	// Pattern for gathering http:// links from the Text
 	Pattern hyperLinksPattern = Pattern.compile("([Hh][tT][tT][pP][sS]?:\\/\\/[^ ,'\">\\]\\)]*[^\\. ,'\">\\]\\)])");
@@ -62,18 +65,17 @@ public class LinkEnabledTextView  extends TextView {
 	    gatherLinks(listOfLinks, linkableText, hyperLinksPattern);
 	    //gatherLinks(listOfLinks, linkableText, renrenFeedTypePattern);
 	
-	    for(int i = 0; i< listOfLinks.size(); i++) {
-	        Hyperlink linkSpec = listOfLinks.get(i);
-	        android.util.Log.v("listOfLinks :: " + linkSpec.textSpan, "listOfLinks :: " + linkSpec.textSpan);
-	        /*
-	         * this process here makes the Clickable Links from the text
-	         */
-	        linkableText.setSpan(linkSpec.span, linkSpec.start, linkSpec.end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+	    try {
+	    	for(int i = 0; i< listOfLinks.size(); i++) {
+		        Hyperlink linkSpec = listOfLinks.get(i);
+		        android.util.Log.v("listOfLinks :: " + linkSpec.textSpan, "listOfLinks :: " + linkSpec.textSpan);
+		        // this process here makes the Clickable Links from the text
+		        linkableText.setSpan(linkSpec.span, linkSpec.start, linkSpec.end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		    }
+	    } catch (IndexOutOfBoundsException e) {
+	    	Log.e(TAG, "Link Text Index out of bounds:" + text);
 	    }
-	
-	    /*
-	     * sets the text for the TextView with enabled links
-	     */
+	    // sets the text for the TextView with enabled links
 	    setText(linkableText);
 	}
 
