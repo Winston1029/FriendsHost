@@ -136,8 +136,8 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 
 				// Add data to the intent, the receiving app will decide what to do with it.
-				intent.putExtra(Intent.EXTRA_SUBJECT, "Some Subject Line");
-				intent.putExtra(Intent.EXTRA_TEXT, "Body of the message, woot!");
+				intent.putExtra(Intent.EXTRA_SUBJECT, "Share From MelonFriends");
+				intent.putExtra(Intent.EXTRA_TEXT, descriptionDetail);
 				zActivity.startActivity(Intent.createChooser(intent, "Share via"));
 			}
 		});	
@@ -183,8 +183,9 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		fInitUIWebView();
 	}
 	
+	private String descriptionDetail = "";
 	private void fInitUIDescription() {
-		String descriptionDetail = null;
+		//String descriptionDetail = null;
 		String sMsgBody = feed.getsMsgBody() ;
 		String sStory = feed.getsStory();
 		if ( sMsgBody  != null && sStory != null
