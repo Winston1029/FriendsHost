@@ -100,15 +100,15 @@ public class HelpView extends DialogView{
 		}
 		
 		@Override
-		public Object getChild(int arg0, int arg1) {
+		public Object getChild(int groupPosition, int childPosition) {
 			// TODO Auto-generated method stub
-			return null;
+			return childPosition;
 		}
 
 		@Override
-		public long getChildId(int arg0, int arg1) {
+		public long getChildId(int groupPosition, int childPosition) {
 			// TODO Auto-generated method stub
-			return 0;
+			return childPosition;
 		}
 
 		@Override
@@ -128,9 +128,9 @@ public class HelpView extends DialogView{
 		}
 
 		@Override
-		public int getChildrenCount(int arg0) {
+		public int getChildrenCount(int groupPosition) {
 			// TODO Auto-generated method stub
-			return 0;
+			return 1;
 		}
 
 		@Override

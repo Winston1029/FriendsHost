@@ -24,8 +24,10 @@
  	  <item name="android:layout_width">match_parent</item>
   	  <item name="android:layout_height">match_parent</item>
   	  <item name="android:layout_weight">1</item>
-  	   <item name="android:background">@drawable/fh_title_btn_bg</item>
+  	   <item name="android:background">@drawable/title_btn_selector</item>
  </style>
+ 
+<!-- <item name="android:background">@drawable/fh_title_btn_bg</item>-->
  
  <style name="TitleBarButtonStyle.Pos">
  	 <item name="android:layout_marginTop">5dip</item>

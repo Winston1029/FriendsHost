@@ -351,6 +351,12 @@ public class PubSub {
 
 	}
 
-	
+	public boolean SlidePanelBack()
+	{
+		if(mainUIView != null)
+			return mainUIView.SlidePanelBack();
+		else
+			return false;
+	}
 	
 }
