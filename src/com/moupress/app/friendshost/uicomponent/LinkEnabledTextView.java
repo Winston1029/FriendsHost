@@ -36,7 +36,7 @@ public class LinkEnabledTextView  extends TextView {
 	Pattern hashTagsPattern = Pattern.compile("( #[a-zA-Z0-9_-]+)");
 	
 	// Pattern for gathering http:// links from the Text
-	Pattern hyperLinksPattern = Pattern.compile("([Hh][tT][tT][pP][sS]?:\\/\\/[^ ,'\">\\]\\)]*[^\\. ,'\">\\]\\)])");
+	Pattern hyperLinksPattern = Pattern.compile("(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
 	
 	// Pattern for Renren Feed Type 分享相册， 分享日志
 	Pattern renrenFeedTypePattern = Pattern.compile("(分享了|上传了|转自)(日志|照片|相册)?:");

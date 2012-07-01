@@ -198,6 +198,9 @@ public class TwitterUtil extends SnsUtil{
 			Pref.setMyStringPref(this.zContext, OAuth.OAUTH_TOKEN, this.sTokenKey);
 			Pref.setMyStringPref(this.zContext, OAuth.OAUTH_TOKEN_SECRET, this.sTokenSecret);
 			
+			sTokenKey = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), OAuth.OAUTH_TOKEN);
+			sTokenSecret = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), OAuth.OAUTH_TOKEN_SECRET);
+			
 			this.SnsAddEventCallback(snsEventListener, uptPref);
 		} catch (OAuthMessageSignerException e) {
 			e.printStackTrace();
@@ -252,9 +255,6 @@ public class TwitterUtil extends SnsUtil{
 		//super.Autentication(prefs);
 //		String token = Pref.getMyStringPref(this.zContext, OAuth.OAUTH_TOKEN);
 //		String secret = Pref.getMyStringPref(this.zContext, OAuth.OAUTH_TOKEN_SECRET);
-		
-//		if(token.length() ==0 || secret.length() == 0)
-//			return null;
 		
 		AccessToken a = new AccessToken(sTokenKey,sTokenSecret);
 		//Twitter twitter = new TwitterFactory().getInstance();
