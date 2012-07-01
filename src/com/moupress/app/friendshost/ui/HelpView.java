@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class HelpView extends DialogView{
@@ -111,10 +112,19 @@ public class HelpView extends DialogView{
 		}
 
 		@Override
-		public View getChildView(int arg0, int arg1, boolean arg2, View arg3,
-				ViewGroup arg4) {
-			// TODO Auto-generated method stub
-			return null;
+		public View getChildView(final int groupPosition, int childPosition,
+				boolean isLastChild, View convertView, ViewGroup parent) {
+			ImageView imgView = new ImageView(zActivity);
+			if(groupPosition==0)
+			{
+				imgView.setImageResource(R.drawable.fh_help_cmt);
+			}
+			else if(groupPosition==1)
+			{
+				imgView.setImageResource(R.drawable.fh_help_pub);
+			}
+			
+			return imgView;
 		}
 
 		@Override
