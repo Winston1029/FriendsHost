@@ -102,17 +102,23 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 				params.putString(Const.SFEEDID, feed.getsID());
 				params.putString(Const.SOWNERID, feed.getsOwnerID());
 				params.putString(Const.SFEEDTYPE, feed.getsFeedType());
-				ArrayList<String> ids = StringUtil.retrieveID(feed.getsLink());
-				if (ids != null && ids.size() > 0) {
-					params.putString(Const.SRESOURCEID, ids.get(0));	
+				
+				if(displayedSns.equals(Const.SNS_RENREN))
+				{
+					ArrayList<String> ids = StringUtil.retrieveID(feed.getsLink());
+					if (ids != null && ids.size() > 0) {
+						params.putString(Const.SRESOURCEID, ids.get(0));	
+					}
 				}
 				if (bIsFeedLiked == false) {
 					//v.setBackgroundResource(android.R.drawable.btn_star_big_on);
+					((ImageButton)v).setImageResource(R.drawable.fh_feed_liked);
 					bIsFeedLiked = true;
 					PubSub.zSnsOrg.GetSnsInstance(displayedSns).fLikeFeeds(params);
 					FlurryUtil.logEvent(TAG+":btnLikes", displayedSns + ", Like");
 				} else {
 					//v.setBackgroundResource(android.R.drawable.btn_star_big_off);
+					((ImageButton)v).setImageResource(R.drawable.fh_feed_like);
 					bIsFeedLiked = false;
 					PubSub.zSnsOrg.GetSnsInstance(displayedSns).fUnLikeFeeds(params);
 					FlurryUtil.logEvent(TAG+":btnLikes", displayedSns + ", UnLike");

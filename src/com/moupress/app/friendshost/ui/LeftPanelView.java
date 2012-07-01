@@ -189,7 +189,11 @@ public class LeftPanelView extends View{
 			}
 			else if(this.grpName.equals(Const.SETTING_FEEDBACKS) && ((String)this.getItem(position)).equals(Const.SETTING_FEEDBACKS_GROUPS[2]))
 			{
-				logView.setImageResource(R.drawable.fh_rate);
+				logView.setImageResource(R.drawable.fh_help_icon);
+			}
+			else if(this.grpName.equals(Const.SETTING_FEEDBACKS) && ((String)this.getItem(position)).equals(Const.SETTING_FEEDBACKS_GROUPS[0]))
+			{
+				logView.setImageResource(R.drawable.fh_feedback_icon);
 			}
 			
 			
