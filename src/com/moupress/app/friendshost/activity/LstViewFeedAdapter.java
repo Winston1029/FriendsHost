@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -131,15 +132,24 @@ public class LstViewFeedAdapter extends BaseAdapter{
 			
 		}else {
 			
+			if(position < feedArrayList.size())
+			{
 			feedItemUIComponent.getTxv_FeedUser().setText(feedArrayList.get(position).getsName());
 			feedItemUIComponent.getTxv_MsgCreationTime().setText(feedArrayList.get(position).getsCreatedTime());
+			try{
 			feedItemUIComponent.TxtMsgBodyLoad(feedArrayList.get(position).getsMsgBody(), feedArrayList.get(position).getsStory());
+			}
+			catch(Exception e)
+			{
+				
+			}
 			
 			feedItemUIComponent.ImgPhotoPreviewLoad(feedArrayList.get(position).getsPhotoPreviewLink());
 			
 			feedItemUIComponent.TxtImgNameLoad(feedArrayList.get(position).getsPhotoPreviewName());
 			feedItemUIComponent.TxvImgCaptionLoad( feedArrayList.get(position).getsPhotoPreviewCaption());
 			feedItemUIComponent.TxvImgDecription(feedArrayList.get(position).getsPhotoPreviewDescription());
+			}
 			
 		}
 		return convertView;

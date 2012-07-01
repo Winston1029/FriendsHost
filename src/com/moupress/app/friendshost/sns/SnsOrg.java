@@ -135,7 +135,8 @@ public class SnsOrg {
 	
 	public void SnsResetPublishNewFeedSelected() {
 		for(int i=0; i< Const.SNSGROUPS.length; i++)  {
-			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).fIsSelectedToPublish()) {
+			//if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).fIsSelectedToPublish()) {
+				if(this.GetSnsInstance(Const.SNSGROUPS[i]).fIsSelectedToPublish()) {
 				this.GetSnsInstance(Const.SNSGROUPS[i]).fUnSelectToPublish();
 			}
 		}
