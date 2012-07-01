@@ -27,6 +27,14 @@ public class FriendsHostActivity extends FragmentActivity {
     
     
     @Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+	}
+
+
+
+	@Override
 	protected void onStart() {
 		super.onStart();
 		fBindService();
@@ -126,7 +134,7 @@ public class FriendsHostActivity extends FragmentActivity {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		//this.zPubsub.UnBindToService();
+		this.zPubsub.UnBindToService();
 		FlurryUtil.onStop(this);
 	}
 	
