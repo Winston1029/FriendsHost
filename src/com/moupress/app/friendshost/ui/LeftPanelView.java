@@ -22,10 +22,13 @@ import com.moupress.app.friendshost.activity.FHDialogActivity;
 import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
 import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
+import com.moupress.app.friendshost.util.FlurryUtil;
 import com.moupress.app.friendshost.util.Pref;
 
 public class LeftPanelView extends View{
 	
+	private static final String TAG = "LeftPanelView";
+
 	//private ExpandableListView settingExpLstV;
 	//private ExpandableListView feedBksExpLstV;
 	private Activity zActivity;
@@ -252,7 +255,7 @@ public class LeftPanelView extends View{
 			{
 				displayView = R.layout.fh_help_layout;
 			}
-			
+			FlurryUtil.logEvent(TAG + ":LaunchDialog", grpName);
 			popUpDialogActivity(displayView,optionName,themeId);
 		}
 
