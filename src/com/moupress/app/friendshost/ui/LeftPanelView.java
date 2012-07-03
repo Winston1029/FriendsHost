@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.PubSub;
@@ -76,9 +78,35 @@ public class LeftPanelView extends View{
 		}
 		
 		this.acntLstV = (ListView) activity.findViewById(R.id.signOnLst);
-		this.settingLstV = (ListView) activity.findViewById(R.id.settingLst);
-		this.feedBksLstV = (ListView) activity.findViewById(R.id.feedBksLst);
+		this.acntLstV.setOnItemClickListener(new OnItemClickListener(){
+
+			@Override
+			public void onItemClick(AdapterView<?> parent,
+					android.view.View view, int position, long id) {
+				
+				PubSub.zSnsOrg.GetSnsInstance(Const.SNSGROUPS[position]).ToggleSelectSNS(snsEventListener);
+				
+			}});
 		
+		this.settingLstV = (ListView) activity.findViewById(R.id.settingLst);
+		this.settingLstV.setOnItemClickListener(new OnItemClickListener(){
+
+			@Override
+			public void onItemClick(AdapterView<?> parent,
+					android.view.View view, int position, long id) {
+				
+				LaunchDialog(Const.SETTING_BASIC,Const.SETTING_BASIC_GROUPS[position]);
+				
+			}});
+		
+		this.feedBksLstV = (ListView) activity.findViewById(R.id.feedBksLst);
+		this.feedBksLstV.setOnItemClickListener(new OnItemClickListener(){
+
+			@Override
+			public void onItemClick(AdapterView<?> parent,
+					android.view.View view, int position, long id) {
+				LaunchDialog(Const.SETTING_FEEDBACKS,Const.SETTING_FEEDBACKS_GROUPS[position]);
+			}});
 		 
 		//Setting Expander List View
 		//settingLstV = (ListView) activity.findViewById(R.id.settingExpandLst);
@@ -197,22 +225,22 @@ public class LeftPanelView extends View{
 			}
 			
 			
-            convertView.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(android.view.View view) {
-					
-					//PubSub.zSnsOrg.GetSnsInstance(Const.SNSGROUPS[position]).ToggleSelectSNS(snsEventListener);
-					if(grpName.equals(Const.SETTING_ACNT))
-					{
-						PubSub.zSnsOrg.GetSnsInstance(displayArray[position]).ToggleSelectSNS(snsEventListener);
-					}
-					else if(grpName.equals(Const.SETTING_BASIC) || grpName.equals(Const.SETTING_FEEDBACKS))
-					{
-						LaunchDialog(grpName,(String)getItem(position));
-					}
-					
-				}});
+//            convertView.setOnClickListener(new OnClickListener(){
+//
+//				@Override
+//				public void onClick(android.view.View view) {
+//					
+//					//PubSub.zSnsOrg.GetSnsInstance(Const.SNSGROUPS[position]).ToggleSelectSNS(snsEventListener);
+//					if(grpName.equals(Const.SETTING_ACNT))
+//					{
+//						PubSub.zSnsOrg.GetSnsInstance(displayArray[position]).ToggleSelectSNS(snsEventListener);
+//					}
+//					else if(grpName.equals(Const.SETTING_BASIC) || grpName.equals(Const.SETTING_FEEDBACKS))
+//					{
+//						LaunchDialog(grpName,(String)getItem(position));
+//					}
+//					
+//				}});
 			
 			return convertView;
 		}
@@ -230,49 +258,49 @@ public class LeftPanelView extends View{
 			}
 		}
 		
-		private void LaunchDialog(String grpName, String optionName)
-		{
-			int displayView = -1;
-			int themeId = -1;
-			if(grpName.equals(Const.SETTING_BASIC) && optionName.contains(Const.SETTING_BASIC_GROUPS[0]))
-			{
-				displayView = R.layout.fh_upt_req_layout;
-				themeId = android.R.style.Theme_Dialog;
-			}
-			else if (grpName.equals(Const.SETTING_FEEDBACKS) && optionName.equals(Const.SETTING_FEEDBACKS_GROUPS[1]))
-			{
-				displayView = R.layout.fh_rate_layout;
-				themeId = android.R.style.Theme_Dialog;
-			}
-			else if(grpName.equals(Const.SETTING_FEEDBACKS) && optionName.equals(Const.SETTING_FEEDBACKS_GROUPS[0]))
-			{
-				displayView = R.layout.fh_feedback_layout;
-			}
-			else if (grpName.equals(Const.SETTING_FEEDBACKS) && optionName.equals(Const.SETTING_FEEDBACKS_GROUPS[2]))
-			{
-				displayView = R.layout.fh_help_layout;
-			}
-			
-			popUpDialogActivity(displayView,optionName,themeId);
-		}
-
-
-		private void popUpDialogActivity(int displayView, String optionName, int themeId) {
-			
-			if(displayView > 0)
-			{
-				Intent intent = new Intent(zActivity,FHDialogActivity.class);
-				intent.putExtra(Const.DIALOG_VIEW_ID, displayView);
-				intent.putExtra(Const.SETTING_REQ_KEY, optionName);
-				intent.putExtra(Const.DIALOG_THEME_ID, themeId);
-				zActivity.startActivityForResult(intent, Const.CD_REQ_DIALOG);
-			}
-			else
-			{
-				Toast.makeText(zActivity, "Invalid View", 1000);
-			}
-		}
-		
+//		private void LaunchDialog(String grpName, String optionName)
+//		{
+//			int displayView = -1;
+//			int themeId = -1;
+//			if(grpName.equals(Const.SETTING_BASIC) && optionName.contains(Const.SETTING_BASIC_GROUPS[0]))
+//			{
+//				displayView = R.layout.fh_upt_req_layout;
+//				themeId = android.R.style.Theme_Dialog;
+//			}
+//			else if (grpName.equals(Const.SETTING_FEEDBACKS) && optionName.equals(Const.SETTING_FEEDBACKS_GROUPS[1]))
+//			{
+//				displayView = R.layout.fh_rate_layout;
+//				themeId = android.R.style.Theme_Dialog;
+//			}
+//			else if(grpName.equals(Const.SETTING_FEEDBACKS) && optionName.equals(Const.SETTING_FEEDBACKS_GROUPS[0]))
+//			{
+//				displayView = R.layout.fh_feedback_layout;
+//			}
+//			else if (grpName.equals(Const.SETTING_FEEDBACKS) && optionName.equals(Const.SETTING_FEEDBACKS_GROUPS[2]))
+//			{
+//				displayView = R.layout.fh_help_layout;
+//			}
+//			
+//			popUpDialogActivity(displayView,optionName,themeId);
+//		}
+//
+//
+//		private void popUpDialogActivity(int displayView, String optionName, int themeId) {
+//			
+//			if(displayView > 0)
+//			{
+//				Intent intent = new Intent(zActivity,FHDialogActivity.class);
+//				intent.putExtra(Const.DIALOG_VIEW_ID, displayView);
+//				intent.putExtra(Const.SETTING_REQ_KEY, optionName);
+//				intent.putExtra(Const.DIALOG_THEME_ID, themeId);
+//				zActivity.startActivityForResult(intent, Const.CD_REQ_DIALOG);
+//			}
+//			else
+//			{
+//				Toast.makeText(zActivity, "Invalid View", 1000);
+//			}
+//		}
+//		
 		
 		public void SetDtlText(String[] dtlText)
 		{
@@ -281,6 +309,51 @@ public class LeftPanelView extends View{
 	}
 
 
+	
+	private void LaunchDialog(String grpName, String optionName)
+	{
+		int displayView = -1;
+		int themeId = -1;
+		if(grpName.equals(Const.SETTING_BASIC) && optionName.contains(Const.SETTING_BASIC_GROUPS[0]))
+		{
+			displayView = R.layout.fh_upt_req_layout;
+			themeId = android.R.style.Theme_Dialog;
+		}
+		else if (grpName.equals(Const.SETTING_FEEDBACKS) && optionName.equals(Const.SETTING_FEEDBACKS_GROUPS[1]))
+		{
+			displayView = R.layout.fh_rate_layout;
+			themeId = android.R.style.Theme_Dialog;
+		}
+		else if(grpName.equals(Const.SETTING_FEEDBACKS) && optionName.equals(Const.SETTING_FEEDBACKS_GROUPS[0]))
+		{
+			displayView = R.layout.fh_feedback_layout;
+		}
+		else if (grpName.equals(Const.SETTING_FEEDBACKS) && optionName.equals(Const.SETTING_FEEDBACKS_GROUPS[2]))
+		{
+			displayView = R.layout.fh_help_layout;
+		}
+		
+		popUpDialogActivity(displayView,optionName,themeId);
+	}
+
+
+	private void popUpDialogActivity(int displayView, String optionName, int themeId) {
+		
+		if(displayView > 0)
+		{
+			Intent intent = new Intent(zActivity,FHDialogActivity.class);
+			intent.putExtra(Const.DIALOG_VIEW_ID, displayView);
+			intent.putExtra(Const.SETTING_REQ_KEY, optionName);
+			intent.putExtra(Const.DIALOG_THEME_ID, themeId);
+			zActivity.startActivityForResult(intent, Const.CD_REQ_DIALOG);
+		}
+		else
+		{
+			Toast.makeText(zActivity, "Invalid View", 1000);
+		}
+	}
+	
+	
 	public void DialogCallBack(Intent data) {
 		
 		if(data.getIntExtra(Const.DIALOG_VIEW_ID, -1) == R.layout.fh_upt_req_layout)

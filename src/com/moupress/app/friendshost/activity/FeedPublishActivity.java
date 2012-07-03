@@ -45,8 +45,8 @@ public class FeedPublishActivity extends Activity{
 //	private boolean WBSelected = false;
 	
 	//Controls & variables to publish Photos
-	private Button btnUploadPic;
-	private Button btnTakePic;
+	private ImageButton btnUploadPic;
+	private ImageButton btnTakePic;
 	private ImageView imgUploadPic;
 	public static int uploadPicRotateDegree = 0;
 
@@ -60,7 +60,7 @@ public class FeedPublishActivity extends Activity{
 	private String bodyText;
 	
 	//Button to publish msg
-	private Button publishButton;
+	private ImageButton publishButton;
 	private Button cancelButton;
 	
 	//Uri of captured Image
@@ -124,7 +124,7 @@ public class FeedPublishActivity extends Activity{
 				
 			}});
 		
-		publishButton = (Button) this.findViewById(R.id.thirdbtn);
+		publishButton = (ImageButton) this.findViewById(R.id.thirdbtn);
 		publishButton.setOnClickListener(new View.OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
@@ -283,7 +283,7 @@ public class FeedPublishActivity extends Activity{
 		//ScrollView layout = (ScrollView) LayoutInflater.from(this).inflate(R.layout.feed_publish_layout, null);
 		
 		//Functions of Photos
-		btnUploadPic = (Button) this.findViewById(R.id.updPic);
+		btnUploadPic = (ImageButton) this.findViewById(R.id.updPic);
 		btnUploadPic.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -297,7 +297,7 @@ public class FeedPublishActivity extends Activity{
 			}
 		});
 		
-		btnTakePic = (Button) this.findViewById(R.id.tkePic);
+		btnTakePic = (ImageButton) this.findViewById(R.id.tkePic);
 		btnTakePic.setOnClickListener(new View.OnClickListener() {
 			
 			@Override

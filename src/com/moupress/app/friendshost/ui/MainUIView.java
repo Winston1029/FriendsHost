@@ -224,22 +224,25 @@ public class MainUIView extends View{
 			@Override
 			public void onClick(android.view.View v) {
 				//slidingPanel.Slide2Right();
-				int index = mPager.getCurrentItem();
-				//String snsName = Const.SNSGROUPS[index];
-				//final ListView lv = (SnsFeedListFragment)mPager.ge ().getListView();
-				SnsFeedListFragment lstFrag = (SnsFeedListFragment) ((FragmentActivity)activity).getSupportFragmentManager().findFragmentByTag(Const.SNSGROUPS[index]);
-				
-				if(lstFrag != null)
+				if(!slidingPanel.Slide2Right())
 				{
-					final ListView lv = (ListView) lstFrag.getListView();
+					int index = mPager.getCurrentItem();
+					//String snsName = Const.SNSGROUPS[index];
+					//final ListView lv = (SnsFeedListFragment)mPager.ge ().getListView();
+					SnsFeedListFragment lstFrag = (SnsFeedListFragment) ((FragmentActivity)activity).getSupportFragmentManager().findFragmentByTag(Const.SNSGROUPS[index]);
 					
-					lv.post(new  Runnable(){
-	
-						@Override
-						public void run() {
-							lv.setSelection(0);						
-						}});
-				}	
+					if(lstFrag != null)
+					{
+						final ListView lv = (ListView) lstFrag.getListView();
+						
+						lv.post(new  Runnable(){
+		
+							@Override
+							public void run() {
+								lv.setSelection(0);						
+							}});
+					}	
+				}
 				
 			}});
     		  	

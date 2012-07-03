@@ -95,42 +95,42 @@ public class FriendsHostActivity extends FragmentActivity {
 		fAnalyseIntent();
 	}
 	
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v,
-			ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, v, menuInfo);
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.feed_item_ctx_menu, menu);
-
-	}
-	
-	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.option_menu, menu);
-	    return true;
-	}
-	
-	public boolean onOptionsItemSelected(MenuItem item) {
-		
-		switch (item.getItemId()) {
-        case R.id.menu_item_about:
-        	Toast.makeText(getApplicationContext(), "About", Toast.LENGTH_SHORT).show();
-        	break;
-        case R.id.menu_item_help:
-        	Toast.makeText(getApplicationContext(), "Help", Toast.LENGTH_SHORT).show();
-        	break;
-        case R.id.menu_item_feedback:
-        	Toast.makeText(getApplicationContext(), "FeedBack", Toast.LENGTH_SHORT).show();
-        	Mail.sendFeedbackEmail(this,"Email Body");
-        	break;
-        case R.id.menu_item_rate:
-        	Toast.makeText(getApplicationContext(), "Rate", Toast.LENGTH_SHORT).show();
-        	break;
-        default:
-        	super.onOptionsItemSelected(item);
-        }		
-		return true;
-	}
+//	@Override
+//	public void onCreateContextMenu(ContextMenu menu, View v,
+//			ContextMenuInfo menuInfo) {
+//		super.onCreateContextMenu(menu, v, menuInfo);
+//		MenuInflater inflater = getMenuInflater();
+//		inflater.inflate(R.menu.feed_item_ctx_menu, menu);
+//
+//	}
+//	
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//	    MenuInflater inflater = getMenuInflater();
+//	    inflater.inflate(R.menu.option_menu, menu);
+//	    return true;
+//	}
+//	
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		
+//		switch (item.getItemId()) {
+//        case R.id.menu_item_about:
+//        	Toast.makeText(getApplicationContext(), "About", Toast.LENGTH_SHORT).show();
+//        	break;
+//        case R.id.menu_item_help:
+//        	Toast.makeText(getApplicationContext(), "Help", Toast.LENGTH_SHORT).show();
+//        	break;
+//        case R.id.menu_item_feedback:
+//        	Toast.makeText(getApplicationContext(), "FeedBack", Toast.LENGTH_SHORT).show();
+//        	Mail.sendFeedbackEmail(this,"Email Body");
+//        	break;
+//        case R.id.menu_item_rate:
+//        	Toast.makeText(getApplicationContext(), "Rate", Toast.LENGTH_SHORT).show();
+//        	break;
+//        default:
+//        	super.onOptionsItemSelected(item);
+//        }		
+//		return true;
+//	}
 
 	@Override
 	protected void onStop() {

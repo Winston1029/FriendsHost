@@ -27,10 +27,9 @@
    <ListView
     android:id="@+id/signOnLst"
     android:textColor="@color/white"
-    android:background="@android:color/transparent"
-    
     style="@style/LeftPanel"
    >
+<!--   android:background="@android:color/transparent"-->
 <!--   android:divider="@android:color/transparent"-->
    </ListView>
   
@@ -57,7 +56,6 @@
   <ListView
   	 android:id="@+id/settingLst"
   	 android:textColor="@color/white"
-  	 android:background="@android:color/transparent"
   	style="@style/LeftPanel">
   </ListView>
   
@@ -78,7 +76,6 @@
     <ListView
   	 android:id="@+id/feedBksLst"
   	 android:textColor="@color/white"
-  	 android:background="@android:color/transparent"
   	style="@style/LeftPanel">
   </ListView>
 <!--  android:divider="@android:color/transparent"-->
