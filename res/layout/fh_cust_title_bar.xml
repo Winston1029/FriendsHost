@@ -20,21 +20,20 @@
   </TextView>
   
   
-  <Button android:id="@+id/secondbtn" 
+  <ImageButton android:id="@+id/secondbtn" 
   		style="@style/TitleBarButtonStyle.Pos"
   		android:layout_weight="1"
-  		android:background="@android:color/transparent"
   		android:layout_height="match_parent"
   		>
-  </Button>
+  </ImageButton>
   
   <!--  android:background="@drawable/fh_camera"-->
   
-     <Button android:id="@+id/thirdbtn" 
+     <ImageButton android:id="@+id/thirdbtn" 
   		style="@style/TitleBarButtonStyle.Pos"
   		android:layout_weight="1"
   		android:layout_height="match_parent"
-  		android:background="@drawable/fh_feed_send"
+  		android:src="@drawable/fh_feed_send"
   		>
-  </Button>
+  </ImageButton>
 </LinearLayout>

@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -59,7 +60,7 @@ public class HelpView extends DialogView{
 	public void InitTitle(Activity activity, TitleBarListener titleBarListener) {
 		// TODO Auto-generated method stub
 		//super.InitTitle(activity, titleBarListener);
-		Button sendBtn = (Button) zActivity.findViewById(R.id.thirdbtn);
+		ImageButton sendBtn = (ImageButton) zActivity.findViewById(R.id.thirdbtn);
 		sendBtn.setVisibility(android.view.View.INVISIBLE);
 		
 		Button closeBtn = (Button) zActivity.findViewById(R.id.CancelBtn);

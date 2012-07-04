@@ -104,24 +104,24 @@ android:background="@color/white"
 <!--	            android:layout_marginTop="10dip"-->
 <!--	            android:text="Publish" />-->
 <!--	            -->
-	        <Button
+	        <ImageButton
 	           android:id="@+id/tkePic"
-  			   android:background="@drawable/fh_camera"
+  			   android:src="@drawable/fh_camera"
   		       android:layout_marginLeft="55dip"
   		       android:gravity="center_vertical"
   		       style="@style/BottomBarButtonStyle"
   		       >
-	        </Button>
+	        </ImageButton>
 
-	        <Button
+	        <ImageButton
 	            android:id="@+id/updPic"
-  				android:background="@drawable/fh_attachment"
-  				style="@style/BottomBarButtonStyle"
+  				android:src="@drawable/fh_attachment"
   				android:layout_alignParentRight="true"
   				android:layout_marginRight="55dip"
   				android:gravity="center_vertical"
+  				style="@style/BottomBarButtonStyle"
   				>
-	        </Button>
+	        </ImageButton>
 
 	    </RelativeLayout>
 </RelativeLayout>

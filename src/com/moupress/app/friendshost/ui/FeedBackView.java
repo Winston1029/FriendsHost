@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -81,7 +82,7 @@ public class FeedBackView extends DialogView{
 				activity.finish();
 			}});
 		
-		Button btnSend = (Button) activity.findViewById(R.id.thirdbtn);
+		ImageButton btnSend = (ImageButton) activity.findViewById(R.id.thirdbtn);
 		btnSend.setOnClickListener(new OnClickListener(){
 
 			@Override

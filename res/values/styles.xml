@@ -34,20 +34,35 @@
   	 <item name="android:layout_marginBottom">5dip</item>
   	 <item name="android:layout_marginLeft">5dip</item>
   	 <item name="android:layout_marginRight">5dip</item>
+  	 <item name="android:background">@drawable/cust_title_btn_selector</item>
+  	 <item name="android:scaleType">fitCenter</item> 
 </style>
+
+
 
  <style name="TitleBarCancelButtonStyle">
  	  <item name="android:layout_width">match_parent</item>
   	  <item name="android:layout_height">match_parent</item>
   	  <item name="android:layout_weight">1</item>
-  	   <item name="android:background">@drawable/fh_btn_cancel</item>
+  	   <item name="android:background">@drawable/cancel_title_btn_selector</item>
+ </style>
+<!--  	   <item name="android:src">@drawable/fh_btn_cancel</item>-->
+
+<style name="TitleBarDetailButton">
+	<item name="android:layout_weight">1</item>
+  	<item name="android:layout_marginRight">3dip</item>
+  	<item name="android:layout_width">match_parent</item>
+  	<item name="android:layout_height">match_parent</item>	
+  	<item name="android:background">@drawable/cust_title_btn_selector</item>
  </style>
  
  <style name="BottomBarButtonStyle">
-   		<item name = "android:layout_marginTop">5dip</item> 
-  		<item name = "android:layout_marginBottom">5dip</item>
+   		<item name = "android:layout_marginTop">3dip</item> 
+  		<item name = "android:layout_marginBottom">3dip</item>
   		<item name = "android:layout_height">35dip</item>
   		<item name = "android:layout_width">35dip</item>
+  		<item name = "android:background">@drawable/cust_title_btn_selector</item>
+  		<item name = "android:scaleType">fitCenter</item>
  </style>
  
 

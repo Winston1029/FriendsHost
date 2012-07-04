@@ -81,7 +81,7 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 	}
 	
 	private void InitTitleButtons(final Activity activity) {
-    	ImageButton btnReturnMain = (ImageButton) activity.findViewById(R.id.CancelBtn);
+    	Button btnReturnMain = (Button) activity.findViewById(R.id.CancelBtn);
     	//btnReturnMain.setBackgroundResource(android.R.drawable.ic_menu_revert);
     	btnReturnMain.setOnClickListener(new OnClickListener() {
 

@@ -55,7 +55,7 @@ public class SinaUtil extends SnsUtil{
 		zSina = OAuthConstant.getInstance().getWeibo();
 		//zContext = pubSub.fGetContext();
 		//fSinaAuth();
-		this.logImg  = R.drawable.fh_sina_log;
+		this.logImg  = R.drawable.fh_sina_logo;
 	}
 	
 	@Override
