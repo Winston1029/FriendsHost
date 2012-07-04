@@ -261,7 +261,6 @@ public class LeftPanelView extends View{
 			}
 		}
 		
-<<<<<<< HEAD
 		private void LaunchDialog(String grpName, String optionName)
 		{
 			int displayView = -1;
@@ -305,7 +304,6 @@ public class LeftPanelView extends View{
 			}
 		}
 		
-=======
 //		private void LaunchDialog(String grpName, String optionName)
 //		{
 //			int displayView = -1;
@@ -349,7 +347,6 @@ public class LeftPanelView extends View{
 //			}
 //		}
 //		
->>>>>>> branch 'master' of https://github.com/Winston1029/FriendsHost.git
 		
 		public void SetDtlText(String[] dtlText)
 		{
