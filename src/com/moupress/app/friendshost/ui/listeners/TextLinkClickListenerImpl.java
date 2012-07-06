@@ -14,13 +14,13 @@ public class TextLinkClickListenerImpl implements TextLinkClickListener {
 	
 	@Override
 	public void onTextLinkClick(View textView, String clickedString) {
-		if (clickedString.startsWith("http://")) {
+		if (clickedString.trim().startsWith("http://")) {
 			
 		}
-		else if (clickedString.startsWith("@")) {
-			clickedString = clickedString.replace("@", "https://twitter.com/");
-		} else if (clickedString.startsWith("#")) {
-			clickedString = clickedString.replace("#", "https://twitter.com/#!/search/%23");
+		else if (clickedString.trim().startsWith("@")) {
+			clickedString = clickedString.trim().replace("@", "https://twitter.com/");
+		} else if (clickedString.trim().startsWith("#")) {
+			clickedString = clickedString.trim().replace("#", "https://twitter.com/#!/search/%23");
 		} 
 		
 		Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(clickedString));
