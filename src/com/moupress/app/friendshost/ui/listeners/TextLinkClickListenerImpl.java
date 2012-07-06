@@ -21,7 +21,8 @@ public class TextLinkClickListenerImpl implements TextLinkClickListener {
 			clickedString = clickedString.replace("@", "https://twitter.com/");
 		} else if (clickedString.startsWith("#")) {
 			clickedString = clickedString.replace("#", "https://twitter.com/#!/search/%23");
-		}
+		} 
+		
 		Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(clickedString));
 		activity.startActivity(viewIntent);			
 	}

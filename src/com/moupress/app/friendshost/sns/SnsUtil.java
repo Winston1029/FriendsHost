@@ -198,6 +198,12 @@ public abstract class SnsUtil {
 		}
 	}
 
+	public void DisplayFeedDtl(int position) {
+
+		FeedEntry feed = (FeedEntry) this.getFeedAdapter().getItem(position);
+		zPubSub.fFeedDisplayDetailUI(feed, this.SnsName);
+	}
+
 	
 	//===============Use Selection Setting Functions Start==============
 }

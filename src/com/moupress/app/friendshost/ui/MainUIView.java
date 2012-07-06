@@ -21,11 +21,14 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.AbsListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Toast;
 
 
@@ -33,6 +36,7 @@ import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.PubSub;
 import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.activity.FHGuideActivity;
+import com.moupress.app.friendshost.sns.SnsUtil;
 import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
 import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
@@ -380,9 +384,34 @@ public class MainUIView extends View{
 		public void onActivityCreated(Bundle savedInstanceState) {
 			// TODO Auto-generated method stub
 			super.onActivityCreated(savedInstanceState);
-			this.setListAdapter(PubSub.zSnsOrg.GetSnsInstance(this.snsName).getFeedAdapter());
-			PubSub.zSnsOrg.GetSnsInstance(snsName).RefreshAdapter();
+			final SnsUtil snsUtil = PubSub.zSnsOrg.GetSnsInstance(this.snsName);
+			this.setListAdapter(snsUtil.getFeedAdapter());
+			snsUtil.RefreshAdapter();
 			lstViewFeedPreview = (PullToRefreshListView) this.getListView();
+//			lstViewFeedPreview.setOnItemClickListener(new OnItemClickListener(){
+//
+//				@Override
+//				public void onItemClick(AdapterView<?> parent,
+//						android.view.View view, int position, long id) {
+//					// TODO Auto-generated method stub
+//					snsUtil.DisplayFeedDtl(position);
+//				}});
+			
+//			lstViewFeedPreview.setOnItemSelectedListener(new OnItemSelectedListener(){
+//
+//				@Override
+//				public void onItemSelected(AdapterView<?> parent,
+//						android.view.View view, int position, long id) {
+//					// TODO Auto-generated method stub
+//					snsUtil.DisplayFeedDtl(position);
+//				}
+//
+//				@Override
+//				public void onNothingSelected(AdapterView<?> arg0) {
+//					// TODO Auto-generated method stub
+//					
+//				}});
+			
 			lstViewFeedPreview.setOnRefreshListener(new OnRefreshListener() {
 				
 				@Override

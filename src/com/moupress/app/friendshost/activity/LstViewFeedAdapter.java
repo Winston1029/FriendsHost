@@ -9,11 +9,10 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -67,6 +66,13 @@ public class LstViewFeedAdapter extends BaseAdapter{
 		return position;
 	}
 	
+	private void ViewFeedDtl(int position)
+	{
+		FeedEntry feed = (FeedEntry) feedArrayList.get(position);
+		FriendsHostActivity.zPubsub.fFeedDisplayDetailUI(feed, snsName);
+
+	}
+	
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent)
 	{
@@ -93,7 +99,9 @@ public class LstViewFeedAdapter extends BaseAdapter{
 			txvLink.setOnTextLinkClickListener(new TextLinkClickListenerImpl(zActivity));
 			txvLink.setTextColor(Color.BLACK);
 			txvLink.setLinkTextColor(Color.BLUE);
+			
 			feedItemUIComponent.setTxv_MsgBody(txvLink);
+			
 			
 			//img_photopreview
 			feedItemUIComponent.setImg_PhotoPreview((WebImageView) convertView.findViewById(R.id.img_photopreview));
@@ -117,10 +125,21 @@ public class LstViewFeedAdapter extends BaseAdapter{
 		convertView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				FeedEntry feed = (FeedEntry) feedArrayList.get(position);
-				FriendsHostActivity.zPubsub.fFeedDisplayDetailUI(feed, snsName);
+				ViewFeedDtl(position);
 			}
 		});
+		
+		feedItemUIComponent.getTxv_MsgBody().setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				
+				if(!((LinkEnabledTextView)v).IsLinkedTxtClicked)
+				{
+					ViewFeedDtl(position);
+				}
+				((LinkEnabledTextView)v).IsLinkedTxtClicked = false;
+			}});
 		
 		feedItemUIComponent.ImgHeadLoad(feedArrayList.get(position).getzFriend().getHeadurl());
 		if (feedArrayList == null || feedArrayList.size() < 2) {
@@ -290,6 +309,7 @@ public class LstViewFeedAdapter extends BaseAdapter{
 	public void addItem(FeedEntry item) {
 		feedArrayList.add(item);		
 	}
+	
 	
 	private Bitmap ImageOperations(String url) {
 		HttpURLConnection con = null;

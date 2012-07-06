@@ -42,6 +42,8 @@ public class LinkEnabledTextView  extends TextView {
 	Pattern renrenFeedTypePattern = Pattern.compile("(分享了|上传了|转自)(日志|照片|相册)?:");
 
 	private Spannable linkableText;
+	
+	public boolean IsLinkedTxtClicked = false;
 
 	public LinkEnabledTextView(Context context, AttributeSet attrs) {
 	    super(context, attrs);
@@ -126,6 +128,7 @@ public class LinkEnabledTextView  extends TextView {
 	
 	    @Override
 	    public void onClick(View textView) {
+	    	IsLinkedTxtClicked = true;
 	        mListener.onTextLinkClick(textView, clickedSpan);
 	    }
 	}

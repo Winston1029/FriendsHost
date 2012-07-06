@@ -138,8 +138,7 @@ public class FriendsHostActivity extends FragmentActivity {
 		this.zPubsub.UnBindToService();
 		FlurryUtil.onStop(this);
 	}
-
-
+	
 
 	@Override
 	public void onBackPressed() {
@@ -147,6 +146,5 @@ public class FriendsHostActivity extends FragmentActivity {
 		if(! this.zPubsub.SlidePanelBack())
 			super.onBackPressed();
 	}
-	
 	
 }
