@@ -24,10 +24,13 @@ import com.moupress.app.friendshost.activity.FHDialogActivity;
 import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
 import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
+import com.moupress.app.friendshost.util.FlurryUtil;
 import com.moupress.app.friendshost.util.Pref;
 
 public class LeftPanelView extends View{
 	
+	private static final String TAG = "LeftPanelView";
+
 	//private ExpandableListView settingExpLstV;
 	//private ExpandableListView feedBksExpLstV;
 	private Activity zActivity;
@@ -255,6 +258,49 @@ public class LeftPanelView extends View{
 			else
 			{
 				imgView.setImageResource(R.drawable.fh_add);
+			}
+		}
+		
+		private void LaunchDialog(String grpName, String optionName)
+		{
+			int displayView = -1;
+			int themeId = -1;
+			if(grpName.equals(Const.SETTING_BASIC) && optionName.contains(Const.SETTING_BASIC_GROUPS[0]))
+			{
+				displayView = R.layout.fh_upt_req_layout;
+				themeId = android.R.style.Theme_Dialog;
+			}
+			else if (grpName.equals(Const.SETTING_FEEDBACKS) && optionName.equals(Const.SETTING_FEEDBACKS_GROUPS[1]))
+			{
+				displayView = R.layout.fh_rate_layout;
+				themeId = android.R.style.Theme_Dialog;
+			}
+			else if(grpName.equals(Const.SETTING_FEEDBACKS) && optionName.equals(Const.SETTING_FEEDBACKS_GROUPS[0]))
+			{
+				displayView = R.layout.fh_feedback_layout;
+			}
+			else if (grpName.equals(Const.SETTING_FEEDBACKS) && optionName.equals(Const.SETTING_FEEDBACKS_GROUPS[2]))
+			{
+				displayView = R.layout.fh_help_layout;
+			}
+			FlurryUtil.logEvent(TAG + ":LaunchDialog", grpName);
+			popUpDialogActivity(displayView,optionName,themeId);
+		}
+
+
+		private void popUpDialogActivity(int displayView, String optionName, int themeId) {
+			
+			if(displayView > 0)
+			{
+				Intent intent = new Intent(zActivity,FHDialogActivity.class);
+				intent.putExtra(Const.DIALOG_VIEW_ID, displayView);
+				intent.putExtra(Const.SETTING_REQ_KEY, optionName);
+				intent.putExtra(Const.DIALOG_THEME_ID, themeId);
+				zActivity.startActivityForResult(intent, Const.CD_REQ_DIALOG);
+			}
+			else
+			{
+				Toast.makeText(zActivity, "Invalid View", 1000);
 			}
 		}
 		
