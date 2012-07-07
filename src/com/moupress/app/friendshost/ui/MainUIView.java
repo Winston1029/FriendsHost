@@ -150,10 +150,6 @@ public class MainUIView extends View{
 
 
 
-
-
-
-
 	@Override
 	public void LoadView(Bundle loadData) {
 		
@@ -233,7 +229,7 @@ public class MainUIView extends View{
 					int index = mPager.getCurrentItem();
 					//String snsName = Const.SNSGROUPS[index];
 					//final ListView lv = (SnsFeedListFragment)mPager.ge ().getListView();
-					SnsFeedListFragment lstFrag = (SnsFeedListFragment) ((FragmentActivity)activity).getSupportFragmentManager().findFragmentByTag(Const.SNSGROUPS[index]);
+					SnsFeedListFragment lstFrag = (SnsFeedListFragment) ((FragmentActivity)activity).getSupportFragmentManager().findFragmentByTag(((SnsAdapter)mAdapter).getTitle(index));
 					
 					if(lstFrag != null)
 					{
@@ -247,7 +243,6 @@ public class MainUIView extends View{
 							}});
 					}	
 				}
-				
 			}});
     		  	
     }
@@ -298,7 +293,7 @@ public class MainUIView extends View{
 			SnsFeedListFragment snsFeedListFragment = SnsFeedListFragment.newInstance(LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON).get(position).toString());
 			
 			try{
-				fm.beginTransaction().add(snsFeedListFragment, LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON).get(position).toString()).commit();
+				fm.beginTransaction().add(snsFeedListFragment, LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON).get(position).toString().toUpperCase()).commit();
 			}
 			catch(Exception e)
 			{
@@ -388,29 +383,6 @@ public class MainUIView extends View{
 			this.setListAdapter(snsUtil.getFeedAdapter());
 			snsUtil.RefreshAdapter();
 			lstViewFeedPreview = (PullToRefreshListView) this.getListView();
-//			lstViewFeedPreview.setOnItemClickListener(new OnItemClickListener(){
-//
-//				@Override
-//				public void onItemClick(AdapterView<?> parent,
-//						android.view.View view, int position, long id) {
-//					// TODO Auto-generated method stub
-//					snsUtil.DisplayFeedDtl(position);
-//				}});
-			
-//			lstViewFeedPreview.setOnItemSelectedListener(new OnItemSelectedListener(){
-//
-//				@Override
-//				public void onItemSelected(AdapterView<?> parent,
-//						android.view.View view, int position, long id) {
-//					// TODO Auto-generated method stub
-//					snsUtil.DisplayFeedDtl(position);
-//				}
-//
-//				@Override
-//				public void onNothingSelected(AdapterView<?> arg0) {
-//					// TODO Auto-generated method stub
-//					
-//				}});
 			
 			lstViewFeedPreview.setOnRefreshListener(new OnRefreshListener() {
 				
