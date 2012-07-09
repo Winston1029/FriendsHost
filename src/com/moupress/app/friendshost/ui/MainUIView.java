@@ -327,7 +327,6 @@ public class MainUIView extends View{
 			return LoadData.getCharSequenceArrayList(Const.SNS_SIGN_ON).size();
 		}
 		
-		
 	}
 	
 	

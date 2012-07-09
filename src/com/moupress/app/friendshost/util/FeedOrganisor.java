@@ -107,7 +107,6 @@ public class FeedOrganisor {
 						comment.setCommetedfeedID(entry.getId());
 						zDBHelper.fInsertComments(comment);
 					}
-
 				}
 				
 			}
@@ -380,6 +379,8 @@ public class FeedOrganisor {
 						comment.setCommentedTime(comments[j][index++]);
 						item.getzComments().add(comment);
 					}
+					
+				item.setsCntCmt(Integer.toString(comments.length));
 				}
 				
 				items.add(item);

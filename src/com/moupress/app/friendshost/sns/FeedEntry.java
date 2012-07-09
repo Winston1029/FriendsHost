@@ -22,6 +22,8 @@ public class FeedEntry /*implements Parcelable*/{
 	private String sPhotoPreviewDescription;
 	
 	private String sCntLikes;
+	private String sCntCmt;
+	
 	
 	private UserFriend zFriend;
 	private ArrayList<FeedEntryComment> zComments;
@@ -153,6 +155,15 @@ public class FeedEntry /*implements Parcelable*/{
 	public String getsCntLikes() {
 		return sCntLikes;
 	}
+	
+	public String getsCntCmt() {
+		return sCntCmt;
+	}
+
+	public void setsCntCmt(String sCntCmt) {
+		this.sCntCmt = sCntCmt;
+	}
+
 	
 //	public FeedEntry(Parcel in)
 //	{

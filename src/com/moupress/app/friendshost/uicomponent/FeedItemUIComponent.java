@@ -26,6 +26,42 @@ public class FeedItemUIComponent {
 	private TextView txv_ImgDecription;
 	private LinearLayout img_Layout;
 	
+	private TextView txv_LikeCnt;
+	private TextView txv_CmtCnt;
+	
+	public TextView getTxv_LikeCnt() {
+		return txv_LikeCnt;
+	}
+	
+	public void setTxv_LikeCnt(TextView txvLikeCnt) {
+		txv_LikeCnt = txvLikeCnt;
+	}
+	public void LikeCntLoad(String likeCnt)
+	{	
+		this.txv_LikeCnt.setVisibility(View.VISIBLE);
+		this.txv_LikeCnt.setText(likeCnt);
+		if(likeCnt == null || likeCnt.length() == 0 || likeCnt.equals("0"))
+		{
+			this.txv_LikeCnt.setVisibility(View.INVISIBLE);
+		}
+	}
+	
+	public TextView getTxv_CmtCnt() {
+		return txv_CmtCnt;
+	}
+	public void setTxv_CmtCnt(TextView txvCmtCnt) {
+		txv_CmtCnt = txvCmtCnt;
+	}
+	public void CmtCntLoad(String cmtCnt)
+	{
+		this.txv_CmtCnt.setVisibility(View.VISIBLE);
+		this.txv_CmtCnt.setText(cmtCnt);
+		if(cmtCnt == null || cmtCnt.length() ==0 || cmtCnt.equals("0"))
+		{
+			this.txv_CmtCnt.setVisibility(View.INVISIBLE);
+		}
+	}
+	
 	public WebImageView getImg_Head() {
 		return img_Head;
 	}
@@ -55,31 +91,38 @@ public class FeedItemUIComponent {
 		txv_MsgBody.setVisibility(View.VISIBLE);
 		this.txv_MsgBody = txv_MsgBody;
 	}
+	
 	public WebImageView getImg_PhotoPreview() {
 		return img_PhotoPreview;
 	}
+	
 	public void setImg_PhotoPreview(WebImageView img_PhotoPreview) {
 		this.img_PhotoPreview = img_PhotoPreview;
 	}
+	
 	public TextView getTxv_ImgName() {
 		return txv_ImgName;
 	}
+	
 	public void setTxv_ImgName(TextView txv_ImgName) {
 		this.txv_ImgName = txv_ImgName;
 	}
+	
 	public TextView getTxv_ImgCaption() {
 		return txv_ImgCaption;
 	}
+	
 	public void setTxv_ImgCaption(TextView txv_ImgCaption) {
 		this.txv_ImgCaption = txv_ImgCaption;
 	}
+	
 	public TextView getTxv_ImgDecription() {
 		return txv_ImgDecription;
 	}
+	
 	public void setTxv_ImgDecription(TextView txv_ImgDecription) {
 		this.txv_ImgDecription = txv_ImgDecription;
 	}
-	
 	
 	public LinearLayout getImg_Layout() {
 		return img_Layout;

@@ -48,22 +48,56 @@
                 ns:autoLoad="true" android:visibility="invisible">
             </com.github.droidfu.widgets.WebImageView>
         </LinearLayout>
-
-    </LinearLayout>
-
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/layout_feedcontent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
+	<LinearLayout
+		android:id="@+id/layout_feedlikecmt"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
         <TextView
             android:id="@+id/txt_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:padding="5dp"
+            android:layout_gravity="center"
+            android:layout_weight="0.5"
             android:textSize="18sp" android:text="feed user"/>
+       
+          <TextView
+        	android:id="@+id/txt_cmtcnt"
+        	android:layout_width="match_parent"
+        	android:layout_height="30dip"
+        	android:textColor="@color/black"
+        	android:textSize="7sp"
+        	android:layout_gravity="center"
+        	android:gravity="center"
+        	android:layout_margin="5dip"
+        	android:background="@drawable/fh_feed_cmt"
+        	android:layout_weight="1.5"
+        />
+        
+         <TextView
+        	android:id="@+id/txt_likecnt"
+        	android:layout_width="match_parent"
+        	android:layout_height="30dip"
+        	android:textColor="@color/black"
+        	android:padding="5dp"
+        	android:textSize="7sp"
+        	android:layout_gravity="center"
+        	android:gravity="center"
+        	android:layout_margin="5dip"
+        	android:background="@drawable/fh_feed_likecnt"
+        	android:layout_weight="1.5"
+        	/>
+
+    </LinearLayout>
 <!--             android:textAppearance="?android:attr/textAppearanceSmall" /> -->
         <TextView
             android:id="@+id/txt_msgcreatedtime"
@@ -108,11 +142,9 @@
                         droidfu:progressDrawable="..."
                         ns:autoLoad="true" android:visibility="invisible">
                     </com.github.droidfu.widgets.WebImageView>
-
                 </LinearLayout>
-
             </LinearLayout>
-
+
             <LinearLayout
                 android:id="@+id/linearLayout4"
                 android:layout_width="match_parent"

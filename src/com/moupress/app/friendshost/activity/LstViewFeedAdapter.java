@@ -115,6 +115,12 @@ public class LstViewFeedAdapter extends BaseAdapter{
 			//txv_ImgDecription
 			feedItemUIComponent.setTxv_ImgDecription((TextView) convertView.findViewById(R.id.txv_imgdescription));
 			
+			//txt_LikeCnt
+			feedItemUIComponent.setTxv_LikeCnt((TextView) convertView.findViewById(R.id.txt_likecnt));
+			
+			//txt_CmtCnt
+			feedItemUIComponent.setTxv_CmtCnt((TextView) convertView.findViewById(R.id.txt_cmtcnt));
+			
 			convertView.setTag(feedItemUIComponent);
 		}
 			else
@@ -148,6 +154,8 @@ public class LstViewFeedAdapter extends BaseAdapter{
 			feedItemUIComponent.getImg_Head().setVisibility(View.GONE);
 			feedItemUIComponent.getTxv_MsgCreationTime().setVisibility(View.GONE);
 			feedItemUIComponent.getTxv_MsgBody().setVisibility(View.GONE);
+			feedItemUIComponent.getTxv_LikeCnt().setVisibility(View.GONE);
+			feedItemUIComponent.getTxv_CmtCnt().setVisibility(View.GONE);
 			
 		}else {
 			
@@ -168,8 +176,9 @@ public class LstViewFeedAdapter extends BaseAdapter{
 			feedItemUIComponent.TxtImgNameLoad(feedArrayList.get(position).getsPhotoPreviewName());
 			feedItemUIComponent.TxvImgCaptionLoad( feedArrayList.get(position).getsPhotoPreviewCaption());
 			feedItemUIComponent.TxvImgDecription(feedArrayList.get(position).getsPhotoPreviewDescription());
+			feedItemUIComponent.LikeCntLoad(feedArrayList.get(position).getsCntLikes());
+			feedItemUIComponent.CmtCntLoad(feedArrayList.get(position).getsCntCmt());
 			}
-			
 		}
 		return convertView;
 	}
@@ -301,9 +310,7 @@ public class LstViewFeedAdapter extends BaseAdapter{
 		} else {												//No local feed available
 			item.setsName(feedMsg[0]);
 		}
-		
 		feedArrayList.add(item);
-		
 	}
 	
 	public void addItem(FeedEntry item) {
