@@ -150,7 +150,9 @@ public class LstViewFeedAdapter extends BaseAdapter{
 		feedItemUIComponent.ImgHeadLoad(feedArrayList.get(position).getzFriend().getHeadurl());
 		if (feedArrayList == null || feedArrayList.size() < 2) {
 			
-			feedItemUIComponent.getTxv_FeedUser().setText("Feed Not available yet. \nPlease refresh later");
+			feedItemUIComponent.getTxv_FeedUser().setText("This is your time sign in.\n" +
+															"It will take a few mininutes to load your feed.\n" +
+															"Please refresh later");
 			feedItemUIComponent.getImg_Head().setVisibility(View.GONE);
 			feedItemUIComponent.getTxv_MsgCreationTime().setVisibility(View.GONE);
 			feedItemUIComponent.getTxv_MsgBody().setVisibility(View.GONE);
