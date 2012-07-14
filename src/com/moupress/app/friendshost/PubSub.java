@@ -28,6 +28,7 @@ import com.moupress.app.friendshost.ui.MainUIView;
 import com.moupress.app.friendshost.ui.listeners.ContentViewListener;
 import com.moupress.app.friendshost.ui.listeners.TitleBarListener;
 import com.moupress.app.friendshost.util.FeedOrganisor;
+import com.moupress.app.friendshost.util.Pref;
 
 
 public class PubSub {
@@ -212,8 +213,10 @@ public class PubSub {
 //			intent.putExtra(Const.COMMENTS, feed.getzComments());
 //		}
 		
-		intent.putExtra(Const.FID, feed.getsID());
-		intent.putExtra(Const.SNS, snsName);
+//		intent.putExtra(Const.FID, feed.getsID());
+//		intent.putExtra(Const.SNS, snsName);
+		Pref.setMyStringPref(zContext, Const.SHOWDETAIL_FEEDID, feed.getsID());
+		Pref.setMyStringPref(zContext, Const.SHOWDETAIL_SNS, snsName);
 		zActivity.startActivity(intent);
 	}
 	

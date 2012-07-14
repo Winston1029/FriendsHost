@@ -120,5 +120,9 @@ public class Const {
 
 	
 	//============Initial Guide=====================================
-	public static final String VIEW_GUIDE = "ViewGuide"; 
+	public static final String VIEW_GUIDE = "ViewGuide";
+	
+	//============Detail View Get Feed==============================
+	public static final String SHOWDETAIL_SNS = "ShowDetail_SNS";
+	public static final String SHOWDETAIL_FEEDID = "ShowDetail_FEEDID";
 }

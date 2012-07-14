@@ -158,11 +158,15 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 	private void fInitFeed(Bundle loadData) {
 		//Intent intent = this.getIntent();
 		bIsFeedLiked = false;
-		displayedSns = loadData.getString(Const.SNS);
-		String feed_id = loadData.getString(Const.FID);
+//		displayedSns = loadData.getString(Const.SNS);
+//		String feed_id = loadData.getString(Const.FID);
+		displayedSns = Pref.getMyStringPref(zActivity.getApplicationContext(), Const.SHOWDETAIL_SNS);
+		String feed_id = Pref.getMyStringPref(zActivity.getApplicationContext(), Const.SHOWDETAIL_FEEDID);
 		
-		if(PubSub.zFeedOrg != null)
-		feed = PubSub.zFeedOrg.fGetFeedByID( displayedSns, feed_id );
+		if(PubSub.zFeedOrg != null) {
+			feed = PubSub.zFeedOrg.fGetFeedByID( displayedSns, feed_id );
+		}
+		
 		//feed.setsFeedType(displayedSns);
 		// FlurryUtil
 		FlurryUtil.logEvent(TAG+":fInitFeed", displayedSns +"," + feed.getsFeedType());
@@ -257,7 +261,11 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		WebView webV_detail = (WebView) zActivity.findViewById(R.id.webV_detail);
 		webV_detail.setVisibility(android.view.View.VISIBLE);
 		webV_detail.setWebViewClient(new MyWebViewClient());
-		if (sFeedType != null && (sFeedType.equals("blog") || sFeedType.equals("21")) ) {
+		if (sFeedType != null 
+				&& (sFeedType.equals("blog") 
+				|| sFeedType.equals("21")
+				|| sFeedType.equals("20")) 
+		) {
 			webV_detail.loadUrl(feed.getsLink());
 			TextView txv_description_detail = (TextView) zActivity.findViewById(R.id.txv_description_detail);
 			txv_description_detail.setVisibility(android.view.View.GONE);
