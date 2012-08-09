@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.moupress.app.friendshost"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.3" android:versionCode="3">
 
     <uses-sdk android:minSdkVersion="8" />
 
@@ -45,7 +44,8 @@
             android:enabled="true"
             android:screenOrientation="portrait" 
             android:name=".activity.FeedPublishActivity"
-            android:noHistory="true">
+            >
+<!--            android:noHistory="true"-->
         	<intent-filter>
 <!--             	<action android:name="android.intent.action.SEND" /> -->
             	<category android:name="android.intent.category.DEFAULT" />
