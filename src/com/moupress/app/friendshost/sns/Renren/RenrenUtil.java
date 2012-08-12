@@ -211,6 +211,9 @@ public class RenrenUtil extends SnsUtil{
 		//String name, String description,String url, String imageUrl, String caption, String message
 		if (zRenren != null) {
 			//AsyncRenren asyncRenren = new AsyncRenren(zRenren);
+			if (!isSessionValid()) {
+				fSnsAuth(null, false);
+			}
 			asyncRenren = fGetAsyncRenren();
 			//showProgress();
 			String name = params.getString(Const.SNAME);
@@ -285,6 +288,9 @@ public class RenrenUtil extends SnsUtil{
 
 	public void fUploadPic(String message, String selectedImagePath) {
 			if (zRenren != null) {
+				if (!isSessionValid()) {
+					fSnsAuth(null, false);
+				}
 				//AsyncRenren asyncRenren = new AsyncRenren(zRenren);
 				asyncRenren = fGetAsyncRenren();
 				PhotoUploadRequestParam photoParam = new PhotoUploadRequestParam();
@@ -391,6 +397,12 @@ public class RenrenUtil extends SnsUtil{
 			String response = zRenren.requestJSON(parameters);
 			System.out.println(response);
     	}
+	}
+	
+	public void fLogout(Bundle params) {
+		if (zRenren != null) {
+			zRenren.logout(zContext);
+		}
 	}
 	
 	public void fShareFeeds(Bundle params) {

@@ -288,6 +288,7 @@ public class FacebookUtil extends SnsUtil {
 		//String name, String description, String url,String imageUrl, String caption, String message
 		if (zFacebook != null) {
 			// AsyncFacebookRunner asyncFB = new AsyncFacebookRunner(zFacebook);
+			
 			asyncFB = fGetAsyncFacebook();
 
 			Bundle data = new Bundle();

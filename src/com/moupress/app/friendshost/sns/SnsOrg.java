@@ -120,7 +120,7 @@ public class SnsOrg {
 		boolean bPublished = false;
 		String flurry_sns_topublish="";
 		for(int i=0; i< Const.SNSGROUPS.length; i++)  {
-			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).fIsSelectedToPublish()) {
+			if(this.GetSnsInstance(Const.SNSGROUPS[i]).fIsSelectedToPublish()) {
 				this.GetSnsInstance(Const.SNSGROUPS[i]).fPublishFeeds(params);
 				flurry_sns_topublish += Const.SNSGROUPS[i] + ":" + params.getString(Const.SMSGBODY).length() + ",";
 				bPublished = true;
@@ -146,7 +146,7 @@ public class SnsOrg {
 		boolean bPublished = false;
 		String flurry_sns_topublish="";
 		for(int i=0; i< Const.SNSGROUPS.length; i++)  {
-			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).fIsSelectedToPublish()) {
+			if(this.GetSnsInstance(Const.SNSGROUPS[i]).fIsSelectedToPublish()) {
 				this.GetSnsInstance(Const.SNSGROUPS[i]).fUploadPic(message, selectedImagePath);
 				flurry_sns_topublish += Const.SNSGROUPS[i] + ":" + message.length() + ",";
 				bPublished = true;

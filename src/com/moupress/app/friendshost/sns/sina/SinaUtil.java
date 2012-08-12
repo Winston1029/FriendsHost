@@ -62,7 +62,8 @@ public class SinaUtil extends SnsUtil{
 	public boolean isSessionValid() {
 		if ( zSina != null ) {
 			try {
-				return zSina.test();
+				List<Status> retweetbymestatus = zSina.getRetweetedByMe();
+				return true;
 			} catch (WeiboException e) {
 				e.printStackTrace();
 				return false;
@@ -147,26 +148,28 @@ public class SinaUtil extends SnsUtil{
 	
 	@Override
 	public void fPublishFeeds(Bundle params) {
-		if (isSessionValid()) {
-			try {
-				startNotification(7, "Feed");
-				zSina.updateStatus(params.getString(Const.SMSGBODY));
-			} catch (WeiboException e) {
-				e.printStackTrace();
-			} finally {
-				stopNotification();
-			}
+		if (!isSessionValid()) {
+			fSnsAuth(null, false);
+		}
+		try {
+			startNotification(7, "Feed");
+			zSina.updateStatus(params.getString(Const.SMSGBODY));
+		} catch (WeiboException e) {
+			e.printStackTrace();
+		} finally {
+			stopNotification();
 		}
 		
 	}
 	
 	public void fUploadPic(String message, String selectedImagePath) {
-		if (isSessionValid()) {
-			try {
-				zSina.uploadStatus(message, new File(selectedImagePath));
-			} catch (WeiboException e) {
-				e.printStackTrace();
-			}
+		if (!isSessionValid()) {
+			fSnsAuth(null, false);
+		}
+		try {
+			zSina.uploadStatus(message, new File(selectedImagePath));
+		} catch (WeiboException e) {
+			e.printStackTrace();
 		}
 	}
 	

@@ -80,6 +80,7 @@ public abstract class SnsUtil {
 	public void fLikeFeeds(Bundle params) {}
 	public void fUnLikeFeeds(Bundle params) {}
 	public void fShareFeeds(Bundle params) {}
+	public void fLogout(Bundle params) {}
 	
 	
 	//===============Adapter Related Functions Begin=================
@@ -158,8 +159,11 @@ public abstract class SnsUtil {
 	{
 		this.SetSelectedPref(false);
 		
-		if(snsUpdateListener != null)
+		if(snsUpdateListener != null) {
 			snsUpdateListener.OnSnsUtilRemoved(this.SnsName);
+		}
+		
+		this.fLogout(null);
 	}
 	
 	
