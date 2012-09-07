@@ -197,8 +197,6 @@ public abstract class SnsUtil {
 			
 			if(snsEventListener != null)
 				snsEventListener.OnSnsUtilAdded(this.SnsName);
-			
-			
 		}
 	}
 

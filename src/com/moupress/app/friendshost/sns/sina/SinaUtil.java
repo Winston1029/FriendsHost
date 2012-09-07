@@ -86,10 +86,12 @@ public class SinaUtil extends SnsUtil{
 		sTokenKey = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENKEY);
 		sTokenSecret = Pref.getMyStringPref(zPubSub.fGetContext().getApplicationContext(), Const.SP_SINA_TOKENSECRET);
 		
-		if ( sTokenKey.length() > 0 && sTokenSecret.length() > 0) {
+		//if ( sTokenKey.length() > 0 && sTokenSecret.length() > 0) {
+		if(this.isSessionValid()){
 			this.SnsAddEventCallback(snsEventListener, uptPref);
 			return;
 		}
+	
 		try {
 			RequestToken requestToken =zSina.getOAuthRequestToken("weibo4andriod://OAuthActivity");
 			Uri uri = Uri.parse(requestToken.getAuthenticationURL()+ "&from=xweibo");

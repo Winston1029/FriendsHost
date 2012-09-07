@@ -109,7 +109,7 @@ public class SnsOrg {
 		{
 			Log.v(TAG,this.GetSnsInstance(Const.SNSGROUPS[i]).SnsName + " "+this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid());
 			
-			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid() && this.GetSnsInstance(Const.SNSGROUPS[i]).isSelected())
+			if(this.GetSnsInstance(Const.SNSGROUPS[i]).isSelected() && this.GetSnsInstance(Const.SNSGROUPS[i]).isSessionValid())
 			{
 				this.GetSnsInstance(Const.SNSGROUPS[i]).fGetNewsFeed(ctx);
 			}

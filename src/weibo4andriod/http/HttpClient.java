@@ -860,7 +860,7 @@ public class HttpClient implements java.io.Serializable {
 
     private static void log(String message) {
         if (DEBUG) {
-            //System.out.println("[" + new java.util.Date() + "]" + message);
+            System.out.println("[" + new java.util.Date() + "]" + message);
         }
     }
 

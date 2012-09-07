@@ -36,7 +36,7 @@ import weibo4andriod.WeiboException;
 public class AccessToken extends OAuthToken {
     private static final long serialVersionUID = -8344528374458826291L;
     private String screenName;
-    private int userId;
+    private long userId;
     
     AccessToken(Response res) throws WeiboException {
         this(res.asString());
@@ -47,8 +47,8 @@ public class AccessToken extends OAuthToken {
         super(str);
         screenName = getParameter("screen_name");
 	String sUserId = getParameter("user_id");
-	if (sUserId != null) userId = Integer.parseInt(sUserId);
-
+	//if (sUserId != null) userId = Integer.parseInt(sUserId);
+	if (sUserId != null) userId =  Long.parseLong(sUserId);
     }
 
     public AccessToken(String token, String tokenSecret) {
@@ -71,7 +71,7 @@ public class AccessToken extends OAuthToken {
      * @since Weibo4J 2.0.4
      */
 
-	public int getUserId() {
+	public long getUserId() {
 		return userId;
 	}
     

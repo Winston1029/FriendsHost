@@ -53,8 +53,10 @@ import weibo4andriod.org.json.JSONObject;
 public class Weibo extends WeiboSupport implements java.io.Serializable {
 	//public static String CONSUMER_KEY = "1552112022";
 	//public static String CONSUMER_SECRET = "bd9e3b147ece106f9cee159758a28ec1";
-	public static String CONSUMER_KEY = "1255140182";
-	public static String CONSUMER_SECRET = "ace86405a2aea9d30c5986d5465e163f";
+	//public static String CONSUMER_KEY = "1255140182";
+	//public static String CONSUMER_SECRET = "ace86405a2aea9d30c5986d5465e163f";
+	public static String CONSUMER_KEY = "194048236";
+	public static String CONSUMER_SECRET = "f224d6f3ee63132ab16459b59dfc9bdf";
     private String baseURL = Configuration.getScheme() + "api.t.sina.com.cn/";
     private String searchBaseURL = Configuration.getScheme() + "api.t.sina.com.cn/";
     private static final long serialVersionUID = -1486360080128882436L;
@@ -66,7 +68,6 @@ public class Weibo extends WeiboSupport implements java.io.Serializable {
         http.setRequestTokenURL(Configuration.getScheme() + "api.t.sina.com.cn/oauth/request_token");
         http.setAuthorizationURL(Configuration.getScheme() + "api.t.sina.com.cn/oauth/authorize");
         http.setAccessTokenURL(Configuration.getScheme() + "api.t.sina.com.cn/oauth/access_token");
-
 
     }
 
