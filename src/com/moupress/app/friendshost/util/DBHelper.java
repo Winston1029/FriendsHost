@@ -6,9 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
-
-import weibo4andriod.Status;
 
 import com.moupress.app.friendshost.Const;
 import com.moupress.app.friendshost.sns.FeedEntryComment;
@@ -20,6 +19,9 @@ import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntry;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryAction;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryComments.FBFeedEntryComment;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryFrom;
+import com.moupress.app.friendshost.sns.sina.WBHomeCommentEntry;
+import com.weibo.net.Status;
+import com.weibo.net.WBStatus;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -259,10 +261,37 @@ public class DBHelper {
 	}
 	
 	// insert feed for Sina
-	public long fInsertFeed(Status status) {
+//	public long fInsertFeed(Status status) {
+//		long ret = 0;
+//		
+//		if (fIfItemExist(status.getId() + "", SNS_SINA, T_FEED)) {
+//			return ret;
+//		}
+//		
+//		ContentValues values  = new ContentValues();
+//		values.put(C_FEED_SNS, SNS_SINA);
+//		values.put(C_FEED_ISREAD, "0");
+//		values.put(C_FEED_ID, status.getId() + "");
+//		values.put(C_FEED_FROM, status.getUser().getName());
+//		values.put(C_FEED_OWNER_ID, status.getUser().getId());
+//		values.put(C_FEED_MSG, status.getText());
+//		values.put(C_FEED_PIC, status.getThumbnail_pic());
+//		values.put(C_FEED_RAW_PIC, status.getOriginal_pic());
+//		values.put(C_FEED_UPDATED_TIME, simpleDateFormat.format(status.getCreatedAt()));
+//		values.put(C_FEED_CREATED_TIME, simpleDateFormat.format(status.getCreatedAt()));
+//		//values.put(C_FEED_FROM, status.getSource());
+//		
+//		ret = zSQLiteDB.insert(T_FEED, null, values);
+//		
+//		return ret;
+//	}
+	
+	
+	public long fInsertFeed(WBStatus status) {
 		long ret = 0;
 		
-		if (fIfItemExist(status.getId() + "", SNS_SINA, T_FEED)) {
+		if(fIfItemExist(status.getId().toString(),SNS_SINA,T_FEED))
+		{
 			return ret;
 		}
 		
@@ -275,12 +304,20 @@ public class DBHelper {
 		values.put(C_FEED_MSG, status.getText());
 		values.put(C_FEED_PIC, status.getThumbnail_pic());
 		values.put(C_FEED_RAW_PIC, status.getOriginal_pic());
-		values.put(C_FEED_UPDATED_TIME, simpleDateFormat.format(status.getCreatedAt()));
-		values.put(C_FEED_CREATED_TIME, simpleDateFormat.format(status.getCreatedAt()));
-		//values.put(C_FEED_FROM, status.getSource());
 		
+		SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+         
+
+		 try {
+			 values.put(C_FEED_UPDATED_TIME, simpleDateFormat.format(sdf.parse(status.getCreated_at())));
+		     values.put(C_FEED_CREATED_TIME, simpleDateFormat.format(sdf.parse(status.getCreated_at())));
+		    } catch (ParseException e) {
+		    	e.printStackTrace();
+				Log.i(TAG,e.getMessage());
+			}
+		    
 		ret = zSQLiteDB.insert(T_FEED, null, values);
-		
 		return ret;
 	}
 	
@@ -436,6 +473,39 @@ public class DBHelper {
 		values.put(C_COMMENTS_USERHEADURL, comment.getHeadurl());
 		values.put(C_COMMENTS_MSG, comment.getText());
 		values.put(C_COMMENTS_CREATED_TIME, comment.getTime());
+		
+		ret = zSQLiteDB.insert(T_COMMENTS, null, values);
+		
+		return ret;
+	}
+	
+	
+	public long fInsertComments(WBHomeCommentEntry comment)
+	{
+		long ret = 0;
+		
+		if (fIfItemExist(comment.getComment_id(), comment.getSns(), T_COMMENTS)) {
+			return ret;
+		}
+		
+		ContentValues values  = new ContentValues();
+		values.put(C_COMMENTS_SNS, comment.getSns());
+		values.put(C_COMMENTS_ID, comment.getComment_id());
+		values.put(C_COMMENTS_FEEDID, comment.getFeed_id());
+		values.put(C_COMMENTS_USERID, comment.getUsr_id());
+		values.put(C_COMMENTS_USERNAME, comment.getUsr_name());
+		values.put(C_COMMENTS_USERHEADURL, comment.getUsr_hdr_url());
+		values.put(C_COMMENTS_MSG, comment.getMessage());
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+         
+		 try {
+		     values.put(C_COMMENTS_CREATED_TIME, simpleDateFormat.format(sdf.parse(comment.getCreate_tm())));
+		    } catch (ParseException e) {
+		    	e.printStackTrace();
+				Log.i(TAG,e.getMessage());
+			}
 		
 		ret = zSQLiteDB.insert(T_COMMENTS, null, values);
 		

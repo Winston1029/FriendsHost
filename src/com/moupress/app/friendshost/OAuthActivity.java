@@ -1,14 +1,11 @@
 package com.moupress.app.friendshost;
 
-import weibo4andriod.WeiboException;
-import weibo4andriod.http.AccessToken;
-import weibo4andriod.http.RequestToken;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.moupress.app.friendshost.sns.sina.OAuthConstant;
 import com.moupress.app.friendshost.sns.sina.SinaUtil;
 import com.moupress.app.friendshost.sns.twitter.TwitterUtil;
 import com.moupress.app.friendshost.util.Pref;
@@ -28,16 +25,16 @@ public class OAuthActivity extends Activity {
 			((TwitterUtil)PubSub.zSnsOrg.GetSnsInstance(Const.SNS_TWITTER)).CallBackTrigger(uri, 0, 0, null);
 			startActivity(new Intent(this, FriendsHostActivity.class));
 		}
-		else if(uri != null && uri.getScheme().equals(Const.SINA_AUTH))
-		{
-			
-				((SinaUtil)PubSub.zSnsOrg.GetSnsInstance(Const.SNS_SINA)).CallBackTrigger(uri);
-				
-				startActivity(new Intent(this, FriendsHostActivity.class));
-				//TextView textView = (TextView) findViewById(R.id.TextView01);
-				//textView.setText("得到AccessToken的key和Secret,可以使用这两个参数进行授权登录了.\n Access token:\n"+accessToken.getToken()+"\n Access token secret:\n"+accessToken.getTokenSecret());
-				
-		}
+//		else if(uri != null && uri.getScheme().equals(Const.SINA_AUTH))
+//		{
+//			
+//				((SinaUtil)PubSub.zSnsOrg.GetSnsInstance(Const.SNS_SINA)).CallBackTrigger(uri);
+//				
+//				startActivity(new Intent(this, FriendsHostActivity.class));
+//				//TextView textView = (TextView) findViewById(R.id.TextView01);
+//				//textView.setText("得到AccessToken的key和Secret,可以使用这两个参数进行授权登录了.\n Access token:\n"+accessToken.getToken()+"\n Access token secret:\n"+accessToken.getTokenSecret());
+//				
+//		}
 		
 //		Button button=  (Button) findViewById(R.id.Button01);
 //		button.setText("显示FriendTimeline");

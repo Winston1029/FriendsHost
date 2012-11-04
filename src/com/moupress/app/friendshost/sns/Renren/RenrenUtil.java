@@ -207,7 +207,7 @@ public class RenrenUtil extends SnsUtil{
 	}
 	
 	@Override
-	public void fPublishFeeds(Bundle params) {
+	public void fPublishFeeds(Bundle params, final Context context) {
 		//String name, String description,String url, String imageUrl, String caption, String message
 		if (zRenren != null) {
 			//AsyncRenren asyncRenren = new AsyncRenren(zRenren);
@@ -354,7 +354,8 @@ public class RenrenUtil extends SnsUtil{
 //		this.fPublishFeeds(name, description, link, imgUrl, caption, msg+story);
 	}
     
-    public void fLikeFeeds(Bundle params) {
+    @Override
+    public void fLikeFeeds(Bundle params, final Context context) {
     	String likeUrl = "http://www.renren.com/g?ownerid=%s&resourceid=%s&type=%s";
     	if (zRenren != null) {
     		Bundle parameters = new Bundle();
@@ -377,7 +378,8 @@ public class RenrenUtil extends SnsUtil{
     	}
 	}
 	
-	public void fUnLikeFeeds(Bundle params) {
+    @Override
+	public void fUnLikeFeeds(Bundle params, final Context context) {
 		String likeUrl = "http://www.renren.com/g?ownerid=%s&resourceid=%s&type=%s";
     	if (zRenren != null) {
     		Bundle parameters = new Bundle();
@@ -405,6 +407,8 @@ public class RenrenUtil extends SnsUtil{
 		}
 	}
 	
-	public void fShareFeeds(Bundle params) {
+	@Override
+	public void fShareFeeds(Bundle params, final Context context) {
+		
 	}
 }

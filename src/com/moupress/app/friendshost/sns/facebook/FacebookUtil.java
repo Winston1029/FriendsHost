@@ -254,7 +254,8 @@ public class FacebookUtil extends SnsUtil {
 		return asyncFB;
 	}
 	
-	public void fPostComments(Bundle params) {
+	@Override
+	public void fPostComments(Bundle params, final Context context) {
 		if (zFacebook != null ) {
 			asyncFB = fGetAsyncFacebook();
 			params.putString(FEED_MSG, params.getString(Const.COMMENTED_MSG));
@@ -284,7 +285,7 @@ public class FacebookUtil extends SnsUtil {
 	}
 
 	@Override
-	public void fPublishFeeds(Bundle params) {
+	public void fPublishFeeds(Bundle params, final Context context) {
 		//String name, String description, String url,String imageUrl, String caption, String message
 		if (zFacebook != null) {
 			// AsyncFacebookRunner asyncFB = new AsyncFacebookRunner(zFacebook);
@@ -352,7 +353,8 @@ public class FacebookUtil extends SnsUtil {
 		}
 	}
 
-	public void fUploadPic(String message, String selectedImagePath) {
+	@Override
+	public void fUploadPic(String message, String selectedImagePath, final Context context) {
 		if (zFacebook != null) {
 			// AsyncFacebookRunner asyncFB = new AsyncFacebookRunner(zFacebook);
 			asyncFB = fGetAsyncFacebook();
@@ -420,7 +422,8 @@ public class FacebookUtil extends SnsUtil {
 //				.getsPhotoPreviewCaption(), feed.getsMsgBody());
 	}
 	
-	public void fLikeFeeds(Bundle params) {
+	@Override
+	public void fLikeFeeds(Bundle params, final Context context) {
 		if (zFacebook != null ) {
 			asyncFB = fGetAsyncFacebook();
 			RequestListener listener = new RequestListener() {
@@ -448,7 +451,8 @@ public class FacebookUtil extends SnsUtil {
 		}
 	}
 	
-	public void fUnLikeFeeds(Bundle params) {
+	@Override
+	public void fUnLikeFeeds(Bundle params, final Context context) {
 		if (zFacebook != null ) {
 			asyncFB = fGetAsyncFacebook();
 			RequestListener listener = new RequestListener() {
@@ -476,7 +480,8 @@ public class FacebookUtil extends SnsUtil {
 		}
 	}
 	
-	public void fShareFeeds(Bundle params) {
+	@Override
+	public void fShareFeeds(Bundle params, final Context context) {
 	}
 
 }

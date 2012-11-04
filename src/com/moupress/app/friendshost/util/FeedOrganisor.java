@@ -13,7 +13,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import twitter4j.ResponseList;
-import weibo4andriod.Status;
+
+
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -36,6 +37,10 @@ import com.moupress.app.friendshost.sns.Renren.RenrenFeedElementEntry;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeed;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntry;
 import com.moupress.app.friendshost.sns.facebook.FBHomeFeedEntryComments.FBFeedEntryComment;
+import com.moupress.app.friendshost.sns.sina.WBHomeCommentEntry;
+import com.weibo.net.Status;
+import com.weibo.net.WBComment;
+import com.weibo.net.WBStatus;
 
 public class FeedOrganisor {
 	private Activity zActivity;
@@ -68,7 +73,8 @@ public class FeedOrganisor {
 	
 	/**
 	 * Save new feeds from fGetNewsFeed() into DB
-	 * @param context 
+	 * @param context
+	 *  
 	 */
 	public void fSaveNewFeeds(FBHomeFeed beans, Context context) {
 		
@@ -122,6 +128,7 @@ public class FeedOrganisor {
 	
 	/*
 	 * A temp workaround method to get FB pic_raw_url
+	 * 
 	 */
 	private String fGetFbRawPicUrl(String picUrl) {
 		String picRawUrl = null;
@@ -205,6 +212,58 @@ public class FeedOrganisor {
 		
 	}
 	
+	
+	public void fSaveNewFeeds(List<WBStatus> friendsTimeLine, Context context)
+	{
+		long res = 0;
+		
+		if(friendsTimeLine == null) return;
+		
+		for(WBStatus status: friendsTimeLine)
+		{
+			res += zDBHelper.fInsertFeed(status);
+			
+			UserFriend friend = new UserFriend();
+			friend.setId(status.getUser().getId()+"");
+			friend.setSNS(Const.SNS_SINA);
+			friend.setName(status.getUser().getName());
+			friend.setHeadurl(status.getUser().getProfile_image_url().toString());
+			zDBHelper.fInsertFriend(friend);
+			
+		}
+	}
+	
+	//Save SINA comments
+	public void fSaveNewComments(List<WBComment> comments, Context context) {
+		
+		int res = 0;
+		
+		for(WBComment comment : comments)
+		{
+			if(comment != null)
+			{
+				WBHomeCommentEntry wbComment = new WBHomeCommentEntry();
+				wbComment.setComment_id(Long.toString(comment.getId()));
+				wbComment.setFeed_id(Long.toString(comment.getStatus().getId()));
+				wbComment.setUsr_id(Long.toString(comment.getUser().getId()));
+				wbComment.setUsr_name(comment.getUser().getName());
+				wbComment.setUsr_hdr_url(comment.getUser().getProfile_image_url());
+				wbComment.setMessage(comment.getText());
+				wbComment.setCreate_tm(comment.getCreated_at());
+				
+				res += zDBHelper.fInsertComments(wbComment);
+				
+			}
+		}
+	}
+	
+	
+	/**
+	 * Function Deprecicated 
+	 * @param friendsTimeline
+	 * @param context
+	 */
+	/*
 	public void fSaveNewFeeds(List<Status> friendsTimeline, Context context) {
 		long res = 0;
 		
@@ -228,6 +287,8 @@ public class FeedOrganisor {
 			fShowNotification(Const.SNS_SINA, cntUnReadFeed, context);
 		}
 	}
+	
+	*/
 	
 	public void fSaveNewFeeds(ResponseList<twitter4j.Status> statuses,
 			Context context) {
@@ -323,6 +384,7 @@ public class FeedOrganisor {
 		
 		return items.get(0);
 	}
+	
 	
 	private ArrayList<FeedEntry> transformDB2Feed(String sns, String[][] feeds) {
 		String[][] owners = null;

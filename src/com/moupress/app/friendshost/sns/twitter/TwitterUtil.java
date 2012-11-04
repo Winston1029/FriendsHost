@@ -48,7 +48,6 @@ import com.moupress.app.friendshost.R;
 import com.moupress.app.friendshost.sns.FeedEntry;
 import com.moupress.app.friendshost.sns.SnsUtil;
 import com.moupress.app.friendshost.sns.Listener.SnsEventListener;
-import com.moupress.app.friendshost.sns.sina.OAuthConstant;
 import com.moupress.app.friendshost.util.NotificationTask;
 import com.moupress.app.friendshost.util.Pref;
 
@@ -304,7 +303,7 @@ public class TwitterUtil extends SnsUtil{
 	}
     
     @Override
-    public void fPublishFeeds(Bundle params) {
+    public void fPublishFeeds(Bundle params, final Context context) {
 		if(twitterAsync == null) {
 			Authentication();
 		}
@@ -392,7 +391,8 @@ public class TwitterUtil extends SnsUtil{
 		//this.fPublishFeeds(feed.getsMsgBody());
 	}
 	
-	public void fLikeFeeds(Bundle params) {
+	@Override
+	public void fLikeFeeds(Bundle params, final Context context) {
 		try {
 			twitter.createFavorite(Long.valueOf(params.getString(Const.SFEEDID)));
 		} catch (NumberFormatException e) {
@@ -412,7 +412,8 @@ public class TwitterUtil extends SnsUtil{
 		}
 	}
 	
-	public void fShareFeeds(Bundle params) {
+	@Override
+	public void fShareFeeds(Bundle params, final Context context) {
 		try {
 			twitter.retweetStatus(Long.valueOf(params.getString(Const.SFEEDID)));
 		} catch (NumberFormatException e) {

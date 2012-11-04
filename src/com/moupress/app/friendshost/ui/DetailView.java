@@ -8,7 +8,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View.OnClickListener;
@@ -18,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+//import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -114,13 +114,13 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 					//v.setBackgroundResource(android.R.drawable.btn_star_big_on);
 					((ImageButton)v).setImageResource(R.drawable.fh_feed_liked);
 					bIsFeedLiked = true;
-					PubSub.zSnsOrg.GetSnsInstance(displayedSns).fLikeFeeds(params);
+					PubSub.zSnsOrg.GetSnsInstance(displayedSns).fLikeFeeds(params, zActivity.getApplicationContext());
 					FlurryUtil.logEvent(TAG+":btnLikes", displayedSns + ", Like");
 				} else {
 					//v.setBackgroundResource(android.R.drawable.btn_star_big_off);
 					((ImageButton)v).setImageResource(R.drawable.fh_feed_like);
 					bIsFeedLiked = false;
-					PubSub.zSnsOrg.GetSnsInstance(displayedSns).fUnLikeFeeds(params);
+					PubSub.zSnsOrg.GetSnsInstance(displayedSns).fUnLikeFeeds(params, zActivity.getApplicationContext());
 					FlurryUtil.logEvent(TAG+":btnLikes", displayedSns + ", UnLike");
 				}
 			}
@@ -348,7 +348,8 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 	    //not working yet !!!
 	    @Override
 	    public void onReceivedError  (WebView view, int errorCode, String description, String failingUrl) {
-	    	if (errorCode == ERROR_FILE_NOT_FOUND) {
+	    	if(errorCode == -14){
+	    	//if (errorCode ==  super.ERROR_FILE_NOT_FOUND) {
 	    		String sPhotoUrl = feed.getsPhotoPreviewLink();
 	    		String sLargeImgUrl = sPhotoUrl.replace("large", "original");
 	    		String HTML_FORMAT = 
@@ -381,13 +382,13 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 		lstView_comments.setVisibility(android.view.View.VISIBLE);
 		
 		arrAdapterComment.notifyDataSetChanged();
-		fInitMyCommentUI();
+		fInitMyCommentUI(this.zActivity.getApplicationContext());
 		//FlurryUtil
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
 		FlurryUtil.logEvent(TAG+":onDrawerOpened", displayedSns+","+arrAdapterComment.getCount() + sdf.format(new Date()));
 	}
 	
-	private void fInitMyCommentUI() {
+	private void fInitMyCommentUI(final Context context) {
 		WebImageView img_selfhead_detail_comment = (WebImageView) zActivity.findViewById(R.id.img_selfhead_detail_comment);
 		String selfHeadUrl = fRetrieveProfileHeadImgUrl(displayedSns);
 		img_selfhead_detail_comment.setImageUrl(selfHeadUrl);
@@ -404,7 +405,7 @@ public class DetailView extends View implements OnDrawerOpenListener, OnDrawerCl
 				params.putString(Const.COMMENTED_MSG, sCommentMsg);
 				params.putString(Const.SNAME, feed.getsName());
 				params.putString(Const.SOWNERID, feed.getsOwnerID());
-				PubSub.zSnsOrg.GetSnsInstance(displayedSns).fPostComments(params);
+				PubSub.zSnsOrg.GetSnsInstance(displayedSns).fPostComments(params, context);
 				// FlurryUtil
 				FlurryUtil.logEvent(TAG+":fInitMyCommentUI:btn_send_detail_comment", displayedSns+","+sCommentMsg.length());
 				etx_commentmsg_detail_comment.setText("");

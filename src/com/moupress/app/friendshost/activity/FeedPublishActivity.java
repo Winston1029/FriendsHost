@@ -3,6 +3,7 @@ package com.moupress.app.friendshost.activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -133,7 +134,7 @@ public class FeedPublishActivity extends Activity{
 				boolean bPublished = false;
 				if(selectedImagePath != null && selectedImagePath.length() > 0)
 				{
-					bPublished = uploadPhoto();
+					bPublished = uploadPhoto(activity.getApplicationContext());
 					selectedImagePath="";
 				}
 				else 
@@ -390,7 +391,7 @@ public class FeedPublishActivity extends Activity{
 		Bundle params = new Bundle();
 		params.putString(Const.SMSGBODY, message);
 		
-		return PubSub.zSnsOrg.SnsPublishNewFeed(params);
+		return PubSub.zSnsOrg.SnsPublishNewFeed(params, this.getApplicationContext());
 //		
 //		if(this.WBSelected)
 //		{
@@ -411,8 +412,8 @@ public class FeedPublishActivity extends Activity{
 	    
 	    
 	}
-	private boolean uploadPhoto() {
-		return PubSub.zSnsOrg.SnsUploadPic(message, selectedImagePath);
+	private boolean uploadPhoto(final Context context) {
+		return PubSub.zSnsOrg.SnsUploadPic(message, selectedImagePath,context);
 //		
 //		if(this.WBSelected)
 //		{

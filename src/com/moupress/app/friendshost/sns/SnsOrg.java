@@ -116,12 +116,12 @@ public class SnsOrg {
 		}
 	}
 	
-	public boolean SnsPublishNewFeed(Bundle params) {
+	public boolean SnsPublishNewFeed(Bundle params, final Context context) {
 		boolean bPublished = false;
 		String flurry_sns_topublish="";
 		for(int i=0; i< Const.SNSGROUPS.length; i++)  {
 			if(this.GetSnsInstance(Const.SNSGROUPS[i]).fIsSelectedToPublish()) {
-				this.GetSnsInstance(Const.SNSGROUPS[i]).fPublishFeeds(params);
+				this.GetSnsInstance(Const.SNSGROUPS[i]).fPublishFeeds(params, context);
 				flurry_sns_topublish += Const.SNSGROUPS[i] + ":" + params.getString(Const.SMSGBODY).length() + ",";
 				bPublished = true;
 			}
@@ -142,12 +142,12 @@ public class SnsOrg {
 		}
 	}
 	
-	public boolean SnsUploadPic(String message, String selectedImagePath) {
+	public boolean SnsUploadPic(String message, String selectedImagePath, Context context) {
 		boolean bPublished = false;
 		String flurry_sns_topublish="";
 		for(int i=0; i< Const.SNSGROUPS.length; i++)  {
 			if(this.GetSnsInstance(Const.SNSGROUPS[i]).fIsSelectedToPublish()) {
-				this.GetSnsInstance(Const.SNSGROUPS[i]).fUploadPic(message, selectedImagePath);
+				this.GetSnsInstance(Const.SNSGROUPS[i]).fUploadPic(message, selectedImagePath, context);
 				flurry_sns_topublish += Const.SNSGROUPS[i] + ":" + message.length() + ",";
 				bPublished = true;
 			}

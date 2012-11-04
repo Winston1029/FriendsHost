@@ -22,6 +22,7 @@ public class Const {
 	//==============DBHelper================================
 	public static final String SP_SINA_TOKENKEY = "SinaTokeyKey";
 	public static final String SP_SINA_TOKENSECRET = "SinaTokeySecret";
+	public static final String SP_SINA_TOKENEXPIRE = "SinaToKeyExpire";
 	
 	//==============Intent===================================
 	public static final String ACTION_DISPLAYFEED = "DisplayFeed";

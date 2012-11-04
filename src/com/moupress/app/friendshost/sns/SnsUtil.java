@@ -74,12 +74,12 @@ public abstract class SnsUtil {
 	protected boolean isSessionValid(){return false;};
 	public void fGetNewsFeed(Context context){};
 	public void fDisplayFeed(){};
-	public void fPostComments(Bundle params) {}
-	public void fPublishFeeds(Bundle params){};
-	public void fUploadPic(String message, String selectedImagePath){};
-	public void fLikeFeeds(Bundle params) {}
-	public void fUnLikeFeeds(Bundle params) {}
-	public void fShareFeeds(Bundle params) {}
+	public void fPostComments(Bundle params, final Context context) {}
+	public void fPublishFeeds(Bundle params, final Context context){};
+	public void fUploadPic(String message, String selectedImagePath, final Context context){};
+	public void fLikeFeeds(Bundle params, final Context context) {}
+	public void fUnLikeFeeds(Bundle params, final Context context) {}
+	public void fShareFeeds(Bundle params, final Context context) {}
 	public void fLogout(Bundle params) {}
 	
 	
